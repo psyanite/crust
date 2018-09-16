@@ -5,7 +5,7 @@ import 'package:crust/modules/app/app_state.dart';
 import 'package:crust/presentation/platform_adaptive.dart';
 import 'package:crust/modules/loading/loading_screen.dart';
 import 'package:crust/modules/auth/login_screen.dart';
-import 'package:crust/modules/main/main_screen.dart';
+import 'package:crust/modules/main/main_tab_navigator.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
 import 'package:redux_persist/redux_persist.dart';
@@ -33,9 +33,8 @@ class Main extends StatelessWidget {
                         ? kIOSTheme
                         : kDefaultTheme,
                     routes: <String, WidgetBuilder>{
-                        '/': (BuildContext context) => new MainScreen(),
-                        '/login': (BuildContext context) => new LoginScreen(),
-                        '/main': (BuildContext context) => new MainScreen()
+                        '/': (BuildContext context) => new MainTabNavigator(),
+                        '/login': (BuildContext context) => new LoginScreen()
                     }
                 )
             ),
