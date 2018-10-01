@@ -3,7 +3,7 @@ import 'package:crust/modules/my_profile/my_profile_screen.dart';
 import 'package:crust/modules/favorites/favorites_screen.dart';
 import 'package:crust/modules/new_post/new_post_screen.dart';
 import 'package:crust/modules/rewards/rewards_screen.dart';
-import 'package:crust/presentation/crust_con_icons.dart';
+import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/platform_adaptive.dart';
 import 'package:crust/presentation/texts.dart';
 import 'package:flutter/material.dart';
@@ -81,9 +81,9 @@ class TabItem {
 }
 
 const List<TabItem> TabItems = const <TabItem>[
-  const TabItem(title: 'Home', icon: CrustCon.bubble_heart),
-  const TabItem(title: 'Rewards', icon: CrustCon.present),
-  const TabItem(title: 'New Post', icon: CrustCon.new_post),
-  const TabItem(title: 'Favorites', icon: CrustCon.star),
-  const TabItem(title: 'My Profile', icon: CrustCon.heart),
+  const TabItem(title: 'Home', icon: CrustCons.bread_heart),
+  const TabItem(title: 'Rewards', icon: CrustCons.present),
+  const TabItem(title: 'New Post', icon: CrustCons.new_post),
+  const TabItem(title: 'Favorites', icon: CrustCons.star),
+  const TabItem(title: 'My Profile', icon: CrustCons.person),
 ];
