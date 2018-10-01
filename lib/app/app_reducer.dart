@@ -1,6 +1,6 @@
 import 'package:redux_persist/redux_persist.dart';
 
-import 'package:crust/modules/app/app_state.dart';
+import 'package:crust/app/app_state.dart';
 import 'package:crust/modules/auth/auth_reducer.dart';
 
 AppState appReducer(AppState state, action){

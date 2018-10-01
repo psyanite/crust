@@ -1,6 +1,8 @@
 import 'package:crust/modules/home/home_screen.dart';
-import 'package:crust/modules/main/main_tabs/discover_tab.dart';
-import 'package:crust/modules/main/main_tabs/stats_tab.dart';
+import 'package:crust/modules/my_profile/my_profile_screen.dart';
+import 'package:crust/modules/favorites/favorites_screen.dart';
+import 'package:crust/modules/new_post/new_post_screen.dart';
+import 'package:crust/modules/rewards/rewards_screen.dart';
 import 'package:crust/presentation/crust_con_icons.dart';
 import 'package:crust/presentation/platform_adaptive.dart';
 import 'package:crust/presentation/texts.dart';
@@ -47,7 +49,13 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
       body: new PageView(
         controller: _tabController,
         onPageChanged: onTabChanged,
-        children: <Widget>[new HomeScreen(), new StatsTab(), new DiscoverTab()],
+        children: <Widget>[
+          new HomeScreen(),
+          new RewardsScreen(),
+          new NewPostScreen(),
+          new FavoritesScreen(),
+          new MyProfileScreen()
+        ],
       ),
     );
   }

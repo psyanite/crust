@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 
 import 'package:crust/modules/auth/user.dart';
-import 'package:crust/modules/app/app_state.dart';
+import 'package:crust/app/app_state.dart';
 
 class UserLoginRequest {}
 

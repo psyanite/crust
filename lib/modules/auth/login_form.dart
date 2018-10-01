@@ -3,7 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 import 'package:crust/presentation/platform_adaptive.dart';
-import 'package:crust/modules/app/app_state.dart';
+import 'package:crust/app/app_state.dart';
 import 'package:crust/modules/auth/auth_actions.dart';
 
 class LoginForm extends StatefulWidget {

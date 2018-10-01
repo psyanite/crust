@@ -3,7 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 
 import 'package:crust/presentation/colors.dart';
 import 'package:crust/modules/auth/auth_actions.dart';
-import 'package:crust/modules/app/app_state.dart';
+import 'package:crust/app/app_state.dart';
 
 class MainDrawer extends StatelessWidget {
     
