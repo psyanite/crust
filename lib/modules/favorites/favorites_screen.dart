@@ -1,3 +1,4 @@
+import 'package:crust/presentation/colors.dart';
 import 'package:flutter/material.dart';
 
 class FavoritesScreen extends StatelessWidget {
@@ -5,8 +6,22 @@ class FavoritesScreen extends StatelessWidget {
 
     @override
     Widget build(BuildContext context) {
-        return new Center(
-            child: new Text('Favorites'),
+        return new Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(60.0),
+            child: AppBar(
+              backgroundColor: themeColors['white'],
+              elevation: 0.0,
+              title: const Text(
+                'Favorites',
+                style: const TextStyle(
+                  color: Color(0xFF604B41),
+                  fontSize: 30.0,
+                  fontFamily: 'OpenSans'
+                )
+              )
+            )
+          )
         );
     }
 

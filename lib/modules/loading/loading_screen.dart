@@ -12,7 +12,7 @@ class LoadingScreen extends StatelessWidget {
             home: new Scaffold(
                 body: new Center(
                     child: new CircularProgressIndicator(
-                        backgroundColor: colorStyles['gray'],
+                        backgroundColor: themeColors['screen_background'],
                         strokeWidth: 2.0
                     ),
                 ),

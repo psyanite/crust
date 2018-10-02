@@ -18,7 +18,7 @@ class LoginScreen extends StatelessWidget {
                             new Expanded(
                                 child: new Center(
                                     child: new FlutterLogo(
-                                        colors: colorStyles['primary'],
+                                        colors: themeColors['primary_dark'],
                                         size: 200.0,
                                     ),
                                 ),
