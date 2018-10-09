@@ -57,6 +57,5 @@ Store<AppState> createStore() {
     middleware: createMiddleware(),
   );
   persistor.load(store);
-
   return store;
 }

@@ -13,6 +13,8 @@ environment:
     sdk: ">=2.0.0-dev.68.0 <3.0.0"
 
 dependencies:
+
+    # Flutter
     flutter:
         sdk: flutter
 
@@ -26,12 +28,15 @@ dependencies:
 
     # Other
     http: ^0.12.0
+    graphql_flutter: ^0.9.4
     cupertino_icons: ^0.1.2
 
 dev_dependencies:
     flutter_test:
         sdk: flutter
 
+dependency_overrides:
+  http: ^0.12.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec

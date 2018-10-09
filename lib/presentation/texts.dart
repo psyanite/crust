@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 Map<String, TextStyle> textStyles = {
-    'bottom_label': new TextStyle(
-        fontSize: 12.0,
-        fontWeight: FontWeight.w100,
-    ),
+  'bottom_label': new TextStyle(
+    fontSize: 12.0,
+    fontWeight: FontWeight.w100,
+  ),
 };

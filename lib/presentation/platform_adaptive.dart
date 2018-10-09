@@ -20,29 +20,27 @@ final ThemeData kDefaultTheme = new ThemeData(
 
 /// App bar that uses iOS styling on iOS
 class PlatformAdaptiveAppBar extends AppBar {
-  PlatformAdaptiveAppBar({
-    Key key,
-    TargetPlatform platform,
-    List<Widget> actions,
-    Widget title,
-    Widget body,
-    Widget bottom,
-    Color backgroundColor,
-    bool centerTitle,
-    IconThemeData iconTheme,
-    TextTheme textTheme
-  })
+  PlatformAdaptiveAppBar(
+      {Key key,
+      TargetPlatform platform,
+      List<Widget> actions,
+      Widget title,
+      Widget body,
+      Widget bottom,
+      Color backgroundColor,
+      bool centerTitle,
+      IconThemeData iconTheme,
+      TextTheme textTheme})
       : super(
-          key: key,
-          elevation: platform == TargetPlatform.iOS ? 0.0 : 4.0,
-          title: title,
-          actions: actions,
-          bottom: bottom,
-          backgroundColor: backgroundColor,
-          centerTitle: centerTitle ?? true,
-          iconTheme: iconTheme,
-          textTheme: textTheme
-        );
+            key: key,
+            elevation: platform == TargetPlatform.iOS ? 0.0 : 4.0,
+            title: title,
+            actions: actions,
+            bottom: bottom,
+            backgroundColor: backgroundColor,
+            centerTitle: centerTitle ?? true,
+            iconTheme: iconTheme,
+            textTheme: textTheme);
 }
 
 /// Button that is Material on Android and Cupertino on iOS
@@ -72,7 +70,8 @@ class PlatformAdaptiveButton extends StatelessWidget {
 
 // Bottom navigation bar that is Material on Android and Cupertino on iOS.
 class PlatformAdaptiveBottomBar extends StatelessWidget {
-  PlatformAdaptiveBottomBar({Key key, this.activeColor, this.currentIndex, this.onTap, this.items})
+  PlatformAdaptiveBottomBar(
+      {Key key, this.activeColor, this.currentIndex, this.onTap, this.items})
       : super(key: key);
   final Color activeColor;
   final int currentIndex;

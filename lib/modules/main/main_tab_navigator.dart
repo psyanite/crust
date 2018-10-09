@@ -17,14 +17,12 @@ class MainTabNavigator extends StatefulWidget {
 
 class MainTabNavigatorState extends State<MainTabNavigator> {
   PageController _tabController;
-  String _title;
   int _index;
 
   @override
   void initState() {
     super.initState();
     _tabController = new PageController();
-    _title = TabItems[0].title;
     _index = 0;
   }
 
@@ -66,8 +64,6 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
     setState(() {
       this._index = tab;
     });
-
-    this._title = TabItems[tab].title;
   }
 }
 
