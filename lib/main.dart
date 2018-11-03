@@ -1,6 +1,7 @@
 import 'package:crust/app/app_reducer.dart';
 import 'package:crust/app/app_state.dart';
 import 'package:crust/modules/auth/login_screen.dart';
+import 'package:crust/modules/home/home_middleware.dart';
 import 'package:crust/modules/loading/loading_screen.dart';
 import 'package:crust/modules/main/main_tab_navigator.dart';
 import 'package:crust/presentation/platform_adaptive.dart';
@@ -44,11 +45,13 @@ final persistor = new Persistor<AppState>(
     storage: new FlutterStorage('redux-app'),
     decoder: AppState.rehydrateFromJson);
 
-List<Middleware<AppState>> createMiddleware() => <Middleware<AppState>>[
-      thunkMiddleware,
-      persistor.createMiddleware(),
-      new LoggingMiddleware.printer(),
-    ];
+List<Middleware<AppState>> createMiddleware() {
+  return <Middleware<AppState>>[
+    thunkMiddleware,
+    persistor.createMiddleware(),
+    new LoggingMiddleware.printer(),
+  ]..addAll(createHomeMiddleware());
+}
 
 Store<AppState> createStore() {
   Store<AppState> store = new Store(

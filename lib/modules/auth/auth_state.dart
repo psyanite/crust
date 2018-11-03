@@ -4,13 +4,11 @@ import 'package:crust/modules/auth/user.dart';
 
 @immutable
 class AuthState {
-  // properties
   final bool isAuthenticated;
   final bool isAuthenticating;
   final User user;
   final String error;
 
-  // constructor with default
   AuthState({
     this.isAuthenticated = false,
     this.isAuthenticating = false,

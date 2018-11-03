@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:crust/presentation/colors.dart';
 import 'package:crust/modules/auth/auth_actions.dart';
 import 'package:crust/app/app_state.dart';
+import 'package:redux/redux.dart';
 
 class MainDrawer extends StatelessWidget {
   MainDrawer({Key key}) : super(key: key);
@@ -11,7 +12,7 @@ class MainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new StoreConnector<AppState, dynamic>(
-        converter: (store) => (BuildContext context) {
+        converter: (Store<AppState> store) {
               store.dispatch(logout(context));
             },
         builder: (BuildContext context, logout) => new Drawer(
