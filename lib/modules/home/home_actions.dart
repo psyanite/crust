@@ -14,7 +14,7 @@ class FetchStoresSuccess {
 }
 
 class FetchStoresFailure {
-  final String error;
+  final Exception error;
 
   FetchStoresFailure(this.error);
 

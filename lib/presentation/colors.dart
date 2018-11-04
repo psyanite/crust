@@ -10,3 +10,9 @@ final Map<String, Color> themeColors = const {
   'screen_background': Color(0xFFFFFFFF),
   'white': Color(0xFFFFFFFF)
 };
+
+final Map<String, dynamic> themeText = const {
+  'base': 'OpenSans',
+  'fancy': 'GrandHotel',
+  'body': Color(0xFF604b41)
+};

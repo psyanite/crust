@@ -17,5 +17,5 @@ HomeState fetchStoresSuccess(HomeState state, FetchStoresSuccess action) {
 }
 
 HomeState fetchStoresFailure(HomeState state, FetchStoresFailure action) {
-  return state.copyWith(error: action.error);
+  return state.copyWith(error: action.error.toString());
 }

@@ -11,15 +11,19 @@ class HomeRepository {
         id,
         name,
         cover_image,
-        location: {
+        location {
           id,
           name,
         },
-        cuisines: {
+        suburb {
+          id,
+          name,
+        },
+        cuisines {
           id,
           name,
         }
-      } 
+      }
     }
   """;
     final response = await Toaster.get(getAllStores);
