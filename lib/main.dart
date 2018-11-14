@@ -29,7 +29,7 @@ class Main extends StatelessWidget {
       builder: (context) => new StoreProvider<AppState>(
           store: store,
           child: new MaterialApp(
-              title: 'ReduxApp',
+              title: 'Crust',
               theme: defaultTargetPlatform == TargetPlatform.iOS
                   ? kIOSTheme
                   : kDefaultTheme,

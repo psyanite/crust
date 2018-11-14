@@ -1,4 +1,4 @@
-package com.example.crust;
+package com.burntoast.crust;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

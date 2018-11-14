@@ -71,7 +71,6 @@ class HomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Container(
-            color: Colors.red,
             height: 100.0,
             child: Image.network(store.coverImage, fit: BoxFit.cover)
           ),
