@@ -33,19 +33,7 @@ class HomeScreen extends StatelessWidget {
       expandedHeight: 60.0,
       backgroundColor: themeColors['primary_light'],
       elevation: 24.0,
-      centerTitle: true,
-      flexibleSpace: FlexibleSpaceBar(
-        title: Stack(
-          fit: StackFit.expand,
-          children: <Widget>[
-            Positioned(
-                left: 0.0,
-                right: 0.0,
-                bottom: 0.0,
-                child: Text('Burntoast', style: TextStyle(color: themeColors['white'], fontSize: 20.0, fontFamily: themeText['fancy'])))
-          ],
-        ),
-      ),
+      title: Text('Burntoast', style: TextStyle(color: themeColors['white'], fontSize: 40.0, fontFamily: themeText['fancy']))
     );
   }
 
@@ -61,9 +49,11 @@ class HomeScreen extends StatelessWidget {
 
   Widget _gridSliver(stores) {
     return new SliverGrid(
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-        maxCrossAxisExtent: 200.0,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 1.2,
         crossAxisSpacing: 5.0,
+        mainAxisSpacing: 5.0,
       ),
       delegate: SliverChildListDelegate(
         List<Widget>.from(stores.map(_storeCard))

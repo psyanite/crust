@@ -6,6 +6,7 @@ import 'package:crust/modules/rewards/rewards_screen.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/platform_adaptive.dart';
 import 'package:crust/presentation/texts.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MainTabNavigator extends StatefulWidget {
@@ -29,29 +30,27 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      bottomNavigationBar: new PlatformAdaptiveBottomBar(
-        currentIndex: _index,
-        onTap: onTap,
-        items: TabItems.map((TabItem item) {
-          return new BottomNavigationBarItem(
-            title: new Text(
-              item.title,
-              style: textStyles['bottom_label'],
-            ),
-            icon: new Icon(item.icon),
-          );
-        }).toList(),
+      bottomNavigationBar: new Card(
+        margin: const EdgeInsets.all(0.0),
+        elevation: 24.0,
+        child: new CupertinoTabBar(
+          border: null,
+          backgroundColor: Colors.grey[50],
+          activeColor: Color(0xFFFFAB40),
+          inactiveColor: Color(0x44604B41),
+          currentIndex: _index,
+          onTap: onTap,
+          items: TabIcons.map((IconData icon) {
+            return new BottomNavigationBarItem(
+              icon: new Icon(icon),
+            );
+          }).toList(),
+        )
       ),
       body: new PageView(
         controller: _tabController,
         onPageChanged: onTabChanged,
-        children: <Widget>[
-          new HomeScreen(),
-          new RewardsScreen(),
-          new NewPostScreen(),
-          new FavoritesScreen(),
-          new MyProfileScreen()
-        ],
+        children: <Widget>[new HomeScreen(), new RewardsScreen(), new NewPostScreen(), new FavoritesScreen(), new MyProfileScreen()],
       ),
     );
   }
@@ -68,16 +67,15 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
 }
 
 class TabItem {
-  final String title;
   final IconData icon;
 
-  const TabItem({this.title, this.icon});
+  const TabItem({this.icon});
 }
 
-const List<TabItem> TabItems = const <TabItem>[
-  const TabItem(title: 'Home', icon: CrustCons.bread_heart),
-  const TabItem(title: 'Rewards', icon: CrustCons.present),
-  const TabItem(title: 'New Post', icon: CrustCons.new_post),
-  const TabItem(title: 'Favorites', icon: CrustCons.star),
-  const TabItem(title: 'My Profile', icon: CrustCons.person),
+const List<IconData> TabIcons = const <IconData>[
+  CrustCons.bread_heart,
+  CrustCons.present,
+  CrustCons.new_post,
+  CrustCons.star,
+  CrustCons.person,
 ];
