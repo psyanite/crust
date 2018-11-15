@@ -1,81 +1,64 @@
-import 'package:crust/modules/home/home_screen.dart';
-import 'package:crust/modules/my_profile/my_profile_screen.dart';
 import 'package:crust/modules/favorites/favorites_screen.dart';
+import 'package:crust/modules/home/home_screen.dart';
+import 'package:crust/modules/my_profile/my_profile_tab.dart';
 import 'package:crust/modules/new_post/new_post_screen.dart';
 import 'package:crust/modules/rewards/rewards_screen.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
-import 'package:crust/presentation/platform_adaptive.dart';
-import 'package:crust/presentation/texts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class MainTabNavigator extends StatefulWidget {
-  MainTabNavigator({Key key}) : super(key: key);
-
   @override
-  State<MainTabNavigator> createState() => new MainTabNavigatorState();
+  State<StatefulWidget> createState() => MainTabNavigatorState();
 }
 
 class MainTabNavigatorState extends State<MainTabNavigator> {
-  PageController _tabController;
-  int _index;
-
-  @override
-  void initState() {
-    super.initState();
-    _tabController = new PageController();
-    _index = 0;
-  }
+  PageController _tabController = new PageController();
+  int _currentIndex = 0;
+  Map<TabType, Tab> _tabs = {
+    TabType.home: Tab(widget: HomeScreen(), icon: CrustCons.bread_heart),
+    TabType.rewards: Tab(widget: RewardsScreen(), icon: CrustCons.present),
+    TabType.newPost: Tab(widget: NewPostScreen(), icon: CrustCons.new_post),
+    TabType.favorites: Tab(widget: FavoritesScreen(), icon: CrustCons.star),
+    TabType.myProfile: Tab(widget: MyProfileTab(), icon: CrustCons.person)
+  };
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      bottomNavigationBar: new Card(
-        margin: const EdgeInsets.all(0.0),
-        elevation: 24.0,
-        child: new CupertinoTabBar(
-          border: null,
-          backgroundColor: Colors.grey[50],
-          activeColor: Color(0xFFFFAB40),
-          inactiveColor: Color(0x44604B41),
-          currentIndex: _index,
-          onTap: onTap,
-          items: TabIcons.map((IconData icon) {
-            return new BottomNavigationBarItem(
-              icon: new Icon(icon),
-            );
-          }).toList(),
-        )
-      ),
-      body: new PageView(
-        controller: _tabController,
-        onPageChanged: onTabChanged,
-        children: <Widget>[new HomeScreen(), new RewardsScreen(), new NewPostScreen(), new FavoritesScreen(), new MyProfileScreen()],
-      ),
+    return Scaffold(
+      body: PageView(controller: _tabController, onPageChanged: _onPageChanged, children: _tabs.values.map((t) => t.widget).toList()),
+      bottomNavigationBar: Card(
+          margin: const EdgeInsets.all(0.0),
+          elevation: 24.0,
+          child: CupertinoTabBar(
+            border: null,
+            backgroundColor: Colors.grey[50],
+            activeColor: Color(0xFFFFAB40),
+            inactiveColor: Color(0x44604B41),
+            currentIndex: _currentIndex,
+            onTap: _onTap,
+            items: _tabs.values.map((t) => new BottomNavigationBarItem(icon: new Icon(t.icon))).toList(),
+          )),
     );
   }
 
-  void onTap(int tab) {
-    _tabController.jumpToPage(tab);
-  }
-
-  void onTabChanged(int tab) {
+  _onPageChanged(int index) {
     setState(() {
-      this._index = tab;
+      _currentIndex = index;
     });
   }
+
+  _onTap(int index) {
+    _tabController.jumpToPage(index);
+  }
 }
 
-class TabItem {
+enum TabType { home, rewards, newPost, favorites, myProfile }
+
+class Tab {
+  final String name;
+  final Widget widget;
   final IconData icon;
 
-  const TabItem({this.icon});
+  const Tab({this.name, this.widget, this.icon});
 }
-
-const List<IconData> TabIcons = const <IconData>[
-  CrustCons.bread_heart,
-  CrustCons.present,
-  CrustCons.new_post,
-  CrustCons.star,
-  CrustCons.person,
-];

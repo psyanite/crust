@@ -1,6 +1,6 @@
 import 'package:crust/app/app_reducer.dart';
 import 'package:crust/app/app_state.dart';
-import 'package:crust/modules/auth/login_screen.dart';
+import 'package:crust/modules/auth/data/auth_middleware.dart';
 import 'package:crust/modules/home/home_middleware.dart';
 import 'package:crust/modules/loading/loading_screen.dart';
 import 'package:crust/modules/main/main_tab_navigator.dart';
@@ -16,6 +16,10 @@ import 'package:redux_thunk/redux_thunk.dart';
 
 void main() => runApp(new Main());
 
+class MainRoutes {
+  static const String root = '/';
+}
+
 class Main extends StatelessWidget {
   final store = createStore();
 
@@ -30,27 +34,25 @@ class Main extends StatelessWidget {
           store: store,
           child: new MaterialApp(
               title: 'Crust',
-              theme: defaultTargetPlatform == TargetPlatform.iOS
-                  ? kIOSTheme
-                  : kDefaultTheme,
+              theme: defaultTargetPlatform == TargetPlatform.iOS ? kIOSTheme : kDefaultTheme,
               routes: <String, WidgetBuilder>{
-                '/': (BuildContext context) => new MainTabNavigator(),
-                '/login': (BuildContext context) => new LoginScreen()
+                MainRoutes.root: (context) => new MainTabNavigator(),
               })),
     );
   }
 }
 
-final persistor = new Persistor<AppState>(
-    storage: new FlutterStorage('redux-app'),
-    decoder: AppState.rehydrateFromJson);
+final persistor = new Persistor<AppState>(storage: new FlutterStorage('redux-app'), decoder: AppState.rehydrateFromJson);
 
 List<Middleware<AppState>> createMiddleware() {
   return <Middleware<AppState>>[
     thunkMiddleware,
     persistor.createMiddleware(),
     new LoggingMiddleware.printer(),
-  ]..addAll(createHomeMiddleware());
+  ]
+    ..addAll(createHomeMiddleware())
+    ..addAll(createAuthMiddleware())
+  ;
 }
 
 Store<AppState> createStore() {

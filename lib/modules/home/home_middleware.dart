@@ -13,13 +13,13 @@ List<Middleware<AppState>> createHomeMiddleware([
   ];
 }
 
-Middleware<AppState> _fetchStores(HomeRepository repository) {
+Middleware<AppState> _fetchStores(repository) {
   return (Store<AppState> store, action, NextDispatcher next) {
     repository.fetchStores().then(
       (stores) {
         store.dispatch(FetchStoresSuccess(stores));
       },
-    ).catchError((e) => store.dispatch(FetchStoresFailure(e)));
+    ).catchError((e) => store.dispatch(RequestFailure(e)));
 
     next(action);
   };

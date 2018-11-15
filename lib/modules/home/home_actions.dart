@@ -13,13 +13,13 @@ class FetchStoresSuccess {
   }
 }
 
-class FetchStoresFailure {
+class RequestFailure {
   final Exception error;
 
-  FetchStoresFailure(this.error);
+  RequestFailure(this.error);
 
   @override
   String toString() {
-    return 'FetchStoresFailure{error: $error}';
+    return 'RequestFailure{error: $error}';
   }
 }

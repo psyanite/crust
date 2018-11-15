@@ -1,4 +1,4 @@
-import 'package:crust/modules/auth/auth_state.dart';
+import 'package:crust/modules/auth/data/auth_state.dart';
 import 'package:crust/modules/home/home_state.dart';
 import 'package:meta/meta.dart';
 

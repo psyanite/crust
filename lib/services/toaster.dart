@@ -11,7 +11,7 @@ final Client client = Client(
 class Toaster {
   static Future<dynamic> get(String body, {Map<String, dynamic> variables}) async {
     final Future<Map<String, dynamic>> response =
-        client.query(query: body.replaceAll('\n', ' '), variables: variables);
+        client.query(query: body.replaceAll('\n', ''), variables: variables);
     return response;
   }
 }

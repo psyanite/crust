@@ -12,7 +12,7 @@ class Config {
         return 'https://burntoast.herokuapp.com';
       case Flavor.DEVELOPMENT:
       default:
-        return 'https://burntoast.herokuapp.com';
+        return 'http://192.168.40.2:3000';
     }
   }
 }

@@ -1,31 +1,105 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-import 'package:crust/modules/auth/login_form.dart';
+import 'package:crust/app/app_state.dart';
+import 'package:crust/main.dart';
+import 'package:crust/modules/auth/data/auth_actions.dart';
+import 'package:crust/modules/auth/data/auth_repository.dart';
+import 'package:crust/modules/auth/models/user.dart';
+import 'package:crust/modules/auth/register_screen.dart';
 import 'package:crust/presentation/colors.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:http/http.dart' as http;
+import 'package:redux/redux.dart';
 
 class LoginScreen extends StatelessWidget {
-  LoginScreen({Key key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, dynamic>(
+      converter: (Store<AppState> store) => (user) => store.dispatch(LoginSuccess(user)),
+      builder: (context, loginSuccess) => _Presenter(loginSuccess: loginSuccess));
+  }
+}
+
+class _Presenter extends StatelessWidget {
+  final Function loginSuccess;
+
+  _Presenter({Key key, this.loginSuccess}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        body: new Container(
-            child: new Padding(
-                padding: new EdgeInsets.fromLTRB(32.0,
-                    MediaQuery.of(context).padding.top + 32.0, 32.0, 32.0),
-                child: new Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    new Expanded(
-                      child: new Center(
-                        child: new FlutterLogo(
-                          colors: themeColors['primary_dark'],
-                          size: 200.0,
-                        ),
-                      ),
-                    ),
-                    new LoginForm()
-                  ],
-                ))));
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0, 0.6, 1.0],
+            colors: [
+              Color(0xFFffc86b),
+              Color(0xFFffab40),
+              Color(0xFFc45d35),
+            ],
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Image.asset('assets/images/loading-icon.png', height: 200.0),
+            _buildButton("Login with Facebook", _loginWithFacebook, context),
+            new Container(height: 10.0),
+            _buildButton("Login with Google", _loginWithGoogle, context),
+          ]),
+      ),
+    );
+  }
+
+  _buildButton(text, onPressed, context) {
+    return FlatButton(
+      textColor: ThemeColors.primaryDark,
+      color: ThemeColors.background,
+      padding: EdgeInsets.symmetric(vertical: 20.0),
+      child: Text(text, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w100)),
+      onPressed: () => onPressed(context),
+    );
+  }
+
+  _loginWithFacebook(context) async {
+    var result = await FacebookLogin().logInWithReadPermissions(['email']);
+    if (result.status == FacebookLoginStatus.loggedIn) {
+      var graphResponse = await http.get(
+        'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${result.accessToken
+          .token}');
+      var user = User.fromFacebook(result.accessToken.token, json.decode(graphResponse.body));
+      await _login(user, context);
+    }
+  }
+
+  _loginWithGoogle(context) async {
+    GoogleSignIn _googleSignIn = GoogleSignIn(
+      scopes: <String>[
+        'email',
+        'https://www.googleapis.com/auth/contacts.readonly',
+      ],
+    );
+    GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    await _login(User.fromGoogle(googleUser), context);
+  }
+
+  _login(user, context) async {
+    var userAccountId = await AuthRepository.getUserAccountId(user);
+    if (userAccountId != null) {
+      loginSuccess(user.copyWith(id: userAccountId));
+      Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => RegisterScreen(user: user)),
+      );
+    }
   }
 }
