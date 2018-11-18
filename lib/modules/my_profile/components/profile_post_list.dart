@@ -9,29 +9,28 @@ class ProfilePostList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return posts == null ? _loadingView() : _postList(context);
-  }
-
-  Widget _postList(BuildContext context) {
     return Center(
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: posts.map(_buildPostCard)),
+      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: posts.map((p) => _buildPostCard(p)).toList()),
     );
   }
 
-  _buildPostCard(Post post) {
+//  Widget _gridSliver(stores) {
+//    return SliverGrid(
+//      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//        crossAxisCount: 2,
+//        childAspectRatio: 1.2,
+//        crossAxisSpacing: 5.0,
+//        mainAxisSpacing: 5.0,
+//      ),
+//      delegate: SliverChildListDelegate(List<Widget>.from(stores.map(_storeCard))));
+//  }
+
+  Widget _buildPostCard(Post post) {
     return Card(
         child: Column(children: <Widget>[Container(child: Text('store details')), Container(child: Text('ratings')), _buildContent(post)]));
   }
 
   _buildContent(Post post) {
     return Container(child: Text('content'));
-  }
-
-  Widget _loadingView() {
-    return Container(
-      child: Center(
-        child: CupertinoActivityIndicator(),
-      ),
-    );
   }
 }

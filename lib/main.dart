@@ -44,8 +44,7 @@ class Main extends StatelessWidget {
 
 final persistor = new Persistor<AppState>(
   storage: FlutterStorage('burntoast'),
-  decoder: AppState.rehydrateFromJson,
-  debug: true
+  decoder: AppState.rehydrateFromJson
 );
 
 List<Middleware<AppState>> createMiddleware() {

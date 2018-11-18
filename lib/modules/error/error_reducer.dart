@@ -2,7 +2,7 @@ import 'package:crust/modules/error/error_actions.dart';
 import 'package:crust/modules/error/error_state.dart';
 import 'package:redux/redux.dart';
 
-Reducer<ErrorState> homeReducer = combineReducers([
+Reducer<ErrorState> errorReducer = combineReducers([
   new TypedReducer<ErrorState, RequestFailure>(requestFailure),
 ]);
 

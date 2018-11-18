@@ -18,7 +18,7 @@ AuthState logoutReducer(AuthState auth, Logout action) {
 }
 
 AuthState fetchMyPostsReducer(AuthState auth, FetchMyPostsSuccess action) {
-  return new AuthState().copyWith(posts: action.posts);
+  return auth.copyWith(posts: action.posts);
 }
 
 

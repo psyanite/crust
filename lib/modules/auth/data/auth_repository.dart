@@ -23,22 +23,32 @@ class AuthRepository {
     }
   }
 
-  static Future<int> getUserAccountId(User user) async {
+  static Future<User> getUser(User user) async {
     String getUserLogin = """
       query {
         userLoginBy(
-          social_type: "${EnumUtil.toString(user.type.toString())}", 
-          social_id: "${user.socialId}"
+          socialType: "${EnumUtil.toString(user.type.toString())}", 
+          socialId: "${user.socialId}"
           ) {
           user_account {
-            id
+            id,
+            profile {
+              profile_picture,
+              display_name,
+              username
+            }
           }
         }
       }
     """;
     final response = await Toaster.get(getUserLogin);
     if (response['userLoginBy'] != null) {
-      return response['userLoginBy']['user_account']['id'];
+      return user.copyWith(
+        id: response['userLoginBy']['user_account']['id'],
+        profilePicture: response['userLoginBy']['user_account']['profile']['profile_picture'],
+        displayName: response['userLoginBy']['user_account']['profile']['display_name'],
+        username: response['userLoginBy']['user_account']['profile']['username']
+      );
     } else {
       return null;
     }
@@ -54,31 +64,6 @@ class AuthRepository {
         profile_picture: "${user.picture}",
         social_id: "${user.socialId}",
         social_type: "${EnumUtil.toString(user.type.toString())}}"
-      ) {
-        user_account {
-          id
-        }
-      }
-    }
-  """;
-    final response = await Toaster.get(addUser);
-    if (response['addUser'] != null) {
-      return response['addUser']['user_account']['id'];
-    } else {
-      throw Exception('Failed');
-    }
-  }
-
-  static Future<int> addMeow(User user) async {
-    String addUser = """
-    mutation {
-      addUser(
-        username: "${user.username}",
-        display_name: "${user.fullName}",
-        email: "${user.email}",
-        profile_picture: "${user.picture}",
-        social_id: "${user.socialId}",
-        social_type: "${EnumUtil.toString(user.type.toString())}"
       ) {
         user_account {
           id

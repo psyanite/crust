@@ -24,17 +24,17 @@ class User {
     this.username,
     this.socialId});
 
-  User copyWith({int id, String username}) {
-    return new User(
+  User copyWith({int id, String username, String profilePicture, String displayName}) {
+    return User(
       type: type,
       token: token,
       id: id ?? this.id,
       username: username ?? this.username,
       firstName: firstName,
       lastName: lastName,
-      fullName: fullName,
+      fullName: displayName ?? this.fullName,
       email: email,
-      picture: picture,
+      picture: profilePicture ?? this.picture,
       socialId: socialId
     );
   }

@@ -3,7 +3,7 @@ import 'package:crust/modules/home/models/store.dart';
 
 class Post {
   final int id;
-  final String type;
+  final PostType type;
   final Store store;
   final User postedBy;
   final DateTime postedAt;
@@ -39,14 +39,4 @@ class PostReview {
 
 enum PostType { photo, review }
 
-PostType getPostType(String value) {
-  value = 'PostType.$value';
-  return PostType.values.firstWhere((v) => v.toString() == value, orElse: () => null);
-}
-
 enum Score { bad, okay, good }
-
-Score getScore(String value) {
-  value = 'Score.$value';
-  return Score.values.firstWhere((v) => v.toString() == value, orElse: () => null);
-}

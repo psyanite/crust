@@ -91,9 +91,9 @@ class _Presenter extends StatelessWidget {
   }
 
   _login(user, context) async {
-    var userAccountId = await AuthRepository.getUserAccountId(user);
-    if (userAccountId != null) {
-      loginSuccess(user.copyWith(id: userAccountId));
+    var fetchedUser = await AuthRepository.getUser(user);
+    if (fetchedUser != null) {
+      loginSuccess(fetchedUser);
       Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
     } else {
       Navigator.push(
