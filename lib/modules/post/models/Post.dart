@@ -40,3 +40,5 @@ class PostReview {
 enum PostType { photo, review }
 
 enum Score { bad, okay, good }
+
+

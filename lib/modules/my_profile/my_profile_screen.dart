@@ -6,6 +6,7 @@ import 'package:crust/modules/settings/settings_screen.dart';
 import 'package:crust/utils/time_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
@@ -109,7 +110,7 @@ class _Presenter extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.0),
               image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.store.coverImage)))),
-      Column(children: <Widget>[Text(post.store.name), Text(TimeUtil.toString(post.postedAt))])
+      Column(children: <Widget>[Text(post.store.name), Text(TimeUtil.format(post.postedAt))])
     ];
     if (post.type == PostType.review) details.add(Text(post.postReview.overallScore.toString()));
     var children = <Widget>[Row(children: details)];
@@ -146,8 +147,30 @@ class _Presenter extends StatelessWidget {
     ]);
   }
 
-  _buildScore(Score score) {
-    return Text(score.toString());
+  _buildScore(Score score, [double size = 50.0]) {
+    var assetName;
+    switch(score) {
+      case(Score.bad): {
+        assetName = 'assets/svgs/bread-bad.svg';
+      }
+      break;
+      case(Score.bad): {
+        assetName = 'assets/svgs/bread-okay.svg';
+      }
+      break;
+      case(Score.bad): {
+        assetName = 'assets/svgs/bread-good.svg';
+      }
+      break;
+      default: {
+        return new Container();
+      }
+    }
+    return new SvgPicture.asset(
+      assetName,
+      width: size,
+      height: size,
+    );
   }
 
   _buildContent(Post post) {
