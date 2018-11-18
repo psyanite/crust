@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _appBar() {
-    return new SliverAppBar(
+    return SliverAppBar(
         pinned: false,
         floating: false,
         expandedHeight: 60.0,
@@ -29,17 +29,17 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _loadingSliver() {
-    return new SliverFillRemaining(
-      child: new Container(
-        child: new Center(
-          child: new CupertinoActivityIndicator(),
+    return SliverFillRemaining(
+      child: Container(
+        child: Center(
+          child: CupertinoActivityIndicator(),
         ),
       ),
     );
   }
 
   Widget _gridSliver(stores) {
-    return new SliverGrid(
+    return SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
           childAspectRatio: 1.2,

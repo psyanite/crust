@@ -1,5 +1,6 @@
 import 'package:crust/modules/auth/models/user.dart';
 import 'package:crust/services/toaster.dart';
+import 'package:crust/utils/enum_util.dart';
 
 class AuthRepository {
   const AuthRepository();
@@ -26,7 +27,7 @@ class AuthRepository {
     String getUserLogin = """
       query {
         userLoginBy(
-          social_type: "${user.type.toString().split('.')[1]}", 
+          social_type: "${EnumUtil.toString(user.type.toString())}", 
           social_id: "${user.socialId}"
           ) {
           user_account {
@@ -52,7 +53,7 @@ class AuthRepository {
         email: "${user.email}",
         profile_picture: "${user.picture}",
         social_id: "${user.socialId}",
-        social_type: "${user.type.toString().split('.')[1]}"
+        social_type: "${EnumUtil.toString(user.type.toString())}}"
       ) {
         user_account {
           id
@@ -77,7 +78,7 @@ class AuthRepository {
         email: "${user.email}",
         profile_picture: "${user.picture}",
         social_id: "${user.socialId}",
-        social_type: "${user.type.toString().split('.')[1]}"
+        social_type: "${EnumUtil.toString(user.type.toString())}"
       ) {
         user_account {
           id

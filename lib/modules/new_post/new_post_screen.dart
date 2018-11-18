@@ -1,9 +1,9 @@
 import 'package:crust/app/app_state.dart';
 import 'package:crust/modules/auth/data/auth_actions.dart';
-import 'package:crust/modules/auth/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:redux_persist_flutter/redux_persist_flutter.dart';
 
 class NewPostScreen extends StatelessWidget {
   @override
@@ -29,13 +29,10 @@ class _Presenter extends StatelessWidget {
           FlatButton(
               child: Text('Click'),
               onPressed: () {
-                addUser(User(
-                    fullName: "14241a24 420",
-                    username: "124214a21",
-                    picture: "4124a2421@fefefe.com",
-                    socialId: "1241a42100",
-                    type: UserType.facebook,
-                    email: "fefeze@fefe.com"));
+                var storage = new FlutterStorage('meow');
+                var storage2 = new FlutterStorage('redux-app');
+                storage.save("{\"version\":-1,\"state\":{\"auth\":null}}");
+                storage2.save("{\"version\":-1,\"state\":{\"auth\":null}}");
               }),
         ],
       )),

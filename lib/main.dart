@@ -42,7 +42,11 @@ class Main extends StatelessWidget {
   }
 }
 
-final persistor = new Persistor<AppState>(storage: new FlutterStorage('redux-app'), decoder: AppState.rehydrateFromJson);
+final persistor = new Persistor<AppState>(
+  storage: FlutterStorage('burntoast'),
+  decoder: AppState.rehydrateFromJson,
+  debug: true
+);
 
 List<Middleware<AppState>> createMiddleware() {
   return <Middleware<AppState>>[
@@ -51,8 +55,7 @@ List<Middleware<AppState>> createMiddleware() {
     new LoggingMiddleware.printer(),
   ]
     ..addAll(createHomeMiddleware())
-    ..addAll(createAuthMiddleware())
-  ;
+    ..addAll(createAuthMiddleware());
 }
 
 Store<AppState> createStore() {

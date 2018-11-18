@@ -1,5 +1,7 @@
 import 'package:crust/app/app_state.dart';
+import 'package:crust/modules/auth/data/auth_actions.dart';
 import 'package:crust/modules/auth/models/user.dart';
+import 'package:crust/modules/my_profile/components/profile_post_list.dart';
 import 'package:crust/modules/settings/settings_screen.dart';
 import 'package:crust/presentation/colors.dart';
 import 'package:flutter/material.dart';
@@ -35,14 +37,29 @@ class _Presenter extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-          new Container(
+          Container(
               width: 190.0,
               height: 190.0,
-              decoration: new BoxDecoration(
-                  shape: BoxShape.circle, image: new DecorationImage(fit: BoxFit.fill, image: new NetworkImage(user.picture)))),
-          new Text(user.fullName)
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle, image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(user.picture)))),
+          Text(user.fullName),
+//          _MyPostList(userAccountId: user.id)
         ]),
       ),
     );
+  }
+}
+
+class _MyPostList extends StatelessWidget {
+  final int userAccountId;
+
+  _MyPostList({Key key, this.userAccountId}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, dynamic>(
+      onInit: (Store<AppState> store) => store.dispatch(FetchMyPostsRequest(userAccountId)),
+      converter: (Store<AppState> store) => store.state.auth.posts,
+      builder: (context, posts) => ProfilePostList(posts: posts));
   }
 }

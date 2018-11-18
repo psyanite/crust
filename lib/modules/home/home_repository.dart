@@ -28,9 +28,7 @@ class HomeRepository {
     """;
     final response = await Toaster.get(getAllStores);
     if (response['allStores'] != null) {
-      return (response['allStores'] as List)
-          .map((s) => Store.fromJson(s))
-          .toList();
+      return (response['allStores'] as List).map((s) => Store.fromJson(s)).toList();
     } else {
       throw Exception('Failed');
     }

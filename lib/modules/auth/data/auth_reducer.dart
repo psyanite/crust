@@ -6,6 +6,7 @@ import 'package:crust/modules/auth/data/auth_state.dart';
 Reducer<AuthState> authReducer = combineReducers([
   new TypedReducer<AuthState, LoginSuccess>(loginSuccessReducer),
   new TypedReducer<AuthState, Logout>(logoutReducer),
+  new TypedReducer<AuthState, FetchMyPostsSuccess>(fetchMyPostsReducer),
 ]);
 
 AuthState loginSuccessReducer(AuthState auth, LoginSuccess action) {
@@ -14,6 +15,10 @@ AuthState loginSuccessReducer(AuthState auth, LoginSuccess action) {
 
 AuthState logoutReducer(AuthState auth, Logout action) {
   return new AuthState();
+}
+
+AuthState fetchMyPostsReducer(AuthState auth, FetchMyPostsSuccess action) {
+  return new AuthState().copyWith(posts: action.posts);
 }
 
 

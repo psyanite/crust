@@ -1,7 +1,6 @@
 import 'package:crust/app/app_state.dart';
 import 'package:crust/main.dart';
 import 'package:crust/modules/auth/data/auth_actions.dart';
-import 'package:crust/modules/auth/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -10,8 +9,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-      converter: (Store<AppState> store) => () => store.dispatch(Logout()),
-      builder: (context, logout) => _Presenter(logout: logout));
+        converter: (Store<AppState> store) => () => store.dispatch(Logout()), builder: (context, logout) => _Presenter(logout: logout));
   }
 }
 
@@ -24,18 +22,15 @@ class _Presenter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            RaisedButton(
-              child: Text('Logout'),
-              onPressed: () {
-                logout();
-                Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
-              },
-            )
-          ]
-        ),
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+          RaisedButton(
+            child: Text('Logout'),
+            onPressed: () {
+              logout();
+              Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
+            },
+          )
+        ]),
       ),
     );
   }

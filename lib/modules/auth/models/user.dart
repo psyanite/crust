@@ -1,3 +1,4 @@
+import 'package:crust/utils/enum_util.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class User {
@@ -38,8 +39,9 @@ class User {
     );
   }
 
-  Map<String, dynamic> toJSON() =>
+  Map<String, dynamic> toJson() =>
     <String, dynamic>{
+      'type': EnumUtil.toString(this.type.toString()),
       'token': this.token,
       'id': this.id,
       'username': this.username,
@@ -51,9 +53,9 @@ class User {
       'socialId': this.socialId
     };
 
-  factory User.fromJSON(Map<String, dynamic> json) =>
+  factory User.fromJson(Map<String, dynamic> json) =>
     new User(
-      type: json['type'],
+      type: EnumUtil.fromString(UserType.values, json['type']),
       token: json['token'],
       id: json['id'],
       username: json['username'],

@@ -4,17 +4,12 @@ import 'package:meta/meta.dart';
 @immutable
 class HomeState {
   final List<Store> stores;
-  final String error;
 
-  HomeState({
-    this.stores,
-    this.error
-  });
+  HomeState({this.stores});
 
-  HomeState copyWith({List<Store> stores, String error}) {
+  HomeState copyWith({List<Store> stores}) {
     return new HomeState(
       stores: stores ?? this.stores,
-      error: error ?? this.error,
     );
   }
 
@@ -22,7 +17,6 @@ class HomeState {
   String toString() {
     return '''{
                 stores: $stores,
-                error: $error,
             }''';
   }
 }

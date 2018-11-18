@@ -1,4 +1,5 @@
 import 'package:crust/modules/auth/data/auth_state.dart';
+import 'package:crust/modules/error/error_state.dart';
 import 'package:crust/modules/home/home_state.dart';
 import 'package:meta/meta.dart';
 
@@ -6,21 +7,24 @@ import 'package:meta/meta.dart';
 class AppState {
   final AuthState auth;
   final HomeState home;
+  final ErrorState error;
 
-  AppState({AuthState auth, HomeState home})
+  AppState({AuthState auth, HomeState home, ErrorState error})
       : auth = auth ?? new AuthState(),
-        home = home ?? new HomeState();
+        home = home ?? new HomeState(),
+        error = error ?? new ErrorState();
 
-  static AppState rehydrateFromJson(dynamic json) =>
-      new AppState(auth: new AuthState.fromJSON(json['auth']));
+  static AppState rehydrateFromJson(dynamic json) => new AppState(
+    auth: json['auth'] == null ? null : new AuthState.fromJson(json['auth'])
+  );
 
-  Map<String, dynamic> toJson() => {'auth': auth.toJSON()};
+  Map<String, dynamic> toJson() => {'auth': auth.toJson()};
 
   AppState copyWith({
     bool rehydrated,
     AuthState auth,
   }) {
-    return new AppState(auth: auth ?? this.auth, home: home ?? this.home);
+    return new AppState(auth: auth ?? this.auth);
   }
 
   @override
@@ -28,7 +32,8 @@ class AppState {
     return '''
       AppState{
         auth: $auth,
-        home: $home
+        home: $home,
+        error: $error
       }
     ''';
   }
