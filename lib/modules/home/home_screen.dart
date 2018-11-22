@@ -15,7 +15,8 @@ class HomeScreen extends StatelessWidget {
     return StoreConnector<AppState, List<MyStore.Store>>(
         onInit: (Store<AppState> store) => store.dispatch(FetchStoresRequest()),
         converter: (Store<AppState> store) => store.state.home.stores,
-        builder: (BuildContext context, List<MyStore.Store> stores) => CustomScrollView(slivers: <Widget>[_appBar(), _main(stores)]));
+        builder: (BuildContext context, List<MyStore.Store> stores) =>
+            CustomScrollView(slivers: <Widget>[_appBar(), stores == null ? _loadingSliver() : _gridSliver(stores)]));
   }
 
   Widget _appBar() {
@@ -50,23 +51,16 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _storeCard(MyStore.Store store) {
-    var titleStyle = TextStyle();
-    var descStyle = TextStyle(fontSize: 12.0);
-
     return Container(
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
       Container(height: 100.0, child: Image.network(store.coverImage, fit: BoxFit.cover)),
       Padding(
           padding: EdgeInsets.only(left: 8.0, top: 5.0),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-            Text(store.name, style: titleStyle),
-            Text(store.location != null ? store.location : store.suburb, style: descStyle),
-            Text(store.cuisines.join(', '), style: descStyle),
+            Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
+            Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
+            Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
           ]))
     ]));
-  }
-
-  Widget _main(stores) {
-    return stores == null ? _loadingSliver() : _gridSliver(stores);
   }
 }
