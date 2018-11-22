@@ -1,7 +1,7 @@
 import 'package:crust/app/app_state.dart';
-import 'package:crust/modules/auth/data/auth_actions.dart';
-import 'package:crust/modules/auth/models/user.dart';
-import 'package:crust/modules/post/models/Post.dart';
+import 'package:crust/modules/auth/data/me_actions.dart';
+import 'package:crust/models/user.dart';
+import 'package:crust/models/Post.dart';
 import 'package:crust/modules/settings/settings_screen.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/utils/time_util.dart';
@@ -15,8 +15,8 @@ class MyProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-        onInit: (Store<AppState> store) => store.dispatch(FetchMyPostsRequest(store.state.auth.user.id)),
-        converter: _ViewModel.fromStore,
+        onInit: (Store<AppState> store) => store.dispatch(FetchMyPostsRequest(store.state.me.me.id)),
+        converter: _Props.fromStore,
         builder: (context, vm) => _Presenter(user: vm.user, posts: vm.posts));
   }
 }
@@ -44,7 +44,7 @@ class _Presenter extends StatelessWidget {
             height: 80.0,
             decoration: new BoxDecoration(
               image: new DecorationImage(
-                image: NetworkImage(user.picture),
+                image: NetworkImage(user.profilePicture),
                 fit: BoxFit.cover,
               ),
             )),
@@ -76,13 +76,13 @@ class _Presenter extends StatelessWidget {
                     color: Colors.white,
                     width: 4.0,
                   ),
-                  image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(user.picture)))),
+                  image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(user.profilePicture)))),
           Padding(
             padding: EdgeInsets.only(left: 8.0, top: 12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(user.fullName, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
+                Text(user.displayName, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
                 Text("@${user.username}")
               ],
             ),
@@ -232,13 +232,13 @@ class _Presenter extends StatelessWidget {
   }
 }
 
-class _ViewModel {
+class _Props {
   final User user;
   final List<Post> posts;
 
-  _ViewModel({this.user, this.posts});
+  _Props({this.user, this.posts});
 
   static fromStore(Store<AppState> store) {
-    return _ViewModel(user: store.state.auth.user, posts: store.state.auth.posts);
+    return _Props(user: store.state.me.me, posts: store.state.me.posts);
   }
 }

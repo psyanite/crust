@@ -1,5 +1,5 @@
-import 'package:crust/modules/auth/models/user.dart';
-import 'package:crust/modules/home/models/store.dart';
+import 'package:crust/models/user.dart';
+import 'package:crust/models/store.dart';
 
 class Post {
   final int id;
@@ -14,7 +14,7 @@ class Post {
 
   @override
   String toString() {
-    return '{ id: $id, type: $type, store: ${store.name}, postedBy: ${postedBy.fullName} }';
+    return '{ id: $id, type: $type, store: ${store.name}, postedBy: ${postedBy.displayName} }';
   }
 }
 

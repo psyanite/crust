@@ -13,7 +13,7 @@ class MyProfileNavigator extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return StoreConnector<AppState, dynamic>(
-        converter: (Store<AppState> store) => store.state.auth.user,
+        converter: (Store<AppState> store) => store.state.me.me,
         builder: (context, user) => Scaffold(
               body: new Navigator(
                 initialRoute: '/',

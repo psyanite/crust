@@ -1,6 +1,6 @@
 import 'package:crust/app/app_state.dart';
 import 'package:crust/main.dart';
-import 'package:crust/modules/auth/data/auth_actions.dart';
+import 'package:crust/modules/auth/data/me_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';

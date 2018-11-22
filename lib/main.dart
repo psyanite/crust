@@ -1,6 +1,6 @@
 import 'package:crust/app/app_reducer.dart';
 import 'package:crust/app/app_state.dart';
-import 'package:crust/modules/auth/data/auth_middleware.dart';
+import 'package:crust/modules/auth/data/me_middleware.dart';
 import 'package:crust/modules/home/home_middleware.dart';
 import 'package:crust/modules/loading/loading_screen.dart';
 import 'package:crust/modules/main/main_tab_navigator.dart';
@@ -38,7 +38,7 @@ class Main extends StatelessWidget {
   }
 }
 
-final persistor = new Persistor<AppState>(storage: FlutterStorage('burntoast'), decoder: AppState.rehydrateFromJson);
+final persistor = new Persistor<AppState>(storage: FlutterStorage('burntoast'), decoder: AppState.rehydrate);
 
 List<Middleware<AppState>> createMiddleware() {
   return <Middleware<AppState>>[
@@ -47,7 +47,7 @@ List<Middleware<AppState>> createMiddleware() {
     new LoggingMiddleware.printer(),
   ]
     ..addAll(createHomeMiddleware())
-    ..addAll(createAuthMiddleware());
+    ..addAll(createMeMiddleware());
 }
 
 Store<AppState> createStore() {

@@ -15,7 +15,7 @@ class ErrorState {
   @override
   String toString() {
     return '''{
-                message: $message,
-            }''';
+        message: $message,
+      }''';
   }
 }

@@ -1,40 +1,39 @@
-import 'package:crust/modules/auth/data/auth_state.dart';
+import 'package:crust/modules/auth/data/me_state.dart';
 import 'package:crust/modules/error/error_state.dart';
 import 'package:crust/modules/home/home_state.dart';
 import 'package:meta/meta.dart';
 
 @immutable
 class AppState {
-  final AuthState auth;
+  final MeState me;
   final HomeState home;
   final ErrorState error;
 
-  AppState({AuthState auth, HomeState home, ErrorState error})
-      : auth = auth ?? new AuthState(),
+  AppState({MeState me, HomeState home, ErrorState error})
+      : me = me ?? new MeState(),
         home = home ?? new HomeState(),
         error = error ?? new ErrorState();
 
-  static AppState rehydrateFromJson(dynamic json) => new AppState(
-    auth: json['auth'] == null ? null : new AuthState.fromJson(json['auth'])
+  static AppState rehydrate(dynamic json) => new AppState(
+    me: json['me'] == null ? null : new MeState.rehydrate(json['me'])
   );
 
-  Map<String, dynamic> toJson() => {'auth': auth.toJson()};
+  // Used by persistor
+  Map<String, dynamic> toJson() => {'me': me.toPersist()};
 
   AppState copyWith({
     bool rehydrated,
-    AuthState auth,
+    MeState me,
   }) {
-    return new AppState(auth: auth ?? this.auth);
+    return new AppState(me: me ?? this.me);
   }
 
   @override
   String toString() {
-    return '''
-      AppState{
-        auth: $auth,
-        home: $home,
-        error: $error
-      }
-    ''';
+    return '''{
+      me: $me,
+      home: $home,
+      error: $error
+    }''';
   }
 }

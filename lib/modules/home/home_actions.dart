@@ -1,4 +1,4 @@
-import 'package:crust/modules/home/models/store.dart';
+import 'package:crust/models/store.dart';
 
 class FetchStoresRequest {}
 

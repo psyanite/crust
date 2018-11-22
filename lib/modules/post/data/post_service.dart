@@ -1,11 +1,11 @@
-import 'package:crust/modules/auth/models/user.dart';
-import 'package:crust/modules/home/models/store.dart';
-import 'package:crust/modules/post/models/Post.dart';
+import 'package:crust/models/user.dart';
+import 'package:crust/models/store.dart';
+import 'package:crust/models/Post.dart';
 import 'package:crust/services/toaster.dart';
 import 'package:crust/utils/enum_util.dart';
 
-class PostRepository {
-  const PostRepository();
+class PostService {
+  const PostService();
 
   Future<List<Post>> fetchPostsByUserAccountId(int userAccountId) async {
     String query = """
@@ -62,8 +62,8 @@ class PostRepository {
             postedBy: User(
               id: postedBy['id'],
               username: postedBy['profile']['username'],
-              fullName: postedBy['profile']['display_name'],
-              picture: postedBy['profile']['profile_picture'],
+              displayName: postedBy['profile']['display_name'],
+              profilePicture: postedBy['profile']['profile_picture'],
             ),
             postedAt: DateTime.parse(post['posted_at']),
             postPhotos: (postPhotos as List).map((postPhoto) => PostPhoto(

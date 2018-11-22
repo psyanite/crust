@@ -1,6 +1,6 @@
 import 'package:crust/app/app_state.dart';
 import 'package:crust/modules/home/home_actions.dart';
-import 'package:crust/modules/home/models/store.dart' as MyStore;
+import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

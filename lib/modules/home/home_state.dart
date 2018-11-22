@@ -1,4 +1,4 @@
-import 'package:crust/modules/home/models/store.dart';
+import 'package:crust/models/store.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -16,7 +16,7 @@ class HomeState {
   @override
   String toString() {
     return '''{
-                stores: $stores,
-            }''';
+        stores: $stores,
+      }''';
   }
 }

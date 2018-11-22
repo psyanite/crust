@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:crust/app/app_state.dart';
 import 'package:crust/main.dart';
-import 'package:crust/modules/auth/data/auth_actions.dart';
-import 'package:crust/modules/auth/data/auth_repository.dart';
-import 'package:crust/modules/auth/models/user.dart';
+import 'package:crust/modules/auth/data/me_actions.dart';
+import 'package:crust/modules/auth/data/me_service.dart';
+import 'package:crust/models/user.dart';
 import 'package:crust/modules/auth/register_screen.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:flutter/material.dart';
@@ -90,7 +90,7 @@ class _Presenter extends StatelessWidget {
   }
 
   _login(user, context) async {
-    var fetchedUser = await AuthRepository.getUser(user);
+    var fetchedUser = await MeService.getUser(user);
     if (fetchedUser != null) {
       loginSuccess(fetchedUser);
       Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));

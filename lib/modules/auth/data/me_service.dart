@@ -1,9 +1,9 @@
-import 'package:crust/modules/auth/models/user.dart';
+import 'package:crust/models/user.dart';
 import 'package:crust/services/toaster.dart';
 import 'package:crust/utils/enum_util.dart';
 
-class AuthRepository {
-  const AuthRepository();
+class MeService {
+  const MeService();
 
   static Future<int> getUserAccountIdByUsername(String username) async {
     String getUserAccountIdByUsername = """
@@ -27,7 +27,7 @@ class AuthRepository {
     String getUserLogin = """
       query {
         userLoginBy(
-          socialType: "${EnumUtil.toString(user.type.toString())}", 
+          socialType: "${EnumUtil.toString(user.socialType.toString())}", 
           socialId: "${user.socialId}"
           ) {
           user_account {
@@ -59,11 +59,11 @@ class AuthRepository {
     mutation {
       addUser(
         username: "${user.username}",
-        display_name: "${user.fullName}",
+        display_name: "${user.displayName}",
         email: "${user.email}",
-        profile_picture: "${user.picture}",
+        profile_picture: "${user.profilePicture}",
         social_id: "${user.socialId}",
-        social_type: "${EnumUtil.toString(user.type.toString())}"
+        social_type: "${EnumUtil.toString(user.socialType.toString())}"
       ) {
         user_account {
           id

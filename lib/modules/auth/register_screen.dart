@@ -1,8 +1,8 @@
 import 'package:crust/app/app_state.dart';
 import 'package:crust/main.dart';
-import 'package:crust/modules/auth/data/auth_actions.dart';
-import 'package:crust/modules/auth/data/auth_repository.dart';
-import 'package:crust/modules/auth/models/user.dart';
+import 'package:crust/modules/auth/data/me_actions.dart';
+import 'package:crust/modules/auth/data/me_service.dart';
+import 'package:crust/models/user.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +80,7 @@ class _PresenterState extends State<_Presenter> {
       _snack(context, 'Please enter at least 8 characters');
       return;
     }
-    var userAccountId = await AuthRepository.getUserAccountIdByUsername(_username);
+    var userAccountId = await MeService.getUserAccountIdByUsername(_username);
     if (userAccountId != null) {
       _snack(context, 'Sorry, that username is already taken');
     } else {

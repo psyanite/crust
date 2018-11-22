@@ -1,8 +1,8 @@
-import 'package:crust/modules/home/models/store.dart';
+import 'package:crust/models/store.dart';
 import 'package:crust/services/toaster.dart';
 
-class HomeRepository {
-  const HomeRepository();
+class HomeService {
+  const HomeService();
 
   Future<List<Store>> fetchStores() async {
     String getAllStores = """

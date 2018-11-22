@@ -1,5 +1,5 @@
-import 'package:crust/modules/auth/models/user.dart';
-import 'package:crust/modules/post/models/Post.dart';
+import 'package:crust/models/user.dart';
+import 'package:crust/models/Post.dart';
 
 class AddUserRequested {
   final User user;
