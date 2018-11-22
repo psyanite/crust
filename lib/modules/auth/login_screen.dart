@@ -28,45 +28,35 @@ class _Presenter extends StatelessWidget {
 
   _Presenter({Key key, this.loginSuccess}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            stops: [0, 0.6, 1.0],
-            colors: [
-              Color(0xFFffc86b),
-              Color(0xFFffab40),
-              Color(0xFFc45d35),
-            ],
+    @override
+    Widget build(BuildContext context) {
+      return Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              stops: [0, 0.6, 1.0],
+              colors: [
+                Color(0xFFffc86b),
+                Color(0xFFffab40),
+                Color(0xFFc45d35),
+              ],
+            ),
           ),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Image.asset('assets/images/loading-icon.png', height: 250.0),
+                WhiteButton(text: "Login with Facebook", onPressed: _loginWithFacebook),
+                new Container(height: 10.0),
+                WhiteButton(text: "Login with Google", onPressed: _loginWithGoogle),
+              ]),
         ),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Image.asset('assets/images/loading-icon.png', height: 250.0),
-              WhiteButton(text: "Login with Facebook", onPressed: _loginWithFacebook),
-              new Container(height: 10.0),
-              WhiteButton(text: "Login with Google", onPressed: _loginWithGoogle),
-            ]),
-      ),
-    );
-  }
-
-//  _buildButton(text, onPressed, context) {
-//    return FlatButton(
-//      textColor: Burnt.primary,
-//      color: Burnt.background,
-//      padding: EdgeInsets.symmetric(vertical: 20.0),
-//      child: Text(text, style: TextStyle(fontSize: 22.0)),
-//      onPressed: () => onPressed(context),
-//    );
-//  }
+      );
+    }
 
   _loginWithFacebook(context) async {
     var result = await FacebookLogin().logInWithReadPermissions(['email']);

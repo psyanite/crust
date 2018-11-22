@@ -1,8 +1,8 @@
-import 'package:crust/modules/favorites/favorites_screen.dart';
+import 'package:crust/modules/screens/favorites_screen.dart';
 import 'package:crust/modules/home/home_screen.dart';
 import 'package:crust/modules/my_profile/my_profile_tab.dart';
-import 'package:crust/modules/new_post/new_post_screen.dart';
-import 'package:crust/modules/rewards/rewards_screen.dart';
+import 'package:crust/modules/screens/new_post_screen.dart';
+import 'package:crust/modules/screens/rewards_screen.dart';
 import 'package:crust/components/crust_cons_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -2,7 +2,7 @@ import 'package:crust/app/app_state.dart';
 import 'package:crust/modules/auth/data/me_actions.dart';
 import 'package:crust/models/user.dart';
 import 'package:crust/models/Post.dart';
-import 'package:crust/modules/settings/settings_screen.dart';
+import 'package:crust/modules/screens/settings_screen.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/utils/time_util.dart';
 import 'package:flutter/cupertino.dart';
