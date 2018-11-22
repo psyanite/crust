@@ -27,14 +27,13 @@ class PostPhoto {
 
 class PostReview {
   final int id;
-  final Score overallScore;
   final Score tasteScore;
   final Score serviceScore;
   final Score valueScore;
   final Score ambienceScore;
   final String body;
 
-  PostReview({this.id, this.overallScore, this.tasteScore, this.serviceScore, this.valueScore, this.ambienceScore, this.body});
+  PostReview({this.id, this.tasteScore, this.serviceScore, this.valueScore, this.ambienceScore, this.body});
 }
 
 enum PostType { photo, review }

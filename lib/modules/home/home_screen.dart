@@ -1,7 +1,7 @@
 import 'package:crust/app/app_state.dart';
 import 'package:crust/modules/home/home_actions.dart';
 import 'package:crust/modules/home/models/store.dart' as MyStore;
-import 'package:crust/presentation/colors.dart';
+import 'package:crust/presentation/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -23,9 +23,9 @@ class HomeScreen extends StatelessWidget {
         pinned: false,
         floating: false,
         expandedHeight: 60.0,
-        backgroundColor: ThemeColors.primaryLight,
+        backgroundColor: Burnt.primaryLight,
         elevation: 24.0,
-        title: Text('Burntoast', style: TextStyle(color: themeColors['white'], fontSize: 40.0, fontFamily: themeText['fancy'])));
+        title: Text('Burntoast', style: TextStyle(color: Colors.white, fontSize: 40.0, fontFamily: Burnt.fontFancy)));
   }
 
   Widget _loadingSliver() {
@@ -50,8 +50,8 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _storeCard(MyStore.Store store) {
-    var titleStyle = TextStyle(color: themeText['body'], fontFamily: themeText['base']);
-    var descStyle = TextStyle(color: themeText['body'], fontSize: 12.0, fontFamily: themeText['base'], fontWeight: FontWeight.w100);
+    var titleStyle = TextStyle();
+    var descStyle = TextStyle(fontSize: 12.0);
 
     return Container(
         child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[

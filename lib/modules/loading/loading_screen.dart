@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:crust/presentation/colors.dart';
+import 'package:crust/presentation/theme.dart';
 
 class LoadingScreen extends StatelessWidget {
   LoadingScreen({Key key}) : super(key: key);
@@ -11,7 +11,7 @@ class LoadingScreen extends StatelessWidget {
       home: new Scaffold(
         body: new Center(
           child: new CircularProgressIndicator(
-              backgroundColor: themeColors['screen_background'],
+              backgroundColor: Burnt.background,
               strokeWidth: 2.0),
         ),
       ),

@@ -1,21 +1,19 @@
-// Copyright 2017, the Flutter project authors.  Please see the AUTHORS file
-// for details. All rights reserved. Use of this source code is governed by a
-// BSD-style license that can be found in the LICENSE file.
-
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-import 'package:crust/presentation/colors.dart';
-
-final ThemeData kIOSTheme = new ThemeData(
-  primarySwatch: themeColors['primary'],
-  primaryColor: themeColors['primary'],
-  primaryColorBrightness: Brightness.light,
-);
-
-final ThemeData kDefaultTheme = new ThemeData(
-  primarySwatch: themeColors['primary'],
-  accentColor: themeColors['primary'],
+import 'package:crust/presentation/theme.dart';
+ThemeData getTheme(context) => new ThemeData(
+  primarySwatch: Burnt.material_primary,
+  accentColor: Burnt.material_primary,
+  fontFamily: Burnt.fontBase,
+  textTheme: Theme.of(context).textTheme.apply(
+    bodyColor: Burnt.textBody,
+    displayColor: Burnt.textBody,
+  ).merge(
+    TextTheme(
+      body1: TextStyle(fontSize: 16.0)
+    )
+  ),
 );
 
 /// App bar that uses iOS styling on iOS

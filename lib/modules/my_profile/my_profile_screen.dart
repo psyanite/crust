@@ -3,11 +3,12 @@ import 'package:crust/modules/auth/data/auth_actions.dart';
 import 'package:crust/modules/auth/models/user.dart';
 import 'package:crust/modules/post/models/Post.dart';
 import 'package:crust/modules/settings/settings_screen.dart';
+import 'package:crust/presentation/theme.dart';
 import 'package:crust/utils/time_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:redux/redux.dart';
 
 class MyProfileScreen extends StatelessWidget {
@@ -31,22 +32,12 @@ class _Presenter extends StatelessWidget {
     return CustomScrollView(slivers: <Widget>[_appBar(context), posts == null ? _loadingSliver() : _postList()]);
   }
 
-  Widget _postList() {
-    return SliverSafeArea(
-      top: false,
-      minimum: const EdgeInsets.all(16.0),
-      sliver: SliverList(
-        delegate: SliverChildListDelegate((List<Widget>.from(posts.map(_postCard)))),
-      ),
-    );
-  }
-
   Widget _appBar(context) {
     return SliverToBoxAdapter(
         child: Container(
             child: Stack(children: <Widget>[
       Container(
-        height: 200.0,
+        height: 180.0,
       ),
       Stack(children: <Widget>[
         Container(
@@ -87,10 +78,13 @@ class _Presenter extends StatelessWidget {
                   ),
                   image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(user.picture)))),
           Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.only(left: 8.0, top: 12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[Text(user.fullName), Text("@${user.username}")],
+              children: <Widget>[
+                Text(user.fullName, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
+                Text("@${user.username}")
+              ],
             ),
           )
         ]),
@@ -98,90 +92,133 @@ class _Presenter extends StatelessWidget {
     ])));
   }
 
-  Widget _postCard(Post post) {
-    return Container(child: Column(children: <Widget>[_buildStoreDetails(post), _buildContent(post)]));
+  Widget _postList() {
+    return SliverSafeArea(
+      top: false,
+      minimum: const EdgeInsets.symmetric(horizontal: 16.0),
+      sliver: SliverList(
+        delegate: SliverChildListDelegate((List<Widget>.from(posts.map(_postCard)))),
+      ),
+    );
   }
 
-  Widget _buildStoreDetails(Post post) {
-    var details = <Widget>[
-      Container(
+  Widget _postCard(Post post) {
+    return Container(
+      decoration: BoxDecoration(border: Border(
+        bottom: BorderSide(color: Burnt.separator)
+      )),
+      child: Column(children: <Widget>[_storeDetails(post), _content(post)])
+    );
+  }
+
+  Widget _storeDetails(Post post) {
+    var details = Row(
+      children: <Widget>[
+        Container(
           width: 50.0,
           height: 50.0,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0),
-              image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.store.coverImage)))),
-      Column(children: <Widget>[Text(post.store.name), Text(TimeUtil.format(post.postedAt))])
-    ];
-    if (post.type == PostType.review) details.add(Text(post.postReview.overallScore.toString()));
-    var children = <Widget>[Row(children: details)];
-    if (post.type == PostType.review) children.add(_buildStoreRatings(post));
+            borderRadius: BorderRadius.circular(5.0),
+            image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.store.coverImage)))),
+        Padding(
+          padding: const EdgeInsets.only(left: 10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(post.store.name, style: TextStyle(fontWeight: Burnt.fontBold, fontSize: 20.0)),
+              Text(TimeUtil.format(post.postedAt))
+            ]
+          ),
+        )
+      ]
+    );
+    if (post.type == PostType.review) {
+      details = Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          details
+        ]
+      );
+    }
+    var children = <Widget>[Container(padding: EdgeInsets.only(top: 15.0, bottom: 10.0), child: details)];
+    if (post.type == PostType.review) {
+      children.add(_storeRatings(post));
+    }
     return Column(
       children: children,
     );
   }
 
-  _buildStoreRatings(Post post) {
-    return Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[
-      _buildScore(post.postReview.tasteScore),
-      Container(
-        height: 30.0,
-        width: 1.0,
-        color: Colors.black38,
-        margin: const EdgeInsets.symmetric(horizontal: 5.0),
-      ),
-      _buildScore(post.postReview.serviceScore),
-      Container(
-        height: 30.0,
-        width: 1.0,
-        color: Colors.black38,
-        margin: const EdgeInsets.symmetric(horizontal: 5.0),
-      ),
-      _buildScore(post.postReview.valueScore),
-      Container(
-        height: 30.0,
-        width: 1.0,
-        color: Colors.black38,
-        margin: const EdgeInsets.symmetric(horizontal: 5.0),
-      ),
-      _buildScore(post.postReview.ambienceScore),
-    ]);
-  }
-
-  _buildScore(Score score, [double size = 50.0]) {
-    var assetName;
-    switch(score) {
-      case(Score.bad): {
-        assetName = 'assets/svgs/bread-bad.svg';
-      }
-      break;
-      case(Score.bad): {
-        assetName = 'assets/svgs/bread-okay.svg';
-      }
-      break;
-      case(Score.bad): {
-        assetName = 'assets/svgs/bread-good.svg';
-      }
-      break;
-      default: {
-        return new Container();
-      }
-    }
-    return new SvgPicture.asset(
-      assetName,
-      width: size,
-      height: size,
+  Widget _storeRatings(Post post) {
+    return Container(
+      decoration: BoxDecoration(border: Border(top: BorderSide(color: Burnt.separator), bottom: BorderSide(color: Burnt.separator))),
+      padding: EdgeInsets.only(top: 10.0, bottom: 5.0),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[
+        _score(post.postReview.tasteScore, name: 'Taste'),
+        _score(post.postReview.serviceScore, name: 'Service'),
+        _score(post.postReview.valueScore, name: 'Value'),
+        _score(post.postReview.ambienceScore, name: 'Ambience'),
+      ]),
     );
   }
 
-  _buildContent(Post post) {
-    if (post.type == PostType.review) {
-      return Text(post.postReview.body);
+  Widget _score(Score score, {double size = 25.0, String name = ''}) {
+    var assetName;
+    switch (score) {
+      case (Score.bad):
+        {
+          assetName = 'assets/svgs/bread-bad.svg';
+        }
+        break;
+      case (Score.okay):
+        {
+          assetName = 'assets/svgs/bread-okay.svg';
+        }
+        break;
+      case (Score.good):
+        {
+          assetName = 'assets/svgs/bread-good.svg';
+        }
+        break;
+      default:
+        {
+          return new Container();
+        }
     }
-    return Container(
-      height: 350.0,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5.0),
-        image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.postPhotos[0].photo))));
+    var children = <Widget>[
+      SvgPicture.asset(
+        assetName,
+        width: size,
+        height: size,
+      )
+    ];
+    if (name != '') {
+      children.add(Padding(
+        padding: const EdgeInsets.only(top: 5.0),
+        child: Text(name),
+      ));
+    }
+    return Column(
+      children: children
+    );
+  }
+
+  Widget _content(Post post) {
+    if (post.type == PostType.review) {
+      return Container(padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
+        child: Column(children: <Widget>[
+          Text(post.postReview.body),
+        ]));
+    }
+    return Padding(
+      padding: EdgeInsets.only(bottom: 20.0),
+      child: Container(
+          height: 350.0,
+          decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: Burnt.separator)),
+              borderRadius: BorderRadius.circular(5.0),
+              image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.postPhotos[0].photo)))),
+    );
   }
 
   Widget _loadingSliver() {
@@ -194,20 +231,6 @@ class _Presenter extends StatelessWidget {
     );
   }
 }
-
-//class _MyPostList extends StatelessWidget {
-//  final int userAccountId;
-//
-//  _MyPostList({Key key, this.userAccountId}) : super(key: key);
-//
-//  @override
-//  Widget build(BuildContext context) {
-//    return StoreConnector<AppState, dynamic>(
-//        onInit: (Store<AppState> store) => store.dispatch(FetchMyPostsRequest(userAccountId)),
-//        converter: (Store<AppState> store) => store.state.auth.posts,
-//        builder: (context, posts) => posts == null ? _loadingSliver() : ProfilePostList(posts: posts));
-//  }
-//}
 
 class _ViewModel {
   final User user;

@@ -6,7 +6,7 @@ import 'package:crust/modules/auth/data/auth_actions.dart';
 import 'package:crust/modules/auth/data/auth_repository.dart';
 import 'package:crust/modules/auth/models/user.dart';
 import 'package:crust/modules/auth/register_screen.dart';
-import 'package:crust/presentation/colors.dart';
+import 'package:crust/presentation/components.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -18,8 +18,8 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-      converter: (Store<AppState> store) => (user) => store.dispatch(LoginSuccess(user)),
-      builder: (context, loginSuccess) => _Presenter(loginSuccess: loginSuccess));
+        converter: (Store<AppState> store) => (user) => store.dispatch(LoginSuccess(user)),
+        builder: (context, loginSuccess) => _Presenter(loginSuccess: loginSuccess));
   }
 }
 
@@ -45,35 +45,34 @@ class _Presenter extends StatelessWidget {
           ),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Image.asset('assets/images/loading-icon.png', height: 200.0),
-            _buildButton("Login with Facebook", _loginWithFacebook, context),
-            new Container(height: 10.0),
-            _buildButton("Login with Google", _loginWithGoogle, context),
-          ]),
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Image.asset('assets/images/loading-icon.png', height: 250.0),
+              WhiteButton(text: "Login with Facebook", onPressed: _loginWithFacebook),
+              new Container(height: 10.0),
+              WhiteButton(text: "Login with Google", onPressed: _loginWithGoogle),
+            ]),
       ),
     );
   }
 
-  _buildButton(text, onPressed, context) {
-    return FlatButton(
-      textColor: ThemeColors.primaryDark,
-      color: ThemeColors.background,
-      padding: EdgeInsets.symmetric(vertical: 20.0),
-      child: Text(text, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w100)),
-      onPressed: () => onPressed(context),
-    );
-  }
+//  _buildButton(text, onPressed, context) {
+//    return FlatButton(
+//      textColor: Burnt.primary,
+//      color: Burnt.background,
+//      padding: EdgeInsets.symmetric(vertical: 20.0),
+//      child: Text(text, style: TextStyle(fontSize: 22.0)),
+//      onPressed: () => onPressed(context),
+//    );
+//  }
 
   _loginWithFacebook(context) async {
     var result = await FacebookLogin().logInWithReadPermissions(['email']);
     if (result.status == FacebookLoginStatus.loggedIn) {
       var graphResponse = await http.get(
-        'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${result.accessToken
-          .token}');
+          'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${result.accessToken.token}');
       var user = User.fromFacebook(result.accessToken.token, json.decode(graphResponse.body));
       await _login(user, context);
     }

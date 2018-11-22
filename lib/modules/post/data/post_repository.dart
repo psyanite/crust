@@ -35,7 +35,6 @@ class PostRepository {
         },
         post_review {
           id,
-          overall_score,
           taste_score,
           service_score,
           value_score,
@@ -73,7 +72,6 @@ class PostRepository {
                 )).toList(),
             postReview: postReview == null ? null : PostReview(
               id: postReview['id'],
-              overallScore: EnumUtil.fromString(Score.values, postReview['overall_score']),
               ambienceScore: EnumUtil.fromString(Score.values, postReview['ambience_score']),
               serviceScore: EnumUtil.fromString(Score.values, postReview['service_score']),
               tasteScore: EnumUtil.fromString(Score.values, postReview['taste_score']),

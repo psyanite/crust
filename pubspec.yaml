@@ -83,12 +83,15 @@ flutter:
     -   family: OpenSans
         fonts:
         -   asset: assets/fonts/OpenSans-Light.ttf
-            weight: 100
         -   asset: assets/fonts/OpenSans-Regular.ttf
         -   asset: assets/fonts/OpenSans-Bold.ttf
-            weight: 300
         -   asset: assets/fonts/OpenSans-ExtraBold.ttf
-            weight: 400
+
+
+    -   family: PTSans
+        fonts:
+        -   asset: assets/fonts/PTSans-Regular.ttf
+        -   asset: assets/fonts/PTSans-Bold.ttf
 
     # To add custom fonts to your application, add a fonts section here,
     # in this "flutter" section. Each entry in this list should have a

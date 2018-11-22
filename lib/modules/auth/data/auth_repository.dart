@@ -63,7 +63,7 @@ class AuthRepository {
         email: "${user.email}",
         profile_picture: "${user.picture}",
         social_id: "${user.socialId}",
-        social_type: "${EnumUtil.toString(user.type.toString())}}"
+        social_type: "${EnumUtil.toString(user.type.toString())}"
       ) {
         user_account {
           id

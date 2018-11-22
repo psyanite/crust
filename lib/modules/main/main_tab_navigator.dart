@@ -3,7 +3,7 @@ import 'package:crust/modules/home/home_screen.dart';
 import 'package:crust/modules/my_profile/my_profile_tab.dart';
 import 'package:crust/modules/new_post/new_post_screen.dart';
 import 'package:crust/modules/rewards/rewards_screen.dart';
-import 'package:crust/presentation/crust_cons_icons.dart';
+import 'package:crust/components/crust_cons_icons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

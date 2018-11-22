@@ -3,7 +3,8 @@ import 'package:crust/main.dart';
 import 'package:crust/modules/auth/data/auth_actions.dart';
 import 'package:crust/modules/auth/data/auth_repository.dart';
 import 'package:crust/modules/auth/models/user.dart';
-import 'package:crust/presentation/colors.dart';
+import 'package:crust/presentation/components.dart';
+import 'package:crust/presentation/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -39,48 +40,24 @@ class _PresenterState extends State<_Presenter> {
     return Scaffold(
         body: Builder(
       builder: (context) => Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                stops: [0, 0.6, 1.0],
-                colors: [
-                  Color(0xFFffc86b),
-                  Color(0xFFffab40),
-                  Color(0xFFc45d35),
-                ],
-              ),
-            ),
             child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  FlatButton(
-                    child: Text('Click'),
-                    onPressed: () {
-                      widget.addUser(User(
-                          fullName: "14241a24 420",
-                          username: "124214a21",
-                          picture: "4124a2421@fefefe.com",
-                          socialId: "1241a42100",
-                          type: UserType.facebook,
-                          email: "fefeze@fefe.com"));
-                    },
+                  Padding(
+                    padding: const EdgeInsets.only(top: 100.0, bottom: 20.0),
+                    child: Text("What's your username?", style: TextStyle(fontSize: 18.0), textAlign: TextAlign.center,),
                   ),
-                  TextField(
-                    decoration: new InputDecoration(labelText: "Username"),
-                    onChanged: (val) => setState(() {
-                          _username = val;
-                        }),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
+                    child: TextField(
+                      decoration: new InputDecoration(hintText: "Username"),
+                      onChanged: (val) => setState(() { _username = val; }),
+                      style: TextStyle(fontSize: 18.0, color: Burnt.textBody),
+                    ),
                   ),
-                  FlatButton(
-                    textColor: ThemeColors.primaryDark,
-                    color: ThemeColors.background,
-                    padding: EdgeInsets.symmetric(vertical: 20.0),
-                    child: Text("Submit", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w100)),
-                    onPressed: () => _press(context),
-                  )
+                  SolidButton(text: "Next", onPressed: _press)
                 ]),
           ),
     ));
@@ -98,6 +75,7 @@ class _PresenterState extends State<_Presenter> {
   }
 
   _press(context) async {
+    FocusScope.of(context).requestFocus(new FocusNode());
     if (_username == null || _username.isEmpty) {
       _snack(context, 'Please enter at least 8 characters');
       return;
