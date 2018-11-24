@@ -19,8 +19,8 @@ List<Middleware<AppState>> createMeMiddleware(
 Middleware<AppState> _addUser(MeService repository) {
   return (Store<AppState> store, action, NextDispatcher next) {
     repository.addUser(action.me).then((userAccountId) {
-      store.dispatch(LoginSuccess(action.me.copyWith(id: userAccountId)));
-    }).catchError((e) => store.dispatch(RequestFailure(e)));
+      store.dispatch(LoginSuccess(action.me.copyWith(storeId: userAccountId)));
+    }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
 
     next(action);
   };
@@ -32,7 +32,7 @@ Middleware<AppState> _fetchMyPosts(PostService repository) {
       (posts) {
         store.dispatch(FetchMyPostsSuccess(posts));
       },
-    ).catchError((e) => store.dispatch(RequestFailure(e)));
+    ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
 
     next(action);
   };

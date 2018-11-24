@@ -1,16 +1,20 @@
 import 'package:crust/modules/home/home_actions.dart';
 import 'package:crust/modules/home/home_state.dart';
 import 'package:redux/redux.dart';
+import 'package:crust/models/store.dart' as MyStore;
+
 
 Reducer<HomeState> homeReducer = combineReducers([
-  new TypedReducer<HomeState, FetchStoresRequest>(fetchStores),
   new TypedReducer<HomeState, FetchStoresSuccess>(fetchStoresSuccess),
+  new TypedReducer<HomeState, FetchPostsByStoreIdSuccess>(fetchPostsByStoreIdSuccess),
 ]);
 
-HomeState fetchStores(HomeState state, FetchStoresRequest action) {
-  return state;
+HomeState fetchStoresSuccess(HomeState state, FetchStoresSuccess action) {
+  return state.copyWith(stores: Map.fromEntries(action.stores.map((s) => MapEntry<int, MyStore.Store>(s.id, s))));
 }
 
-HomeState fetchStoresSuccess(HomeState state, FetchStoresSuccess action) {
-  return state.copyWith(stores: action.stores);
+HomeState fetchPostsByStoreIdSuccess(HomeState state, FetchPostsByStoreIdSuccess action) {
+  var newStores = Map<int, MyStore.Store>.from(state.stores);
+  newStores[action.storeId] = newStores[action.storeId].copyWith(posts: action.posts);
+  return state.copyWith(stores: newStores);
 }

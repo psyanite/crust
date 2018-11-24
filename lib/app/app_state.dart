@@ -21,10 +21,7 @@ class AppState {
   // Used by persistor
   Map<String, dynamic> toJson() => {'me': me.toPersist()};
 
-  AppState copyWith({
-    bool rehydrated,
-    MeState me,
-  }) {
+  AppState copyWith({MeState me}) {
     return new AppState(me: me ?? this.me);
   }
 

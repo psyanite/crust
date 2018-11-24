@@ -56,26 +56,26 @@ class MeService {
 
   Future<int> addUser(User user) async {
     String addUser = """
-    mutation {
-      addUser(
-        username: "${user.username}",
-        display_name: "${user.displayName}",
-        email: "${user.email}",
-        profile_picture: "${user.profilePicture}",
-        social_id: "${user.socialId}",
-        social_type: "${EnumUtil.toString(user.socialType.toString())}"
-      ) {
-        user_account {
-          id
+      mutation {
+        addUser(
+          username: "${user.username}",
+          display_name: "${user.displayName}",
+          email: "${user.email}",
+          profile_picture: "${user.profilePicture}",
+          social_id: "${user.socialId}",
+          social_type: "${EnumUtil.toString(user.socialType.toString())}"
+        ) {
+          user_account {
+            id
+          }
         }
       }
-    }
-  """;
+    """;
     final response = await Toaster.get(addUser);
     if (response['addUser'] != null) {
       return response['addUser']['user_account']['id'];
     } else {
-      throw Exception('Failed');
+      throw Exception('Failed to addUser');
     }
   }
 }

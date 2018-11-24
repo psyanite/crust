@@ -1,5 +1,5 @@
 class RequestFailure {
-  final Exception error;
+  final String error;
 
   RequestFailure(this.error);
 }

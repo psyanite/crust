@@ -11,10 +11,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-class StoreScreen extends StatelessWidget {
+class ProfileScreen extends StatelessWidget {
   final int storeId;
 
-  StoreScreen({Key key, this.storeId}) : super(key: key);
+  ProfileScreen({Key key, this.storeId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

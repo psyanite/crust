@@ -1,8 +1,5 @@
-import 'package:crust/models/user.dart';
-import 'package:crust/models/store.dart';
 import 'package:crust/models/Post.dart';
 import 'package:crust/services/toaster.dart';
-import 'package:crust/utils/enum_util.dart';
 
 class PostService {
   const PostService();
@@ -10,9 +7,7 @@ class PostService {
   Future<List<Post>> fetchPostsByUserAccountId(int userAccountId) async {
     String query = """
     query {
-      postsByUserAccountId(
-        userAccountId: $userAccountId
-      ) {
+      postsByUserAccountId(userAccountId: $userAccountId) {
         id,
         type,
         store {
@@ -20,7 +15,7 @@ class PostService {
           name,
           cover_image,
         },
-        posted_by{
+        posted_by {
           id,
           profile {
             username,
@@ -35,6 +30,7 @@ class PostService {
         },
         post_review {
           id,
+          overall_score,
           taste_score,
           service_score,
           value_score,
@@ -46,41 +42,9 @@ class PostService {
   """;
     final response = await Toaster.get(query);
     if (response['postsByUserAccountId'] != null) {
-      return (response['postsByUserAccountId'] as List).map((post) {
-        var store = post['store'];
-        var postedBy = post['posted_by'];
-        var postPhotos = post['post_photos'];
-        var postReview = post['post_review'];
-        return Post(
-            id: post['id'],
-            type: EnumUtil.fromString(PostType.values, post['type']),
-            store: Store(
-              id: store['id'],
-              name: store['name'],
-              coverImage: store['cover_image'],
-            ),
-            postedBy: User(
-              id: postedBy['id'],
-              username: postedBy['profile']['username'],
-              displayName: postedBy['profile']['display_name'],
-              profilePicture: postedBy['profile']['profile_picture'],
-            ),
-            postedAt: DateTime.parse(post['posted_at']),
-            postPhotos: (postPhotos as List).map((postPhoto) => PostPhoto(
-                  id: postPhoto['id'],
-                  photo: postPhoto['photo'],
-                )).toList(),
-            postReview: postReview == null ? null : PostReview(
-              id: postReview['id'],
-              ambienceScore: EnumUtil.fromString(Score.values, postReview['ambience_score']),
-              serviceScore: EnumUtil.fromString(Score.values, postReview['service_score']),
-              tasteScore: EnumUtil.fromString(Score.values, postReview['taste_score']),
-              valueScore: EnumUtil.fromString(Score.values, postReview['value_score']),
-              body: postReview['body'],
-            ));
-      }).toList();
+      return (response['postsByUserAccountId'] as List).map((p) => Post.fromToaster(p)).toList();
     } else {
-      throw Exception('Failed');
+      throw Exception('Failed to postsByUserAccountId');
     }
   }
 }

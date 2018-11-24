@@ -13,30 +13,32 @@ class User {
   final String socialId;
   final String token;
 
-  User(
-      {this.id,
-      this.username,
-      this.firstName,
-      this.lastName,
-      this.displayName,
-      this.email,
-      this.profilePicture,
-      this.socialType,
-      this.socialId,
-      this.token});
+  User({
+    this.id,
+    this.username,
+    this.firstName,
+    this.lastName,
+    this.displayName,
+    this.email,
+    this.profilePicture,
+    this.socialType,
+    this.socialId,
+    this.token,
+  });
 
   User copyWith({int id, String username, String profilePicture, String displayName}) {
     return User(
-        id: id ?? this.id,
-        username: username ?? this.username,
-        firstName: firstName,
-        lastName: lastName,
-        displayName: displayName ?? this.displayName,
-        email: email,
-        profilePicture: profilePicture ?? this.profilePicture,
-        socialType: socialType,
-        socialId: socialId,
-        token: token);
+      id: id ?? this.id,
+      username: username ?? this.username,
+      firstName: firstName,
+      lastName: lastName,
+      displayName: displayName ?? this.displayName,
+      email: email,
+      profilePicture: profilePicture ?? this.profilePicture,
+      socialType: socialType,
+      socialId: socialId,
+      token: token,
+    );
   }
 
   Map<String, dynamic> toPersist() => <String, dynamic>{
@@ -53,36 +55,39 @@ class User {
       };
 
   factory User.rehydrate(Map<String, dynamic> json) => new User(
-      id: json['id'],
-      username: json['username'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      displayName: json['displayName'],
-      email: json['email'],
-      profilePicture: json['profilePicture'],
-      socialType: EnumUtil.fromString(SocialType.values, json['socialType']),
-      socialId: json['socialId'],
-      token: json['token']);
+        id: json['id'],
+        username: json['username'],
+        firstName: json['firstName'],
+        lastName: json['lastName'],
+        displayName: json['displayName'],
+        email: json['email'],
+        profilePicture: json['profilePicture'],
+        socialType: EnumUtil.fromString(SocialType.values, json['socialType']),
+        socialId: json['socialId'],
+        token: json['token'],
+      );
 
   factory User.fromFacebook(String token, Map<String, dynamic> json) {
     return User(
-        firstName: json['first_name'],
-        lastName: json['last_name'],
-        displayName: json['name'],
-        email: json['email'],
-        profilePicture: json['picture']['data']['url'],
-        socialType: SocialType.facebook,
-        socialId: json['id'],
-        token: token);
+      firstName: json['first_name'],
+      lastName: json['last_name'],
+      displayName: json['name'],
+      email: json['email'],
+      profilePicture: json['picture']['data']['url'],
+      socialType: SocialType.facebook,
+      socialId: json['id'],
+      token: token,
+    );
   }
 
   factory User.fromGoogle(GoogleSignInAccount googleUser) {
     return User(
-        displayName: googleUser.displayName,
-        email: googleUser.email,
-        profilePicture: googleUser.photoUrl,
-        socialType: SocialType.google,
-        socialId: googleUser.id);
+      displayName: googleUser.displayName,
+      email: googleUser.email,
+      profilePicture: googleUser.photoUrl,
+      socialType: SocialType.google,
+      socialId: googleUser.id,
+    );
   }
 
   @override

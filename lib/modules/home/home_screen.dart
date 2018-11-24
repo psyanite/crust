@@ -2,6 +2,7 @@ import 'package:crust/app/app_state.dart';
 import 'package:crust/modules/home/home_actions.dart';
 import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/modules/screens/store_screen.dart';
+import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +13,11 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, List<MyStore.Store>>(
+    return StoreConnector<AppState, Map<int, MyStore.Store>>(
         onInit: (Store<AppState> store) => store.dispatch(FetchStoresRequest()),
         converter: (Store<AppState> store) => store.state.home.stores,
-        builder: (BuildContext context, List<MyStore.Store> stores) =>
-            CustomScrollView(slivers: <Widget>[_appBar(), stores == null ? _loadingSliver() : _gridSliver(stores)]));
+        builder: (BuildContext context, Map<int, MyStore.Store> stores) =>
+            CustomScrollView(slivers: <Widget>[_appBar(), stores == null ? LoadingSliver() : _gridSliver(stores.values.toList())]));
   }
 
   Widget _appBar() {
@@ -27,16 +28,6 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Burnt.primaryLight,
         elevation: 24.0,
         title: Text('Burntoast', style: TextStyle(color: Colors.white, fontSize: 40.0, fontFamily: Burnt.fontFancy)));
-  }
-
-  Widget _loadingSliver() {
-    return SliverFillRemaining(
-      child: Container(
-        child: Center(
-          child: CupertinoActivityIndicator(),
-        ),
-      ),
-    );
   }
 
   Widget _gridSliver(List<MyStore.Store> stores) {

@@ -51,7 +51,7 @@ class _Presenter extends StatelessWidget {
               children: [
                 Image.asset('assets/images/loading-icon.png', height: 250.0),
                 WhiteButton(text: "Login with Facebook", onPressed: _loginWithFacebook),
-                new Container(height: 10.0),
+                Container(height: 10.0),
                 WhiteButton(text: "Login with Google", onPressed: _loginWithGoogle),
               ]),
         ),
