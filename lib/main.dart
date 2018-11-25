@@ -15,7 +15,13 @@ import 'package:redux_thunk/redux_thunk.dart';
 void main() async {
   final persistor = Persistor<AppState>(storage: FlutterStorage(), serializer: JsonSerializer<AppState>(AppState.rehydrate));
 
-  final initialState = await persistor.load();
+  var initialState;
+  try {
+    initialState = await persistor.load();
+  }
+  catch (e) {
+    initialState = null;
+  }
 
   List<Middleware<AppState>> createMiddleware() {
     return <Middleware<AppState>>[

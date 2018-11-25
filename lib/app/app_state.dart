@@ -16,13 +16,13 @@ class AppState {
 
   static AppState rehydrate(dynamic json) {
     try {
-      return new AppState(
+      return AppState(
         me: json['me'] == null ? null : new MeState.rehydrate(json['me'])
       );
     }
     catch (e) {
       print("Could not deserialize json from persistor: $e");
-      return new AppState();
+      return AppState();
     }
   }
 
@@ -30,7 +30,7 @@ class AppState {
   Map<String, dynamic> toJson() => {'me': me.toPersist()};
 
   AppState copyWith({MeState me}) {
-    return new AppState(me: me ?? this.me);
+    return AppState(me: me ?? this.me);
   }
 
   @override

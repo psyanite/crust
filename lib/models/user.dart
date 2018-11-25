@@ -70,7 +70,7 @@ class User {
         socialType: EnumUtil.fromString(SocialType.values, json['socialType']),
         socialId: json['socialId'],
         token: json['token'],
-        posts: (json['posts'] as List).map((p) => Post.fromJson(p)),
+        posts: json['posts'] != null ? (json['posts'] as List).map((p) => Post.fromJson(p)) : null,
       );
 
   factory User.fromFacebook(String token, Map<String, dynamic> json) {
