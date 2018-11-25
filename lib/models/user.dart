@@ -1,3 +1,4 @@
+import 'package:crust/models/Post.dart';
 import 'package:crust/utils/enum_util.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -12,6 +13,7 @@ class User {
   final SocialType socialType;
   final String socialId;
   final String token;
+  final List<Post> posts;
 
   User({
     this.id,
@@ -24,9 +26,10 @@ class User {
     this.socialType,
     this.socialId,
     this.token,
+    this.posts,
   });
 
-  User copyWith({int id, String username, String profilePicture, String displayName}) {
+  User copyWith({int id, String username, String profilePicture, String displayName, List<Post> posts}) {
     return User(
       id: id ?? this.id,
       username: username ?? this.username,
@@ -38,6 +41,7 @@ class User {
       socialType: socialType,
       socialId: socialId,
       token: token,
+      posts: posts ?? this.posts,
     );
   }
 
@@ -49,12 +53,13 @@ class User {
         'displayName': this.displayName,
         'email': this.email,
         'profilePicture': this.profilePicture,
-        'socialType': EnumUtil.toString(this.socialType.toString()),
+        'socialType': EnumUtil.format(this.socialType.toString()),
         'socialId': this.socialId,
-        'token': this.token
+        'token': this.token,
+        'posts': this.posts,
       };
 
-  factory User.rehydrate(Map<String, dynamic> json) => new User(
+  factory User.fromJson(Map<String, dynamic> json) => new User(
         id: json['id'],
         username: json['username'],
         firstName: json['firstName'],
@@ -65,6 +70,7 @@ class User {
         socialType: EnumUtil.fromString(SocialType.values, json['socialType']),
         socialId: json['socialId'],
         token: json['token'],
+        posts: (json['posts'] as List).map((p) => Post.fromJson(p)),
       );
 
   factory User.fromFacebook(String token, Map<String, dynamic> json) {

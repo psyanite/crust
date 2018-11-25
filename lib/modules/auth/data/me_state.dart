@@ -1,37 +1,32 @@
 import 'package:crust/models/user.dart';
-import 'package:crust/models/Post.dart';
 import 'package:meta/meta.dart';
 
 @immutable
 class MeState {
-  final User me;
-  final List<Post> posts;
+  final User user;
 
   MeState({
-    this.me,
-    this.posts,
+    this.user,
   });
 
-  MeState copyWith({User me, List<Post> posts}) {
+  MeState copyWith({User user}) {
     return new MeState(
-      me: me ?? this.me,
-      posts: posts ?? this.posts,
+      user: user ?? this.user,
     );
   }
 
   factory MeState.rehydrate(Map<String, dynamic> json) => new MeState(
-    me: json['me'] == null ? null : new User.rehydrate(json['me']),
-  );
+        user: json['user'] == null ? null : new User.fromJson(json['user']),
+      );
 
   Map<String, dynamic> toPersist() => <String, dynamic>{
-    'me': this.me == null ? null : this.me.toPersist(),
-  };
+        'user': this.user == null ? null : this.user.toPersist(),
+      };
 
   @override
   String toString() {
     return '''{
-        me: $me,
-        posts: $posts,
+        user: $user,
       }''';
   }
 }

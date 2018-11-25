@@ -14,9 +14,17 @@ class AppState {
         home = home ?? new HomeState(),
         error = error ?? new ErrorState();
 
-  static AppState rehydrate(dynamic json) => new AppState(
-    me: json['me'] == null ? null : new MeState.rehydrate(json['me'])
-  );
+  static AppState rehydrate(dynamic json) {
+    try {
+      return new AppState(
+        me: json['me'] == null ? null : new MeState.rehydrate(json['me'])
+      );
+    }
+    catch (e) {
+      print("Could not deserialize json from persistor: $e");
+      return new AppState();
+    }
+  }
 
   // Used by persistor
   Map<String, dynamic> toJson() => {'me': me.toPersist()};

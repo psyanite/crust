@@ -1,8 +1,7 @@
+import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/modules/home/home_actions.dart';
 import 'package:crust/modules/home/home_state.dart';
 import 'package:redux/redux.dart';
-import 'package:crust/models/store.dart' as MyStore;
-
 
 Reducer<HomeState> homeReducer = combineReducers([
   new TypedReducer<HomeState, FetchStoresSuccess>(fetchStoresSuccess),

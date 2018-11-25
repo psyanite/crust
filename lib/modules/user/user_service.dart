@@ -1,11 +1,10 @@
-import 'package:crust/models/Post.dart';
 import 'package:crust/models/store.dart';
 import 'package:crust/services/toaster.dart';
 
-class HomeService {
-  const HomeService();
+class UserService {
+  const UserService();
 
-  Future<List<Store>> fetchStores() async {
+  Future<List<Store>> fetchUserByUserId() async {
     String query = """
       query {
         allStores {
@@ -61,50 +60,6 @@ class HomeService {
           .toList();
     } else {
       throw Exception('Failed to allStores');
-    }
-  }
-
-  Future<List<Post>> fetchPostsByStoreId(int storeId) async {
-    String query = """
-      query {
-        postsByStoreId(storeId: $storeId) {
-          id,
-          type,
-          store {
-            id,
-            name,
-            cover_image,
-          },
-          posted_by {
-            id,
-            profile {
-              username,
-              display_name,
-              profile_picture,
-            }
-          },
-          posted_at,
-          post_photos {
-            id,
-            photo,
-          },
-          post_review {
-            id,
-            overall_score,
-            taste_score,
-            service_score,
-            value_score,
-            ambience_score,
-            body,
-          }
-        }
-      }
-    """;
-    final response = await Toaster.get(query);
-    if (response['postsByStoreId'] != null) {
-      return (response['postsByStoreId'] as List).map((p) => Post.fromJson(p)).toList();
-    } else {
-      throw Exception('Failed to postsByStoreId');
     }
   }
 }

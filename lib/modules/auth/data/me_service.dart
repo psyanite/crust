@@ -27,7 +27,7 @@ class MeService {
     String getUserLogin = """
       query {
         userLoginBy(
-          socialType: "${EnumUtil.toString(user.socialType.toString())}", 
+          socialType: "${EnumUtil.format(user.socialType.toString())}", 
           socialId: "${user.socialId}"
           ) {
           user_account {
@@ -44,11 +44,10 @@ class MeService {
     final response = await Toaster.get(getUserLogin);
     if (response['userLoginBy'] != null) {
       return user.copyWith(
-        id: response['userLoginBy']['user_account']['id'],
-        profilePicture: response['userLoginBy']['user_account']['profile']['profile_picture'],
-        displayName: response['userLoginBy']['user_account']['profile']['display_name'],
-        username: response['userLoginBy']['user_account']['profile']['username']
-      );
+          id: response['userLoginBy']['user_account']['id'],
+          profilePicture: response['userLoginBy']['user_account']['profile']['profile_picture'],
+          displayName: response['userLoginBy']['user_account']['profile']['display_name'],
+          username: response['userLoginBy']['user_account']['profile']['username']);
     } else {
       return null;
     }
@@ -63,7 +62,7 @@ class MeService {
           email: "${user.email}",
           profile_picture: "${user.profilePicture}",
           social_id: "${user.socialId}",
-          social_type: "${EnumUtil.toString(user.socialType.toString())}"
+          social_type: "${EnumUtil.format(user.socialType.toString())}"
         ) {
           user_account {
             id

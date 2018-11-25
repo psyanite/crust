@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:crust/app/app_state.dart';
 import 'package:crust/main.dart';
+import 'package:crust/models/user.dart';
 import 'package:crust/modules/auth/data/me_actions.dart';
 import 'package:crust/modules/auth/data/me_service.dart';
-import 'package:crust/models/user.dart';
 import 'package:crust/modules/auth/register_screen.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:flutter/material.dart';
@@ -28,35 +28,35 @@ class _Presenter extends StatelessWidget {
 
   _Presenter({Key key, this.loginSuccess}) : super(key: key);
 
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              stops: [0, 0.6, 1.0],
-              colors: [
-                Color(0xFFffc86b),
-                Color(0xFFffab40),
-                Color(0xFFc45d35),
-              ],
-            ),
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            stops: [0, 0.6, 1.0],
+            colors: [
+              Color(0xFFffc86b),
+              Color(0xFFffab40),
+              Color(0xFFc45d35),
+            ],
           ),
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Image.asset('assets/images/loading-icon.png', height: 250.0),
-                WhiteButton(text: "Login with Facebook", onPressed: _loginWithFacebook),
-                Container(height: 10.0),
-                WhiteButton(text: "Login with Google", onPressed: _loginWithGoogle),
-              ]),
         ),
-      );
-    }
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Image.asset('assets/images/loading-icon.png', height: 250.0),
+              WhiteButton(text: "Login with Facebook", onPressed: _loginWithFacebook),
+              Container(height: 10.0),
+              WhiteButton(text: "Login with Google", onPressed: _loginWithGoogle),
+            ]),
+      ),
+    );
+  }
 
   _loginWithFacebook(context) async {
     var result = await FacebookLogin().logInWithReadPermissions(['email']);

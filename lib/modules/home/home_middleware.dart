@@ -12,7 +12,7 @@ List<Middleware<AppState>> createHomeMiddleware([
 
   return [
     TypedMiddleware<AppState, FetchStoresRequest>(fetchStores),
-    TypedMiddleware<AppState, FetchPostsByStoreIdRequest>(fetchPostsByStoreId),
+    TypedMiddleware<AppState, FetchUserByUserIdRequest>(fetchPostsByStoreId),
   ];
 }
 

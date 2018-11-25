@@ -3,7 +3,6 @@ import 'package:crust/modules/auth/data/me_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:redux_persist_flutter/redux_persist_flutter.dart';
 
 class NewPostScreen extends StatelessWidget {
   @override
@@ -22,20 +21,7 @@ class _Presenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-          child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          FlatButton(
-              child: Text('Click'),
-              onPressed: () {
-                var storage = new FlutterStorage('meow');
-                var storage2 = new FlutterStorage('redux-app');
-                storage.save("{\"version\":-1,\"state\":{\"auth\":null}}");
-                storage2.save("{\"version\":-1,\"state\":{\"auth\":null}}");
-              }),
-        ],
-      )),
+      body: Center(child: Text('New Post')),
     );
   }
 }

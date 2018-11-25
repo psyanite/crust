@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-
 import 'package:crust/presentation/theme.dart';
+import 'package:flutter/material.dart';
 
 class LoadingScreen extends StatelessWidget {
   LoadingScreen({Key key}) : super(key: key);
@@ -10,9 +9,7 @@ class LoadingScreen extends StatelessWidget {
     return new MaterialApp(
       home: new Scaffold(
         body: new Center(
-          child: new CircularProgressIndicator(
-              backgroundColor: Burnt.background,
-              strokeWidth: 2.0),
+          child: new CircularProgressIndicator(backgroundColor: Burnt.background, strokeWidth: 2.0),
         ),
       ),
     );

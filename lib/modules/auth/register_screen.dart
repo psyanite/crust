@@ -1,8 +1,8 @@
 import 'package:crust/app/app_state.dart';
 import 'package:crust/main.dart';
+import 'package:crust/models/user.dart';
 import 'package:crust/modules/auth/data/me_actions.dart';
 import 'package:crust/modules/auth/data/me_service.dart';
-import 'package:crust/models/user.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/material.dart';
@@ -47,13 +47,19 @@ class _PresenterState extends State<_Presenter> {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 100.0, bottom: 20.0),
-                    child: Text("What's your username?", style: TextStyle(fontSize: 18.0), textAlign: TextAlign.center,),
+                    child: Text(
+                      "What's your username?",
+                      style: TextStyle(fontSize: 18.0),
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 40.0),
                     child: TextField(
                       decoration: new InputDecoration(hintText: "Username"),
-                      onChanged: (val) => setState(() { _username = val; }),
+                      onChanged: (val) => setState(() {
+                            _username = val;
+                          }),
                       style: TextStyle(fontSize: 18.0, color: Burnt.textBody),
                     ),
                   ),

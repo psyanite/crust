@@ -1,6 +1,6 @@
 import 'package:crust/app/app_state.dart';
-import 'package:crust/modules/home/home_actions.dart';
 import 'package:crust/models/store.dart' as MyStore;
+import 'package:crust/modules/home/home_actions.dart';
 import 'package:crust/modules/screens/store_screen.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
@@ -10,7 +10,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 class HomeScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, Map<int, MyStore.Store>>(
@@ -52,16 +51,16 @@ class HomeScreen extends StatelessWidget {
             );
           },
           child: Container(
-            child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
-              Container(height: 100.0, child: Image.network(store.coverImage, fit: BoxFit.cover)),
-              Padding(
+              child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
+            Container(height: 100.0, child: Image.network(store.coverImage, fit: BoxFit.cover)),
+            Padding(
                 padding: EdgeInsets.only(left: 8.0, top: 5.0),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
                   Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
                   Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
                 ]))
-            ])),
+          ])),
         );
       },
     );

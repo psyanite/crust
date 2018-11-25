@@ -13,11 +13,23 @@ class PostList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (posts == null) return LoadingSliver();
+    if (posts.length == 0) return _noPostsNotice();
     return SliverSafeArea(
       top: false,
       minimum: const EdgeInsets.symmetric(horizontal: 16.0),
       sliver: SliverList(
         delegate: SliverChildListDelegate((List<Widget>.from(posts.map(_postCard)))),
+      ),
+    );
+  }
+
+  Widget _noPostsNotice() {
+    return SliverSafeArea(
+      top: false,
+      minimum: const EdgeInsets.symmetric(horizontal: 16.0),
+      sliver: SliverList(
+        delegate: SliverChildListDelegate(<Widget>[Text('No posts')]),
       ),
     );
   }

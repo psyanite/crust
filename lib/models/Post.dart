@@ -18,7 +18,7 @@ class Post {
     return '{ id: $id, type: $type, store: ${store.name}, postedBy: ${postedBy.displayName} }';
   }
 
-  factory Post.fromToaster(Map<String, dynamic> post) {
+  factory Post.fromJson(Map<String, dynamic> post) {
     var store = post['store'];
     var postedBy = post['posted_by'];
     var postPhotos = post['post_photos'];

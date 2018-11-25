@@ -5,8 +5,7 @@ import 'package:crust/modules/error/error_actions.dart';
 import 'package:crust/modules/post/data/post_service.dart';
 import 'package:redux/redux.dart';
 
-List<Middleware<AppState>> createMeMiddleware(
-    [MeService authRepo = const MeService(), PostService postRepo = const PostService()]) {
+List<Middleware<AppState>> createMeMiddleware([MeService authRepo = const MeService(), PostService postRepo = const PostService()]) {
   final addUser = _addUser(authRepo);
   final fetchMyPosts = _fetchMyPosts(postRepo);
 
@@ -16,9 +15,9 @@ List<Middleware<AppState>> createMeMiddleware(
   ];
 }
 
-Middleware<AppState> _addUser(MeService repository) {
+Middleware<AppState> _addUser(MeService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
-    repository.addUser(action.me).then((userAccountId) {
+    service.addUser(action.me).then((userAccountId) {
       store.dispatch(LoginSuccess(action.me.copyWith(storeId: userAccountId)));
     }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
 
@@ -26,9 +25,9 @@ Middleware<AppState> _addUser(MeService repository) {
   };
 }
 
-Middleware<AppState> _fetchMyPosts(PostService repository) {
+Middleware<AppState> _fetchMyPosts(PostService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
-    repository.fetchPostsByUserAccountId(action.userAccountId).then(
+    service.fetchPostsByUserAccountId(action.userAccountId).then(
       (posts) {
         store.dispatch(FetchMyPostsSuccess(posts));
       },

@@ -42,7 +42,7 @@ class PostService {
   """;
     final response = await Toaster.get(query);
     if (response['postsByUserAccountId'] != null) {
-      return (response['postsByUserAccountId'] as List).map((p) => Post.fromToaster(p)).toList();
+      return (response['postsByUserAccountId'] as List).map((p) => Post.fromJson(p)).toList();
     } else {
       throw Exception('Failed to postsByUserAccountId');
     }

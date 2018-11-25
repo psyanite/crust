@@ -1,7 +1,6 @@
-import 'package:redux/redux.dart';
-
 import 'package:crust/modules/auth/data/me_actions.dart';
 import 'package:crust/modules/auth/data/me_state.dart';
+import 'package:redux/redux.dart';
 
 Reducer<MeState> authReducer = combineReducers([
   new TypedReducer<MeState, LoginSuccess>(loginSuccessReducer),
@@ -9,16 +8,14 @@ Reducer<MeState> authReducer = combineReducers([
   new TypedReducer<MeState, FetchMyPostsSuccess>(fetchMyPostsReducer),
 ]);
 
-MeState loginSuccessReducer(MeState auth, LoginSuccess action) {
-  return new MeState().copyWith(me: action.user);
+MeState loginSuccessReducer(MeState state, LoginSuccess action) {
+  return new MeState().copyWith(user: action.user);
 }
 
-MeState logoutReducer(MeState auth, Logout action) {
+MeState logoutReducer(MeState state, Logout action) {
   return new MeState();
 }
 
-MeState fetchMyPostsReducer(MeState auth, FetchMyPostsSuccess action) {
-  return auth.copyWith(posts: action.posts);
+MeState fetchMyPostsReducer(MeState state, FetchMyPostsSuccess action) {
+  return state.copyWith(user: state.user.copyWith(posts: action.posts));
 }
-
-

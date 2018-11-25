@@ -1,10 +1,8 @@
 import 'package:crust/app/app_state.dart';
-import 'package:crust/models/Post.dart';
 import 'package:crust/models/user.dart';
 import 'package:crust/modules/auth/data/me_actions.dart';
 import 'package:crust/modules/post/post_list.dart';
 import 'package:crust/modules/screens/settings_screen.dart';
-import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,22 +13,20 @@ class MyProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-        onInit: (Store<AppState> store) => store.dispatch(FetchMyPostsRequest(store.state.me.me.id)),
+        onInit: (Store<AppState> store) => store.dispatch(FetchMyPostsRequest(store.state.me.user.id)),
         converter: _Props.fromStore,
-        builder: (context, props) => _Presenter(user: props.user, posts: props.posts));
+        builder: (context, props) => _Presenter(user: props.user));
   }
 }
 
 class _Presenter extends StatelessWidget {
   final User user;
-  final List<Post> posts;
 
-  _Presenter({Key key, this.user, this.posts}) : super(key: key);
+  _Presenter({Key key, this.user}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-        slivers: <Widget>[_appBar(), posts == null ? LoadingSliver() : PostList(posts: posts, postListType: PostListType.forProfile)]);
+    return CustomScrollView(slivers: <Widget>[_appBar(), PostList(posts: user.posts, postListType: PostListType.forProfile)]);
   }
 
   Widget _appBar() {
@@ -97,11 +93,10 @@ class _Presenter extends StatelessWidget {
 
 class _Props {
   final User user;
-  final List<Post> posts;
 
-  _Props({this.user, this.posts});
+  _Props({this.user});
 
   static fromStore(Store<AppState> store) {
-    return _Props(user: store.state.me.me, posts: store.state.me.posts);
+    return _Props(user: store.state.me.user);
   }
 }

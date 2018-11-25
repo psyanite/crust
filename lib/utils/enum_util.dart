@@ -5,7 +5,7 @@ class EnumUtil {
         == string, orElse: () => null);
   }
 
-  static String toString(String string) {
+  static String format(String string) {
     return string.split('.')[1];
   }
 }

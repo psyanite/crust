@@ -11,9 +11,8 @@ class MyProfileNavigator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return StoreConnector<AppState, dynamic>(
-        converter: (Store<AppState> store) => store.state.me.me,
+        converter: (Store<AppState> store) => store.state.me.user,
         builder: (context, user) => Scaffold(
               body: new Navigator(
                 initialRoute: '/',

@@ -23,8 +23,8 @@ dependencies:
     flutter_redux: ^0.5.2
     redux_logging: ^0.3.0
     redux_thunk: ^0.2.0
-    redux_persist_flutter: ^0.6.0-rc.1
-    redux_persist: ^0.7.0-rc.2
+    redux_persist_flutter: ^0.8.0-rc.0
+    redux_persist: ^0.8.0-rc.0
 
     # Auth
     flutter_facebook_login: ^1.1.1
