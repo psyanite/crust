@@ -1,65 +1,60 @@
-import 'package:crust/models/store.dart';
+import 'package:crust/models/user.dart';
 import 'package:crust/services/toaster.dart';
 
 class UserService {
   const UserService();
 
-  Future<List<Store>> fetchUserByUserId() async {
+  Future<User> fetchUserByUserId(int userId) async {
     String query = """
       query {
-        allStores {
+        userAccountById(id: $userId) {
           id,
-          name,
-          phone_number,
-          cover_image,
-          address {
-            address_first_line,
-            address_second_line,
-            address_street_number,
-            address_street_name,
-            google_url,
+          email,
+          profile {
+            profile_picture,
+            display_name,
+            username
           },
-          location {
+          posts {
             id,
-            name,
-          },
-          suburb {
-            id,
-            name,
-          },
-          cuisines {
-            id,
-            name,
-          },
-          ratings {
-            heart_ratings,
-            okay_ratings,
-            burnt_ratings
-          }
+            type,
+            store {
+              id,
+              name,
+              cover_image,
+            },
+            posted_by {
+              id,
+              profile {
+                username,
+                display_name,
+                profile_picture,
+              }
+            },
+            posted_at,
+            post_photos {
+              id,
+              photo,
+            },
+            post_review {
+              id,
+              overall_score,
+              taste_score,
+              service_score,
+              value_score,
+              ambience_score,
+              body,
+            }
+          } 
         }
       }
     """;
     final response = await Toaster.get(query);
-    if (response['allStores'] != null) {
-      return (response['allStores'] as List)
-          .map((s) => Store(
-                id: s['id'],
-                name: s['name'],
-                phoneNumber: s['phone_number'],
-                coverImage: s['cover_image'],
-                address: Address.fromToaster(s['address']),
-                location: s['location'] == null ? null : s['location']['name'],
-                suburb: s['suburb'] == null ? null : s['suburb']['name'],
-                heartCount: s['ratings']['heart_ratings'],
-                okayCount: s['ratings']['okay_ratings'],
-                burntCount: s['ratings']['burnt_ratings'],
-                cuisines: List<String>.from(s['cuisines'].map(
-                  (c) => c['name'],
-                )),
-              ))
-          .toList();
+    var json = response['userAccountById'];
+    if (json != null) {
+      return User.fromToaster(json);
     } else {
-      throw Exception('Failed to allStores');
+      throw Exception('Failed to fetchUserByUserId');
     }
   }
 }

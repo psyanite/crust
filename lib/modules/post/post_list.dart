@@ -1,4 +1,6 @@
 import 'package:crust/models/Post.dart';
+import 'package:crust/modules/screens/profile_screen.dart';
+import 'package:crust/modules/screens/store_screen.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/utils/time_util.dart';
@@ -66,8 +68,18 @@ class PostList extends StatelessWidget {
     if (post.type == PostType.review) {
       children.add(_storeRatings(post));
     }
-    return Column(
-      children: children,
+    var nextScreen =
+        postListType == PostListType.forProfile ? StoreScreen(storeId: post.store.id) : ProfileScreen(userId: post.postedBy.id);
+    return Builder(
+      builder: (context) => InkWell(
+            onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => nextScreen),
+                ),
+            child: Column(
+              children: children,
+            ),
+          ),
     );
   }
 

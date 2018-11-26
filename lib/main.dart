@@ -3,6 +3,7 @@ import 'package:crust/app/app_reducer.dart';
 import 'package:crust/modules/auth/data/me_middleware.dart';
 import 'package:crust/modules/home/home_middleware.dart';
 import 'package:crust/modules/main/main_tab_navigator.dart';
+import 'package:crust/modules/user/user_middleware.dart';
 import 'package:crust/presentation/platform_adaptive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -30,7 +31,8 @@ void main() async {
       LoggingMiddleware.printer(),
     ]
       ..addAll(createHomeMiddleware())
-      ..addAll(createMeMiddleware());
+      ..addAll(createMeMiddleware())
+      ..addAll(createUserMiddleware());
   }
 
   final store = Store<AppState>(

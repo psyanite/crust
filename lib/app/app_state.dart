@@ -1,17 +1,20 @@
 import 'package:crust/modules/auth/data/me_state.dart';
 import 'package:crust/modules/error/error_state.dart';
 import 'package:crust/modules/home/home_state.dart';
+import 'package:crust/modules/user/user_state.dart';
 import 'package:meta/meta.dart';
 
 @immutable
 class AppState {
   final MeState me;
   final HomeState home;
+  final UserState user;
   final ErrorState error;
 
-  AppState({MeState me, HomeState home, ErrorState error})
+  AppState({MeState me, HomeState home, UserState user, ErrorState error})
       : me = me ?? new MeState(),
         home = home ?? new HomeState(),
+        user = user ?? new UserState(),
         error = error ?? new ErrorState();
 
   static AppState rehydrate(dynamic json) {
@@ -38,6 +41,7 @@ class AppState {
     return '''{
       me: $me,
       home: $home,
+      user: $user,
       error: $error
     }''';
   }

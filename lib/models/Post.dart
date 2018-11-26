@@ -13,12 +13,7 @@ class Post {
 
   Post({this.id, this.type, this.store, this.postedBy, this.postedAt, this.postPhotos, this.postReview});
 
-  @override
-  String toString() {
-    return '{ id: $id, type: $type, store: ${store.name}, postedBy: ${postedBy.displayName} }';
-  }
-
-  factory Post.fromJson(Map<String, dynamic> post) {
+  factory Post.fromToaster(Map<String, dynamic> post) {
     var store = post['store'];
     var postedBy = post['posted_by'];
     var postPhotos = post['post_photos'];
@@ -51,6 +46,11 @@ class Post {
         valueScore: EnumUtil.fromString(Score.values, postReview['value_score']),
         body: postReview['body'],
       ));
+  }
+
+  @override
+  String toString() {
+    return '{ id: $id, type: $type, store: ${store.name}, postedBy: ${postedBy.displayName} }';
   }
 }
 

@@ -16,10 +16,11 @@ class MeService {
       }
     """;
     final response = await Toaster.get(getUserAccountIdByUsername);
-    if (response['userProfileByUsername'] != null) {
-      return response['userProfileByUsername']['user_account']['id'];
+    var json = response['userProfileByUsername'];
+    if (json != null) {
+      return json['user_account']['id'];
     } else {
-      return null;
+      throw Exception('Failed to getUserAccountIdByUsername');
     }
   }
 
@@ -42,14 +43,15 @@ class MeService {
       }
     """;
     final response = await Toaster.get(getUserLogin);
-    if (response['userLoginBy'] != null) {
+    var json = response['userLoginBy'];
+    if (json != null) {
       return user.copyWith(
-          id: response['userLoginBy']['user_account']['id'],
-          profilePicture: response['userLoginBy']['user_account']['profile']['profile_picture'],
-          displayName: response['userLoginBy']['user_account']['profile']['display_name'],
-          username: response['userLoginBy']['user_account']['profile']['username']);
+          id: json['user_account']['id'],
+          profilePicture: json['user_account']['profile']['profile_picture'],
+          displayName: json['user_account']['profile']['display_name'],
+          username: json['user_account']['profile']['username']);
     } else {
-      return null;
+      throw Exception('Failed to getUser');
     }
   }
 
@@ -71,8 +73,9 @@ class MeService {
       }
     """;
     final response = await Toaster.get(addUser);
-    if (response['addUser'] != null) {
-      return response['addUser']['user_account']['id'];
+    var json = response['addUser'];
+    if (json != null) {
+      return json['user_account']['id'];
     } else {
       throw Exception('Failed to addUser');
     }

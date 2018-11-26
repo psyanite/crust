@@ -45,33 +45,48 @@ class User {
     );
   }
 
-  Map<String, dynamic> toPersist() => <String, dynamic>{
-        'id': this.id,
-        'username': this.username,
-        'firstName': this.firstName,
-        'lastName': this.lastName,
-        'displayName': this.displayName,
-        'email': this.email,
-        'profilePicture': this.profilePicture,
-        'socialType': EnumUtil.format(this.socialType.toString()),
-        'socialId': this.socialId,
-        'token': this.token,
-        'posts': this.posts,
-      };
+  Map<String, dynamic> toPersist() {
+    return <String, dynamic>{
+      'id': this.id,
+      'username': this.username,
+      'firstName': this.firstName,
+      'lastName': this.lastName,
+      'displayName': this.displayName,
+      'email': this.email,
+      'profilePicture': this.profilePicture,
+      'socialType': EnumUtil.format(this.socialType.toString()),
+      'socialId': this.socialId,
+      'token': this.token,
+      'posts': this.posts,
+    };
+  }
 
-  factory User.fromJson(Map<String, dynamic> json) => new User(
-        id: json['id'],
-        username: json['username'],
-        firstName: json['firstName'],
-        lastName: json['lastName'],
-        displayName: json['displayName'],
-        email: json['email'],
-        profilePicture: json['profilePicture'],
-        socialType: EnumUtil.fromString(SocialType.values, json['socialType']),
-        socialId: json['socialId'],
-        token: json['token'],
-        posts: json['posts'] != null ? (json['posts'] as List).map((p) => Post.fromJson(p)) : null,
-      );
+  factory User.rehydrate(Map<String, dynamic> json) {
+    return User(
+      id: json['id'],
+      username: json['username'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      displayName: json['displayName'],
+      email: json['email'],
+      profilePicture: json['profilePicture'],
+      socialType: EnumUtil.fromString(SocialType.values, json['socialType']),
+      socialId: json['socialId'],
+      token: json['token'],
+      posts: json['posts'] != null ? (json['posts'] as List).map((p) => Post.fromToaster(p)).toList() : null,
+    );
+  }
+
+  factory User.fromToaster(Map<String, dynamic> json) {
+    return User(
+      id: json['id'],
+      email: json['email'],
+      username: json['profile']['username'],
+      displayName: json['profile']['display_name'],
+      profilePicture: json['profile']['profile_picture'],
+      posts: json['posts'] != null ? (json['posts'] as List).map((p) => Post.fromToaster(p)).toList() : null,
+    );
+  }
 
   factory User.fromFacebook(String token, Map<String, dynamic> json) {
     return User(

@@ -44,6 +44,29 @@ class Store {
       burntCount: this.burntCount
     );
   }
+
+  factory Store.fromToaster(Map<String, dynamic> json) {
+    return Store(
+      id: json['id'],
+      name: json['name'],
+      phoneNumber: json['phone_number'],
+      coverImage: json['cover_image'],
+      address: Address.fromToaster(json['address']),
+      location: json['location'] == null ? null : json['location']['name'],
+      suburb: json['suburb'] == null ? null : json['suburb']['name'],
+      heartCount: json['ratings']['heart_ratings'],
+      okayCount: json['ratings']['okay_ratings'],
+      burntCount: json['ratings']['burnt_ratings'],
+      cuisines: List<String>.from(json['cuisines'].map(
+          (c) => c['name'],
+      )),
+    );
+  }
+
+  @override
+  String toString() {
+    return '{ id: $id, name: $name }';
+  }
 }
 
 class Cuisine {
@@ -52,7 +75,7 @@ class Cuisine {
 
   Cuisine({this.id, this.name});
 
-  factory Cuisine.fromJson(Map<String, dynamic> json) {
+  factory Cuisine.fromToaster(Map<String, dynamic> json) {
     return Cuisine(id: json['id'], name: json['name']);
   }
 }
@@ -63,7 +86,7 @@ class Location {
 
   Location({this.id, this.name});
 
-  factory Location.fromJson(Map<String, dynamic> json) {
+  factory Location.fromToaster(Map<String, dynamic> json) {
     return Location(id: json['id'], name: json['name']);
   }
 }
@@ -74,7 +97,7 @@ class Suburb {
 
   Suburb({this.id, this.name});
 
-  factory Suburb.fromJson(Map<String, dynamic> json) {
+  factory Suburb.fromToaster(Map<String, dynamic> json) {
     return Suburb(id: json['id'], name: json['name']);
   }
 }

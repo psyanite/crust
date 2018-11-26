@@ -19,7 +19,10 @@ class StoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-        onInit: (Store<AppState> store) => store.dispatch(FetchPostsByStoreIdRequest(storeId)),
+        onInit: (Store<AppState> store) {
+          if (store.state.home.stores[storeId].posts == null)
+            return store.dispatch(FetchPostsByStoreIdRequest(storeId));
+        },
         converter: (Store<AppState> store) => _Props.fromStore(store, storeId),
         builder: (context, props) => _Presenter(store: props.store));
   }

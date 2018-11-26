@@ -47,7 +47,9 @@ class LoadingSliver extends StatelessWidget {
     return SliverFillRemaining(
       child: Container(
         child: Center(
-          child: CupertinoActivityIndicator(),
+          child: new CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+          ),
         ),
       ),
     );

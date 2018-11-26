@@ -16,7 +16,7 @@ class MeState {
   }
 
   factory MeState.rehydrate(Map<String, dynamic> json) => new MeState(
-        user: json['user'] == null ? null : new User.fromJson(json['user']),
+        user: json['user'] == null ? null : new User.rehydrate(json['user']),
       );
 
   Map<String, dynamic> toPersist() => <String, dynamic>{

@@ -9,7 +9,9 @@ class LoadingScreen extends StatelessWidget {
     return new MaterialApp(
       home: new Scaffold(
         body: new Center(
-          child: new CircularProgressIndicator(backgroundColor: Burnt.background, strokeWidth: 2.0),
+          child: new CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+          ),
         ),
       ),
     );

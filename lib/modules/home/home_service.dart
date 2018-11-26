@@ -41,26 +41,11 @@ class HomeService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response['allStores'] != null) {
-      return (response['allStores'] as List)
-          .map((s) => Store(
-                id: s['id'],
-                name: s['name'],
-                phoneNumber: s['phone_number'],
-                coverImage: s['cover_image'],
-                address: Address.fromToaster(s['address']),
-                location: s['location'] == null ? null : s['location']['name'],
-                suburb: s['suburb'] == null ? null : s['suburb']['name'],
-                heartCount: s['ratings']['heart_ratings'],
-                okayCount: s['ratings']['okay_ratings'],
-                burntCount: s['ratings']['burnt_ratings'],
-                cuisines: List<String>.from(s['cuisines'].map(
-                  (c) => c['name'],
-                )),
-              ))
-          .toList();
+    var json = response['allStores'];
+    if (json != null) {
+      return (json as List).map((s) => Store.fromToaster(s)).toList();
     } else {
-      throw Exception('Failed to allStores');
+      throw Exception('Failed to fetchStores');
     }
   }
 
@@ -101,10 +86,11 @@ class HomeService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response['postsByStoreId'] != null) {
-      return (response['postsByStoreId'] as List).map((p) => Post.fromJson(p)).toList();
+    var json = response['postsByStoreId'];
+    if (json != null) {
+      return (json as List).map((p) => Post.fromToaster(p)).toList();
     } else {
-      throw Exception('Failed to postsByStoreId');
+      throw Exception('Failed to fetchPostsByStoreId');
     }
   }
 }

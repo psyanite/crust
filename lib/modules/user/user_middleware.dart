@@ -7,18 +7,18 @@ import 'package:redux/redux.dart';
 List<Middleware<AppState>> createUserMiddleware([
   UserService service = const UserService(),
 ]) {
-  final fetchStores = _fetchStores(service);
+  final fetchUserByUserId = _fetchUserByUserId(service);
 
   return [
-    TypedMiddleware<AppState, FetchUserByUserIdRequest>(fetchStores),
+    TypedMiddleware<AppState, FetchUserByUserIdRequest>(fetchUserByUserId),
   ];
 }
 
-Middleware<AppState> _fetchStores(UserService service) {
+Middleware<AppState> _fetchUserByUserId(UserService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
-    service.fetchUserByUserId().then(
-      (stores) {
-        store.dispatch(FetchStoresSuccess(stores));
+    service.fetchUserByUserId(action.userId).then(
+      (user) {
+        store.dispatch(FetchUserByUserIdSuccess(user));
       },
     ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
 
