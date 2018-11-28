@@ -1,4 +1,3 @@
-import 'package:crust/presentation/theme.dart';
 import 'package:flutter/material.dart';
 
 class LoadingScreen extends StatelessWidget {

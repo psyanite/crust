@@ -1,3 +1,4 @@
+import 'package:crust/components/carousel.dart';
 import 'package:crust/models/Post.dart';
 import 'package:crust/modules/screens/profile_screen.dart';
 import 'package:crust/modules/screens/store_screen.dart';
@@ -55,19 +56,19 @@ class PostList extends StatelessWidget {
           width: 50.0,
           height: 50.0,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5.0), image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image)))),
+              borderRadius: BorderRadius.circular(3.0), image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image)))),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[name, Text(TimeUtil.format(post.postedAt))]),
       )
     ]);
     if (post.type == PostType.review) {
-      details = Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[details]);
+      details = Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[details, ScoreIcon(score: post.postReview.overallScore, size: 30.0)]);
     }
     var children = <Widget>[Container(padding: EdgeInsets.only(top: 15.0, bottom: 10.0), child: details)];
-    if (post.type == PostType.review) {
-      children.add(_storeRatings(post));
-    }
+
     var nextScreen =
         postListType == PostListType.forProfile ? StoreScreen(storeId: post.store.id) : ProfileScreen(userId: post.postedBy.id);
     return Builder(
@@ -83,35 +84,29 @@ class PostList extends StatelessWidget {
     );
   }
 
-  Widget _storeRatings(Post post) {
-    return Container(
-      decoration: BoxDecoration(border: Border(top: BorderSide(color: Burnt.separator), bottom: BorderSide(color: Burnt.separator))),
-      padding: EdgeInsets.only(top: 10.0, bottom: 5.0),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: <Widget>[
-        ScoreIcon(score: post.postReview.tasteScore, name: 'Taste'),
-        ScoreIcon(score: post.postReview.serviceScore, name: 'Service'),
-        ScoreIcon(score: post.postReview.valueScore, name: 'Value'),
-        ScoreIcon(score: post.postReview.ambienceScore, name: 'Ambience'),
-      ]),
-    );
-  }
-
   Widget _content(Post post) {
     if (post.type == PostType.review) {
-      return Container(
-          padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
-          child: Column(children: <Widget>[
-            Text(post.postReview.body),
-          ]));
+      var children = <Widget>[
+        Padding(
+          padding: EdgeInsets.only(bottom: 10.0),
+          child: Text(post.postReview.body),
+        ),
+      ];
+      if (post.postPhotos != null && post.postPhotos.length != 0) {
+        children.add(Carousel(images: post.postPhotos));
+      }
+      return Container(padding: EdgeInsets.only(top: 10.0, bottom: 20.0), child: Column(children: children));
     }
-    return Padding(
-      padding: EdgeInsets.only(bottom: 20.0),
-      child: Container(
-          height: 350.0,
-          decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: Burnt.separator)),
-              borderRadius: BorderRadius.circular(5.0),
-              image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.postPhotos[0].photo)))),
+    return Builder(
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(bottom: 20.0),
+        child: Container(
+            height: MediaQuery.of(context).size.width - 30.0,
+            decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: Burnt.separator)),
+                borderRadius: BorderRadius.circular(3.0),
+                image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.postPhotos[0])))),
+      ),
     );
   }
 }

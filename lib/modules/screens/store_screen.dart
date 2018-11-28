@@ -48,8 +48,8 @@ class _Presenter extends StatelessWidget {
           children: <Widget>[
             Container(
                 height: 100.0,
-                decoration: new BoxDecoration(
-                  image: new DecorationImage(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
                     image: NetworkImage(store.coverImage),
                     fit: BoxFit.cover,
                   ),

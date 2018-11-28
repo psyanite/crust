@@ -8,7 +8,7 @@ class Post {
   final Store store;
   final User postedBy;
   final DateTime postedAt;
-  final List<PostPhoto> postPhotos;
+  final List<String> postPhotos;
   final PostReview postReview;
 
   Post({this.id, this.type, this.store, this.postedBy, this.postedAt, this.postPhotos, this.postReview});
@@ -33,17 +33,10 @@ class Post {
         profilePicture: postedBy['profile']['profile_picture'],
       ),
       postedAt: DateTime.parse(post['posted_at']),
-      postPhotos: (postPhotos as List).map((postPhoto) => PostPhoto(
-        id: postPhoto['id'],
-        photo: postPhoto['photo'],
-      )).toList(),
+      postPhotos: (postPhotos as List).map<String>((postPhoto) => postPhoto['photo']).toList(),
       postReview: postReview == null ? null : PostReview(
         id: postReview['id'],
-        ambienceScore: EnumUtil.fromString(Score.values, postReview['ambience_score']),
         overallScore: EnumUtil.fromString(Score.values, postReview['overall_score']),
-        serviceScore: EnumUtil.fromString(Score.values, postReview['service_score']),
-        tasteScore: EnumUtil.fromString(Score.values, postReview['taste_score']),
-        valueScore: EnumUtil.fromString(Score.values, postReview['value_score']),
         body: postReview['body'],
       ));
   }
@@ -64,13 +57,9 @@ class PostPhoto {
 class PostReview {
   final int id;
   final Score overallScore;
-  final Score tasteScore;
-  final Score serviceScore;
-  final Score valueScore;
-  final Score ambienceScore;
   final String body;
 
-  PostReview({this.id, this.overallScore, this.tasteScore, this.serviceScore, this.valueScore, this.ambienceScore, this.body});
+  PostReview({this.id, this.overallScore, this.body});
 }
 
 enum PostType { photo, review }

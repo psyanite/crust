@@ -31,10 +31,6 @@ class PostService {
         post_review {
           id,
           overall_score,
-          taste_score,
-          service_score,
-          value_score,
-          ambience_score,
           body,
         }
       }
