@@ -57,7 +57,6 @@ class User {
       'socialType': EnumUtil.format(this.socialType.toString()),
       'socialId': this.socialId,
       'token': this.token,
-      'posts': this.posts,
     };
   }
 
@@ -73,7 +72,6 @@ class User {
       socialType: EnumUtil.fromString(SocialType.values, json['socialType']),
       socialId: json['socialId'],
       token: json['token'],
-      posts: json['posts'] != null ? (json['posts'] as List).map((p) => Post.fromToaster(p)).toList() : null,
     );
   }
 

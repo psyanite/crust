@@ -1,10 +1,8 @@
-import 'package:crust/app/app_state.dart';
-import 'package:crust/app/app_reducer.dart';
-import 'package:crust/modules/auth/data/me_middleware.dart';
-import 'package:crust/modules/home/home_middleware.dart';
-import 'package:crust/modules/main/main_tab_navigator.dart';
-import 'package:crust/modules/user/user_middleware.dart';
+import 'package:crust/components/main_tab_navigator.dart';
 import 'package:crust/presentation/platform_adaptive.dart';
+import 'package:crust/state/app/app_middleware.dart';
+import 'package:crust/state/app/app_reducer.dart';
+import 'package:crust/state/app/app_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -19,8 +17,7 @@ void main() async {
   var initialState;
   try {
     initialState = await persistor.load();
-  }
-  catch (e) {
+  } catch (e) {
     initialState = null;
   }
 
@@ -29,10 +26,7 @@ void main() async {
       thunkMiddleware,
       persistor.createMiddleware(),
       LoggingMiddleware.printer(),
-    ]
-      ..addAll(createHomeMiddleware())
-      ..addAll(createMeMiddleware())
-      ..addAll(createUserMiddleware());
+    ]..addAll(createAppMiddleware());
   }
 
   final store = Store<AppState>(
