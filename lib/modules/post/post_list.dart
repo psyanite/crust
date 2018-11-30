@@ -56,7 +56,7 @@ class PostList extends StatelessWidget {
           width: 50.0,
           height: 50.0,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(3.0), image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image)))),
+              image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image)))),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[name, Text(TimeUtil.format(post.postedAt))]),
@@ -104,7 +104,6 @@ class PostList extends StatelessWidget {
             height: MediaQuery.of(context).size.width - 30.0,
             decoration: BoxDecoration(
                 border: Border(bottom: BorderSide(color: Burnt.separator)),
-                borderRadius: BorderRadius.circular(3.0),
                 image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.postPhotos[0])))),
       ),
     );

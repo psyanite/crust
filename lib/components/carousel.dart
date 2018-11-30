@@ -41,7 +41,6 @@ class _CarouselState extends State<Carousel> {
     final List<Widget> listImages = widget.images
         .map<Widget>((image) => Container(
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(8.0)),
                 image: new DecorationImage(
                   image: NetworkImage(image),
                   fit: BoxFit.cover,

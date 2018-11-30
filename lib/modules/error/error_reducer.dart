@@ -7,5 +7,5 @@ Reducer<ErrorState> errorReducer = combineReducers([
 ]);
 
 ErrorState requestFailure(ErrorState state, RequestFailure action) {
-  return state.copyWith(message: action.error.toString());
+  return state.copyWith(message: action.error.toString().replaceAll("\n", " "));
 }
