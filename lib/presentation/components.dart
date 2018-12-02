@@ -103,3 +103,20 @@ class ScoreIcon extends StatelessWidget {
     return Column(children: children);
   }
 }
+
+class HeartIcon extends StatelessWidget {
+  final bool isHollow;
+  final double size;
+
+  HeartIcon({Key key, this.isHollow, this.size});
+
+  @override
+  Widget build(BuildContext context) {
+    var assetName = isHollow ? 'assets/svgs/heart-hollow.svg' : 'assets/svgs/heart-filled.svg';
+    return SvgPicture.asset(
+      assetName,
+      width: size ?? 25.0,
+      height: size ?? 25.0,
+    );
+  }
+}
