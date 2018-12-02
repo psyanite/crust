@@ -14,6 +14,7 @@ class Post {
   Post({this.id, this.type, this.store, this.postedBy, this.postedAt, this.postPhotos, this.postReview});
 
   factory Post.fromToaster(Map<String, dynamic> post) {
+    if (post == null) return null;
     var store = post['store'];
     var postedBy = post['posted_by'];
     var postPhotos = post['post_photos'];
@@ -34,11 +35,11 @@ class Post {
       ),
       postedAt: DateTime.parse(post['posted_at']),
       postPhotos: (postPhotos as List).map<String>((postPhoto) => postPhoto['photo']).toList(),
-      postReview: postReview == null ? null : PostReview(
+      postReview: postReview != null ? PostReview(
         id: postReview['id'],
         overallScore: EnumUtil.fromString(Score.values, postReview['overall_score']),
         body: postReview['body'],
-      ));
+      ) : null);
   }
 
   @override

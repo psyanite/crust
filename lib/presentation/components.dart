@@ -1,4 +1,4 @@
-import 'package:crust/models/Post.dart';
+import 'package:crust/models/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 

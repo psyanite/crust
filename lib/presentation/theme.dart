@@ -13,4 +13,6 @@ class Burnt {
   static const fontBold = FontWeight.w600;
   static const fontExtraBold = FontWeight.w800;
   static const fontFancy = 'GrandHotel';
+  static var display4 = TextStyle(fontSize: 28.0);
+  static var title = TextStyle(fontSize: 20.0, fontWeight: Burnt.fontBold);
 }

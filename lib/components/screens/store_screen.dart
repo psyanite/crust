@@ -1,11 +1,11 @@
-import 'package:crust/state/app/app_state.dart';
-import 'package:crust/models/Post.dart';
-import 'package:crust/models/store.dart' as MyStore;
-import 'package:crust/state/home/home_actions.dart';
 import 'package:crust/components/post_list.dart';
 import 'package:crust/components/screens/settings_screen.dart';
+import 'package:crust/models/post.dart';
+import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
+import 'package:crust/state/app/app_state.dart';
+import 'package:crust/state/home/home_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -20,8 +20,7 @@ class StoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
         onInit: (Store<AppState> store) {
-          if (store.state.home.stores[storeId].posts == null)
-            return store.dispatch(FetchPostsByStoreIdRequest(storeId));
+          if (store.state.home.stores[storeId].posts == null) return store.dispatch(FetchPostsByStoreIdRequest(storeId));
         },
         converter: (Store<AppState> store) => _Props.fromStore(store, storeId),
         builder: (context, props) => _Presenter(store: props.store));
@@ -69,13 +68,13 @@ class _Presenter extends StatelessWidget {
           ],
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+          padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(bottom: 5.0),
-                child: Text(store.name, style: TextStyle(fontSize: 28.0, fontWeight: Burnt.fontBold)),
+                child: Text(store.name, style: Burnt.display4),
               ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,

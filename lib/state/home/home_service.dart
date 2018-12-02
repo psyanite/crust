@@ -1,4 +1,4 @@
-import 'package:crust/models/Post.dart';
+import 'package:crust/models/post.dart';
 import 'package:crust/models/store.dart';
 import 'package:crust/services/toaster.dart';
 

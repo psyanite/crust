@@ -1,4 +1,4 @@
-import 'package:crust/models/Post.dart';
+import 'package:crust/models/post.dart';
 
 class FetchPostsForUserRequested {
   final int userAccountId;

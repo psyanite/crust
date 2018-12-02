@@ -14,4 +14,18 @@ class HomeState {
       stores: stores ?? this.stores,
     );
   }
+
+//  @override
+//  String toString() {
+//    return '''{
+//        stores: $stores,
+//      }''';
+//  }
+
+  @override
+  String toString() {
+    return '''{
+        stores: ${stores != null ? '${stores.length} stores' : null},
+      }''';
+  }
 }

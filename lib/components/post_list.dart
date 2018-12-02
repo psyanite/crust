@@ -1,5 +1,5 @@
 import 'package:crust/components/carousel.dart';
-import 'package:crust/models/Post.dart';
+import 'package:crust/models/post.dart';
 import 'package:crust/components/screens/profile_screen.dart';
 import 'package:crust/components/screens/store_screen.dart';
 import 'package:crust/presentation/components.dart';
@@ -20,7 +20,7 @@ class PostList extends StatelessWidget {
     if (posts.length == 0) return _noPostsNotice();
     return SliverSafeArea(
       top: false,
-      minimum: const EdgeInsets.symmetric(horizontal: 16.0),
+      minimum: const EdgeInsets.symmetric(horizontal: 15.0),
       sliver: SliverList(
         delegate: SliverChildListDelegate((List<Widget>.from(posts.map(_postCard)))),
       ),
@@ -32,7 +32,13 @@ class PostList extends StatelessWidget {
       top: false,
       minimum: const EdgeInsets.symmetric(horizontal: 16.0),
       sliver: SliverList(
-        delegate: SliverChildListDelegate(<Widget>[Text('No posts')]),
+        delegate: SliverChildListDelegate(<Widget>[
+          Column(
+          children: <Widget>[
+            Text('We don\'t have any posts yet'),
+//            RaisedButton(child: Text('Add One Now'), onPressed: () {},)
+          ]
+        )]),
       ),
     );
   }
@@ -46,9 +52,9 @@ class PostList extends StatelessWidget {
   Widget _header(Post post) {
     var image = postListType == PostListType.forProfile ? post.store.coverImage : post.postedBy.profilePicture;
     var name = postListType == PostListType.forProfile
-        ? Text(post.store.name, style: TextStyle(fontWeight: Burnt.fontBold, fontSize: 20.0))
+        ? Text(post.store.name, style: Burnt.title)
         : Row(children: <Widget>[
-            Text(post.postedBy.displayName, style: TextStyle(fontWeight: Burnt.fontBold, fontSize: 20.0)),
+            Text(post.postedBy.displayName, style: Burnt.title),
             Text(" @${post.postedBy.username}")
           ]);
     var details = Row(children: <Widget>[
@@ -68,7 +74,6 @@ class PostList extends StatelessWidget {
           children: <Widget>[details, ScoreIcon(score: post.postReview.overallScore, size: 30.0)]);
     }
     var children = <Widget>[Container(padding: EdgeInsets.only(top: 15.0, bottom: 10.0), child: details)];
-
     var nextScreen =
         postListType == PostListType.forProfile ? StoreScreen(storeId: post.store.id) : ProfileScreen(userId: post.postedBy.id);
     return Builder(

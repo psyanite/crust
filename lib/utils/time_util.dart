@@ -5,7 +5,7 @@ class TimeUtil {
   static String format(DateTime time) {
     var result = timeago.format(time);
     if (result == 'about a year ago') {
-      return new DateFormat.yMMMMd("en_US").format(time);
+      return DateFormat.yMMMMd("en_US").format(time);
     }
     return result;
   }

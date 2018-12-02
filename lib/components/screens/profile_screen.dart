@@ -92,7 +92,7 @@ class _Presenter extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(user.displayName, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
+                Text(user.displayName, style: Burnt.title),
                 Text("@${user.username}")
               ],
             ),

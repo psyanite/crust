@@ -1,4 +1,4 @@
-import 'package:crust/models/Post.dart';
+import 'package:crust/models/post.dart';
 import 'package:crust/utils/enum_util.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -76,6 +76,7 @@ class User {
   }
 
   factory User.fromToaster(Map<String, dynamic> json) {
+    if (json == null) return null;
     return User(
       id: json['id'],
       email: json['email'],

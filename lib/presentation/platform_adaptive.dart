@@ -1,20 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:crust/presentation/theme.dart';
-ThemeData getTheme(context) => new ThemeData(
-  primarySwatch: Burnt.material_primary,
-  accentColor: Burnt.material_primary,
-  fontFamily: Burnt.fontBase,
-  textTheme: Theme.of(context).textTheme.apply(
-    bodyColor: Burnt.textBody,
-    displayColor: Burnt.textBody,
-  ).merge(
-    TextTheme(
-      body1: TextStyle(fontSize: 16.0)
-    )
-  ),
-);
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+ThemeData getTheme(context) => ThemeData(
+      primarySwatch: Burnt.material_primary,
+      accentColor: Burnt.material_primary,
+      fontFamily: Burnt.fontBase,
+      textTheme: Theme.of(context)
+          .textTheme
+          .apply(
+            bodyColor: Burnt.textBody,
+            displayColor: Burnt.textBody,
+          )
+          .merge(TextTheme(
+              body1: TextStyle(fontSize: 16.0),
+      )),
+    );
 
 /// App bar that uses iOS styling on iOS
 class PlatformAdaptiveAppBar extends AppBar {
@@ -44,8 +45,7 @@ class PlatformAdaptiveAppBar extends AppBar {
 /// Button that is Material on Android and Cupertino on iOS
 /// On Android an icon button; on iOS, text is used
 class PlatformAdaptiveButton extends StatelessWidget {
-  PlatformAdaptiveButton({Key key, this.child, this.icon, this.onPressed})
-      : super(key: key);
+  PlatformAdaptiveButton({Key key, this.child, this.icon, this.onPressed}) : super(key: key);
   final Widget child;
   final Widget icon;
   final VoidCallback onPressed;
@@ -68,9 +68,7 @@ class PlatformAdaptiveButton extends StatelessWidget {
 
 // Bottom navigation bar that is Material on Android and Cupertino on iOS.
 class PlatformAdaptiveBottomBar extends StatelessWidget {
-  PlatformAdaptiveBottomBar(
-      {Key key, this.activeColor, this.currentIndex, this.onTap, this.items})
-      : super(key: key);
+  PlatformAdaptiveBottomBar({Key key, this.activeColor, this.currentIndex, this.onTap, this.items}) : super(key: key);
   final Color activeColor;
   final int currentIndex;
   final Function onTap;
@@ -100,8 +98,7 @@ class PlatformAdaptiveContainer extends StatelessWidget {
   final Widget child;
   final EdgeInsets margin;
 
-  PlatformAdaptiveContainer({Key key, this.child, this.margin})
-      : super(key: key);
+  PlatformAdaptiveContainer({Key key, this.child, this.margin}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -109,8 +106,7 @@ class PlatformAdaptiveContainer extends StatelessWidget {
       child: child,
       margin: margin,
       decoration: Theme.of(context).platform == TargetPlatform.iOS
-          ? new BoxDecoration(
-              border: new Border(top: new BorderSide(color: Colors.grey[200])))
+          ? new BoxDecoration(border: new Border(top: new BorderSide(color: Colors.grey[200])))
           : null,
     );
   }
@@ -118,6 +114,7 @@ class PlatformAdaptiveContainer extends StatelessWidget {
 
 class PlatformChooser extends StatelessWidget {
   PlatformChooser({Key key, this.iosChild, this.defaultChild});
+
   final Widget iosChild;
   final Widget defaultChild;
 

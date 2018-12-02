@@ -1,4 +1,4 @@
-import 'package:crust/models/Post.dart';
+import 'package:crust/models/post.dart';
 
 class Store {
   final int id;
@@ -46,20 +46,21 @@ class Store {
   }
 
   factory Store.fromToaster(Map<String, dynamic> json) {
+  if (json == null) return null;
     return Store(
       id: json['id'],
       name: json['name'],
       phoneNumber: json['phone_number'],
       coverImage: json['cover_image'],
-      address: json['address'] == null ? null : Address.fromToaster(json['address']),
-      location: json['location'] == null ? null : json['location']['name'],
-      suburb: json['suburb'] == null ? null : json['suburb']['name'],
-      heartCount: json['ratings'] == null ? null : json['ratings']['heart_ratings'],
-      okayCount: json['ratings'] == null ? null : json['ratings']['okay_ratings'],
-      burntCount: json['ratings'] == null ? null : json['ratings']['burnt_ratings'],
-      cuisines: List<String>.from(json['cuisines'].map(
+      address: json['address'] != null ? Address.fromToaster(json['address']) : null,
+      location: json['location'] != null ? json['location']['name'] : null,
+      suburb: json['suburb'] != null ? json['suburb']['name'] : null,
+      heartCount: json['ratings'] != null ? json['ratings']['heart_ratings'] : null,
+      okayCount: json['ratings'] != null ? json['ratings']['okay_ratings'] : null,
+      burntCount: json['ratings'] != null ? json['ratings']['burnt_ratings'] : null,
+      cuisines: json['cuisines'] != null ? List<String>.from(json['cuisines'].map(
           (c) => c['name'],
-      )),
+      )) : null,
     );
   }
 
@@ -76,6 +77,7 @@ class Cuisine {
   Cuisine({this.id, this.name});
 
   factory Cuisine.fromToaster(Map<String, dynamic> json) {
+    if (json == null) return null;
     return Cuisine(id: json['id'], name: json['name']);
   }
 }
@@ -87,6 +89,7 @@ class Location {
   Location({this.id, this.name});
 
   factory Location.fromToaster(Map<String, dynamic> json) {
+    if (json == null) return null;
     return Location(id: json['id'], name: json['name']);
   }
 }
@@ -98,6 +101,7 @@ class Suburb {
   Suburb({this.id, this.name});
 
   factory Suburb.fromToaster(Map<String, dynamic> json) {
+    if (json == null) return null;
     return Suburb(id: json['id'], name: json['name']);
   }
 }
@@ -111,13 +115,14 @@ class Address {
 
   Address({this.firstLine, this.secondLine, this.streetNumber, this.streetName, this.googleUrl});
 
-  factory Address.fromToaster(Map<String, dynamic> address) {
+  factory Address.fromToaster(Map<String, dynamic> json) {
+    if (json == null) return null;
     return Address(
-      firstLine: address['address_first_line'],
-      secondLine: address['address_second_line'],
-      streetNumber: int.tryParse(address['address_street_number']),
-      streetName: address['address_street_name'],
-      googleUrl: address['google_url'],
+      firstLine: json['address_first_line'],
+      secondLine: json['address_second_line'],
+      streetNumber: int.tryParse(json['address_street_number']),
+      streetName: json['address_street_name'],
+      googleUrl: json['google_url'],
     );
   }
 }

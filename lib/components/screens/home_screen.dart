@@ -16,7 +16,7 @@ class HomeScreen extends StatelessWidget {
         onInit: (Store<AppState> store) => store.dispatch(FetchStoresRequest()),
         converter: (Store<AppState> store) => store.state.home.stores,
         builder: (BuildContext context, Map<int, MyStore.Store> stores) =>
-            CustomScrollView(slivers: <Widget>[_appBar(), stores == null ? LoadingSliver() : _gridSliver(stores.values.toList())]));
+            CustomScrollView(slivers: <Widget>[_appBar(), stores == null ? LoadingSliver() : _storeCards(stores.values.toList())]));
   }
 
   Widget _appBar() {
@@ -24,12 +24,13 @@ class HomeScreen extends StatelessWidget {
         pinned: false,
         floating: false,
         expandedHeight: 60.0,
-        backgroundColor: Burnt.primaryLight,
+        backgroundColor: Burnt.primary,
         elevation: 24.0,
         title: Text('Burntoast', style: TextStyle(color: Colors.white, fontSize: 40.0, fontFamily: Burnt.fontFancy)));
   }
 
-  Widget _gridSliver(List<MyStore.Store> stores) {
+  Widget _storeCards(List<MyStore.Store> stores) {
+    stores.sort((a, b) => a.id.compareTo(b.id));
     return SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
