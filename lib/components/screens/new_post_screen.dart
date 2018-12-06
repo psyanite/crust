@@ -8,7 +8,7 @@ class NewPostScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-        converter: (Store<AppState> store) => (user) => store.dispatch(AddUserRequested(user)),
+        converter: (Store<AppState> store) => (user) => store.dispatch(AddUserRequest(user)),
         builder: (context, addUser) => _Presenter(addUser: addUser));
   }
 }

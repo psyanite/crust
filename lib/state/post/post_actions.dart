@@ -1,9 +1,9 @@
 import 'package:crust/models/post.dart';
 
 class FetchPostsForUserRequested {
-  final int userAccountId;
+  final int userId;
 
-  FetchPostsForUserRequested(this.userAccountId);
+  FetchPostsForUserRequested(this.userId);
 
   @override
   String toString() {

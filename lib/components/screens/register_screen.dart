@@ -17,7 +17,7 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-        converter: (Store<AppState> store) => (user) => store.dispatch(AddUserRequested(user)),
+        converter: (Store<AppState> store) => (user) => store.dispatch(AddUserRequest(user)),
         builder: (context, addUser) => _Presenter(addUser: addUser, user: user));
   }
 }
@@ -86,8 +86,8 @@ class _PresenterState extends State<_Presenter> {
       _snack(context, 'Please enter at least 8 characters');
       return;
     }
-    var userAccountId = await MeService.getUserAccountIdByUsername(_username);
-    if (userAccountId != null) {
+    var userId = await MeService.getUserIdByUsername(_username);
+    if (userId != null) {
       _snack(context, 'Sorry, that username is already taken');
     } else {
       widget.addUser(widget.user.copyWith(username: _username));

@@ -5,8 +5,8 @@ import 'package:crust/utils/enum_util.dart';
 class MeService {
   const MeService();
 
-  static Future<int> getUserAccountIdByUsername(String username) async {
-    String getUserAccountIdByUsername = """
+  static Future<int> getUserIdByUsername(String username) async {
+    String query = """
       query {
         userProfileByUsername(username: "$username") {
           user_account {
@@ -15,17 +15,17 @@ class MeService {
         }
       }
     """;
-    final response = await Toaster.get(getUserAccountIdByUsername);
+    final response = await Toaster.get(query);
     var json = response['userProfileByUsername'];
     if (json != null) {
       return json['user_account']['id'];
     } else {
-      throw Exception('Failed to getUserAccountIdByUsername');
+      throw Exception('Failed to getUserIdByUsername');
     }
   }
 
   static Future<User> getUser(User user) async {
-    String getUserLogin = """
+    String query = """
       query {
         userLoginBy(
           socialType: "${EnumUtil.format(user.socialType.toString())}", 
@@ -42,7 +42,7 @@ class MeService {
         }
       }
     """;
-    final response = await Toaster.get(getUserLogin);
+    final response = await Toaster.get(query);
     var json = response['userLoginBy'];
     if (json != null) {
       return user.copyWith(
@@ -56,15 +56,15 @@ class MeService {
   }
 
   Future<int> addUser(User user) async {
-    String addUser = """
+    String query = """
       mutation {
         addUser(
           username: "${user.username}",
-          display_name: "${user.displayName}",
+          displayName: "${user.displayName}",
           email: "${user.email}",
-          profile_picture: "${user.profilePicture}",
-          social_id: "${user.socialId}",
-          social_type: "${EnumUtil.format(user.socialType.toString())}"
+          profilePicture: "${user.profilePicture}",
+          socialId: "${user.socialId}",
+          socialType: "${EnumUtil.format(user.socialType.toString())}"
         ) {
           user_account {
             id
@@ -72,12 +72,74 @@ class MeService {
         }
       }
     """;
-    final response = await Toaster.get(addUser);
+    final response = await Toaster.get(query);
     var json = response['addUser'];
     if (json != null) {
       return json['user_account']['id'];
     } else {
       throw Exception('Failed to addUser');
+    }
+  }
+
+  Future<Set<int>> favoriteReward({ userId, rewardId }) async {
+    String query = """
+      mutation {
+        favoriteReward(userId: $userId, rewardId: $rewardId) {
+          favorite_rewards {
+            id,
+          },
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['favoriteReward'];
+    if (json != null) {
+      return Set<int>.from(json['favorite_rewards'].map((r) => r['id']));
+    } else {
+      throw Exception('Failed to favoriteReward(userId: $userId, rewardId: $rewardId)');
+    }
+  }
+
+  Future<Set<int>> unfavoriteReward({ userId, rewardId }) async {
+    String query = """
+      mutation {
+        unfavoriteReward(userId: $userId, rewardId: $rewardId) {
+          favorite_rewards {
+            id,
+          },
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['unfavoriteReward'];
+    if (json != null) {
+      return Set<int>.from(json['favorite_rewards'].map((r) => r['id']));
+    } else {
+      throw Exception('Failed to unfavoriteReward(userId: $userId, rewardId: $rewardId)');
+    }
+  }
+
+  Future<Map<String, Set<int>>> fetchFavorites(userId) async {
+    String query = """
+      query {
+        userAccountById(id: $userId) {
+          favorite_rewards {
+            id,
+          },
+          favorite_stores {
+            id,
+          },
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['userAccountById'];
+    if (json != null) {
+      var rewards = Set<int>.from(json['favorite_rewards'].map((r) => r['id']));
+      var stores = Set<int>.from(json['favorite_stores'].map((r) => r['id']));
+      return { 'rewards': rewards, 'stores': stores };
+    } else {
+      throw Exception('Failed to fetchFavorites(userId: $userId)');
     }
   }
 }

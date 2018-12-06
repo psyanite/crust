@@ -4,10 +4,10 @@ import 'package:crust/services/toaster.dart';
 class PostService {
   const PostService();
 
-  Future<List<Post>> fetchPostsByUserAccountId(int userAccountId) async {
+  Future<List<Post>> fetchPostsByUserId(int userId) async {
     String query = """
     query {
-      postsByUserAccountId(userAccountId: $userAccountId) {
+      postsByUserId(userId: $userId) {
         id,
         type,
         store {
@@ -37,11 +37,11 @@ class PostService {
     }
   """;
     final response = await Toaster.get(query);
-    var json = response['postsByUserAccountId'];
+    var json = response['postsByUserId'];
     if (json != null) {
       return (json as List).map((p) => Post.fromToaster(p)).toList();
     } else {
-      throw Exception('Failed to fetchPostsByUserAccountId');
+      throw Exception('Failed to fetchPostsByUserId');
     }
   }
 }

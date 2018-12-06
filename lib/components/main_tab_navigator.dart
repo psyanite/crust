@@ -19,7 +19,7 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
     TabType.home: Tab(widget: HomeScreen(), icon: CrustCons.bread_heart),
     TabType.rewards: Tab(widget: RewardsScreen(), icon: CrustCons.present),
     TabType.newPost: Tab(widget: NewPostScreen(), icon: CrustCons.new_post),
-    TabType.favorites: Tab(widget: FavoritesScreen(), icon: CrustCons.star),
+    TabType.favorites: Tab(widget: FavoritesScreen(), icon: CrustCons.heart),
     TabType.myProfile: Tab(widget: MyProfileTab(), icon: CrustCons.person)
   };
 

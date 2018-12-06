@@ -4,14 +4,20 @@ import 'package:meta/meta.dart';
 @immutable
 class MeState {
   final User user;
+  final Set<int> favoriteRewards;
+  final Set<int> favoriteStores;
 
   MeState({
     this.user,
+    this.favoriteRewards,
+    this.favoriteStores,
   });
 
-  MeState copyWith({User user}) {
-    return new MeState(
+  MeState copyWith({User user, Set<int> favoriteRewards, Set<int> favoriteStores}) {
+    return MeState(
       user: user ?? this.user,
+      favoriteRewards: favoriteRewards ?? this.favoriteRewards,
+      favoriteStores: favoriteStores ?? this.favoriteStores,
     );
   }
 
