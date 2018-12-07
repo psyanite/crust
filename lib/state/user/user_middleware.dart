@@ -1,6 +1,6 @@
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/error/error_actions.dart';
-import 'package:crust/state/home/home_actions.dart';
+import 'package:crust/state/user/user_actions.dart';
 import 'package:crust/state/user/user_service.dart';
 import 'package:redux/redux.dart';
 

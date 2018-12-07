@@ -1,10 +1,10 @@
-import 'package:crust/state/app/app_state.dart';
-import 'package:crust/models/user.dart';
-import 'package:crust/state/home/home_actions.dart';
 import 'package:crust/components/post_list.dart';
 import 'package:crust/components/screens/loading_screen.dart';
 import 'package:crust/components/screens/settings_screen.dart';
+import 'package:crust/models/user.dart';
 import 'package:crust/presentation/theme.dart';
+import 'package:crust/state/app/app_state.dart';
+import 'package:crust/state/user/user_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -91,10 +91,7 @@ class _Presenter extends StatelessWidget {
             padding: EdgeInsets.only(left: 8.0, top: 12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(user.displayName, style: Burnt.title),
-                Text("@${user.username}")
-              ],
+              children: <Widget>[Text(user.displayName, style: Burnt.title), Text("@${user.username}")],
             ),
           )
         ]),

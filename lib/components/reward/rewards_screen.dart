@@ -69,13 +69,12 @@ class RewardsScreenState extends State<RewardsScreen> {
   Widget _content(_Props props) {
     if (props.rewards == null) return LoadingSliver();
     return RewardCards(
-      rewards: props.rewards,
-      favoriteRewards: props.favoriteRewards,
-      favoriteReward: props.favoriteReward,
-      unfavoriteReward: props.unfavoriteReward,
-      isLoggedIn: props.isLoggedIn,
-      layout: currentLayout
-    );
+        rewards: props.rewards,
+        favoriteRewards: props.favoriteRewards,
+        favoriteReward: props.favoriteReward,
+        unfavoriteReward: props.unfavoriteReward,
+        isLoggedIn: props.isLoggedIn,
+        layout: currentLayout);
   }
 }
 
@@ -96,7 +95,7 @@ class _Props {
 
   static fromStore(Store<AppState> store) {
     return _Props(
-      rewards: store.state.reward.rewards,
+      rewards: store.state.reward.rewards.values,
       favoriteRewards: store.state.me.favoriteRewards ?? Set<int>(),
       favoriteReward: (rewardId) => store.dispatch(FavoriteRewardRequest(rewardId)),
       unfavoriteReward: (rewardId) => store.dispatch(UnfavoriteRewardRequest(rewardId)),

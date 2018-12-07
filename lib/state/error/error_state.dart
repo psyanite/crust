@@ -7,7 +7,7 @@ class ErrorState {
   ErrorState({this.message});
 
   ErrorState copyWith({String message}) {
-    return new ErrorState(
+    return ErrorState(
       message: message ?? this.message,
     );
   }

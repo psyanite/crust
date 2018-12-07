@@ -5,7 +5,7 @@ import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
-import 'package:crust/state/home/home_actions.dart';
+import 'package:crust/state/store/store_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -20,7 +20,7 @@ class StoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
         onInit: (Store<AppState> store) {
-          if (store.state.home.stores[storeId].posts == null) return store.dispatch(FetchPostsByStoreIdRequest(storeId));
+          if (store.state.store.stores[storeId].posts == null) return store.dispatch(FetchPostsByStoreIdRequest(storeId));
         },
         converter: (Store<AppState> store) => _Props.fromStore(store, storeId),
         builder: (context, props) => _Presenter(store: props.store));
@@ -141,6 +141,6 @@ class _Props {
   _Props({this.store});
 
   static fromStore(Store<AppState> store, int storeId) {
-    return _Props(store: store.state.home.stores[storeId]);
+    return _Props(store: store.state.store.stores[storeId]);
   }
 }

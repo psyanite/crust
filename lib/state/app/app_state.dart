@@ -1,6 +1,6 @@
 import 'package:crust/state/me/me_state.dart';
 import 'package:crust/state/error/error_state.dart';
-import 'package:crust/state/home/home_state.dart';
+import 'package:crust/state/store/store_state.dart';
 import 'package:crust/state/reward/reward_state.dart';
 import 'package:crust/state/user/user_state.dart';
 import 'package:meta/meta.dart';
@@ -8,14 +8,14 @@ import 'package:meta/meta.dart';
 @immutable
 class AppState {
   final MeState me;
-  final HomeState home;
+  final StoreState store;
   final UserState user;
   final RewardState reward;
   final ErrorState error;
 
-  AppState({MeState me, HomeState home, UserState user, RewardState reward, ErrorState error})
+  AppState({MeState me, StoreState store, UserState user, RewardState reward, ErrorState error})
       : me = me ?? MeState(),
-        home = home ?? HomeState(),
+        store = store ?? StoreState(),
         user = user ?? UserState(),
         reward = reward ?? RewardState(),
         error = error ?? ErrorState();
@@ -43,7 +43,7 @@ class AppState {
   String toString() {
     return '''{
       me: $me,
-      home: $home,
+      store: $store,
       user: $user,
       reward: $reward,
       error: $error

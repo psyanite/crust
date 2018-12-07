@@ -10,7 +10,7 @@ class UserState {
   UserState({this.users});
 
   UserState copyWith({LinkedHashMap<int, User> users}) {
-    return new UserState(
+    return UserState(
       users: users ?? this.users,
     );
   }

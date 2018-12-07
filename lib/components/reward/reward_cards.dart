@@ -111,13 +111,13 @@ class RewardCards extends StatelessWidget {
       alignment: AlignmentDirectional.center,
       children: <Widget>[
         Container(
-          width: 80.0,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(reward.promoImage),
-              fit: BoxFit.cover,
-            ),
-          )),
+            width: 80.0,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(reward.promoImage),
+                fit: BoxFit.cover,
+              ),
+            )),
         _favoriteButton(reward)
       ],
     );

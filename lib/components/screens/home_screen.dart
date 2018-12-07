@@ -1,6 +1,6 @@
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/models/store.dart' as MyStore;
-import 'package:crust/state/home/home_actions.dart';
+import 'package:crust/state/store/store_actions.dart';
 import 'package:crust/components/screens/store_screen.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, Map<int, MyStore.Store>>(
         onInit: (Store<AppState> store) => store.dispatch(FetchStoresRequest()),
-        converter: (Store<AppState> store) => store.state.home.stores,
+        converter: (Store<AppState> store) => store.state.store.stores,
         builder: (BuildContext context, Map<int, MyStore.Store> stores) =>
             CustomScrollView(slivers: <Widget>[_appBar(), stores == null ? LoadingSliver() : _storeCards(stores.values.toList())]));
   }

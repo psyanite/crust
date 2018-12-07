@@ -1,7 +1,7 @@
 import 'dart:collection';
 
 import 'package:crust/models/user.dart';
-import 'package:crust/state/home/home_actions.dart';
+import 'package:crust/state/user/user_actions.dart';
 import 'package:crust/state/user/user_state.dart';
 import 'package:redux/redux.dart';
 

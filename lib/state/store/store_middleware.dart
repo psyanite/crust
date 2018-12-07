@@ -1,11 +1,11 @@
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/error/error_actions.dart';
-import 'package:crust/state/home/home_actions.dart';
-import 'package:crust/state/home/home_service.dart';
+import 'package:crust/state/store/store_actions.dart';
+import 'package:crust/state/store/store_service.dart';
 import 'package:redux/redux.dart';
 
-List<Middleware<AppState>> createHomeMiddleware([
-  HomeService service = const HomeService(),
+List<Middleware<AppState>> createStoreMiddleware([
+  StoreService service = const StoreService(),
 ]) {
   final fetchStores = _fetchStores(service);
   final fetchPostsByStoreId = _fetchPostsByStoreId(service);
@@ -16,7 +16,7 @@ List<Middleware<AppState>> createHomeMiddleware([
   ];
 }
 
-Middleware<AppState> _fetchStores(HomeService service) {
+Middleware<AppState> _fetchStores(StoreService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     service.fetchStores().then(
       (stores) {
@@ -28,7 +28,7 @@ Middleware<AppState> _fetchStores(HomeService service) {
   };
 }
 
-Middleware<AppState> _fetchPostsByStoreId(HomeService service) {
+Middleware<AppState> _fetchPostsByStoreId(StoreService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     service.fetchPostsByStoreId(action.storeId).then(
       (posts) {

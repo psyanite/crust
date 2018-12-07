@@ -4,14 +4,18 @@ import 'package:crust/models/store.dart';
 import 'package:meta/meta.dart';
 
 @immutable
-class HomeState {
+class StoreState {
   final LinkedHashMap<int, Store> stores;
 
-  HomeState({this.stores});
+  StoreState({this.stores});
 
-  HomeState copyWith({LinkedHashMap<int, Store> stores}) {
-    return new HomeState(
-      stores: stores ?? this.stores,
+  StoreState copyWith({List<Store> stores}) {
+    var storesUpdate = this.stores ?? LinkedHashMap<int, Store>();
+    if (stores != null) {
+      storesUpdate.addAll(Map.fromEntries(stores.map((s) => MapEntry<int, Store>(s.id, s))));
+    }
+    return StoreState(
+      stores: storesUpdate,
     );
   }
 

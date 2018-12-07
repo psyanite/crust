@@ -2,8 +2,8 @@ import 'package:crust/models/post.dart';
 import 'package:crust/models/store.dart';
 import 'package:crust/services/toaster.dart';
 
-class HomeService {
-  const HomeService();
+class StoreService {
+  const StoreService();
 
   Future<List<Store>> fetchStores() async {
     String query = """
