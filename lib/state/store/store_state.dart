@@ -9,7 +9,13 @@ class StoreState {
 
   StoreState({this.stores});
 
-  StoreState copyWith({List<Store> stores}) {
+  StoreState copyWith({LinkedHashMap<int, Store> stores}) {
+    return StoreState(
+      stores: stores ?? this.stores,
+    );
+  }
+
+  StoreState addStores(List<Store> stores) {
     var storesUpdate = this.stores ?? LinkedHashMap<int, Store>();
     if (stores != null) {
       storesUpdate.addAll(Map.fromEntries(stores.map((s) => MapEntry<int, Store>(s.id, s))));

@@ -43,9 +43,8 @@ class RewardsScreenState extends State<RewardsScreen> {
     return SliverAppBar(
         pinned: false,
         floating: false,
-        expandedHeight: 60.0,
+        expandedHeight: 55.0,
         backgroundColor: Burnt.primary,
-        elevation: 24.0,
         title: Text('Rewards', style: TextStyle(color: Colors.white, fontSize: 40.0, fontFamily: Burnt.fontFancy)));
   }
 
@@ -95,7 +94,7 @@ class _Props {
 
   static fromStore(Store<AppState> store) {
     return _Props(
-      rewards: store.state.reward.rewards.values,
+      rewards: store.state.reward.rewards != null ? store.state.reward.rewards.values.toList() : null,
       favoriteRewards: store.state.me.favoriteRewards ?? Set<int>(),
       favoriteReward: (rewardId) => store.dispatch(FavoriteRewardRequest(rewardId)),
       unfavoriteReward: (rewardId) => store.dispatch(UnfavoriteRewardRequest(rewardId)),

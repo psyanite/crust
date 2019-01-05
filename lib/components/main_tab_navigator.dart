@@ -37,7 +37,7 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
             inactiveColor: Color(0x44604B41),
             currentIndex: _currentIndex,
             onTap: _onTap,
-            items: _tabs.values.map((t) => new BottomNavigationBarItem(icon: new Icon(t.icon))).toList(),
+            items: _tabs.values.map((t) => new BottomNavigationBarItem(icon: Icon(t.icon))).toList(),
           )),
     );
   }

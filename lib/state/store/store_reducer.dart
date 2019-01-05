@@ -9,9 +9,9 @@ Reducer<StoreState> storeReducer = combineReducers([
 ]);
 
 StoreState fetchStoresSuccess(StoreState state, FetchStoresSuccess action) {
-  return state.copyWith(stores: action.stores);
+  return state.addStores(action.stores);
 }
 
 StoreState fetchPostsByStoreIdSuccess(StoreState state, FetchPostsByStoreIdSuccess action) {
-  return state.copyWith(stores: List<MyStore.Store>.from([state.stores[action.storeId].copyWith(posts: action.posts)]));
+  return state.addStores(List<MyStore.Store>.from([state.stores[action.storeId].copyWith(posts: action.posts)]));
 }

@@ -33,6 +33,8 @@ class MeState {
   String toString() {
     return '''{
         user: $user,
+        favoriteRewards: ${favoriteRewards != null ? '${favoriteRewards.length} rewards' : null},
+        favoriteStores: ${favoriteStores != null ? '${favoriteStores.length} stores' : null},
       }''';
   }
 }

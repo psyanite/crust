@@ -67,6 +67,13 @@ class Dots extends AnimatedWidget {
 
   Dots({this.controller, this.itemCount}) : super(listenable: controller);
 
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List<Widget>.generate(itemCount, _buildDot),
+    );
+  }
+
   Widget _buildDot(int index) {
     double selectedness = Curves.easeOut.transform(
       max(
@@ -88,13 +95,6 @@ class Dots extends AnimatedWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List<Widget>.generate(itemCount, _buildDot),
     );
   }
 }

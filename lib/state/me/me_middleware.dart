@@ -1,8 +1,12 @@
+import 'package:crust/models/reward.dart';
+import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/error/error_actions.dart';
 import 'package:crust/state/me/me_actions.dart';
 import 'package:crust/state/me/me_service.dart';
 import 'package:crust/state/post/post_service.dart';
+import 'package:crust/state/reward/reward_actions.dart';
+import 'package:crust/state/store/store_actions.dart';
 import 'package:redux/redux.dart';
 
 List<Middleware<AppState>> createMeMiddleware([MeService meService = const MeService(), PostService postService = const PostService()]) {
@@ -10,6 +14,8 @@ List<Middleware<AppState>> createMeMiddleware([MeService meService = const MeSer
   final fetchMyPosts = _fetchMyPosts(postService);
   final favoriteReward = _favoriteReward(meService);
   final unfavoriteReward = _unfavoriteReward(meService);
+  final favoriteStore = _favoriteStore(meService);
+  final unfavoriteStore = _unfavoriteStore(meService);
   final fetchFavorites = _fetchFavorites(meService);
 
   return [
@@ -17,6 +23,8 @@ List<Middleware<AppState>> createMeMiddleware([MeService meService = const MeSer
     TypedMiddleware<AppState, FetchMyPostsRequest>(fetchMyPosts),
     TypedMiddleware<AppState, FavoriteRewardRequest>(favoriteReward),
     TypedMiddleware<AppState, UnfavoriteRewardRequest>(unfavoriteReward),
+    TypedMiddleware<AppState, FavoriteStoreRequest>(favoriteStore),
+    TypedMiddleware<AppState, UnfavoriteStoreRequest>(unfavoriteStore),
     TypedMiddleware<AppState, FetchFavoritesRequest>(fetchFavorites),
   ];
 }
@@ -59,11 +67,38 @@ Middleware<AppState> _unfavoriteReward(MeService service) {
   };
 }
 
+Middleware<AppState> _favoriteStore(MeService service) {
+  return (Store<AppState> store, action, NextDispatcher next) {
+    service.favoriteStore(userId: store.state.me.user.id, storeId: action.storeId).then((stores) {
+      store.dispatch(FavoriteStoreSuccess(stores));
+    }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    next(action);
+  };
+}
+
+Middleware<AppState> _unfavoriteStore(MeService service) {
+  return (Store<AppState> store, action, NextDispatcher next) {
+    service.unfavoriteStore(userId: store.state.me.user.id, storeId: action.storeId).then((stores) {
+      store.dispatch(UnfavoriteStoreSuccess(stores));
+    }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    next(action);
+  };
+}
+
 Middleware<AppState> _fetchFavorites(MeService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
-    service.fetchFavorites(store.state.me.user.id).then((map) {
-      store.dispatch(FetchFavoritesSuccess(favoriteRewards: map['rewards'], favoriteStores: map['stores']));
-    }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    if (store.state.me.user != null) {
+      service.fetchFavorites(store.state.me.user.id).then((map) {
+        List<Reward> rewards = map['rewards'];
+        List<MyStore.Store> stores = map['stores'];
+        store.dispatch(
+            FetchFavoritesSuccess(favoriteRewards: rewards.map((r) => r.id).toSet(), favoriteStores: stores.map((s) => s.id).toSet()));
+        if (action.updateStore) {
+          store.dispatch(FetchRewardsSuccess(rewards));
+          store.dispatch(FetchStoresSuccess(stores));
+        }
+      }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    }
     next(action);
   };
 }

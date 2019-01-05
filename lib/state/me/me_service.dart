@@ -1,3 +1,5 @@
+import 'package:crust/models/reward.dart';
+import 'package:crust/models/store.dart';
 import 'package:crust/models/user.dart';
 import 'package:crust/services/toaster.dart';
 import 'package:crust/utils/enum_util.dart';
@@ -119,13 +121,10 @@ class MeService {
     }
   }
 
-  Future<Map<String, Set<int>>> fetchFavorites(userId) async {
+  Future<Set<int>> favoriteStore({ userId, storeId }) async {
     String query = """
-      query {
-        userAccountById(id: $userId) {
-          favorite_rewards {
-            id,
-          },
+      mutation {
+        favoriteStore(userId: $userId, storeId: $storeId) {
           favorite_stores {
             id,
           },
@@ -133,10 +132,108 @@ class MeService {
       }
     """;
     final response = await Toaster.get(query);
+    var json = response['favoriteStore'];
+    if (json != null) {
+      return Set<int>.from(json['favorite_stores'].map((s) => s['id']));
+    } else {
+      throw Exception('Failed to favoriteStore(userId: $userId, storeId: $storeId)');
+    }
+  }
+
+  Future<Set<int>> unfavoriteStore({ userId, storeId }) async {
+    String query = """
+      mutation {
+        unfavoriteStore(userId: $userId, storeId: $storeId) {
+          favorite_stores {
+            id,
+          },
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['unfavoriteStore'];
+    if (json != null) {
+      return Set<int>.from(json['favorite_stores'].map((s) => s['id']));
+    } else {
+      throw Exception('Failed to unfavoriteStore(userId: $userId, storeId: $storeId)');
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchFavorites(userId) async {
+    String query = """
+      query {
+        userAccountById(id: $userId) {
+          favorite_rewards {
+            id,
+            name,
+            description,
+            type,
+            store {
+              id,
+              name,
+              location {
+                name
+              },
+              suburb {
+                name
+              },
+            },
+            store_group {
+              id,
+              name,
+              stores {
+                id,
+                name,
+                location {
+                  name
+                },
+                suburb {
+                  name
+                },
+              }
+            },
+            valid_from,
+            valid_until,
+            promo_image,
+          },
+          favorite_stores {
+            id,
+            name,
+            phone_number,
+            cover_image,
+            address {
+              address_first_line,
+              address_second_line,
+              address_street_number,
+              address_street_name,
+              google_url,
+            },
+            location {
+              id,
+              name,
+            },
+            suburb {
+              id,
+              name,
+            },
+            cuisines {
+              id,
+              name,
+            },
+            ratings {
+              heart_ratings,
+              okay_ratings,
+              burnt_ratings
+            }
+          },
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
     var json = response['userAccountById'];
     if (json != null) {
-      var rewards = Set<int>.from(json['favorite_rewards'].map((r) => r['id']));
-      var stores = Set<int>.from(json['favorite_stores'].map((r) => r['id']));
+      var rewards = (json['favorite_rewards'] as List).map((r) => Reward.fromToaster(r)).toList();
+      var stores = (json['favorite_stores'] as List).map((s) => Store.fromToaster(s)).toList();
       return { 'rewards': rewards, 'stores': stores };
     } else {
       throw Exception('Failed to fetchFavorites(userId: $userId)');

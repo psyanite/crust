@@ -69,26 +69,17 @@ class _PresenterState extends State<_Presenter> {
     ));
   }
 
-  _snack(context, text) {
-    final snackBar = SnackBar(
-      content: Text(text),
-      action: SnackBarAction(
-        label: 'OK',
-        onPressed: () {},
-      ),
-    );
-    Scaffold.of(context).showSnackBar(snackBar);
-  }
+//  _snack
 
   _press(context) async {
     FocusScope.of(context).requestFocus(new FocusNode());
     if (_username == null || _username.isEmpty) {
-      _snack(context, 'Please enter at least 8 characters');
+      snack(context, 'Please enter at least 8 characters');
       return;
     }
     var userId = await MeService.getUserIdByUsername(_username);
     if (userId != null) {
-      _snack(context, 'Sorry, that username is already taken');
+      snack(context, 'Sorry, that username is already taken');
     } else {
       widget.addUser(widget.user.copyWith(username: _username));
       Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));

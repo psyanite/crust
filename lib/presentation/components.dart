@@ -41,6 +41,17 @@ class SolidButton extends StatelessWidget {
   }
 }
 
+class LoadingCenter extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+      ),
+    );
+  }
+}
+
 class LoadingSliver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -119,4 +130,15 @@ class HeartIcon extends StatelessWidget {
       height: size ?? 25.0,
     );
   }
+}
+
+snack(context, text) {
+  final snackBar = SnackBar(
+    content: Text(text),
+    action: SnackBarAction(
+      label: 'OK',
+      onPressed: () {},
+    ),
+  );
+  Scaffold.of(context).showSnackBar(snackBar);
 }

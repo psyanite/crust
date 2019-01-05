@@ -7,5 +7,5 @@ Reducer<RewardState> rewardReducer = combineReducers([
 ]);
 
 RewardState fetchRewardsSuccess(RewardState state, FetchRewardsSuccess action) {
-  return state.copyWith(rewards: action.rewards);
+  return state.addRewards(action.rewards);
 }

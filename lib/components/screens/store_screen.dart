@@ -1,10 +1,11 @@
+import 'package:crust/components/favorite_button.dart';
 import 'package:crust/components/post_list.dart';
-import 'package:crust/components/screens/settings_screen.dart';
 import 'package:crust/models/post.dart';
 import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
+import 'package:crust/state/me/me_actions.dart';
 import 'package:crust/state/store/store_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,14 +24,24 @@ class StoreScreen extends StatelessWidget {
           if (store.state.store.stores[storeId].posts == null) return store.dispatch(FetchPostsByStoreIdRequest(storeId));
         },
         converter: (Store<AppState> store) => _Props.fromStore(store, storeId),
-        builder: (context, props) => _Presenter(store: props.store));
+        builder: (context, props) => _Presenter(
+          store: props.store,
+          favoriteStores: props.favoriteStores,
+          favoriteStore: props.favoriteStore,
+          unfavoriteStore: props.unfavoriteStore,
+          isLoggedIn: props.isLoggedIn
+        ));
   }
 }
 
 class _Presenter extends StatelessWidget {
   final MyStore.Store store;
+  final Set<int> favoriteStores;
+  final Function favoriteStore;
+  final Function unfavoriteStore;
+  final bool isLoggedIn;
 
-  _Presenter({Key key, this.store}) : super(key: key);
+  _Presenter({Key key, this.store, this.favoriteStores,  this.favoriteStore, this.unfavoriteStore, this.isLoggedIn}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +55,7 @@ class _Presenter extends StatelessWidget {
             child: Column(
       children: <Widget>[
         Stack(
+          alignment: AlignmentDirectional.centerEnd,
           children: <Widget>[
             Container(
                 height: 100.0,
@@ -53,17 +65,11 @@ class _Presenter extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 )),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Builder(
-                    builder: (context) => IconButton(
-                          icon: Icon(CupertinoIcons.ellipsis),
-                          color: Colors.white,
-                          iconSize: 40.0,
-                          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsScreen())),
-                        )),
-              ],
+            SafeArea(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[Padding(child: _favoriteButton(store), padding: EdgeInsets.only(right: 10.0))],
+              ),
             ),
           ],
         ),
@@ -133,14 +139,49 @@ class _Presenter extends StatelessWidget {
       children: children,
     );
   }
+
+  Widget _favoriteButton(MyStore.Store store) {
+    return Builder(
+      builder: (context) => FavoriteButton(
+        padding: 0,
+        isFavorited: favoriteStores.contains(store.id),
+        onFavorite: () {
+          if (isLoggedIn) {
+            favoriteStore(store.id);
+          } else {
+            snack(context, 'Please login to favorite store');
+          }
+        },
+        onUnfavorite: () {
+          unfavoriteStore(store.id);
+        },
+      ),
+    );
+  }
 }
 
 class _Props {
   final MyStore.Store store;
+  final Set<int> favoriteStores;
+  final Function favoriteStore;
+  final Function unfavoriteStore;
+  final bool isLoggedIn;
 
-  _Props({this.store});
+  _Props({
+    this.store,
+    this.favoriteStores,
+    this.favoriteStore,
+    this.unfavoriteStore,
+    this.isLoggedIn,
+  });
 
   static fromStore(Store<AppState> store, int storeId) {
-    return _Props(store: store.state.store.stores[storeId]);
+    return _Props(
+      store: store.state.store.stores[storeId],
+      favoriteStores: store.state.me.favoriteStores ?? Set<int>(),
+      favoriteStore: (storeId) => store.dispatch(FavoriteStoreRequest(storeId)),
+      unfavoriteStore: (storeId) => store.dispatch(UnfavoriteStoreRequest(storeId)),
+      isLoggedIn: store.state.me.user != null,
+    );
   }
 }

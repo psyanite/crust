@@ -87,7 +87,6 @@ flutter:
         -   asset: assets/fonts/OpenSans-Bold.ttf
         -   asset: assets/fonts/OpenSans-ExtraBold.ttf
 
-
     -   family: PTSans
         fonts:
         -   asset: assets/fonts/PTSans-Regular.ttf

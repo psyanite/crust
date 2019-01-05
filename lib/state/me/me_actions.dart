@@ -53,7 +53,35 @@ class UnfavoriteRewardSuccess {
   UnfavoriteRewardSuccess(this.rewards);
 }
 
-class FetchFavoritesRequest {}
+class FavoriteStoreRequest {
+  final int storeId;
+
+  FavoriteStoreRequest(this.storeId);
+}
+
+class FavoriteStoreSuccess {
+  final Set<int> stores;
+
+  FavoriteStoreSuccess(this.stores);
+}
+
+class UnfavoriteStoreRequest {
+  final int storeId;
+
+  UnfavoriteStoreRequest(this.storeId);
+}
+
+class UnfavoriteStoreSuccess {
+  final Set<int> stores;
+
+  UnfavoriteStoreSuccess(this.stores);
+}
+
+class FetchFavoritesRequest {
+  final bool updateStore;
+
+  FetchFavoritesRequest({this.updateStore: false});
+}
 
 class FetchFavoritesSuccess {
   final Set<int> favoriteRewards;

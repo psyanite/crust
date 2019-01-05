@@ -5,10 +5,10 @@ class LoadingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: new Scaffold(
-        body: new Center(
-          child: new CircularProgressIndicator(
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
           ),
         ),

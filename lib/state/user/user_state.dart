@@ -14,4 +14,11 @@ class UserState {
       users: users ?? this.users,
     );
   }
+
+  @override
+  String toString() {
+    return '''{
+        users: ${users != null ? '${users.length} users' : null},
+      }''';
+  }
 }

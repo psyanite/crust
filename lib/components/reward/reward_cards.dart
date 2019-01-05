@@ -1,5 +1,6 @@
 import 'package:crust/components/favorite_button.dart';
 import 'package:crust/models/reward.dart';
+import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -36,7 +37,7 @@ class RewardCards extends StatelessWidget {
               padding: EdgeInsets.only(top: 10.0),
               child: Text(reward.name, style: Burnt.title),
             ),
-            _locationText(reward),
+            Text(reward.locationText()),
             Text(reward.description),
           ],
         ),
@@ -61,7 +62,7 @@ class RewardCards extends StatelessWidget {
                       padding: EdgeInsets.only(top: 10.0),
                       child: Text(reward.name, style: Burnt.title),
                     ),
-                    _locationText(reward),
+                    Text(reward.locationText()),
                     Text(reward.description),
                     _listItemBanner(reward),
                   ],
@@ -80,13 +81,13 @@ class RewardCards extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 7.0),
       color: Burnt.primary,
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text(_getBannerText(reward), style: TextStyle(color: Colors.white)),
+        Text(reward.bannerText(), style: TextStyle(color: Colors.white)),
       ]),
     );
   }
 
   Widget _listItemBanner(Reward reward) {
-    return Text(_getBannerText(reward), style: TextStyle(fontWeight: Burnt.fontBold, color: Burnt.primary));
+    return Text(reward.bannerText(), style: TextStyle(fontWeight: Burnt.fontBold, color: Burnt.primary));
   }
 
   Widget _cardPromoImage(Reward reward) {
@@ -131,7 +132,7 @@ class RewardCards extends StatelessWidget {
               if (isLoggedIn) {
                 favoriteReward(reward.id);
               } else {
-                _snack(context, 'Please login to favorite rewards');
+                snack(context, 'Please login to favorite rewards');
               }
             },
             onUnfavorite: () {
@@ -139,51 +140,5 @@ class RewardCards extends StatelessWidget {
             },
           ),
     );
-  }
-
-  String _getBannerText(Reward reward) {
-    var today = new DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
-    var firstDay = reward.validFrom;
-    var lastDay = reward.validUntil;
-    if (firstDay != null && lastDay != null) {
-      if (firstDay == lastDay) {
-        if (today == firstDay) return 'Only available TODAY. Get in quick!';
-        return 'Coming Soon · ${DateFormat.MMMEd("en_US").format(firstDay)} · One Day Only';
-      } else {
-        if (firstDay.isBefore(today)) return 'Hurry! Only available until ${DateFormat.MMMEd("en_US").format(lastDay)}';
-        return 'Coming Soon · ${DateFormat.MMMEd("en_US").format(firstDay)} - ${DateFormat.MMMEd("en_US").format(lastDay)}';
-      }
-    } else if (firstDay == null) {
-      return 'Available today until ${DateFormat.MMMEd("en_US").format(lastDay)}';
-    } else {
-      return 'Available from the ${DateFormat.MMMEd("en_US").format(firstDay)}';
-    }
-  }
-
-  Widget _locationText(Reward reward) {
-    var store = reward.store;
-    if (store != null) {
-      var text = store.name;
-      if (store.suburb != null) text = '$text · ${store.suburb}';
-      text = '$text, ${store.location}';
-      return Text(text);
-    }
-    var stores = reward.storeGroup.stores;
-    var text = stores.take(2).map((s) {
-      return s.suburb != null ? s.suburb : s.location;
-    }).join(', ');
-    text = '${reward.storeGroup.name} · $text';
-    if (stores.length > 2) text = '$text, +${stores.length - 2} locations';
-    return Text(text);
-  }
-
-  void _snack(BuildContext context, String message) {
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: Text(message),
-      action: SnackBarAction(
-        label: 'Okay',
-        onPressed: () {},
-      ),
-    ));
   }
 }
