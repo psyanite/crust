@@ -50,7 +50,7 @@ class Reward {
     if (store != null) {
       var text = store.name;
       if (store.suburb != null) text = '$text · ${store.suburb}';
-      text = '$text, ${store.location}';
+      if (store.location != null) text = '$text, ${store.location}';
       return text;
     }
     var stores = this.storeGroup.stores;

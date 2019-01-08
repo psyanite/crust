@@ -50,9 +50,9 @@ class _Presenter extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.asset('assets/images/loading-icon.png', height: 250.0),
-              WhiteButton(text: "Login with Facebook", onPressed: _loginWithFacebook),
+              WhiteButton(text: "Login with Facebook", onPressed: () => _loginWithFacebook(context)),
               Container(height: 10.0),
-              WhiteButton(text: "Login with Google", onPressed: _loginWithGoogle),
+              WhiteButton(text: "Login with Google", onPressed: () => _loginWithGoogle(context)),
             ]),
       ),
     );
