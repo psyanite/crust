@@ -9,10 +9,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PostList extends StatelessWidget {
+  final Widget noPostsView;
   final List<Post> posts;
   final PostListType postListType;
 
-  PostList({Key key, this.posts, this.postListType});
+  PostList({Key key, this.noPostsView, this.posts, this.postListType});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class PostList extends StatelessWidget {
         delegate: SliverChildListDelegate(<Widget>[
           Column(
           children: <Widget>[
-            Text('We don\'t have any posts yet'),
+            noPostsView
 //            RaisedButton(child: Text('Add One Now'), onPressed: () {},)
           ]
         )]),

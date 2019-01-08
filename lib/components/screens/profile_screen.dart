@@ -38,7 +38,7 @@ class _Presenter extends StatelessWidget {
       return LoadingScreen();
     }
     return Scaffold(
-        body: CustomScrollView(slivers: <Widget>[_appBar(), PostList(posts: user.posts, postListType: PostListType.forProfile)]));
+        body: CustomScrollView(slivers: <Widget>[_appBar(), PostList(noPostsView: Text('Looks like ${user.firstName} hasn\'t posted anything yet.'), posts: user.posts, postListType: PostListType.forProfile)]));
   }
 
   Widget _appBar() {

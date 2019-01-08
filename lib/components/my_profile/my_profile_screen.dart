@@ -26,7 +26,7 @@ class _Presenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: <Widget>[_appBar(), PostList(posts: user.posts, postListType: PostListType.forProfile)]);
+    return CustomScrollView(slivers: <Widget>[_appBar(), PostList(noPostsView: Text('Your posts are displayed here, start posting now!'), posts: user.posts, postListType: PostListType.forProfile)]);
   }
 
   Widget _appBar() {
