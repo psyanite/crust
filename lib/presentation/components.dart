@@ -1,9 +1,24 @@
 import 'package:crust/models/post.dart';
+import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter_svg/svg.dart';
+
+class BackArrow extends StatelessWidget {
+  final Color color;
+
+  BackArrow({Key key, this.color = Burnt.textBody});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: Icon(CrustCons.back, color: color),
+      onPressed: () => Navigator.of(context).pop(),
+    );
+  }
+}
 
 class WhiteButton extends StatelessWidget {
   final String text;
@@ -18,7 +33,7 @@ class WhiteButton extends StatelessWidget {
       color: Burnt.background,
       padding: EdgeInsets.symmetric(vertical: 20.0),
       child: Text(text, style: TextStyle(fontSize: 22.0)),
-      onPressed: () => onPressed(context),
+      onPressed: onPressed,
     );
   }
 }
@@ -36,7 +51,7 @@ class SolidButton extends StatelessWidget {
       color: Burnt.primary,
       padding: EdgeInsets.symmetric(vertical: 20.0),
       child: Text(text, style: TextStyle(fontSize: 22.0)),
-      onPressed: () => onPressed(context),
+      onPressed: onPressed,
     );
   }
 }
@@ -72,7 +87,7 @@ class ScoreIcon extends StatelessWidget {
   final double size;
   final String name;
 
-  ScoreIcon({Key key, this.score, this.size, this.name});
+  ScoreIcon({Key key, this.score, this.size = 25.0, this.name});
 
   @override
   Widget build(BuildContext context) {
@@ -101,8 +116,8 @@ class ScoreIcon extends StatelessWidget {
     var children = <Widget>[
       SvgPicture.asset(
         assetName,
-        width: size ?? 25.0,
-        height: size ?? 25.0,
+        width: size,
+        height: size,
       )
     ];
     if (name != null) {
@@ -119,15 +134,15 @@ class HeartIcon extends StatelessWidget {
   final bool isHollow;
   final double size;
 
-  HeartIcon({Key key, this.isHollow, this.size});
+  HeartIcon({Key key, this.isHollow, this.size = 25.0});
 
   @override
   Widget build(BuildContext context) {
     var assetName = isHollow ? 'assets/svgs/heart-hollow.svg' : 'assets/svgs/heart-filled.svg';
     return SvgPicture.asset(
       assetName,
-      width: size ?? 25.0,
-      height: size ?? 25.0,
+      width: size,
+      height: size,
     );
   }
 }
