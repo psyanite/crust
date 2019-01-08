@@ -46,7 +46,7 @@ class _Presenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: CustomScrollView(slivers: <Widget>[_appBar(), PostList(posts: store.posts, postListType: PostListType.forStore)]));
+        body: CustomScrollView(slivers: <Widget>[_appBar(), PostList(noPostsView: Text('Looks like ${store.name} hasn\'t posted anything yet.'), posts: store.posts, postListType: PostListType.forStore)]));
   }
 
   Widget _appBar() {
@@ -55,10 +55,10 @@ class _Presenter extends StatelessWidget {
             child: Column(
       children: <Widget>[
         Stack(
-          alignment: AlignmentDirectional.centerEnd,
+          alignment: AlignmentDirectional.topStart,
           children: <Widget>[
             Container(
-                height: 100.0,
+                height: 150.0,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: NetworkImage(store.coverImage),
@@ -66,9 +66,16 @@ class _Presenter extends StatelessWidget {
                   ),
                 )),
             SafeArea(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[Padding(child: _favoriteButton(store), padding: EdgeInsets.only(right: 10.0))],
+              child: Container(
+                height: 55.0,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    BackArrow(color: Colors.white),
+                    Padding(child: _favoriteButton(store), padding: EdgeInsets.only(right: 10.0))
+                  ],
+                ),
               ),
             ),
           ],
@@ -148,12 +155,14 @@ class _Presenter extends StatelessWidget {
         onFavorite: () {
           if (isLoggedIn) {
             favoriteStore(store.id);
+            snack(context, 'Added to favourites');
           } else {
-            snack(context, 'Please login to favorite store');
+            snack(context, 'Please login to favourite store');
           }
         },
         onUnfavorite: () {
           unfavoriteStore(store.id);
+          snack(context, 'Removed from favourites');
         },
       ),
     );
