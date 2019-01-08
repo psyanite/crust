@@ -3,7 +3,6 @@ import 'package:crust/models/reward.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class RewardCards extends StatelessWidget {
   final List<Reward> rewards;
@@ -135,9 +134,7 @@ class RewardCards extends StatelessWidget {
                 snack(context, 'Please login to favorite rewards');
               }
             },
-            onUnfavorite: () {
-              unfavoriteReward(reward.id);
-            },
+            onUnfavorite: () => unfavoriteReward(reward.id)
           ),
     );
   }

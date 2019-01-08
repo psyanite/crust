@@ -1,4 +1,4 @@
-import 'package:crust/components/reward/reward_cards.dart';
+import 'package:crust/components/rewards_screen/reward_cards.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
