@@ -15,12 +15,32 @@ class RewardService {
           store {
             id,
             name,
+            phone_number,
+            cover_image,
+            address {
+              address_first_line,
+              address_second_line,
+              address_street_number,
+              address_street_name,
+              google_url,
+            },
             location {
-              name
+              id,
+              name,
             },
             suburb {
-              name
+              id,
+              name,
             },
+            cuisines {
+              id,
+              name,
+            },
+            ratings {
+              heart_ratings,
+              okay_ratings,
+              burnt_ratings
+            }
           },
           store_group {
             id,
@@ -28,12 +48,32 @@ class RewardService {
             stores {
               id,
               name,
+              phone_number,
+              cover_image,
+              address {
+                address_first_line,
+                address_second_line,
+                address_street_number,
+                address_street_name,
+                google_url,
+              },
               location {
-                name
+                id,
+                name,
               },
               suburb {
-                name
+                id,
+                name,
               },
+              cuisines {
+                id,
+                name,
+              },
+              ratings {
+                heart_ratings,
+                okay_ratings,
+                burnt_ratings
+              }
             }
           },
           valid_from,

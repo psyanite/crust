@@ -1,5 +1,6 @@
 import 'package:crust/models/post.dart';
 import 'package:crust/models/user.dart';
+import 'package:crust/models/user_reward.dart';
 
 class AddUserRequest {
   final User user;
@@ -88,4 +89,22 @@ class FetchFavoritesSuccess {
   final Set<int> favoriteStores;
 
   FetchFavoritesSuccess({this.favoriteRewards, this.favoriteStores});
+}
+
+class FetchUserRewardRequest {
+  final int rewardId;
+
+  FetchUserRewardRequest(this.rewardId);
+}
+
+class FetchUserRewardSuccess {
+  final UserReward userReward;
+
+  FetchUserRewardSuccess(this.userReward);
+}
+
+class AddUserRewardRequest {
+  final int rewardId;
+
+  AddUserRewardRequest(this.rewardId);
 }

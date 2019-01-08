@@ -1,6 +1,7 @@
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/store.dart';
 import 'package:crust/models/user.dart';
+import 'package:crust/models/user_reward.dart';
 import 'package:crust/services/toaster.dart';
 import 'package:crust/utils/enum_util.dart';
 
@@ -171,12 +172,32 @@ class MeService {
             store {
               id,
               name,
+              phone_number,
+              cover_image,
+              address {
+                address_first_line,
+                address_second_line,
+                address_street_number,
+                address_street_name,
+                google_url,
+              },
               location {
-                name
+                id,
+                name,
               },
               suburb {
-                name
+                id,
+                name,
               },
+              cuisines {
+                id,
+                name,
+              },
+              ratings {
+                heart_ratings,
+                okay_ratings,
+                burnt_ratings
+              }
             },
             store_group {
               id,
@@ -184,12 +205,32 @@ class MeService {
               stores {
                 id,
                 name,
+                phone_number,
+                cover_image,
+                address {
+                  address_first_line,
+                  address_second_line,
+                  address_street_number,
+                  address_street_name,
+                  google_url,
+                },
                 location {
-                  name
+                  id,
+                  name,
                 },
                 suburb {
-                  name
+                  id,
+                  name,
                 },
+                cuisines {
+                  id,
+                  name,
+                },
+                ratings {
+                  heart_ratings,
+                  okay_ratings,
+                  burnt_ratings
+                }
               }
             },
             valid_from,
@@ -237,6 +278,50 @@ class MeService {
       return { 'rewards': rewards, 'stores': stores };
     } else {
       throw Exception('Failed to fetchFavorites(userId: $userId)');
+    }
+  }
+
+  Future<UserReward> fetchUserReward({ userId, rewardId }) async {
+    String query = """
+      query {
+        userRewardBy(userId: $userId, rewardId: $rewardId) {
+          reward {
+            id
+          },
+          unique_code,
+          is_redeemed
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['userRewardBy'];
+    if (json != null) {
+      var result = (json as List).map((u) => UserReward.fromToaster(u)).toList();
+      return result.length > 0 ? result.first : null;
+    } else {
+      throw Exception('Failed to fetchUserReward(userId: $userId, rewardId: $rewardId)');
+    }
+  }
+
+  Future<UserReward> addUserReward({ userId, rewardId }) async {
+    String query = """
+      mutation {
+        addUserReward(userId: $userId, rewardId: $rewardId) {
+          reward {
+            id
+          },
+          unique_code,
+          is_redeemed
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['addUserReward'];
+    if (json != null) {
+      var result = (json as List).map((u) => UserReward.fromToaster(u)).toList();
+      return result.length > 0 ? result.first : null;
+    } else {
+      throw Exception('Failed to addUserReward(userId: $userId, rewardId: $rewardId)');
     }
   }
 }
