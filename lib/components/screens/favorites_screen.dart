@@ -1,3 +1,5 @@
+import 'package:crust/components/favorite_button.dart';
+import 'package:crust/components/screens/reward_screen.dart';
 import 'package:crust/components/screens/store_screen.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/store.dart' as MyStore;
@@ -57,6 +59,7 @@ class _Presenter extends StatelessWidget {
 
   Widget _appBar() {
     return AppBar(
+        automaticallyImplyLeading: true,
         backgroundColor: Burnt.primary,
         elevation: 0.0,
         title: Text('Favourites', style: TextStyle(color: Colors.white, fontSize: 40.0, fontFamily: Burnt.fontFancy)));
@@ -67,8 +70,8 @@ class _Presenter extends StatelessWidget {
     if (rewards == null && stores == null) return LoadingCenter();
     return Column(
       children: <Widget>[
-        _list("Favourite Stores", () {}, List<Widget>.from(stores.map(_storeCard))),
-        _list("Favourite Rewards", () {}, List<Widget>.from(rewards.map(_rewardCard))),
+        _list("Favourite Stores", () {}, stores != null ? List<Widget>.from(stores.map(_storeCard)) : List<Widget>()),
+        _list("Favourite Rewards", () {}, rewards != null ? List<Widget>.from(rewards.map(_rewardCard)) : List<Widget>()),
       ],
     );
   }
@@ -116,7 +119,12 @@ class _Presenter extends StatelessWidget {
               height: 200.0,
               padding: EdgeInsets.only(right: 10.0),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                Container(height: 100.0, child: Image.network(store.coverImage, fit: BoxFit.cover)),
+                Stack(
+                  alignment: AlignmentDirectional.topEnd,
+                  children: <Widget>[
+                    Container(height: 100.0, width: 200.0, child: Image.network(store.coverImage, fit: BoxFit.cover)),
+                    _favoriteButton(() => unfavoriteStore(store.id))
+                  ]),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   Container(height: 5.0),
                   Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
@@ -133,7 +141,7 @@ class _Presenter extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => StoreScreen(storeId: 1)),
+              MaterialPageRoute(builder: (_) => RewardScreen(rewardId: reward.id)),
             );
           },
           child: Container(
@@ -141,7 +149,12 @@ class _Presenter extends StatelessWidget {
               height: 200.0,
               padding: EdgeInsets.only(right: 10.0),
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                Container(height: 100.0, child: Image.network(reward.promoImage, fit: BoxFit.cover)),
+                Stack(
+                  alignment: AlignmentDirectional.topEnd,
+                  children: <Widget>[
+                    Container(height: 100.0, width: 200.0, child: Image.network(reward.promoImage, fit: BoxFit.cover)),
+                    _favoriteButton(() => unfavoriteReward(reward.id))
+                  ]),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   Container(height: 5.0),
                   Text(reward.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
@@ -151,24 +164,37 @@ class _Presenter extends StatelessWidget {
     });
   }
 
-//  Widget _favoriteButton(MyStore.Store store) {
-//    return Builder(
-//      builder: (context) => FavoriteButton(
-//        padding: 10.0,
-//        isFavorited: favoriteStores.contains(store.id),
-//        onFavorite: () {
-//          if (isLoggedIn) {
-//            favoriteStore(store.id);
-//          } else {
-//            snack(context, 'Please login to favorite store');
-//          }
-//        },
-//        onUnfavorite: () {
-//          unfavoriteStore(store.id);
-//        },
-//      ),
-//    );
-//  }
+  Widget _favoriteButton(Function onConfirm) {
+    return Builder(
+      builder: (context) => FavoriteButton(
+        padding: 7.0,
+        isFavorited: true,
+        onUnfavorite: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: new Text("Remove from favourites?"),
+                actions: <Widget>[
+                  FlatButton(
+                    child: new Text('Cancel'),
+                    onPressed: () => Navigator.of(context).pop()
+                  ),
+                  FlatButton(
+                    child: new Text('Confirm'),
+                    onPressed: () {
+                      onConfirm();
+                      Navigator.of(context).pop();
+                    }
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
 }
 
 class _Props {
@@ -193,8 +219,8 @@ class _Props {
   static fromStore(Store<AppState> store) {
     var stores = store.state.store.stores;
     var rewards = store.state.reward.rewards;
-    var favoriteRewards = store.state.me.favoriteRewards.take(5);
-    var favoriteStores = store.state.me.favoriteStores.take(5);
+    var favoriteRewards = store.state.me.favoriteRewards?.take(5);
+    var favoriteStores = store.state.me.favoriteStores?.take(5);
     return _Props(
       rewards: rewards != null && favoriteRewards != null
           ? rewards.entries.where((r) => favoriteRewards.contains(r.value.id)).map((e) => e.value).toList()

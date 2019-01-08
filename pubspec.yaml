@@ -37,6 +37,7 @@ dependencies:
     timeago: ^2.0.9
     intl: ^0.15.7
     flutter_svg: ^0.6.3
+    qr_flutter: ^1.1.5
 
 dev_dependencies:
     flutter_test:
