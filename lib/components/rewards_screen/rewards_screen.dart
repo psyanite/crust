@@ -1,6 +1,7 @@
 import 'package:crust/components/rewards_screen/reward_cards.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/presentation/components.dart';
+import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
@@ -18,16 +19,6 @@ class RewardsScreen extends StatefulWidget {
 class RewardsScreenState extends State<RewardsScreen> {
   String currentLayout = 'card';
 
-  void _toggleLayout() {
-    setState(() {
-      if (currentLayout == 'card') {
-        currentLayout = 'list';
-      } else {
-        currentLayout = 'card';
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
@@ -36,33 +27,25 @@ class RewardsScreenState extends State<RewardsScreen> {
           store.dispatch(FetchFavoritesRequest());
         },
         converter: (Store<AppState> store) => _Props.fromStore(store),
-        builder: (BuildContext context, _Props props) => CustomScrollView(slivers: <Widget>[_appBar(), _filters(), _content(props)]));
+        builder: (BuildContext context, _Props props) => CustomScrollView(slivers: <Widget>[_appBar(), _content(props)]));
   }
 
   Widget _appBar() {
     return SliverAppBar(
         pinned: false,
         floating: false,
-        expandedHeight: 55.0,
-        backgroundColor: Burnt.primary,
-        title: Text('Rewards', style: TextStyle(color: Colors.white, fontSize: 40.0, fontFamily: Burnt.fontFancy)));
-  }
-
-  Widget _filters() {
-    return SliverToBoxAdapter(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: <Widget>[
+        actions: <Widget>[
           IconButton(
               splashColor: Colors.transparent,
               padding: EdgeInsets.all(0.0),
-              icon: Icon(Icons.autorenew),
-              color: Burnt.primary,
-              iconSize: 20.0,
-              onPressed: _toggleLayout),
+              icon: Icon(CrustCons.view_mode),
+              color: Colors.white,
+              iconSize: 15.0,
+              onPressed: _toggleLayout)
         ],
-      ),
-    );
+        expandedHeight: 55.0,
+        backgroundColor: Burnt.primary,
+        title: Text('Rewards', style: TextStyle(color: Colors.white, fontSize: 40.0, fontFamily: Burnt.fontFancy)));
   }
 
   Widget _content(_Props props) {
@@ -74,6 +57,16 @@ class RewardsScreenState extends State<RewardsScreen> {
         unfavoriteReward: props.unfavoriteReward,
         isLoggedIn: props.isLoggedIn,
         layout: currentLayout);
+  }
+
+  void _toggleLayout() {
+    setState(() {
+      if (currentLayout == 'card') {
+        currentLayout = 'list';
+      } else {
+        currentLayout = 'card';
+      }
+    });
   }
 }
 
