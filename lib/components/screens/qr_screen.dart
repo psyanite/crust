@@ -32,11 +32,11 @@ class QrScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-
       QrImage(
         data: userReward.uniqueCode,
         size: 200.0,
         foregroundColor: Burnt.textBody,
+        version: 1,
       ),
       Text(userReward.uniqueCode, style: TextStyle(fontSize: 30.0, fontWeight: Burnt.fontBold)),
       Padding(
