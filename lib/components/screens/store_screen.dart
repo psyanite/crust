@@ -127,7 +127,7 @@ class _Presenter extends StatelessWidget {
         children: <Widget>[
           Padding(
             padding: EdgeInsets.only(right: 10.0),
-            child: Text(count.toString()),
+            child: Text(count != null ? count.toString() : ''),
           ),
           ScoreIcon(score: score, size: 25.0)
         ],

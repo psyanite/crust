@@ -1,5 +1,6 @@
 import 'package:crust/components/favorite_button.dart';
 import 'package:crust/components/screens/store_screen.dart';
+import 'package:crust/components/search/search_icon.dart';
 import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
@@ -45,13 +46,17 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _appBar() {
-    return SliverAppBar(
-        pinned: false,
-        floating: false,
-        expandedHeight: 55.0,
-        backgroundColor: Burnt.primary,
-        elevation: 24.0,
-        title: Text('Burntoast', style: TextStyle(color: Colors.white, fontSize: 40.0, fontFamily: Burnt.fontFancy)));
+    return Builder(
+      builder: (context) => SliverAppBar(
+            pinned: false,
+            floating: false,
+            expandedHeight: 55.0,
+            backgroundColor: Burnt.primary,
+            elevation: 24.0,
+            title: Text('Burntoast', style: TextStyle(color: Colors.white, fontSize: 40.0, fontFamily: Burnt.fontFancy)),
+            actions: <Widget>[SearchIcon()],
+          ),
+    );
   }
 
   Widget _content() {
@@ -64,7 +69,10 @@ class _Presenter extends StatelessWidget {
           crossAxisSpacing: 5.0,
           mainAxisSpacing: 5.0,
         ),
-        delegate: SliverChildListDelegate(List<Widget>.from(stores.map(_storeCard))));
+        delegate: SliverChildBuilderDelegate(
+          (builder, i) => _storeCard(stores[i]),
+          childCount: stores.length
+        ));
   }
 
   Widget _storeCard(MyStore.Store store) {
@@ -82,7 +90,12 @@ class _Presenter extends StatelessWidget {
             Stack(
               alignment: AlignmentDirectional.topEnd,
               children: <Widget>[
-                Container(height: 100.0, child: Image.network(store.coverImage, fit: BoxFit.cover)),
+                Container(height: 100.0, decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: NetworkImage(store.coverImage),
+                    fit: BoxFit.cover,
+                  ),
+                )),
                 _favoriteButton(store),
               ],
             ),
@@ -102,19 +115,21 @@ class _Presenter extends StatelessWidget {
   Widget _favoriteButton(MyStore.Store store) {
     return Builder(
       builder: (context) => FavoriteButton(
-        padding: 10.0,
-        isFavorited: favoriteStores.contains(store.id),
-        onFavorite: () {
-          if (isLoggedIn) {
-            favoriteStore(store.id);
-          } else {
-            snack(context, 'Please login to favorite store');
-          }
-        },
-        onUnfavorite: () {
-          unfavoriteStore(store.id);
-        },
-      ),
+            padding: 10.0,
+            isFavorited: favoriteStores.contains(store.id),
+            onFavorite: () {
+              if (isLoggedIn) {
+                favoriteStore(store.id);
+                snack(context, 'Added to favourites');
+              } else {
+                snack(context, 'Please login to favorite store');
+              }
+            },
+            onUnfavorite: () {
+              unfavoriteStore(store.id);
+              snack(context, 'Removed from favourites');
+            },
+          ),
     );
   }
 }
