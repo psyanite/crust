@@ -93,51 +93,47 @@ class _Presenter extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(title, style: TextStyle(fontSize: 23.0, fontWeight: Burnt.fontBold)),
-              InkWell(child: Text("See All", style: TextStyle(fontSize: 14.0, fontWeight: Burnt.fontBold, color: Burnt.primary)), onTap: onTap)
+              InkWell(
+                  child: Text("See All", style: TextStyle(fontSize: 14.0, fontWeight: Burnt.fontBold, color: Burnt.primary)), onTap: onTap)
             ],
           ),
         ),
-        Container(
-          margin: EdgeInsets.only(left: 15.0),
-          height: 180.0,
-          child: ListView(scrollDirection: Axis.horizontal, children: children))
+        Container(margin: EdgeInsets.only(left: 15.0), height: 180.0, child: ListView(scrollDirection: Axis.horizontal, children: children))
       ],
     );
   }
 
   Widget _storeCard(MyStore.Store store) {
-    return Builder(builder: (context) {
-      return InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id)),
-            );
-          },
-          child: Container(
-              width: 200.0,
-              height: 200.0,
-              padding: EdgeInsets.only(right: 10.0),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                Stack(
-                  alignment: AlignmentDirectional.topEnd,
-                  children: <Widget>[
+    return Builder(
+        builder: (context) => InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id)),
+              );
+            },
+            child: Container(
+                width: 200.0,
+                height: 200.0,
+                padding: EdgeInsets.only(right: 10.0),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                  Stack(alignment: AlignmentDirectional.topEnd, children: <Widget>[
                     Container(height: 100.0, width: 200.0, child: Image.network(store.coverImage, fit: BoxFit.cover)),
                     _favoriteButton(() => unfavoriteStore(store.id))
                   ]),
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                  Container(height: 5.0),
-                  Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                  Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
-                  Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
-                ])
-              ])));
-    });
+                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                    Container(height: 5.0),
+                    Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
+                    Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
+                    Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
+                  ])
+                ]))));
   }
 
   Widget _rewardCard(Reward reward) {
-    return Builder(builder: (context) {
-      return InkWell(
+    return Builder(
+      builder: (context) =>
+        InkWell(
           onTap: () {
             Navigator.push(
               context,
@@ -145,23 +141,20 @@ class _Presenter extends StatelessWidget {
             );
           },
           child: Container(
-              width: 200.0,
-              height: 200.0,
-              padding: EdgeInsets.only(right: 10.0),
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                Stack(
-                  alignment: AlignmentDirectional.topEnd,
-                  children: <Widget>[
-                    Container(height: 100.0, width: 200.0, child: Image.network(reward.promoImage, fit: BoxFit.cover)),
-                    _favoriteButton(() => unfavoriteReward(reward.id))
-                  ]),
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                  Container(height: 5.0),
-                  Text(reward.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                  Text(reward.locationText(), style: TextStyle(fontSize: 14.0)),
-                ])
-              ])));
-    });
+            width: 200.0,
+            height: 200.0,
+            padding: EdgeInsets.only(right: 10.0),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+              Stack(alignment: AlignmentDirectional.topEnd, children: <Widget>[
+                Container(height: 100.0, width: 200.0, child: Image.network(reward.promoImage, fit: BoxFit.cover)),
+                _favoriteButton(() => unfavoriteReward(reward.id))
+              ]),
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                Container(height: 5.0),
+                Text(reward.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
+                Text(reward.locationText(), style: TextStyle(fontSize: 14.0)),
+              ])
+            ]))));
   }
 
   Widget _favoriteButton(Function onConfirm) {
@@ -176,17 +169,13 @@ class _Presenter extends StatelessWidget {
               return AlertDialog(
                 title: new Text("Remove from favourites?"),
                 actions: <Widget>[
-                  FlatButton(
-                    child: new Text('Cancel'),
-                    onPressed: () => Navigator.of(context).pop()
-                  ),
+                  FlatButton(child: new Text('Cancel'), onPressed: () => Navigator.of(context).pop()),
                   FlatButton(
                     child: new Text('Confirm'),
                     onPressed: () {
                       onConfirm();
                       Navigator.of(context).pop();
-                    }
-                  ),
+                    }),
                 ],
               );
             },
