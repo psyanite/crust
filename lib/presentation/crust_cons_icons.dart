@@ -12,6 +12,10 @@
 ///       - asset: fonts/CrustCons.ttf
 ///
 /// 
+/// * Elusive, Copyright (C) 2013 by Aristeides Stathopoulos
+///         Author:    Aristeides Stathopoulos
+///         License:   SIL (http://scripts.sil.org/OFL)
+///         Homepage:  http://aristeides.com/
 ///
 import 'package:flutter/widgets.dart';
 
@@ -33,4 +37,5 @@ class CrustCons {
   static const IconData camera = const IconData(0xe80b, fontFamily: _kFontFam);
   static const IconData heart = const IconData(0xe80c, fontFamily: _kFontFam);
   static const IconData logout = const IconData(0xe80d, fontFamily: _kFontFam);
+  static const IconData view_mode = const IconData(0xe80f, fontFamily: _kFontFam);
 }
