@@ -9,34 +9,7 @@ class StoreService {
     String query = """
       query {
         allStores {
-          id,
-          name,
-          phone_number,
-          cover_image,
-          address {
-            address_first_line,
-            address_second_line,
-            address_street_number,
-            address_street_name,
-            google_url,
-          },
-          location {
-            id,
-            name,
-          },
-          suburb {
-            id,
-            name,
-          },
-          cuisines {
-            id,
-            name,
-          },
-          ratings {
-            heart_ratings,
-            okay_ratings,
-            burnt_ratings
-          }
+          ${Store.attributes}
         }
       }
     """;

@@ -8,77 +8,7 @@ class RewardService {
     String query = """
       query {
         allRewards {
-          id,
-          name,
-          description,
-          type,
-          store {
-            id,
-            name,
-            phone_number,
-            cover_image,
-            address {
-              address_first_line,
-              address_second_line,
-              address_street_number,
-              address_street_name,
-              google_url,
-            },
-            location {
-              id,
-              name,
-            },
-            suburb {
-              id,
-              name,
-            },
-            cuisines {
-              id,
-              name,
-            },
-            ratings {
-              heart_ratings,
-              okay_ratings,
-              burnt_ratings
-            }
-          },
-          store_group {
-            id,
-            name,
-            stores {
-              id,
-              name,
-              phone_number,
-              cover_image,
-              address {
-                address_first_line,
-                address_second_line,
-                address_street_number,
-                address_street_name,
-                google_url,
-              },
-              location {
-                id,
-                name,
-              },
-              suburb {
-                id,
-                name,
-              },
-              cuisines {
-                id,
-                name,
-              },
-              ratings {
-                heart_ratings,
-                okay_ratings,
-                burnt_ratings
-              }
-            }
-          },
-          valid_from,
-          valid_until,
-          promo_image,
+          ${Reward.attributes}
         }
       }
     """;
