@@ -2,6 +2,7 @@ import 'package:crust/components/post_list.dart';
 import 'package:crust/components/screens/loading_screen.dart';
 import 'package:crust/components/screens/settings_screen.dart';
 import 'package:crust/models/user.dart';
+import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/user/user_actions.dart';
@@ -57,21 +58,22 @@ class _Presenter extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             )),
-        Container(
-            height: 80.0,
-            decoration: new BoxDecoration(color: Color(0x55000000)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Builder(
-                    builder: (context) => IconButton(
-                          icon: const Icon(CupertinoIcons.ellipsis),
-                          color: Colors.white,
-                          iconSize: 40.0,
-                          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsScreen())),
-                        )),
-              ],
+        Positioned(
+          left: 0,
+          height: 100.0,
+          child:  BackArrow(color: Colors.white),
+        ),
+        Positioned(
+          right: 0,
+          height: 100.0,
+          child:  Builder(
+            builder: (context) => IconButton(
+              icon: const Icon(CupertinoIcons.ellipsis),
+              color: Colors.white,
+              iconSize: 40.0,
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsScreen())),
             )),
+        ),
       ]),
       Positioned(
         left: 50.0,
