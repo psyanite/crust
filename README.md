@@ -1,8 +1,32 @@
-# crust
+# 🍞 Crust 1.0.0
 
-Toast would not be toast without the crust
+🍞 Toast would not be toast without the crust
 
-## Getting Started
+✨ Flutter, Dart, consuming data from the GraphQL API [Toaster](https://github.com/psyanite/toaster)
 
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
+🔥 Download and install the APK [now](https://github.com/psyanite/crust/blob/master/docs/burntoast.apk)!
+
+## Features
+* Register via Facebook or Google now!
+* View all available stores and rewards
+* Favorite rewards so you can keep them handy at all times
+* Request a one-time unique QR code ready for redeeming at the store
+* Visit your friends' profiles
+* Read reviews on others' experiences
+
+## Implementation
+* Implements Presenter-Props model
+* Transforms GraphQL requests into Dart models stored in Redux using Thunk
+* Custom design and branding
+* All assets and icons created via Illustrator
+* Implements [custom icons](https://medium.com/flutterpub/how-to-use-custom-icons-in-flutter-834a079d977)
+* Search for stores using `showSearch` and fulltext PostgreSQL search
+* Custom Instagram-like experience carousel implementation for viewing multiple photos 
+* Implements a Instagram-like main tab navigator
+* Implements Sliver components for greater flexibility
+* Switch between list items and cards viewing available rewards
+* Persists session data into local device using `redux-persist` and `flutter-storage`
+
+<div align="center">
+  <img src="https://github.com/psyanite/toaster/blob/master/docs/images/allstores-query.png" width="600px"/>  
+</div>
