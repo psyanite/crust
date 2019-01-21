@@ -10,6 +10,7 @@ import 'package:crust/state/store/store_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:redux/redux.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -42,6 +43,9 @@ class _Presenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
+    FlutterStatusbarcolor.setNavigationBarWhiteForeground(true);
     return CustomScrollView(slivers: <Widget>[_appBar(), _content()]);
   }
 

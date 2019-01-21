@@ -38,6 +38,7 @@ dependencies:
     intl: ^0.15.7
     flutter_svg: ^0.6.3
     qr_flutter: ^1.1.5
+    flutter_statusbarcolor: 0.1.4+1
 
 dev_dependencies:
     flutter_test:
