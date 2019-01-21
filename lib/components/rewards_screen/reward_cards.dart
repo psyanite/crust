@@ -33,7 +33,8 @@ class RewardCards extends StatelessWidget {
               child: type(reward)
             )
           );
-        }
+        },
+        childCount: rewards.length
       ),
     );
   }
