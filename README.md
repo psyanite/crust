@@ -1,10 +1,10 @@
-# 🍞 Crust 1.0.0
+# 🍞 Crust 1.1.0
 
 🍞 Toast would not be toast without the crust
 
 ✨ Flutter, Dart, consuming data from the GraphQL API [Toaster](https://github.com/psyanite/toaster)
 
-🔥 Download and install the APK [now](https://github.com/psyanite/crust/blob/master/docs/burntoast.apk)!
+🔥 Download and install the APK [now](https://github.com/psyanite/crust/blob/master/docs/burntoast-1.0.0.apk)!
 
 ## Features
 * Register via Facebook or Google now!
@@ -13,6 +13,11 @@
 * Request a one-time unique QR code ready for redeeming at the store
 * Visit your friends' profiles
 * Read reviews on others' experiences
+
+## Next Release Preview
+* Pagination/Forever-scroll
+* Ability to search for keywords in suburbs such as "Cafes in CBD"
+* Create a new post
 
 ## Implementation
 * Implements Presenter-Props model
@@ -28,5 +33,11 @@
 * Persists session data into local device using `redux-persist` and `flutter-storage`
 
 <div align="center">
-  <img src="https://github.com/psyanite/toaster/blob/master/docs/images/allstores-query.png" width="600px"/>  
+  <img src="https://github.com/psyanite/crust/blob/master/docs/images/home.jpg" width="250px"/>
+  <img src="https://github.com/psyanite/crust/blob/master/docs/images/store.jpg" width="250px"/>
+</div>
+<div align="center">
+  <img src="https://github.com/psyanite/crust/blob/master/docs/images/profile.jpg" width="250px"/>
+  <img src="https://github.com/psyanite/crust/blob/master/docs/images/favorites.jpg" width="250px"/>
+  <img src="https://github.com/psyanite/crust/blob/master/docs/images/search.jpg" width="250px"/>
 </div>
