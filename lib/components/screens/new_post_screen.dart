@@ -1,3 +1,4 @@
+import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
 import 'package:flutter/material.dart';
@@ -20,22 +21,20 @@ class _Presenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-            child: Container(
-                child: GridView.count(
-      primary: false,
-      padding: const EdgeInsets.all(20.0),
-      crossAxisSpacing: 10.0,
-      crossAxisCount: 2,
-      children: <Widget>[
-        const Text('He\'d have you all unravel at the'),
-        const Text('Heed not the rabble'),
-        const Text('Sound of screams but the'),
-        const Text('Who scream'),
-        const Text('Revolution is coming...'),
-        const Text('Revolution, they...'),
-      ],
-    ))));
+    return Scaffold(appBar: _appBar(), body: _content());
+  }
+
+  Widget _appBar() {
+    return AppBar(
+      automaticallyImplyLeading: true,
+      backgroundColor: Burnt.primary,
+      elevation: 0.0,
+      title: Text('Post', style: TextStyle(color: Colors.white, fontSize: 40.0, fontFamily: Burnt.fontFancy)));
+  }
+
+  Widget _content() {
+    return Center(
+      child: Text('Coming soon!'),
+    );
   }
 }
