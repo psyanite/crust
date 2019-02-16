@@ -5,7 +5,7 @@ class Burnt {
   static const primary = Color(0xFFFFAB40);
   static const primaryLight = Color(0xFFFFC86B);
   static const textBody = Color(0xDD604B41);
-  static const background = Color(0xFFFFFFFF);
+  static const paper = Color(0xFFFAFAFA);
   static const separator = Color(0xFFEEEEEE);
   static const lightGrey = Color(0x44604B41);
   static const fontBase = 'PTSans';

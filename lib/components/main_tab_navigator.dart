@@ -33,7 +33,7 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
           elevation: 24.0,
           child: CupertinoTabBar(
             border: null,
-            backgroundColor: Colors.grey[50],
+            backgroundColor: Burnt.paper,
             activeColor: Burnt.primary,
             inactiveColor: Burnt.lightGrey,
             currentIndex: _currentIndex,

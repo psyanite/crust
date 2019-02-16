@@ -30,7 +30,7 @@ class WhiteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlatButton(
       textColor: Burnt.primary,
-      color: Burnt.background,
+      color: Burnt.paper,
       padding: EdgeInsets.symmetric(vertical: 20.0),
       child: Text(text, style: TextStyle(fontSize: 22.0)),
       onPressed: onPressed,

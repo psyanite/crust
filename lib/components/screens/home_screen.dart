@@ -50,14 +50,14 @@ class _Presenter extends StatelessWidget {
   Widget _appBar() {
     return Builder(
       builder: (context) => SliverAppBar(
-            pinned: false,
-            floating: false,
-            expandedHeight: 55.0,
-            backgroundColor: Colors.transparent,
-            elevation: 24.0,
-            title: Text('BURNTOAST', style: Burnt.appBarTitleStyle),
-            actions: <Widget>[SearchIcon()],
-          ),
+          pinned: false,
+          floating: false,
+          expandedHeight: 55.0,
+          backgroundColor: Colors.transparent,
+          elevation: 24.0,
+          title: Text('BURNTOAST', style: Burnt.appBarTitleStyle),
+          actions: <Widget>[SearchIcon()],
+          automaticallyImplyLeading: false),
     );
   }
 
@@ -71,10 +71,7 @@ class _Presenter extends StatelessWidget {
           crossAxisSpacing: 5.0,
           mainAxisSpacing: 5.0,
         ),
-        delegate: SliverChildBuilderDelegate(
-          (builder, i) => _storeCard(stores[i]),
-          childCount: stores.length
-        ));
+        delegate: SliverChildBuilderDelegate((builder, i) => _storeCard(stores[i]), childCount: stores.length));
   }
 
   Widget _storeCard(MyStore.Store store) {
@@ -92,12 +89,14 @@ class _Presenter extends StatelessWidget {
             Stack(
               alignment: AlignmentDirectional.topEnd,
               children: <Widget>[
-                Container(height: 100.0, decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(store.coverImage),
-                    fit: BoxFit.cover,
-                  ),
-                )),
+                Container(
+                    height: 100.0,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(store.coverImage),
+                        fit: BoxFit.cover,
+                      ),
+                    )),
                 _favoriteButton(store),
               ],
             ),

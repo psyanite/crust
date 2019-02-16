@@ -33,11 +33,10 @@
 * Persists session data into local device using `redux-persist` and `flutter-storage`
 
 <div align="center">
+  <img src="https://github.com/psyanite/crust/blob/master/docs/images/splash.jpg" width="250px"/>
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/home.jpg" width="250px"/>
-  <img src="https://github.com/psyanite/crust/blob/master/docs/images/store.jpg" width="250px"/>
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/profile.jpg" width="250px"/>
-</div>
-<div align="center">
+  <img src="https://github.com/psyanite/crust/blob/master/docs/images/store.jpg" width="250px"/>
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/rewards.jpg" width="250px"/>
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/favorites.jpg" width="250px"/>
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/search.jpg" width="250px"/>

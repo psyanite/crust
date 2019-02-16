@@ -39,15 +39,15 @@ class _Presenter extends StatelessWidget {
       Stack(children: <Widget>[
         Container(
             height: 80.0,
-            decoration: new BoxDecoration(
-              image: new DecorationImage(
+            decoration: BoxDecoration(
+              image: DecorationImage(
                 image: NetworkImage(user.profilePicture),
                 fit: BoxFit.cover,
               ),
             )),
         Container(
             height: 80.0,
-            decoration: new BoxDecoration(color: Color(0x55000000)),
+            decoration: BoxDecoration(color: Color(0x55000000)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[

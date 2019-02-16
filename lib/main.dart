@@ -1,4 +1,5 @@
 import 'package:crust/components/main_tab_navigator.dart';
+import 'package:crust/components/screens/splash_screen.dart';
 import 'package:crust/presentation/platform_adaptive.dart';
 import 'package:crust/state/app/app_middleware.dart';
 import 'package:crust/state/app/app_reducer.dart';
@@ -40,6 +41,7 @@ void main() async {
 
 class MainRoutes {
   static const String root = '/';
+  static const String splash = '/splash';
 }
 
 class Main extends StatelessWidget {
@@ -51,7 +53,8 @@ class Main extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreProvider<AppState>(
       store: store,
-      child: MaterialApp(title: 'Crust', theme: getTheme(context), routes: <String, WidgetBuilder>{
+      child: MaterialApp(title: 'Crust', theme: getTheme(context), initialRoute: MainRoutes.splash, routes: <String, WidgetBuilder>{
+        MainRoutes.splash: (context) => SplashScreen(),
         MainRoutes.root: (context) => MainTabNavigator(),
       }),
     );
