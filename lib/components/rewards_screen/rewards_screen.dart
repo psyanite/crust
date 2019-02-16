@@ -39,13 +39,13 @@ class RewardsScreenState extends State<RewardsScreen> {
               splashColor: Colors.transparent,
               padding: EdgeInsets.all(0.0),
               icon: Icon(CrustCons.view_mode),
-              color: Colors.white,
+              color: Burnt.lightGrey,
               iconSize: 15.0,
               onPressed: _toggleLayout)
         ],
         expandedHeight: 55.0,
-        backgroundColor: Burnt.primary,
-        title: Text('Rewards', style: TextStyle(color: Colors.white, fontSize: 40.0, fontFamily: Burnt.fontFancy)));
+        backgroundColor: Colors.transparent,
+        title: Text('REWARDS', style: Burnt.appBarTitleStyle));
   }
 
   Widget _content(_Props props) {

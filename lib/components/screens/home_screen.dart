@@ -44,8 +44,6 @@ class _Presenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(true);
-    FlutterStatusbarcolor.setNavigationBarWhiteForeground(true);
     return CustomScrollView(slivers: <Widget>[_appBar(), _content()]);
   }
 
@@ -55,9 +53,9 @@ class _Presenter extends StatelessWidget {
             pinned: false,
             floating: false,
             expandedHeight: 55.0,
-            backgroundColor: Burnt.primary,
+            backgroundColor: Colors.transparent,
             elevation: 24.0,
-            title: Text('Burntoast', style: TextStyle(color: Colors.white, fontSize: 40.0, fontFamily: Burnt.fontFancy)),
+            title: Text('BURNTOAST', style: Burnt.appBarTitleStyle),
             actions: <Widget>[SearchIcon()],
           ),
     );

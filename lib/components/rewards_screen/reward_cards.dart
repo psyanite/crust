@@ -41,7 +41,7 @@ class RewardCards extends StatelessWidget {
 
   Widget _card(Reward reward) {
     return Padding(
-      padding: EdgeInsets.only(top: 15.0, right: 15.0, bottom: 10.0, left: 15.0),
+      padding: EdgeInsets.only( right: 15.0, bottom: 20.0, left: 15.0),
       child: Container(
         padding: EdgeInsets.only(bottom: 20.0),
         decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))),

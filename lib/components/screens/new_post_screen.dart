@@ -27,14 +27,14 @@ class _Presenter extends StatelessWidget {
   Widget _appBar() {
     return AppBar(
       automaticallyImplyLeading: true,
-      backgroundColor: Burnt.primary,
+      backgroundColor: Colors.transparent,
       elevation: 0.0,
-      title: Text('Post', style: TextStyle(color: Colors.white, fontSize: 40.0, fontFamily: Burnt.fontFancy)));
+      title: Text('POST', style: Burnt.appBarTitleStyle));
   }
 
   Widget _content() {
     return Center(
-      child: Text('Coming soon!'),
+      child: Text('COMING SOON', style: TextStyle(letterSpacing: 3.0)),
     );
   }
 }

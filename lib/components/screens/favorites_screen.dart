@@ -60,9 +60,9 @@ class _Presenter extends StatelessWidget {
   Widget _appBar() {
     return AppBar(
         automaticallyImplyLeading: true,
-        backgroundColor: Burnt.primary,
+        backgroundColor: Colors.transparent,
         elevation: 0.0,
-        title: Text('Favourites', style: TextStyle(color: Colors.white, fontSize: 40.0, fontFamily: Burnt.fontFancy)));
+        title: Text('FAVOURITES', style: Burnt.appBarTitleStyle));
   }
 
   Widget _content() {
@@ -88,7 +88,7 @@ class _Presenter extends StatelessWidget {
     return Column(
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.only(top: 20.0, bottom: 5.0, left: 15.0, right: 15.0),
+          padding: EdgeInsets.only(bottom: 5.0, left: 15.0, right: 15.0),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[

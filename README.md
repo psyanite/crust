@@ -23,7 +23,7 @@
 * Implements Presenter-Props model
 * Transforms GraphQL requests into Dart models stored in Redux using Thunk
 * Custom design and branding
-* All assets and icons created via Illustrator
+* All assets and icons created via Adobe Illustrator
 * Implements [custom icons](https://medium.com/flutterpub/how-to-use-custom-icons-in-flutter-834a079d977)
 * Search for stores using `showSearch` and fulltext PostgreSQL search
 * Custom Instagram-like experience carousel implementation for viewing multiple photos 
@@ -35,9 +35,10 @@
 <div align="center">
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/home.jpg" width="250px"/>
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/store.jpg" width="250px"/>
+  <img src="https://github.com/psyanite/crust/blob/master/docs/images/profile.jpg" width="250px"/>
 </div>
 <div align="center">
-  <img src="https://github.com/psyanite/crust/blob/master/docs/images/profile.jpg" width="250px"/>
+  <img src="https://github.com/psyanite/crust/blob/master/docs/images/rewards.jpg" width="250px"/>
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/favorites.jpg" width="250px"/>
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/search.jpg" width="250px"/>
 </div>

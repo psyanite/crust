@@ -4,6 +4,7 @@ import 'package:crust/components/screens/home_screen.dart';
 import 'package:crust/components/screens/favorites_screen.dart';
 import 'package:crust/components/screens/new_post_screen.dart';
 import 'package:crust/components/rewards_screen/rewards_screen.dart';
+import 'package:crust/presentation/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -33,8 +34,8 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
           child: CupertinoTabBar(
             border: null,
             backgroundColor: Colors.grey[50],
-            activeColor: Color(0xFFFFAB40),
-            inactiveColor: Color(0x44604B41),
+            activeColor: Burnt.primary,
+            inactiveColor: Burnt.lightGrey,
             currentIndex: _currentIndex,
             onTap: _onTap,
             items: _tabs.values.map((t) => new BottomNavigationBarItem(icon: Icon(t.icon))).toList(),
