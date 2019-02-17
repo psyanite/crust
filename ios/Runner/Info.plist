@@ -11,7 +11,7 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
-	<string>crust</string>
+	<string>Burntoast</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -55,7 +55,7 @@
         <key>FacebookAppID</key>
         <string>2065053637091627</string>
         <key>FacebookDisplayName</key>
-        <string>Burnt.oast</string>
+        <string>Burntoast</string>
 
         <key>LSApplicationQueriesSchemes</key>
         <array>

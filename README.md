@@ -1,10 +1,10 @@
-# 🍞 Crust 1.1.0
+# 🍞 Crust 1.2.0
 
 🍞 Toast would not be toast without the crust
 
 ✨ Flutter, Dart, consuming data from the GraphQL API [Toaster](https://github.com/psyanite/toaster)
 
-🔥 Download and install the APK [now](https://github.com/psyanite/crust/blob/master/docs/burntoast-1.0.0.apk)!
+🔥 Download and install the APK [now](https://github.com/psyanite/crust/blob/master/docs/burntoast-1.2.0.apk)!
 
 ## Features
 * Register via Facebook or Google now!
