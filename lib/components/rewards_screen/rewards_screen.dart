@@ -31,21 +31,38 @@ class RewardsScreenState extends State<RewardsScreen> {
   }
 
   Widget _appBar() {
-    return SliverAppBar(
-        pinned: false,
-        floating: false,
-        actions: <Widget>[
-          IconButton(
-              splashColor: Colors.transparent,
-              padding: EdgeInsets.all(0.0),
-              icon: Icon(CrustCons.view_mode),
-              color: Burnt.lightGrey,
-              iconSize: 15.0,
-              onPressed: _toggleLayout)
-        ],
-        expandedHeight: 55.0,
-        backgroundColor: Colors.transparent,
-        title: Text('REWARDS', style: Burnt.appBarTitleStyle));
+    return SliverSafeArea(
+      sliver: SliverToBoxAdapter(
+        child: Container(
+          padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0, bottom: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('REWARDS', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
+                  _viewModeIcon()
+                ],
+              ),
+              Text('Browse through all available rewards near you')
+            ],
+          ),
+        )
+      ),
+    );
+  }
+
+  Widget _viewModeIcon() {
+    return IconButton(
+      splashColor: Colors.transparent,
+      padding: EdgeInsets.all(0.0),
+      icon: Icon(CrustCons.view_mode),
+      color: Burnt.lightGrey,
+      iconSize: 15.0,
+      onPressed: _toggleLayout);
   }
 
   Widget _content(_Props props) {

@@ -48,16 +48,22 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _appBar() {
-    return Builder(
-      builder: (context) => SliverAppBar(
-          pinned: false,
-          floating: false,
-          expandedHeight: 55.0,
-          backgroundColor: Colors.transparent,
-          elevation: 24.0,
-          title: Text('BURNTOAST', style: Burnt.appBarTitleStyle),
-          actions: <Widget>[SearchIcon()],
-          automaticallyImplyLeading: false),
+    return SliverSafeArea(
+      sliver: SliverToBoxAdapter(
+        child: Container(
+          height: 100.0,
+          padding: EdgeInsets.symmetric(horizontal: 15.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text('BURNTOAST', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
+              SearchIcon()
+            ],
+          ),
+        )
+      ),
     );
   }
 

@@ -54,28 +54,45 @@ class _Presenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: _appBar(), body: _content());
+    return CustomScrollView(slivers: <Widget>[_appBar(), _content()]);
   }
 
   Widget _appBar() {
-    return AppBar(
-        automaticallyImplyLeading: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        title: Text('FAVOURITES', style: Burnt.appBarTitleStyle));
+    return SliverSafeArea(
+      sliver: SliverToBoxAdapter(
+          child: Container(
+        padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0, bottom: 20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text('FAVOURITES', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
+                Container(height: 50, width: 50),
+              ],
+            ),
+            Text('Access all your favourited stores and rewards')
+          ],
+        ),
+      )),
+    );
   }
 
   Widget _content() {
     if (!isLoggedIn) return _loginMessage();
-    if (rewards == null && stores == null) return LoadingCenter();
-    return Column(
-      children: <Widget>[
+    if (rewards == null && stores == null) return LoadingSliver();
+    return SliverList(
+      delegate: SliverChildListDelegate(<Widget>[
         _list("Favourite Stores", () {}, stores != null ? List<Widget>.from(stores.map(_storeCard)) : List<Widget>()),
         _list("Favourite Rewards", () {}, rewards != null ? List<Widget>.from(rewards.map(_rewardCard)) : List<Widget>()),
-      ],
+      ]),
     );
   }
 
+  // todo: should be a sliver???
   Widget _loginMessage() {
     return Center(
         child: Column(
@@ -132,56 +149,55 @@ class _Presenter extends StatelessWidget {
 
   Widget _rewardCard(Reward reward) {
     return Builder(
-      builder: (context) =>
-        InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => RewardScreen(rewardId: reward.id)),
-            );
-          },
-          child: Container(
-            width: 200.0,
-            height: 200.0,
-            padding: EdgeInsets.only(right: 10.0),
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-              Stack(alignment: AlignmentDirectional.topEnd, children: <Widget>[
-                Container(height: 100.0, width: 200.0, child: Image.network(reward.promoImage, fit: BoxFit.cover)),
-                _favoriteButton(() => unfavoriteReward(reward.id))
-              ]),
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                Container(height: 5.0),
-                Text(reward.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                Text(reward.locationText(), style: TextStyle(fontSize: 14.0)),
-              ])
-            ]))));
+        builder: (context) => InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => RewardScreen(rewardId: reward.id)),
+              );
+            },
+            child: Container(
+                width: 200.0,
+                height: 200.0,
+                padding: EdgeInsets.only(right: 10.0),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                  Stack(alignment: AlignmentDirectional.topEnd, children: <Widget>[
+                    Container(height: 100.0, width: 200.0, child: Image.network(reward.promoImage, fit: BoxFit.cover)),
+                    _favoriteButton(() => unfavoriteReward(reward.id))
+                  ]),
+                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                    Container(height: 5.0),
+                    Text(reward.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
+                    Text(reward.locationText(), style: TextStyle(fontSize: 14.0)),
+                  ])
+                ]))));
   }
 
   Widget _favoriteButton(Function onConfirm) {
     return Builder(
       builder: (context) => FavoriteButton(
-        padding: 7.0,
-        isFavorited: true,
-        onUnfavorite: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: new Text("Remove from favourites?"),
-                actions: <Widget>[
-                  FlatButton(child: new Text('Cancel'), onPressed: () => Navigator.of(context).pop()),
-                  FlatButton(
-                    child: new Text('Confirm'),
-                    onPressed: () {
-                      onConfirm();
-                      Navigator.of(context).pop();
-                    }),
-                ],
+            padding: 7.0,
+            isFavorited: true,
+            onUnfavorite: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: new Text("Remove from favourites?"),
+                    actions: <Widget>[
+                      FlatButton(child: new Text('Cancel'), onPressed: () => Navigator.of(context).pop()),
+                      FlatButton(
+                          child: new Text('Confirm'),
+                          onPressed: () {
+                            onConfirm();
+                            Navigator.of(context).pop();
+                          }),
+                    ],
+                  );
+                },
               );
             },
-          );
-        },
-      ),
+          ),
     );
   }
 }
