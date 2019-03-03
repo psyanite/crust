@@ -82,7 +82,7 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _content() {
-    if (!isLoggedIn) return _loginMessage();
+    if (!isLoggedIn) return CenterTextSliver(text: 'Login now to see your favorites!');
     if (rewards == null && stores == null) return LoadingSliver();
     return SliverList(
       delegate: SliverChildListDelegate(<Widget>[
@@ -90,15 +90,6 @@ class _Presenter extends StatelessWidget {
         _list("Favourite Rewards", () {}, rewards != null ? List<Widget>.from(rewards.map(_rewardCard)) : List<Widget>()),
       ]),
     );
-  }
-
-  // todo: should be a sliver???
-  Widget _loginMessage() {
-    return Center(
-        child: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[Text("Login now to see your favorites!")],
-    ));
   }
 
   Widget _list(String title, Function onTap, List<Widget> children) {
