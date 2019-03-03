@@ -1,16 +1,9 @@
 name: crust
 description: Toast would not be toast without the crust
-
-# The following defines the version and build number for your application.
-# A version number is three numbers separated by dots, like 1.2.43
-# followed by an optional build number separated by a +.
-# Both the version and the builder number may be overridden in flutter
-# build by specifying --build-name and --build-number, respectively.
-# Read more about versioning at semver.org.
 version: 1.0.0+1
 
 environment:
-    sdk: ">=2.0.0-dev.68.0 <3.0.0"
+  sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
 
@@ -19,31 +12,33 @@ dependencies:
         sdk: flutter
 
     # Redux
-    redux: ^3.0.0
     flutter_redux: ^0.5.2
+    redux: ^3.0.0
     redux_logging: ^0.3.0
-    redux_thunk: ^0.2.0
     redux_persist_flutter: ^0.8.0-rc.0
     redux_persist: ^0.8.0-rc.0
+    redux_thunk: ^0.2.0
 
     # Auth
     flutter_facebook_login: ^1.1.1
     google_sign_in: ^3.2.4
 
     # Utils
-    http: ^0.12.0
-    graphql_flutter: ^0.9.4
     cupertino_icons: ^0.1.2
-    timeago: ^2.0.9
-    intl: ^0.15.7
-    flutter_svg: ^0.6.3
-    qr_flutter: ^1.1.5
     flutter_statusbarcolor: 0.1.4+1
+    flutter_svg: ^0.6.3
+    graphql_flutter: ^0.9.4
+    http: ^0.12.0
+    intl: ^0.15.7
+    multi_image_picker: ^2.4.11
+    qr_flutter: ^2.0.0+51
+    timeago: ^2.0.9
 
 dev_dependencies:
     flutter_test:
         sdk: flutter
     flutter_launcher_icons: "^0.7.0"
+
 
 dependency_overrides:
   http: ^0.12.0

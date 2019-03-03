@@ -1,8 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="LaunchTheme" parent="@android:style/Theme.Black.NoTitleBar">
         <!-- Show a splash screen on the activity. Automatically removed when
              Flutter draws its first frame -->
         <item name="android:windowBackground">@drawable/launch_background</item>
     </style>
+
+    <!-- Multi Image Picker -->
+    <color name="zhihu_primary">#FFAB40</color>
+    <color name="zhihu_primary_dark">#FFAB40</color>
+    <color name="zhihu_page_bg">#FAFAFA</color>
+    <color name="zhihu_bottom_toolbar_bg">#FAFAFA</color>
+    <color name="zhihu_item_checkCircle_backgroundColor">#FFAB40</color>
+    <color name="zhihu_album_dropdown_title_text">#000000</color>
+    <color name="zhihu_bottom_toolbar_preview">#604B41</color>
+    <color name="zhihu_bottom_toolbar_apply">#FFAB40</color>
+    <color name="zhihu_preview_bottom_toolbar_apply">#FFAB40</color>
+
 </resources>
