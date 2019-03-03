@@ -1,9 +1,9 @@
-import 'package:crust/state/app/app_state.dart';
-import 'package:crust/models/user.dart';
-import 'package:crust/state/me/me_actions.dart';
 import 'package:crust/components/post_list.dart';
 import 'package:crust/components/screens/settings_screen.dart';
+import 'package:crust/models/user.dart';
 import 'package:crust/presentation/theme.dart';
+import 'package:crust/state/app/app_state.dart';
+import 'package:crust/state/me/me_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -26,7 +26,11 @@ class _Presenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: <Widget>[_appBar(), PostList(noPostsView: Text('Your posts are displayed here, start posting now!'), posts: user.posts, postListType: PostListType.forProfile)]);
+    return CustomScrollView(slivers: <Widget>[
+      _appBar(),
+      PostList(
+          noPostsView: Text('Your posts are displayed here, start posting now!'), posts: user.posts, postListType: PostListType.forProfile)
+    ]);
   }
 
   Widget _appBar() {
@@ -66,6 +70,7 @@ class _Presenter extends StatelessWidget {
         top: 30.0,
         child: Row(children: <Widget>[
           Container(
+              color: Burnt.imgPlaceholderColor,
               width: 150.0,
               height: 150.0,
               decoration: BoxDecoration(

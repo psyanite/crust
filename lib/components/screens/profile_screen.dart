@@ -51,6 +51,7 @@ class _Presenter extends StatelessWidget {
       ),
       Stack(children: <Widget>[
         Container(
+            color: Burnt.imgPlaceholderColor,
             height: 80.0,
             decoration: BoxDecoration(
               image: DecorationImage(
