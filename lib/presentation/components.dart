@@ -1,21 +1,51 @@
 import 'package:crust/models/post.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:crust/presentation/theme.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class BackArrow extends StatelessWidget {
   final Color color;
 
-  BackArrow({Key key, this.color = Burnt.textBody});
+  BackArrow({Key key, this.color = Burnt.textBodyColor});
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
       icon: Icon(CrustCons.back, color: color),
       onPressed: () => Navigator.of(context).pop(),
+    );
+  }
+}
+
+class SmallButton extends StatelessWidget {
+  final Widget child;
+  final Function onPressed;
+  final EdgeInsetsGeometry padding;
+  final Gradient gradient;
+
+  SmallButton(
+      {Key key,
+      this.child,
+      this.onPressed,
+      this.padding,
+      this.gradient = const LinearGradient(
+        begin: Alignment.bottomLeft,
+        end: Alignment.topRight,
+        stops: [0, 0.6, 1.0],
+        colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
+      )});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        padding: padding,
+        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(2.0)), gradient: gradient),
+        child: child,
+      ),
     );
   }
 }
@@ -38,6 +68,39 @@ class WhiteButton extends StatelessWidget {
   }
 }
 
+class BottomButton extends StatelessWidget {
+  final String text;
+  final Function onPressed;
+
+  BottomButton({Key key, this.text, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 20.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(2.0)),
+          gradient: LinearGradient(
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+            stops: [0, 0.6, 1.0],
+            colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
+          )),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(text, style: TextStyle(fontSize: 20.0, color: Colors.white, letterSpacing: 3.0)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class SolidButton extends StatelessWidget {
   final String text;
   final Function onPressed;
@@ -46,12 +109,27 @@ class SolidButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      textColor: Colors.white,
-      color: Burnt.primary,
-      padding: EdgeInsets.symmetric(vertical: 20.0),
-      child: Text(text, style: TextStyle(fontSize: 22.0)),
-      onPressed: onPressed,
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 20.0),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(2.0)),
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              stops: [0, 0.6, 1.0],
+              colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
+            )),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Text(text, style: TextStyle(fontSize: 22.0, color: Colors.white)),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -73,7 +151,7 @@ class LoadingSliver extends StatelessWidget {
     return SliverFillRemaining(
       child: Container(
         child: Center(
-          child: new CircularProgressIndicator(
+          child: CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
           ),
         ),
@@ -82,12 +160,30 @@ class LoadingSliver extends StatelessWidget {
   }
 }
 
+class CenterTextSliver extends StatelessWidget {
+  final String text;
+
+  CenterTextSliver({Key key, this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverFillRemaining(
+      child: Container(
+        child: Center(
+          child: Text(text),
+        ),
+      ),
+    );
+  }
+}
+
 class ScoreIcon extends StatelessWidget {
+  final double opacity;
   final Score score;
   final double size;
   final String name;
 
-  ScoreIcon({Key key, this.score, this.size = 25.0, this.name});
+  ScoreIcon({Key key, this.score, this.size = 25.0, this.name, this.opacity = 1.0});
 
   @override
   Widget build(BuildContext context) {
@@ -114,10 +210,15 @@ class ScoreIcon extends StatelessWidget {
         }
     }
     var children = <Widget>[
-      SvgPicture.asset(
-        assetName,
-        width: size,
-        height: size,
+      Opacity(
+        key: UniqueKey(),
+        opacity: opacity,
+        child: SvgPicture.asset(
+          assetName,
+          key: UniqueKey(),
+          width: size,
+          height: size,
+        ),
       )
     ];
     if (name != null) {
