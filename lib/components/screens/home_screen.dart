@@ -43,6 +43,7 @@ class _Presenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
     FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
     return CustomScrollView(slivers: <Widget>[_appBar(), _content()]);
   }
