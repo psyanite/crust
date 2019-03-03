@@ -52,8 +52,8 @@ class _Presenter extends StatelessWidget {
       Stack(children: <Widget>[
         Container(
             height: 80.0,
-            decoration: new BoxDecoration(
-              image: new DecorationImage(
+            decoration: BoxDecoration(
+              image: DecorationImage(
                 image: NetworkImage(user.profilePicture),
                 fit: BoxFit.cover,
               ),
@@ -93,7 +93,7 @@ class _Presenter extends StatelessWidget {
             padding: EdgeInsets.only(left: 8.0, top: 12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[Text(user.displayName, style: Burnt.title), Text("@${user.username}")],
+              children: <Widget>[Text(user.displayName, style: Burnt.titleStyle), Text("@${user.username}")],
             ),
           )
         ]),

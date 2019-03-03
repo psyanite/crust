@@ -71,6 +71,7 @@ class _Presenter extends StatelessWidget {
             Container(
                 height: 150.0,
                 decoration: BoxDecoration(
+                  color: Burnt.imgPlaceholderColor,
                   image: DecorationImage(
                     image: NetworkImage(reward.promoImage),
                     fit: BoxFit.cover,

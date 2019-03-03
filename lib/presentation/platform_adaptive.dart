@@ -3,14 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 ThemeData getTheme(context) => ThemeData(
-      primarySwatch: Burnt.material_primary,
-      accentColor: Burnt.material_primary,
+      primarySwatch: Burnt.materialPrimary,
+      accentColor: Burnt.materialPrimary,
       fontFamily: Burnt.fontBase,
+      cursorColor: Burnt.primary,
       textTheme: Theme.of(context)
           .textTheme
           .apply(
-            bodyColor: Burnt.textBody,
-            displayColor: Burnt.textBody,
+            bodyColor: Burnt.textBodyColor,
+            displayColor: Burnt.textBodyColor,
           )
           .merge(TextTheme(
               body1: TextStyle(fontSize: 16.0),

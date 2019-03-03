@@ -35,7 +35,7 @@ class QrScreen extends StatelessWidget {
       QrImage(
         data: userReward.uniqueCode,
         size: 200.0,
-        foregroundColor: Burnt.textBody,
+        foregroundColor: Burnt.textBodyColor,
         version: 1,
       ),
       Text(userReward.uniqueCode, style: TextStyle(fontSize: 30.0, fontWeight: Burnt.fontBold)),

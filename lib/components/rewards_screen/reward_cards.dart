@@ -52,7 +52,7 @@ class RewardCards extends StatelessWidget {
             _cardBanner(reward),
             Padding(
               padding: EdgeInsets.only(top: 10.0),
-              child: Text(reward.name, style: Burnt.title),
+              child: Text(reward.name, style: Burnt.titleStyle),
             ),
             Text(reward.locationText()),
             Text(reward.description),
@@ -77,7 +77,7 @@ class RewardCards extends StatelessWidget {
                   children: <Widget>[
                     Padding(
                       padding: EdgeInsets.only(top: 10.0),
-                      child: Text(reward.name, style: Burnt.title),
+                      child: Text(reward.name, style: Burnt.titleStyle),
                     ),
                     Text(reward.locationText()),
                     Text(reward.description),
@@ -114,6 +114,7 @@ class RewardCards extends StatelessWidget {
         Container(
           height: 200.0,
           decoration: BoxDecoration(
+            color: Burnt.imgPlaceholderColor,
             image: DecorationImage(
               image: NetworkImage(reward.promoImage),
               fit: BoxFit.cover,
@@ -131,6 +132,7 @@ class RewardCards extends StatelessWidget {
         Container(
           width: 80.0,
           decoration: BoxDecoration(
+            color: Burnt.imgPlaceholderColor,
             image: DecorationImage(
               image: NetworkImage(reward.promoImage),
               fit: BoxFit.cover,

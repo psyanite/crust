@@ -160,6 +160,7 @@ class _Presenter extends StatelessWidget {
             width: 120.0,
             height: 100.0,
             decoration: BoxDecoration(
+              color: Burnt.imgPlaceholderColor,
               image: DecorationImage(
                 image: NetworkImage(store.coverImage),
                 fit: BoxFit.cover,
