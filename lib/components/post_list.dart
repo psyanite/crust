@@ -1,7 +1,7 @@
 import 'package:crust/components/carousel.dart';
-import 'package:crust/models/post.dart';
 import 'package:crust/components/screens/profile_screen.dart';
 import 'package:crust/components/screens/store_screen.dart';
+import 'package:crust/models/post.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/utils/time_util.dart';
@@ -34,12 +34,11 @@ class PostList extends StatelessWidget {
       minimum: const EdgeInsets.symmetric(horizontal: 16.0),
       sliver: SliverList(
         delegate: SliverChildListDelegate(<Widget>[
-          Column(
-          children: <Widget>[
+          Column(children: <Widget>[
             noPostsView
 //            RaisedButton(child: Text('Add One Now'), onPressed: () {},)
-          ]
-        )]),
+          ])
+        ]),
       ),
     );
   }
@@ -53,17 +52,14 @@ class PostList extends StatelessWidget {
   Widget _header(Post post) {
     var image = postListType == PostListType.forProfile ? post.store.coverImage : post.postedBy.profilePicture;
     var name = postListType == PostListType.forProfile
-        ? Text(post.store.name, style: Burnt.title)
-        : Row(children: <Widget>[
-            Text(post.postedBy.displayName, style: Burnt.title),
-            Text(" @${post.postedBy.username}")
-          ]);
+        ? Text(post.store.name, style: Burnt.titleStyle)
+        : Row(children: <Widget>[Text(post.postedBy.displayName, style: Burnt.titleStyle), Text(" @${post.postedBy.username}")]);
     var details = Row(children: <Widget>[
       Container(
           width: 50.0,
           height: 50.0,
-          decoration: BoxDecoration(
-              image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image)))),
+          decoration:
+              BoxDecoration(color: Burnt.imgPlaceholderColor, image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image)))),
       Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.0),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[name, Text(TimeUtil.format(post.postedAt))]),
@@ -99,20 +95,34 @@ class PostList extends StatelessWidget {
         ),
       ];
       if (post.postPhotos != null && post.postPhotos.length != 0) {
-        children.add(Carousel(images: post.postPhotos));
+        children.add(_carousel(post.postPhotos));
       }
       return Container(padding: EdgeInsets.only(top: 10.0, bottom: 20.0), child: Column(children: children));
     }
     return Builder(
       builder: (context) => Padding(
-        padding: EdgeInsets.only(bottom: 20.0),
-        child: Container(
-            height: MediaQuery.of(context).size.width - 30.0,
-            decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Burnt.separator)),
-                image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.postPhotos[0])))),
-      ),
+            padding: EdgeInsets.only(bottom: 20.0),
+            child: Container(
+                height: MediaQuery.of(context).size.width - 30.0,
+                decoration: BoxDecoration(
+                    color: Burnt.imgPlaceholderColor,
+                    border: Border(bottom: BorderSide(color: Burnt.separator)),
+                    image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.postPhotos[0])))),
+          ),
     );
+  }
+
+  Widget _carousel(List<String> photos) {
+    final List<Widget> widgets = photos
+      .map<Widget>((image) => Container(
+      decoration: BoxDecoration(
+        color: Burnt.imgPlaceholderColor,
+        image: DecorationImage(
+          image: NetworkImage(image),
+          fit: BoxFit.cover,
+        ))))
+      .toList();
+    return Carousel(images: widgets);
   }
 }
 

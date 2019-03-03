@@ -1,10 +1,11 @@
 import 'dart:math';
 
+import 'package:crust/presentation/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Carousel extends StatefulWidget {
-  final List<String> images;
+  final List<Widget> images;
 
   Carousel({
     this.images,
@@ -38,14 +39,6 @@ class _CarouselState extends State<Carousel> {
   }
 
   Widget _gallery() {
-    final List<Widget> listImages = widget.images
-        .map<Widget>((image) => Container(
-            decoration: BoxDecoration(
-                image: new DecorationImage(
-                  image: NetworkImage(image),
-                  fit: BoxFit.cover,
-                ))))
-        .toList();
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,
       children: <Widget>[
@@ -53,7 +46,7 @@ class _CarouselState extends State<Carousel> {
           child: PageView(
             physics: AlwaysScrollableScrollPhysics(),
             controller: _controller,
-            children: listImages,
+            children: widget.images,
           ),
         ),
       ],
