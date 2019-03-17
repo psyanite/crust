@@ -103,9 +103,9 @@ class _PresenterState extends State<_Presenter> {
             return LoadingSliver();
           case ConnectionState.done:
             if (snapshot.hasError) {
-              return SliverToBoxAdapter(child: Text('Oops! An error has occurred please try again'));
+              return SliverCenter(child: Text('Oops! Something went wrong, please try again'));
             } else if (snapshot.data.length == 0) {
-              return SliverToBoxAdapter(child: Text("No Results Found"));
+              return SliverCenter(child: Text("No Results Found"));
             }
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, i) {

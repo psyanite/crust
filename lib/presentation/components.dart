@@ -140,6 +140,21 @@ class LoadingCenter extends StatelessWidget {
     return Center(
       child: CircularProgressIndicator(),
     );
+  }
+}
+
+class SliverCenter extends StatelessWidget {
+  final Widget child;
+
+  SliverCenter({Key key, this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverFillRemaining(
+      child: Container(
+        child: Center(
+          child: child,
+        ),
       ),
     );
   }
