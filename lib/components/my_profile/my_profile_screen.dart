@@ -70,10 +70,10 @@ class _Presenter extends StatelessWidget {
         top: 30.0,
         child: Row(children: <Widget>[
           Container(
-              color: Burnt.imgPlaceholderColor,
               width: 150.0,
               height: 150.0,
               decoration: BoxDecoration(
+                  color: Burnt.imgPlaceholderColor,
                   borderRadius: BorderRadius.circular(150.0),
                   border: new Border.all(
                     color: Colors.white,

@@ -30,6 +30,7 @@ class _CarouselState extends State<Carousel> {
     return Column(
       children: <Widget>[
         Container(
+          color: Burnt.imgPlaceholderColor,
           height: MediaQuery.of(context).size.width - 30.0,
           child: _gallery(),
         ),
