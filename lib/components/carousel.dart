@@ -16,7 +16,7 @@ class Carousel extends StatefulWidget {
 }
 
 class _CarouselState extends State<Carousel> {
-  PageController _controller = new PageController();
+  PageController _controller = PageController();
 
   @override
   void dispose() {

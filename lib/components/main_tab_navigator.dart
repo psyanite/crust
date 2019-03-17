@@ -14,7 +14,7 @@ class MainTabNavigator extends StatefulWidget {
 }
 
 class MainTabNavigatorState extends State<MainTabNavigator> {
-  PageController _tabController = new PageController();
+  PageController _tabController = PageController();
   int _currentIndex = 0;
   Map<TabType, Tab> _tabs = {
     TabType.home: Tab(widget: HomeScreen(), icon: CrustCons.bread_heart),
