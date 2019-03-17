@@ -41,3 +41,36 @@
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/favorites.jpg" width="250px"/>
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/search.jpg" width="250px"/>
 </div>
+
+## To Do
+* Order profile page posts by posted_at
+* Add like post feature
+* Add edit post feature
+* Add delete post feature
+* Fix new post page to show location of store
+* Add search name in category feature
+
+## Done
+* Implement store banner
+* Implement post list on store page
+* Implement post list on profile page
+* Implement login with Facebook
+* Implement login with Google
+* Implement logout
+* Implement profile page
+* Implement my profile page
+* Implement profile header
+* Implement home page
+* Implement favorites on home page and rewards page
+* Implement rewards page
+* Implement rewards card view
+* Implement rewards list view
+* Implement favourites page
+* Implement session persist on me state
+* Implement main tab navigator
+* Implement search store 
+* Implement write a review page
+* Implement review form
+* Compress images before upload
+* Upload photos to firebase
+* Cache network images on post lists
