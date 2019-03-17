@@ -13,6 +13,17 @@ class Post {
 
   Post({this.id, this.type, this.store, this.postedBy, this.postedAt, this.postPhotos, this.postReview});
 
+  Post copyWith({List<String> postPhotos}) {
+    return Post(
+      id: this.id,
+      type: this.type,
+      store: this.store,
+      postedBy: this.postedBy,
+      postedAt: this.postedAt,
+      postPhotos: postPhotos ?? this.postPhotos,
+      postReview: this.postReview,
+    );
+  }
   factory Post.fromToaster(Map<String, dynamic> post) {
     if (post == null) return null;
     var store = post['store'];
@@ -42,6 +53,34 @@ class Post {
       ) : null);
   }
 
+  static const attributes = """
+    id,
+    type,
+    store {
+      id,
+      name,
+      cover_image,
+    },
+    posted_by {
+      id,
+      profile {
+        username,
+        preferred_name,
+        profile_picture,
+      }
+    },
+    posted_at,
+    post_photos {
+      id,
+      photo,
+    },
+    post_review {
+      id,
+      overall_score,
+      body,
+    }
+  """;
+
   @override
   String toString() {
     return '{ id: $id, type: $type, store: ${store.name}, postedBy: ${postedBy.displayName} }';
@@ -57,10 +96,14 @@ class PostPhoto {
 
 class PostReview {
   final int id;
-  final Score overallScore;
   final String body;
+  final Score overallScore;
+  final Score tasteScore;
+  final Score serviceScore;
+  final Score valueScore;
+  final Score ambienceScore;
 
-  PostReview({this.id, this.overallScore, this.body});
+  PostReview({this.id, this.body, this.overallScore, this.tasteScore, this.serviceScore, this.valueScore, this.ambienceScore});
 }
 
 enum PostType { photo, review }
