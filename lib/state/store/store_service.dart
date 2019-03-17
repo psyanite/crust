@@ -22,6 +22,23 @@ class StoreService {
     }
   }
 
+  Future<Store> fetchStoreById(int storeId) async {
+    String query = """
+      query {
+        storeById(id: $storeId) {
+          ${Store.attributes}
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['storeById'];
+    if (json != null) {
+      return Store.fromToaster(json);
+    } else {
+      throw Exception('Failed to storeById');
+    }
+  }
+
   Future<List<Post>> fetchPostsByStoreId(int storeId) async {
     String query = """
       query {

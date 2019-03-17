@@ -1,6 +1,18 @@
 import 'package:crust/models/post.dart';
 import 'package:crust/models/store.dart';
 
+class FetchStoreByIdRequest {
+  final int storeId;
+
+  FetchStoreByIdRequest(this.storeId);
+}
+
+class FetchStoreSuccess {
+  final Store store;
+
+  FetchStoreSuccess(this.store);
+}
+
 class FetchStoresRequest {}
 
 class FetchStoresSuccess {
