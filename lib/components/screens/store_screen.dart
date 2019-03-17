@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:crust/components/favorite_button.dart';
 import 'package:crust/components/post_list.dart';
 import 'package:crust/models/post.dart';
@@ -21,16 +23,22 @@ class StoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
         onInit: (Store<AppState> store) {
-          if (store.state.store.stores[storeId].posts == null) return store.dispatch(FetchPostsByStoreIdRequest(storeId));
+          if (store.state.store.stores == null) {
+            store.dispatch(FetchStoreByIdRequest(storeId));
+            store.dispatch(FetchPostsByStoreIdRequest(storeId));
+          } else {
+            store.dispatch(FetchPostsByStoreIdRequest(storeId));
+          }
         },
         converter: (Store<AppState> store) => _Props.fromStore(store, storeId),
         builder: (context, props) => _Presenter(
-          store: props.store,
-          favoriteStores: props.favoriteStores,
-          favoriteStore: props.favoriteStore,
-          unfavoriteStore: props.unfavoriteStore,
-          isLoggedIn: props.isLoggedIn
-        ));
+              store: props.store,
+              favoriteStores: props.favoriteStores,
+              favoriteStore: props.favoriteStore,
+              unfavoriteStore: props.unfavoriteStore,
+              isLoggedIn: props.isLoggedIn,
+              fetchPostsByStoreId: props.fetchPostsByStoreId,
+            ));
   }
 }
 
@@ -40,13 +48,29 @@ class _Presenter extends StatelessWidget {
   final Function favoriteStore;
   final Function unfavoriteStore;
   final bool isLoggedIn;
+  final Function fetchPostsByStoreId;
 
-  _Presenter({Key key, this.store, this.favoriteStores,  this.favoriteStore, this.unfavoriteStore, this.isLoggedIn}) : super(key: key);
+  _Presenter(
+      {Key key, this.store, this.favoriteStores, this.favoriteStore, this.unfavoriteStore, this.isLoggedIn, this.fetchPostsByStoreId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: CustomScrollView(slivers: <Widget>[_appBar(), PostList(noPostsView: Text('Looks like ${store.name} hasn\'t posted anything yet.'), posts: store.posts, postListType: PostListType.forStore)]));
+        body: RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: CustomScrollView(slivers: <Widget>[
+        _appBar(),
+        PostList(
+            noPostsView: Text('Looks like ${store.name} hasn\'t posted anything yet.'),
+            posts: store.posts,
+            postListType: PostListType.forStore)
+      ]),
+    ));
+  }
+
+  Future<void> _onRefresh() async {
+    await fetchPostsByStoreId();
   }
 
   Widget _appBar() {
@@ -151,21 +175,21 @@ class _Presenter extends StatelessWidget {
   Widget _favoriteButton(MyStore.Store store) {
     return Builder(
       builder: (context) => FavoriteButton(
-        padding: 0,
-        isFavorited: favoriteStores.contains(store.id),
-        onFavorite: () {
-          if (isLoggedIn) {
-            favoriteStore(store.id);
-            snack(context, 'Added to favourites');
-          } else {
-            snack(context, 'Please login to favourite store');
-          }
-        },
-        onUnfavorite: () {
-          unfavoriteStore(store.id);
-          snack(context, 'Removed from favourites');
-        },
-      ),
+            padding: 0,
+            isFavorited: favoriteStores.contains(store.id),
+            onFavorite: () {
+              if (isLoggedIn) {
+                favoriteStore(store.id);
+                snack(context, 'Added to favourites');
+              } else {
+                snack(context, 'Please login to favourite store');
+              }
+            },
+            onUnfavorite: () {
+              unfavoriteStore(store.id);
+              snack(context, 'Removed from favourites');
+            },
+          ),
     );
   }
 }
@@ -176,14 +200,9 @@ class _Props {
   final Function favoriteStore;
   final Function unfavoriteStore;
   final bool isLoggedIn;
+  final Function fetchPostsByStoreId;
 
-  _Props({
-    this.store,
-    this.favoriteStores,
-    this.favoriteStore,
-    this.unfavoriteStore,
-    this.isLoggedIn,
-  });
+  _Props({this.store, this.favoriteStores, this.favoriteStore, this.unfavoriteStore, this.isLoggedIn, this.fetchPostsByStoreId});
 
   static fromStore(Store<AppState> store, int storeId) {
     return _Props(
@@ -192,6 +211,7 @@ class _Props {
       favoriteStore: (storeId) => store.dispatch(FavoriteStoreRequest(storeId)),
       unfavoriteStore: (storeId) => store.dispatch(UnfavoriteStoreRequest(storeId)),
       isLoggedIn: store.state.me.user != null,
+      fetchPostsByStoreId: (storeId) => store.dispatch(FetchPostsByStoreIdRequest(storeId)),
     );
   }
 }

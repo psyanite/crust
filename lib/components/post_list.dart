@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crust/components/carousel.dart';
 import 'package:crust/components/screens/profile_screen.dart';
 import 'package:crust/components/screens/store_screen.dart';
@@ -20,18 +21,13 @@ class PostList extends StatelessWidget {
     if (posts == null) return LoadingSliver();
     if (posts.length == 0) return _noPostsNotice();
     return SliverSafeArea(
-      top: false,
-      minimum: const EdgeInsets.symmetric(horizontal: 15.0),
-      sliver: SliverList(
-        delegate: SliverChildListDelegate((List<Widget>.from(posts.map(_postCard)))),
-      ),
-    );
+        minimum: EdgeInsets.symmetric(horizontal: 15.0),
+        sliver: SliverList(delegate: SliverChildBuilderDelegate((builder, i) => _postCard(posts[i]), childCount: posts.length)));
   }
 
   Widget _noPostsNotice() {
     return SliverSafeArea(
-      top: false,
-      minimum: const EdgeInsets.symmetric(horizontal: 16.0),
+      minimum: EdgeInsets.symmetric(horizontal: 16.0),
       sliver: SliverList(
         delegate: SliverChildListDelegate(<Widget>[
           Column(children: <Widget>[
@@ -75,10 +71,7 @@ class PostList extends StatelessWidget {
         postListType == PostListType.forProfile ? StoreScreen(storeId: post.store.id) : ProfileScreen(userId: post.postedBy.id);
     return Builder(
       builder: (context) => InkWell(
-            onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => nextScreen),
-                ),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => nextScreen)),
             child: Column(
               children: children,
             ),
@@ -87,41 +80,40 @@ class PostList extends StatelessWidget {
   }
 
   Widget _content(Post post) {
-    if (post.type == PostType.review) {
-      var children = <Widget>[
-        Padding(
-          padding: EdgeInsets.only(bottom: 10.0),
-          child: Text(post.postReview.body),
-        ),
-      ];
-      if (post.postPhotos != null && post.postPhotos.length != 0) {
-        children.add(_carousel(post.postPhotos));
-      }
-      return Container(padding: EdgeInsets.only(top: 10.0, bottom: 20.0), child: Column(children: children));
+    var children = <Widget>[];
+    if (post.type == PostType.review && post.postReview.body != null) {
+      children.add(Padding(
+        padding: EdgeInsets.only(bottom: 10.0),
+        child: Text(post.postReview.body),
+      ));
     }
+    if (post.postPhotos.length == 1) {
+      children.add(_imagePreview(post.postPhotos[0]));
+    }
+    if (post.postPhotos.length > 1) {
+      children.add(_carousel(post.postPhotos));
+    }
+    return Container(padding: EdgeInsets.only(top: 10.0, bottom: 20.0), child: Column(children: children));
+  }
+
+  Widget _imagePreview(String photo) {
     return Builder(
-      builder: (context) => Padding(
-            padding: EdgeInsets.only(bottom: 20.0),
-            child: Container(
-                height: MediaQuery.of(context).size.width - 30.0,
-                decoration: BoxDecoration(
-                    color: Burnt.imgPlaceholderColor,
-                    border: Border(bottom: BorderSide(color: Burnt.separator)),
-                    image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.postPhotos[0])))),
-          ),
-    );
+        builder: (context) => Container(
+            height: MediaQuery.of(context).size.width - 30.0,
+            decoration: BoxDecoration(
+                color: Burnt.imgPlaceholderColor,
+                border: Border(bottom: BorderSide(color: Burnt.separator)),
+                image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(photo)))));
   }
 
   Widget _carousel(List<String> photos) {
     final List<Widget> widgets = photos
-      .map<Widget>((image) => Container(
-      decoration: BoxDecoration(
-        color: Burnt.imgPlaceholderColor,
-        image: DecorationImage(
-          image: NetworkImage(image),
-          fit: BoxFit.cover,
-        ))))
-      .toList();
+        .map<Widget>((image) => CachedNetworkImage(
+              imageUrl: image,
+              fit: BoxFit.cover,
+              fadeInDuration: Duration(milliseconds: 100),
+            ))
+        .toList(growable: false);
     return Carousel(images: widgets);
   }
 }

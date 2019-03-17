@@ -1,49 +1,32 @@
+import 'dart:typed_data';
+
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_image_picker/asset.dart';
 
-class CarouselPage extends StatefulWidget {
-  final Asset _asset;
+class CarouselPage extends StatelessWidget {
+  final Uint8List _data;
 
-  CarouselPage(
-    this._asset, {
-      Key key,
-    }) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _CarouselPageState(this._asset);
-}
-
-class _CarouselPageState extends State<CarouselPage> {
-  Asset _asset;
-  _CarouselPageState(this._asset);
-
-  @override
-  void initState() {
-    super.initState();
-    _loadImage();
-  }
-
-  void _loadImage() async {
-    await this._asset.requestOriginal(quality: 80);
-
-    if (this.mounted) {
-      setState(() {});
-    }
-  }
+  CarouselPage(this._data, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (null != this._asset.imageData) {
-      return Image.memory(
-        this._asset.imageData.buffer.asUint8List(),
-        fit: BoxFit.cover,
-        gaplessPlayback: true,
-      );
-    }
+    if (_data == null) return _loading(context);
+    return Image.memory(
+      this._data,
+      fit: BoxFit.cover,
+      gaplessPlayback: true,
+    );
+  }
 
+  Widget _loading(context) {
+    var size = MediaQuery.of(context).size.width - 30.0;
     return Container(
-      color: Burnt.imgPlaceholderColor
+      color: Burnt.imgPlaceholderColor,
+      width: size,
+      height: size,
+      child: Center(
+        child: CircularProgressIndicator(),
+      )
     );
   }
 }
