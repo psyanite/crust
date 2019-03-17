@@ -12,7 +12,7 @@ class UserService {
           email,
           profile {
             profile_picture,
-            display_name,
+            preferred_name,
             username
           },
           posts {
@@ -27,7 +27,7 @@ class UserService {
               id,
               profile {
                 username,
-                display_name,
+                preferred_name,
                 profile_picture,
               }
             },

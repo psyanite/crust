@@ -38,7 +38,7 @@ class MeService {
             id,
             profile {
               profile_picture,
-              display_name,
+              preferred_name,
               username
             }
           }
@@ -51,7 +51,7 @@ class MeService {
       return user.copyWith(
           id: json['user_account']['id'],
           profilePicture: json['user_account']['profile']['profile_picture'],
-          displayName: json['user_account']['profile']['display_name'],
+          displayName: json['user_account']['profile']['preferred_name'],
           username: json['user_account']['profile']['username']);
     } else {
       throw Exception('Failed to getUser');

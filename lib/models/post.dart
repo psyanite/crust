@@ -30,7 +30,7 @@ class Post {
       postedBy: User(
         id: postedBy['id'],
         username: postedBy['profile']['username'],
-        displayName: postedBy['profile']['display_name'],
+        displayName: postedBy['profile']['preferred_name'],
         profilePicture: postedBy['profile']['profile_picture'],
       ),
       postedAt: DateTime.parse(post['posted_at']),

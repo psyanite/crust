@@ -37,7 +37,7 @@ class StoreService {
             id,
             profile {
               username,
-              display_name,
+              preferred_name,
               profile_picture,
             }
           },

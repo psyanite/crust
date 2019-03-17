@@ -81,7 +81,7 @@ class User {
       id: json['id'],
       email: json['email'],
       username: json['profile']['username'],
-      displayName: json['profile']['display_name'],
+      displayName: json['profile']['preferred_name'],
       profilePicture: json['profile']['profile_picture'],
       posts: json['posts'] != null ? (json['posts'] as List).map((p) => Post.fromToaster(p)).toList() : null,
     );
