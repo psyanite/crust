@@ -153,7 +153,7 @@ class _Presenter extends StatelessWidget {
                 padding: EdgeInsets.only(right: 10.0),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   Stack(alignment: AlignmentDirectional.topEnd, children: <Widget>[
-                    Container(height: 100.0, width: 200.0, child: Image.network(reward.promoImage, fit: BoxFit.cover)),
+                    Container(height: 100.0, width: 200.0, color: Burnt.imgPlaceholderColor, child: Image.network(reward.promoImage, fit: BoxFit.cover)),
                     _favoriteButton(() => unfavoriteReward(reward.id))
                   ]),
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[

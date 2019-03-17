@@ -138,8 +138,8 @@ class LoadingCenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+      child: CircularProgressIndicator(),
+    );
       ),
     );
   }
@@ -151,9 +151,7 @@ class LoadingSliver extends StatelessWidget {
     return SliverFillRemaining(
       child: Container(
         child: Center(
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
-          ),
+          child: CircularProgressIndicator(),
         ),
       ),
     );
