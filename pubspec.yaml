@@ -25,14 +25,22 @@ dependencies:
 
     # Utils
     cupertino_icons: ^0.1.2
-    flutter_statusbarcolor: 0.1.4+1
+    flutter_statusbarcolor: 0.2.0
     flutter_svg: ^0.6.3
-    graphql_flutter: ^0.9.4
+    graphql_flutter: ^0.9.5
     http: ^0.12.0
     intl: ^0.15.7
-    multi_image_picker: ^2.4.11
+    multi_image_picker: ^3.0.22
     qr_flutter: ^2.0.0+51
     timeago: ^2.0.9
+    tuple: ^1.0.2
+    flutter_image_compress: ^0.2.4
+    cached_network_image: ^0.5.0
+
+    # Firebase
+    firebase_core: ^0.3.1+1
+    firebase_storage: ^2.1.0+1
+    firebase_auth: ^0.8.1+4
 
 dev_dependencies:
     flutter_test:
