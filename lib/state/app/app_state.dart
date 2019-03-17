@@ -15,7 +15,7 @@ class AppState {
 
   AppState({MeState me, StoreState store, UserState user, RewardState reward, ErrorState error})
       : me = me ?? MeState(),
-        store = store ?? StoreState(),
+        store = store ?? StoreState.initialState(),
         user = user ?? UserState(),
         reward = reward ?? RewardState(),
         error = error ?? ErrorState();

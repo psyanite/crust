@@ -9,14 +9,27 @@ class StoreState {
 
   StoreState({this.stores});
 
+  StoreState.initialState()
+    : stores = LinkedHashMap<int, Store>();
+
   StoreState copyWith({LinkedHashMap<int, Store> stores}) {
     return StoreState(
       stores: stores ?? this.stores,
     );
   }
 
+  StoreState addStore(Store store) {
+    var storesUpdate = this.stores;
+    if (store != null) {
+      storesUpdate[store.id] = store;
+    }
+    return StoreState(
+      stores: storesUpdate,
+    );
+  }
+
   StoreState addStores(List<Store> stores) {
-    var storesUpdate = this.stores ?? LinkedHashMap<int, Store>();
+    var storesUpdate = this.stores;
     if (stores != null) {
       storesUpdate.addAll(Map.fromEntries(stores.map((s) => MapEntry<int, Store>(s.id, s))));
     }
@@ -25,17 +38,10 @@ class StoreState {
     );
   }
 
-//  @override
-//  String toString() {
-//    return '''{
-//        stores: $stores,
-//      }''';
-//  }
-
   @override
   String toString() {
     return '''{
-        stores: ${stores != null ? '${stores.length} stores' : null},
+        stores: '${stores.length} stores,
       }''';
   }
 }
