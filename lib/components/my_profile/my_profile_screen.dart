@@ -38,11 +38,11 @@ class _Presenter extends StatelessWidget {
         child: Container(
             child: Stack(children: <Widget>[
       Container(
-        height: 180.0,
+        height: 200.0,
       ),
       Stack(children: <Widget>[
         Container(
-            height: 80.0,
+            height: 100.0,
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: NetworkImage(user.profilePicture),
@@ -50,30 +50,32 @@ class _Presenter extends StatelessWidget {
               ),
             )),
         Container(
-            height: 80.0,
+            height: 100.0,
             decoration: BoxDecoration(color: Color(0x55000000)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Builder(
-                    builder: (context) => IconButton(
-                          icon: const Icon(CupertinoIcons.ellipsis),
-                          color: Colors.white,
-                          iconSize: 40.0,
-                          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsScreen())),
-                        )),
-              ],
+            child: SafeArea(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Builder(
+                      builder: (context) => IconButton(
+                            icon: Icon(CupertinoIcons.ellipsis),
+                            color: Colors.white,
+                            iconSize: 40.0,
+                            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsScreen())),
+                          )),
+                ],
+              ),
             )),
       ]),
       Positioned(
         left: 50.0,
-        top: 30.0,
+        top: 50.0,
         child: Row(children: <Widget>[
           Container(
               width: 150.0,
               height: 150.0,
               decoration: BoxDecoration(
-                  color: Burnt.imgPlaceholderColor,
+                  color: Burnt.separator,
                   borderRadius: BorderRadius.circular(150.0),
                   border: new Border.all(
                     color: Colors.white,

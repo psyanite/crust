@@ -39,7 +39,13 @@ class _Presenter extends StatelessWidget {
       return LoadingScreen();
     }
     return Scaffold(
-        body: CustomScrollView(slivers: <Widget>[_appBar(), PostList(noPostsView: Text('Looks like ${user.firstName} hasn\'t posted anything yet.'), posts: user.posts, postListType: PostListType.forProfile)]));
+        body: CustomScrollView(slivers: <Widget>[
+      _appBar(),
+      PostList(
+          noPostsView: Text('Looks like ${user.firstName} hasn\'t posted anything yet.'),
+          posts: user.posts,
+          postListType: PostListType.forProfile)
+    ]));
   }
 
   Widget _appBar() {
@@ -47,43 +53,46 @@ class _Presenter extends StatelessWidget {
         child: Container(
             child: Stack(children: <Widget>[
       Container(
-        height: 180.0,
+        height: 200.0,
       ),
       Stack(children: <Widget>[
         Container(
-            color: Burnt.imgPlaceholderColor,
-            height: 80.0,
+            height: 100.0,
             decoration: BoxDecoration(
+              color: Burnt.separator,
               image: DecorationImage(
                 image: NetworkImage(user.profilePicture),
                 fit: BoxFit.cover,
               ),
             )),
-        Positioned(
-          left: 0,
-          height: 100.0,
-          child:  BackArrow(color: Colors.white),
-        ),
-        Positioned(
-          right: 0,
-          height: 100.0,
-          child:  Builder(
-            builder: (context) => IconButton(
-              icon: const Icon(CupertinoIcons.ellipsis),
-              color: Colors.white,
-              iconSize: 40.0,
-              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsScreen())),
+        Container(
+            height: 100.0,
+            decoration: BoxDecoration(color: Color(0x55000000)),
+            child: SafeArea(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  BackArrow(color: Colors.white),
+                  Builder(
+                      builder: (context) => IconButton(
+                            icon: const Icon(CupertinoIcons.ellipsis),
+                            color: Colors.white,
+                            iconSize: 40.0,
+                            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsScreen())),
+                          )),
+                ],
+              ),
             )),
-        ),
       ]),
       Positioned(
         left: 50.0,
-        top: 30.0,
+        top: 50.0,
         child: Row(children: <Widget>[
           Container(
               width: 150.0,
               height: 150.0,
               decoration: BoxDecoration(
+                  color: Burnt.imgPlaceholderColor,
                   borderRadius: BorderRadius.circular(150.0),
                   border: Border.all(
                     color: Colors.white,

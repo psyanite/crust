@@ -43,14 +43,15 @@
 </div>
 
 ## To Do
-* Order profile page posts by posted_at
 * Add like post feature
 * Add edit post feature
 * Add delete post feature
 * Fix new post page to show location of store
 * Add search name in category feature
+* Implement pagination
 
 ## Done
+* Order store and profile page posts chronologically
 * Implement store banner
 * Implement post list on store page
 * Implement post list on profile page
