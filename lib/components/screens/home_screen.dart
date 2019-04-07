@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:redux/redux.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -28,6 +29,7 @@ class HomeScreen extends StatelessWidget {
               favoriteStore: props.favoriteStore,
               unfavoriteStore: props.unfavoriteStore,
               isLoggedIn: props.isLoggedIn,
+              error: props.error,
             ));
   }
 }
@@ -38,8 +40,10 @@ class _Presenter extends StatelessWidget {
   final Function favoriteStore;
   final Function unfavoriteStore;
   final bool isLoggedIn;
+  final String error;
 
-  _Presenter({Key key, this.stores, this.favoriteStores, this.favoriteStore, this.unfavoriteStore, this.isLoggedIn}) : super(key: key);
+  _Presenter({Key key, this.stores, this.favoriteStores, this.favoriteStore, this.unfavoriteStore, this.isLoggedIn, this.error})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,25 +55,53 @@ class _Presenter extends StatelessWidget {
   Widget _appBar() {
     return SliverSafeArea(
       sliver: SliverToBoxAdapter(
-        child: Container(
-          height: 100.0,
-          padding: EdgeInsets.symmetric(horizontal: 15.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text('BURNTOAST', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
-              SearchIcon()
-            ],
-          ),
-        )
-      ),
+          child: Container(
+        height: 100.0,
+        padding: EdgeInsets.symmetric(horizontal: 15.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[Text('BURNTOAST', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)), SearchIcon()],
+        ),
+      )),
     );
   }
 
+  Widget _error() {
+    return SliverCenter(child: Text('Oops! Something went wrong, please restart the app'));
+  }
+
+  Widget _skelly() {
+    return SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 1.2,
+          crossAxisSpacing: 5.0,
+          mainAxisSpacing: 5.0,
+        ),
+        delegate: SliverChildBuilderDelegate(
+            (builder, i) => Shimmer.fromColors(
+                baseColor: Color(0xFFF0F0F0),
+                highlightColor: Color(0xFFF7F7F7),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
+                  Container(
+                    width: 100.0,
+                    height: 100.0,
+                    color: Colors.white,
+                  ),
+                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                    Container(height: 8.0, width: 200.0, color: Colors.white),
+                    Container(height: 8.0),
+                    Container(height: 8.0, width: 100.0, color: Colors.white),
+                  ])
+                ])),
+            childCount: 20));
+  }
+
   Widget _content() {
-    if (stores == null) return LoadingSliver();
+    if (error != null) return _error();
+    if (stores.length < 1) return _skelly();
     stores.sort((a, b) => a.id.compareTo(b.id));
     return SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -149,6 +181,7 @@ class _Props {
   final Function favoriteStore;
   final Function unfavoriteStore;
   final bool isLoggedIn;
+  final String error;
 
   _Props({
     this.stores,
@@ -156,15 +189,16 @@ class _Props {
     this.favoriteStore,
     this.unfavoriteStore,
     this.isLoggedIn,
+    this.error,
   });
 
   static fromStore(Store<AppState> store) {
     return _Props(
-      stores: store.state.store.stores != null ? store.state.store.stores.values.toList() : null,
-      favoriteStores: store.state.me.favoriteStores ?? Set<int>(),
-      favoriteStore: (storeId) => store.dispatch(FavoriteStoreRequest(storeId)),
-      unfavoriteStore: (storeId) => store.dispatch(UnfavoriteStoreRequest(storeId)),
-      isLoggedIn: store.state.me.user != null,
-    );
+        stores: store.state.store.stores != null ? store.state.store.stores.values.toList() : null,
+        favoriteStores: store.state.me.favoriteStores ?? Set<int>(),
+        favoriteStore: (storeId) => store.dispatch(FavoriteStoreRequest(storeId)),
+        unfavoriteStore: (storeId) => store.dispatch(UnfavoriteStoreRequest(storeId)),
+        isLoggedIn: store.state.me.user != null,
+        error: store.state.error.message);
   }
 }

@@ -43,6 +43,7 @@
 </div>
 
 ## To Do
+* Validate file size maximum 5000x5000
 * Add like post feature
 * Add edit post feature
 * Add delete post feature
@@ -51,6 +52,7 @@
 * Implement pagination
 
 ## Done
+* Skeleton homepage
 * Order store and profile page posts chronologically
 * Implement store banner
 * Implement post list on store page

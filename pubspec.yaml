@@ -36,6 +36,7 @@ dependencies:
     tuple: ^1.0.2
     flutter_image_compress: ^0.2.4
     cached_network_image: ^0.5.0
+    shimmer: ^1.0.0
 
     # Firebase
     firebase_core: ^0.3.1+1
