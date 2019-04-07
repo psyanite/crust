@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:crust/components/favorite_button.dart';
-import 'package:crust/components/post_list.dart';
+import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/models/post.dart';
 import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
@@ -32,26 +32,34 @@ class StoreScreen extends StatelessWidget {
         },
         converter: (Store<AppState> store) => _Props.fromStore(store, storeId),
         builder: (context, props) => _Presenter(
-              store: props.store,
-              favoriteStores: props.favoriteStores,
-              favoriteStore: props.favoriteStore,
-              unfavoriteStore: props.unfavoriteStore,
-              isLoggedIn: props.isLoggedIn,
-              fetchPostsByStoreId: props.fetchPostsByStoreId,
-            ));
+            store: props.store,
+            favoriteStores: props.favoriteStores,
+            favoriteStore: props.favoriteStore,
+            unfavoriteStore: props.unfavoriteStore,
+            isLoggedIn: props.isLoggedIn,
+            fetchPostsByStoreId: props.fetchPostsByStoreId,
+            favoritePosts: props.favoritePosts));
   }
 }
 
 class _Presenter extends StatelessWidget {
   final MyStore.Store store;
   final Set<int> favoriteStores;
+  final Set<int> favoritePosts;
   final Function favoriteStore;
   final Function unfavoriteStore;
   final bool isLoggedIn;
   final Function fetchPostsByStoreId;
 
   _Presenter(
-      {Key key, this.store, this.favoriteStores, this.favoriteStore, this.unfavoriteStore, this.isLoggedIn, this.fetchPostsByStoreId})
+      {Key key,
+      this.store,
+      this.favoriteStores,
+      this.favoritePosts,
+      this.favoriteStore,
+      this.unfavoriteStore,
+      this.isLoggedIn,
+      this.fetchPostsByStoreId})
       : super(key: key);
 
   @override
@@ -62,9 +70,10 @@ class _Presenter extends StatelessWidget {
       child: CustomScrollView(slivers: <Widget>[
         _appBar(),
         PostList(
-            noPostsView: Text('Looks like ${store.name} hasn\'t posted anything yet.'),
-            posts: store.posts,
-            postListType: PostListType.forStore)
+          noPostsView: Text('Looks like ${store.name} hasn\'t posted anything yet.'),
+          posts: store.posts,
+          postListType: PostListType.forStore,
+        )
       ]),
     ));
   }
@@ -197,17 +206,26 @@ class _Presenter extends StatelessWidget {
 class _Props {
   final MyStore.Store store;
   final Set<int> favoriteStores;
+  final Set<int> favoritePosts;
   final Function favoriteStore;
   final Function unfavoriteStore;
   final bool isLoggedIn;
   final Function fetchPostsByStoreId;
 
-  _Props({this.store, this.favoriteStores, this.favoriteStore, this.unfavoriteStore, this.isLoggedIn, this.fetchPostsByStoreId});
+  _Props(
+      {this.store,
+      this.favoriteStores,
+      this.favoritePosts,
+      this.favoriteStore,
+      this.unfavoriteStore,
+      this.isLoggedIn,
+      this.fetchPostsByStoreId});
 
   static fromStore(Store<AppState> store, int storeId) {
     return _Props(
       store: store.state.store.stores[storeId],
       favoriteStores: store.state.me.favoriteStores ?? Set<int>(),
+      favoritePosts: store.state.me.favoritePosts ?? Set<int>(),
       favoriteStore: (storeId) => store.dispatch(FavoriteStoreRequest(storeId)),
       unfavoriteStore: (storeId) => store.dispatch(UnfavoriteStoreRequest(storeId)),
       isLoggedIn: store.state.me.user != null,

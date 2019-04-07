@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crust/components/carousel.dart';
+import 'package:crust/components/post_list/carousel_wrapper.dart';
+import 'package:crust/components/post_list/post_like_button.dart';
 import 'package:crust/components/screens/profile_screen.dart';
 import 'package:crust/components/screens/store_screen.dart';
 import 'package:crust/models/post.dart';
@@ -14,7 +16,7 @@ class PostList extends StatelessWidget {
   final List<Post> posts;
   final PostListType postListType;
 
-  PostList({Key key, this.noPostsView, this.posts, this.postListType});
+  PostList({Key key, this.noPostsView, this.posts, this.postListType}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +24,13 @@ class PostList extends StatelessWidget {
     if (posts.length == 0) return _noPostsNotice();
     return SliverSafeArea(
         minimum: EdgeInsets.symmetric(horizontal: 15.0),
-        sliver: SliverList(delegate: SliverChildBuilderDelegate((builder, i) => _postCard(posts[i]), childCount: posts.length)));
+        sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+                (builder, i) => PostCard(
+                      post: posts[i],
+                      postListType: postListType,
+                    ),
+                childCount: posts.length)));
   }
 
   Widget _noPostsNotice() {
@@ -38,8 +46,16 @@ class PostList extends StatelessWidget {
       ),
     );
   }
+}
 
-  Widget _postCard(Post post) {
+class PostCard extends StatelessWidget {
+  final Post post;
+  final PostListType postListType;
+
+  PostCard({this.post, this.postListType});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
         decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))),
         child: Column(children: <Widget>[_header(post), _content(post)]));
@@ -87,34 +103,66 @@ class PostList extends StatelessWidget {
         child: Text(post.postReview.body),
       ));
     }
+    if (post.postPhotos.length > 0) {
+      children.add(CarouselWrapper(postId: post.id, child: _carousel()));
+    }
+    else {
+      children.add(_textEnd());
+    }
+    return Container(padding: EdgeInsets.only(top: 10.0), child: Column(children: children));
+  }
+
+  Widget _carousel() {
     if (post.postPhotos.length == 1) {
-      children.add(_imagePreview(post.postPhotos[0]));
+      return _singlePhoto();
     }
-    if (post.postPhotos.length > 1) {
-      children.add(_carousel(post.postPhotos));
-    }
-    return Container(padding: EdgeInsets.only(top: 10.0, bottom: 20.0), child: Column(children: children));
-  }
-
-  Widget _imagePreview(String photo) {
-    return Builder(
-        builder: (context) => Container(
-            height: MediaQuery.of(context).size.width - 30.0,
-            decoration: BoxDecoration(
-                color: Burnt.imgPlaceholderColor,
-                border: Border(bottom: BorderSide(color: Burnt.separator)),
-                image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(photo)))));
-  }
-
-  Widget _carousel(List<String> photos) {
-    final List<Widget> widgets = photos
+    final List<Widget> widgets = post.postPhotos
         .map<Widget>((image) => CachedNetworkImage(
               imageUrl: image,
               fit: BoxFit.cover,
               fadeInDuration: Duration(milliseconds: 100),
             ))
         .toList(growable: false);
-    return Carousel(images: widgets);
+    return Carousel(images: widgets, right: _carouselRight());
+  }
+
+  Widget _carouselRight() {
+    return Row(
+      children: <Widget>[PostLikeButton(postId: post.id)],
+    );
+  }
+
+  Widget _textEnd() {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 10.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[PostLikeButton(postId: post.id)],
+      ),
+    );
+  }
+
+  Widget _singlePhoto() {
+    return Builder(
+        builder: (context) => Column(
+              children: <Widget>[
+                Container(
+                    height: MediaQuery.of(context).size.width - 30.0,
+                    decoration: BoxDecoration(
+                        color: Burnt.imgPlaceholderColor,
+                        border: Border(bottom: BorderSide(color: Burnt.separator)),
+                        image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.postPhotos[0])))),
+                Padding(
+                  padding: EdgeInsets.only(top: 6.0, bottom: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[PostLikeButton(postId: post.id)],
+                  ),
+                )
+              ],
+            ));
   }
 }
 

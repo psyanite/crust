@@ -1,3 +1,4 @@
+import 'package:crust/models/post.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/store.dart';
 import 'package:crust/models/user.dart';
@@ -160,6 +161,44 @@ class MeService {
     }
   }
 
+  Future<Set<int>> favoritePost({ userId, postId }) async {
+    String query = """
+      mutation {
+        favoritePost(userId: $userId, postId: $postId) {
+          favorite_posts {
+            id,
+          },
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['favoritePost'];
+    if (json != null) {
+      return Set<int>.from(json['favorite_posts'].map((p) => p['id']));
+    } else {
+      throw Exception('Failed to favoritePost(userId: $userId, postId: $postId)');
+    }
+  }
+
+  Future<Set<int>> unfavoritePost({ userId, postId }) async {
+    String query = """
+      mutation {
+        unfavoritePost(userId: $userId, postId: $postId) {
+          favorite_posts {
+            id,
+          },
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['unfavoritePost'];
+    if (json != null) {
+      return Set<int>.from(json['favorite_posts'].map((p) => p['id']));
+    } else {
+      throw Exception('Failed to unfavoritePost(userId: $userId, storeId: $postId)');
+    }
+  }
+
   Future<Map<String, dynamic>> fetchFavorites(userId) async {
     String query = """
       query {
@@ -170,6 +209,9 @@ class MeService {
           favorite_stores {
             ${Store.attributes}
           },
+          favorite_posts {
+            ${Post.attributes}
+          },
         }
       }
     """;
@@ -178,7 +220,8 @@ class MeService {
     if (json != null) {
       var rewards = (json['favorite_rewards'] as List).map((r) => Reward.fromToaster(r)).toList();
       var stores = (json['favorite_stores'] as List).map((s) => Store.fromToaster(s)).toList();
-      return { 'rewards': rewards, 'stores': stores };
+      var posts = (json['favorite_posts'] as List).map((s) => Post.fromToaster(s)).toList();
+      return { 'rewards': rewards, 'stores': stores, 'posts': posts };
     } else {
       throw Exception('Failed to fetchFavorites(userId: $userId)');
     }

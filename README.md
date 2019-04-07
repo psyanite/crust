@@ -43,6 +43,7 @@
 </div>
 
 ## To Do
+* Add keys everywhere
 * Validate file size maximum 5000x5000
 * Add like post feature
 * Add edit post feature

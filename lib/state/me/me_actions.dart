@@ -78,6 +78,30 @@ class UnfavoriteStoreSuccess {
   UnfavoriteStoreSuccess(this.stores);
 }
 
+class FavoritePostRequest {
+  final int postId;
+
+  FavoritePostRequest(this.postId);
+}
+
+class FavoritePostSuccess {
+  final Set<int> posts;
+
+  FavoritePostSuccess(this.posts);
+}
+
+class UnfavoritePostRequest {
+  final int postId;
+
+  UnfavoritePostRequest(this.postId);
+}
+
+class UnfavoritePostSuccess {
+  final Set<int> posts;
+
+  UnfavoritePostSuccess(this.posts);
+}
+
 class FetchFavoritesRequest {
   final bool updateStore;
 
@@ -87,8 +111,9 @@ class FetchFavoritesRequest {
 class FetchFavoritesSuccess {
   final Set<int> favoriteRewards;
   final Set<int> favoriteStores;
+  final Set<int> favoritePosts;
 
-  FetchFavoritesSuccess({this.favoriteRewards, this.favoriteStores});
+  FetchFavoritesSuccess({this.favoriteRewards, this.favoriteStores, this.favoritePosts});
 }
 
 class FetchUserRewardRequest {

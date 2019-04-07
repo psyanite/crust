@@ -1,4 +1,4 @@
-import 'package:crust/components/post_list.dart';
+import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/screens/loading_screen.dart';
 import 'package:crust/components/screens/settings_screen.dart';
 import 'package:crust/models/user.dart';

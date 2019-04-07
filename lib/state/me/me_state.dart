@@ -7,20 +7,23 @@ class MeState {
   final User user;
   final Set<int> favoriteRewards;
   final Set<int> favoriteStores;
+  final Set<int> favoritePosts;
   final UserReward userReward;
 
   MeState({
     this.user,
     this.favoriteRewards,
     this.favoriteStores,
+    this.favoritePosts,
     this.userReward,
   });
 
-  MeState copyWith({User user, Set<int> favoriteRewards, Set<int> favoriteStores, UserReward userReward}) {
+  MeState copyWith({User user, Set<int> favoriteRewards, Set<int> favoriteStores, Set<int> favoritePosts, UserReward userReward}) {
     return MeState(
       user: user ?? this.user,
       favoriteRewards: favoriteRewards ?? this.favoriteRewards,
       favoriteStores: favoriteStores ?? this.favoriteStores,
+      favoritePosts: favoritePosts ?? this.favoritePosts,
       userReward: userReward ?? this.userReward,
     );
   }
@@ -39,6 +42,7 @@ class MeState {
         user: $user,
         favoriteRewards: ${favoriteRewards != null ? '${favoriteRewards.length} rewards' : null},
         favoriteStores: ${favoriteStores != null ? '${favoriteStores.length} stores' : null},
+        favoritePosts: ${favoritePosts != null ? '${favoritePosts.length} stores' : null},
         userReward: $userReward,
       }''';
   }
