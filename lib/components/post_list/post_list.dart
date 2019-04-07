@@ -52,7 +52,7 @@ class PostCard extends StatelessWidget {
   final Post post;
   final PostListType postListType;
 
-  PostCard({this.post, this.postListType});
+  PostCard({Key key, this.post, this.postListType}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

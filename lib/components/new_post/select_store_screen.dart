@@ -11,6 +11,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 class SelectStoreScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(

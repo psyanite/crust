@@ -14,6 +14,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 class SearchScreen extends SearchDelegate<MyStore.Store> {
+
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(

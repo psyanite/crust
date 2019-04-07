@@ -18,7 +18,7 @@ class CarouselWrapper extends StatelessWidget {
   final int postId;
   final Widget child;
 
-  CarouselWrapper({Key key, this.postId, this.child});
+  CarouselWrapper({Key key, this.postId, this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +84,5 @@ class _Presenter extends StatelessWidget {
     );
   }
 }
-
 
 enum PostListType { forStore, forProfile }

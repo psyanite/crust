@@ -11,7 +11,7 @@ class PostLikeButton extends StatelessWidget {
   final double padding;
   final double size;
 
-  PostLikeButton({Key key, this.postId, this.padding, this.size});
+  PostLikeButton({Key key, this.postId, this.padding, this.size}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -8,7 +8,7 @@ import 'package:flutter_svg/svg.dart';
 class BackArrow extends StatelessWidget {
   final Color color;
 
-  BackArrow({Key key, this.color = Burnt.textBodyColor});
+  BackArrow({Key key, this.color = Burnt.textBodyColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class SmallButton extends StatelessWidget {
         end: Alignment.topRight,
         stops: [0, 0.6, 1.0],
         colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-      )});
+      )}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class WhiteButton extends StatelessWidget {
   final String text;
   final Function onPressed;
 
-  WhiteButton({Key key, this.text, this.onPressed});
+  WhiteButton({Key key, this.text, this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +72,7 @@ class BottomButton extends StatelessWidget {
   final String text;
   final Function onPressed;
 
-  BottomButton({Key key, this.text, this.onPressed});
+  BottomButton({Key key, this.text, this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +105,7 @@ class SolidButton extends StatelessWidget {
   final String text;
   final Function onPressed;
 
-  SolidButton({Key key, this.text, this.onPressed});
+  SolidButton({Key key, this.text, this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -146,7 +146,7 @@ class LoadingCenter extends StatelessWidget {
 class SliverCenter extends StatelessWidget {
   final Widget child;
 
-  SliverCenter({Key key, this.child});
+  SliverCenter({Key key, this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -176,7 +176,7 @@ class LoadingSliver extends StatelessWidget {
 class CenterTextSliver extends StatelessWidget {
   final String text;
 
-  CenterTextSliver({Key key, this.text});
+  CenterTextSliver({Key key, this.text}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -196,7 +196,7 @@ class ScoreIcon extends StatelessWidget {
   final double size;
   final String name;
 
-  ScoreIcon({Key key, this.score, this.size = 25.0, this.name, this.opacity = 1.0});
+  ScoreIcon({Key key, this.score, this.size = 25.0, this.name, this.opacity = 1.0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -248,7 +248,7 @@ class HeartIcon extends StatelessWidget {
   final bool isHollow;
   final double size;
 
-  HeartIcon({Key key, this.isHollow, this.size = 25.0});
+  HeartIcon({Key key, this.isHollow, this.size = 25.0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

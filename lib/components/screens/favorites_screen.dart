@@ -13,6 +13,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 class FavoritesScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(

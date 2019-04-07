@@ -15,6 +15,7 @@ import 'package:redux/redux.dart';
 import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(

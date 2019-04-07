@@ -9,9 +9,11 @@ class Carousel extends StatefulWidget {
   final Widget right;
 
   Carousel({
+    Key key,
     this.images,
     this.right,
-  }) : assert(images != null);
+  })  : assert(images != null),
+        super(key: key);
 
   @override
   _CarouselState createState() => _CarouselState();
