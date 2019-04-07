@@ -243,7 +243,7 @@ class MeService {
     var json = response['userRewardBy'];
     if (json != null) {
       var result = (json as List).map((u) => UserReward.fromToaster(u)).toList();
-      return result.length > 0 ? result.first : null;
+      return result.isNotEmpty ? result.first : null;
     } else {
       throw Exception('Failed to fetchUserReward(userId: $userId, rewardId: $rewardId)');
     }
@@ -265,7 +265,7 @@ class MeService {
     var json = response['addUserReward'];
     if (json != null) {
       var result = (json as List).map((u) => UserReward.fromToaster(u)).toList();
-      return result.length > 0 ? result.first : null;
+      return result.isNotEmpty ? result.first : null;
     } else {
       throw Exception('Failed to addUserReward(userId: $userId, rewardId: $rewardId)');
     }

@@ -17,9 +17,9 @@ class PhotoSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var buttonText = images.length > 0 ? 'Change Photos' : 'Add Photos';
+    var buttonText = images.isNotEmpty ? 'Change Photos' : 'Add Photos';
     var children = <Widget>[];
-    if (images.length > 0) {
+    if (images.isNotEmpty) {
       if (images.length == 1) {
         children.add(ImagePreview(images[0]));
       }

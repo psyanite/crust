@@ -4,14 +4,13 @@ import 'dart:typed_data';
 import 'package:crust/components/screens/store_screen.dart';
 import 'package:crust/main.dart';
 import 'package:crust/models/post.dart';
-import 'package:crust/presentation/components.dart';
 import 'package:crust/state/post/post_service.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:multi_image_picker/asset.dart';
 import 'package:tuple/tuple.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 class UploadOverlay extends StatefulWidget {
   final Post post;
@@ -29,6 +28,7 @@ class UploadOverlayState extends State<UploadOverlay> {
   final Function fetchPostsByStoreId;
   final List<Asset> images;
   String loadingText = "Processing your awesome photos…";
+  String error;
 
   UploadOverlayState({this.post, this.fetchPostsByStoreId, this.images});
 
@@ -37,21 +37,27 @@ class UploadOverlayState extends State<UploadOverlay> {
     return Scaffold(
       backgroundColor: Color(0x99000000),
       body: Center(
-        child: AlertDialog(
-            content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Container(height: 15.0),
-            Container(
-              width: 50.0,
-              height: 50.0,
-              child: CircularProgressIndicator(),
-            ),
-            Container(height: 20.0),
-            Text(loadingText),
-          ],
-        )),
+        child: AlertDialog(content: _content()),
       ),
+    );
+  }
+
+  Widget _content() {
+    if (error != null) {
+      Text(error);
+    }
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(height: 15.0),
+        Container(
+          width: 50.0,
+          height: 50.0,
+          child: CircularProgressIndicator(),
+        ),
+        Container(height: 20.0),
+        Text(loadingText),
+      ],
     );
   }
 
@@ -68,15 +74,16 @@ class UploadOverlayState extends State<UploadOverlay> {
     }
 
     var result = await PostService.submitReviewPost(post.copyWith(postPhotos: photoStrings));
-    if (result != null) {
-      fetchPostsByStoreId(post.store.id);
-      Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
-      Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: post.store.id)));
-      return true;
-    } else {
-      snack(context, "Oops! Something went wrong, please try again");
+    if (result == null) {
+      setState(() {
+        error = "Oops! Something went wrong, please try again";
+      });
       return false;
     }
+    fetchPostsByStoreId(post.store.id);
+    Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
+    Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: post.store.id)));
+    return true;
   }
 
   Future<List<String>> _uploadPhotos() async {

@@ -101,8 +101,8 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _content() {
-    if (error != null) return _error();
-    if (stores.length < 1) return _skelly();
+//    if (error != null) return _error();
+    if (stores.isEmpty) return _skelly();
     stores.sort((a, b) => a.id.compareTo(b.id));
     return SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

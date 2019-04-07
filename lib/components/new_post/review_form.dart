@@ -288,7 +288,32 @@ class _PresenterState extends State<_Presenter> {
       snack(context, "Add some photos or add some thoughts");
       return false;
     }
+    if (images.isNotEmpty) {
+      var validatePhotos = _validatePhotos();
+      if (validatePhotos != null) {
+        snack(context, validatePhotos);
+        return false;
+      }
+    }
     return true;
+  }
+
+  String _validatePhotos() {
+    var isValid = true;
+    images.forEach((a) {
+      if (a.originalHeight > 5000 || a.originalWidth > 5000) {
+        isValid = false;
+        return;
+      }
+    });
+    if (!isValid) {
+      if (images.length == 1) {
+        return "Oops! The photo is larger than 5000x5000";
+      } else {
+        return "Oops! One of the photos is larger than 5000x5000";
+      }
+    }
+    return null;
   }
 
   Future<void> _submit(BuildContext context) async {

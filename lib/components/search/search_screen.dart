@@ -56,7 +56,7 @@ class SearchScreen extends SearchDelegate<MyStore.Store> {
           case ConnectionState.done:
             if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
-            } else if (snapshot.data.length == 0) {
+            } else if (snapshot.data.isEmpty) {
               return Text("No Results Found.");
             }
             return ListView.builder(

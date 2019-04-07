@@ -43,7 +43,6 @@
 </div>
 
 ## To Do
-* Validate file size maximum 5000x5000
 * Add edit post feature
 * Add delete post feature
 * Fix new post page to show location of store
@@ -51,6 +50,7 @@
 * Implement pagination
 
 ## Done
+* Validate file size maximum 5000x5000
 * Add keys everywhere
 * Add like post feature
 * Skeleton homepage

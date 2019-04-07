@@ -21,7 +21,7 @@ class PostList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (posts == null) return LoadingSliver();
-    if (posts.length == 0) return _noPostsNotice();
+    if (posts.isEmpty) return _noPostsNotice();
     return SliverSafeArea(
         minimum: EdgeInsets.symmetric(horizontal: 15.0),
         sliver: SliverList(
@@ -103,7 +103,7 @@ class PostCard extends StatelessWidget {
         child: Text(post.postReview.body),
       ));
     }
-    if (post.postPhotos.length > 0) {
+    if (post.postPhotos.isNotEmpty) {
       children.add(CarouselWrapper(postId: post.id, child: _carousel()));
     }
     else {
