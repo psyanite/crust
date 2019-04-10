@@ -123,10 +123,10 @@ class PostCard extends StatelessWidget {
               fadeInDuration: Duration(milliseconds: 100),
             ))
         .toList(growable: false);
-    return Carousel(images: widgets, right: _carouselRight());
+    return Carousel(images: widgets, left: _carouselLeft());
   }
 
-  Widget _carouselRight() {
+  Widget _carouselLeft() {
     return Row(
       children: <Widget>[PostLikeButton(postId: post.id)],
     );
@@ -136,7 +136,7 @@ class PostCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(bottom: 10.0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[PostLikeButton(postId: post.id)],
       ),
@@ -156,7 +156,7 @@ class PostCard extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(top: 6.0, bottom: 10.0),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[PostLikeButton(postId: post.id)],
                   ),

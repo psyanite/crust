@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 
 class Carousel extends StatefulWidget {
   final List<Widget> images;
-  final Widget right;
+  final Widget left;
 
   Carousel({
     Key key,
     this.images,
-    this.right,
+    this.left,
   })  : assert(images != null),
         super(key: key);
 
@@ -40,13 +40,13 @@ class _CarouselState extends State<Carousel> {
         ),
         Container(
           padding: EdgeInsets.only(top: 6.0, bottom: 10.0),
-          height: 45.0,
+          height: 50.0,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              widget.left != null ? widget.left : Container(),
               Dots(controller: _controller, itemCount: widget.images.length),
-              widget.right != null ? widget.right : Container(),
             ],
           ),
         )
