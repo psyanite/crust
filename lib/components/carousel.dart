@@ -7,11 +7,13 @@ import 'package:flutter/material.dart';
 class Carousel extends StatefulWidget {
   final List<Widget> images;
   final Widget left;
+  final bool centreDots;
 
   Carousel({
     Key key,
     this.images,
     this.left,
+    this.centreDots = false,
   })  : assert(images != null),
         super(key: key);
 
@@ -47,6 +49,7 @@ class _CarouselState extends State<Carousel> {
             children: <Widget>[
               widget.left != null ? widget.left : Container(),
               Dots(controller: _controller, itemCount: widget.images.length),
+              if (widget.centreDots) Container()
             ],
           ),
         )

@@ -5,12 +5,15 @@ import 'package:crust/components/screens/store_screen.dart';
 import 'package:crust/main.dart';
 import 'package:crust/models/post.dart';
 import 'package:crust/state/post/post_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:multi_image_picker/asset.dart';
 import 'package:tuple/tuple.dart';
+
+// https://stackoverflow.com/questions/40057798/firebase-token-authentication-error
 
 class UploadOverlay extends StatefulWidget {
   final Post post;
@@ -27,10 +30,17 @@ class UploadOverlayState extends State<UploadOverlay> {
   final Post post;
   final Function fetchPostsByStoreId;
   final List<Asset> images;
-  String loadingText = "Processing your awesome photos…";
+  String loadingText;
   String error;
 
   UploadOverlayState({this.post, this.fetchPostsByStoreId, this.images});
+
+  @override
+  initState() {
+    super.initState();
+    loadingText = images.isNotEmpty ? "Processing your awesome photos…" : "Submitting your awesome review…";
+    _submit();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +53,8 @@ class UploadOverlayState extends State<UploadOverlay> {
   }
 
   Widget _content() {
-    if (error != null) {
-      Text(error);
-    }
+    if (error != null) return Text(error);
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -61,19 +70,14 @@ class UploadOverlayState extends State<UploadOverlay> {
     );
   }
 
-  @override
-  initState() {
-    super.initState();
-    _submit();
-  }
-
   Future<bool> _submit() async {
     List<String> photoStrings = [];
     if (images.isNotEmpty) {
       photoStrings = await _uploadPhotos();
     }
-
-    var result = await PostService.submitReviewPost(post.copyWith(postPhotos: photoStrings));
+    var postPhotos = photoStrings.map((s) => PostPhoto(url: s)).toList(growable: false);
+    var update = post.copyWith(postPhotos: postPhotos);
+    var result = await (post.id == null ? PostService.updateReviewPost(update) : PostService.submitReviewPost(update));
     if (result == null) {
       setState(() {
         error = "Oops! Something went wrong, please try again";
@@ -89,6 +93,9 @@ class UploadOverlayState extends State<UploadOverlay> {
   Future<List<String>> _uploadPhotos() async {
     String timestamp = "${DateTime.now().millisecondsSinceEpoch}";
     List<Uint8List> byteData = await Future.wait(images.map((a) => _getByteData(a)));
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser user = await auth.currentUser();
+    if (user == null) auth.signInAnonymously();
     List<Tuple2<StorageUploadTask, StorageReference>> tasks = byteData.map((bd) {
       String fileName = "$timestamp-${Random().nextInt(10000)}.jpg";
       StorageReference ref = FirebaseStorage.instance.ref().child("reviews/post-photos/$fileName");

@@ -43,31 +43,7 @@ class StoreService {
     String query = """
       query {
         postsByStoreId(storeId: $storeId) {
-          id,
-          type,
-          store {
-            id,
-            name,
-            cover_image,
-          },
-          posted_by {
-            id,
-            profile {
-              username,
-              preferred_name,
-              profile_picture,
-            }
-          },
-          posted_at,
-          post_photos {
-            id,
-            photo,
-          },
-          post_review {
-            id,
-            overall_score,
-            body,
-          }
+          ${Post.attributes}
         }
       }
     """;

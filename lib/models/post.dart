@@ -1,5 +1,5 @@
-import 'package:crust/models/user.dart';
 import 'package:crust/models/store.dart';
+import 'package:crust/models/user.dart';
 import 'package:crust/utils/enum_util.dart';
 
 class Post {
@@ -8,12 +8,12 @@ class Post {
   final Store store;
   final User postedBy;
   final DateTime postedAt;
-  final List<String> postPhotos;
+  final List<PostPhoto> postPhotos;
   final PostReview postReview;
 
   Post({this.id, this.type, this.store, this.postedBy, this.postedAt, this.postPhotos, this.postReview});
 
-  Post copyWith({List<String> postPhotos}) {
+  Post copyWith({List<PostPhoto> postPhotos}) {
     return Post(
       id: this.id,
       type: this.type,
@@ -24,33 +24,37 @@ class Post {
       postReview: this.postReview,
     );
   }
+
   factory Post.fromToaster(Map<String, dynamic> post) {
     if (post == null) return null;
-    var store = post['store'];
     var postedBy = post['posted_by'];
     var postPhotos = post['post_photos'];
     var postReview = post['post_review'];
     return Post(
-      id: post['id'],
-      type: EnumUtil.fromString(PostType.values, post['type']),
-      store: Store(
-        id: store['id'],
-        name: store['name'],
-        coverImage: store['cover_image'],
-      ),
-      postedBy: User(
-        id: postedBy['id'],
-        username: postedBy['profile']['username'],
-        displayName: postedBy['profile']['preferred_name'],
-        profilePicture: postedBy['profile']['profile_picture'],
-      ),
-      postedAt: DateTime.parse(post['posted_at']),
-      postPhotos: (postPhotos as List).map<String>((postPhoto) => postPhoto['photo']).toList(),
-      postReview: postReview != null ? PostReview(
-        id: postReview['id'],
-        overallScore: EnumUtil.fromString(Score.values, postReview['overall_score']),
-        body: postReview['body'],
-      ) : null);
+        id: post['id'],
+        type: EnumUtil.fromString(PostType.values, post['type']),
+        store: Store.fromToaster(post['store']),
+        postedBy: User(
+          id: postedBy['id'],
+          username: postedBy['profile']['username'],
+          displayName: postedBy['profile']['preferred_name'],
+          profilePicture: postedBy['profile']['profile_picture'],
+        ),
+        postedAt: DateTime.parse(post['posted_at']),
+        postPhotos: (postPhotos as List).map<PostPhoto>((postPhoto) {
+          return PostPhoto(id: postPhoto['id'], url: postPhoto['url']);
+        }).toList(),
+        postReview: postReview != null
+            ? PostReview(
+                id: postReview['id'],
+                overallScore: EnumUtil.fromString(Score.values, postReview['overall_score']),
+                tasteScore: EnumUtil.fromString(Score.values, postReview['taste_score']),
+                serviceScore: EnumUtil.fromString(Score.values, postReview['service_score']),
+                valueScore: EnumUtil.fromString(Score.values, postReview['value_score']),
+                ambienceScore: EnumUtil.fromString(Score.values, postReview['ambience_score']),
+                body: postReview['body'],
+              )
+            : null);
   }
 
   static const attributes = """
@@ -60,6 +64,18 @@ class Post {
       id,
       name,
       cover_image,
+      location {
+        id,
+        name,
+      },
+      suburb {
+        id,
+        name,
+      },
+      cuisines {
+        id,
+        name,
+      },
     },
     posted_by {
       id,
@@ -72,11 +88,15 @@ class Post {
     posted_at,
     post_photos {
       id,
-      photo,
+      url,
     },
     post_review {
       id,
       overall_score,
+      taste_score,
+      service_score,
+      value_score,
+      ambience_score,
       body,
     }
   """;
@@ -89,9 +109,9 @@ class Post {
 
 class PostPhoto {
   final int id;
-  final String photo;
+  final String url;
 
-  PostPhoto({this.id, this.photo});
+  PostPhoto({this.id, this.url});
 }
 
 class PostReview {

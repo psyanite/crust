@@ -19,7 +19,7 @@ class StoreState {
   }
 
   StoreState addStore(Store store) {
-    var storesUpdate = this.stores;
+    var storesUpdate = LinkedHashMap<int, Store>.from(this.stores);
     if (store != null) {
       storesUpdate[store.id] = store;
     }
@@ -31,7 +31,12 @@ class StoreState {
   StoreState addStores(List<Store> stores) {
     var storesUpdate = this.stores;
     if (stores != null) {
-      storesUpdate.addAll(Map.fromEntries(stores.map((s) => MapEntry<int, Store>(s.id, s))));
+      storesUpdate.addEntries(stores.map((s) => MapEntry<int, Store>(s.id, s)));
+    }
+    if (stores == null) {
+      return StoreState(
+        stores: LinkedHashMap<int, Store>()
+      );
     }
     return StoreState(
       stores: storesUpdate,

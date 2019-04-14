@@ -42,7 +42,7 @@ class MeState {
         user: $user,
         favoriteRewards: ${favoriteRewards != null ? '${favoriteRewards.length} rewards' : null},
         favoriteStores: ${favoriteStores != null ? '${favoriteStores.length} stores' : null},
-        favoritePosts: ${favoritePosts != null ? '${favoritePosts.length} stores' : null},
+        favoritePosts: ${favoritePosts != null ? '${favoritePosts.length} posts' : null},
         userReward: $userReward,
       }''';
   }

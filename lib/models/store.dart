@@ -29,10 +29,10 @@ class Store {
     this.burntCount,
   });
 
-  Store copyWith({List<Post> posts}) {
+  Store copyWith({List<Post> posts, String name}) {
     return Store(
         id: this.id,
-        name: this.name,
+        name: name ?? this.name,
         phoneNumber: this.phoneNumber,
         coverImage: this.coverImage,
         address: this.address,

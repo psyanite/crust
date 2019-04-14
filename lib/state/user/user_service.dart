@@ -1,3 +1,4 @@
+import 'package:crust/models/post.dart';
 import 'package:crust/models/user.dart';
 import 'package:crust/services/toaster.dart';
 
@@ -16,31 +17,7 @@ class UserService {
             username
           },
           posts {
-            id,
-            type,
-            store {
-              id,
-              name,
-              cover_image,
-            },
-            posted_by {
-              id,
-              profile {
-                username,
-                preferred_name,
-                profile_picture,
-              }
-            },
-            posted_at,
-            post_photos {
-              id,
-              photo,
-            },
-            post_review {
-              id,
-              overall_score,
-              body,
-            }
+            ${Post.attributes}
           } 
         }
       }

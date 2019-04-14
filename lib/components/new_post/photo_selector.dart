@@ -18,40 +18,32 @@ class PhotoSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var buttonText = images.isNotEmpty ? 'Change Photos' : 'Add Photos';
-    var children = <Widget>[];
-    if (images.isNotEmpty) {
-      if (images.length == 1) {
-        children.add(ImagePreview(images[0]));
-      }
-      else {
-        children.add(_carousel());
-      }
-    }
-    children.add(
-      SmallButton(
-        onPressed: () => _loadAssets(context),
-        padding: EdgeInsets.only(left: 7.0, right: 12.0, top: 10.0, bottom: 10.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Icon(
-              Icons.add,
-              size: 16.0,
-              color: Colors.white,
-            ),
-            Container(width: 2.0),
-            Text(buttonText, style: TextStyle(fontSize: 16.0, color: Colors.white))
-          ]),
-      )
-    );
     return Column(
-      children: children,
+      children: <Widget>[
+        if (images.length == 1) ImagePreview(images[0]),
+        if (images.length > 1) _carousel(),
+        SmallButton(
+          onPressed: () => _loadAssets(context),
+          padding: EdgeInsets.only(left: 7.0, right: 12.0, top: 10.0, bottom: 10.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(
+                Icons.add,
+                size: 16.0,
+                color: Colors.white,
+              ),
+              Container(width: 2.0),
+              Text(buttonText, style: TextStyle(fontSize: 16.0, color: Colors.white))
+            ]),
+        )
+      ],
     );
   }
 
   Widget _carousel() {
     final List<Widget> widgets = images.map<Widget>((i) => CarouselPage(i)).toList(growable: false);
-    return Carousel(images: widgets);
+    return Carousel(images: widgets, centreDots: true);
   }
 
   Future<void> _loadAssets(BuildContext context) async {

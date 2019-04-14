@@ -35,7 +35,8 @@ class SmallButton extends StatelessWidget {
         end: Alignment.topRight,
         stops: [0, 0.6, 1.0],
         colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-      )}) : super(key: key);
+      )})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -81,13 +82,13 @@ class BottomButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(2.0)),
-          gradient: LinearGradient(
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-            stops: [0, 0.6, 1.0],
-            colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-          )),
+            borderRadius: BorderRadius.all(Radius.circular(2.0)),
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              stops: [0, 0.6, 1.0],
+              colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
+            )),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -222,7 +223,7 @@ class ScoreIcon extends StatelessWidget {
           return new Container();
         }
     }
-    var children = <Widget>[
+    return Column(children: <Widget>[
       Opacity(
         key: UniqueKey(),
         opacity: opacity,
@@ -232,15 +233,16 @@ class ScoreIcon extends StatelessWidget {
           width: size,
           height: size,
         ),
-      )
-    ];
-    if (name != null) {
-      children.add(Padding(
-        padding: const EdgeInsets.only(top: 5.0),
-        child: Text(name),
-      ));
-    }
-    return Column(children: children);
+      ),
+      if (name != null) _name()
+    ]);
+  }
+
+  Widget _name() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 5.0),
+      child: Text(name),
+    );
   }
 }
 

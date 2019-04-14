@@ -78,7 +78,7 @@ class _Presenter extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Burnt.separator,
                   borderRadius: BorderRadius.circular(150.0),
-                  border: new Border.all(
+                  border: Border.all(
                     color: Colors.white,
                     width: 4.0,
                   ),

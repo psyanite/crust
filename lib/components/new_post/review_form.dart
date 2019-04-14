@@ -64,24 +64,19 @@ class _PresenterState extends State<_Presenter> {
 
   @override
   Widget build(BuildContext context) {
-    var children = <Widget>[
-      Scaffold(
-        body: ListView(
-          children: <Widget>[
-            _appBar(),
-            _content(),
-          ],
-        ),
-      )
-    ];
-    if (showOverlay) {
-      children.add(
-        UploadOverlay(post: post, fetchPostsByStoreId: fetchPostsByStoreId, images: images)
-      );
-    }
     return Stack(
       fit: StackFit.expand,
-      children: children,
+      children: <Widget>[
+        Scaffold(
+          body: ListView(
+            children: <Widget>[
+              _appBar(),
+              _content(),
+            ],
+          ),
+        ),
+        if (showOverlay) UploadOverlay(post: post, fetchPostsByStoreId: fetchPostsByStoreId, images: images)
+      ],
     );
   }
 
