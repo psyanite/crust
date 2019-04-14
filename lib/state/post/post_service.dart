@@ -5,20 +5,20 @@ import 'package:crust/utils/enum_util.dart';
 class PostService {
   const PostService();
 
-  Future<List<Post>> fetchPostsByUserId(int userId) async {
+  static Future<bool> deletePost(int postId, int myId) async {
     String query = """
-    query {
-      postsByUserId(userId: $userId) {
-        ${Post.attributes}
+      mutation {
+        deletePost(postId: $postId, myId: $myId) {
+          id
+        }
       }
-    }
-  """;
+    """;
     final response = await Toaster.get(query);
-    var json = response['postsByUserId'];
+    var json = response['deletePost'];
     if (json != null) {
-      return (json as List).map((p) => Post.fromToaster(p)).toList();
+      return json['id'] == postId;
     } else {
-      throw Exception('Failed to fetchPostsByUserId');
+      throw Exception('Failed to deletePost');
     }
   }
 
@@ -47,6 +47,23 @@ class PostService {
       return Post.fromToaster(json);
     } else {
       throw Exception('Failed to submitReviewPost');
+    }
+  }
+
+  Future<List<Post>> fetchPostsByUserId(int userId) async {
+    String query = """
+    query {
+      postsByUserId(userId: $userId) {
+        ${Post.attributes}
+      }
+    }
+  """;
+    final response = await Toaster.get(query);
+    var json = response['postsByUserId'];
+    if (json != null) {
+      return (json as List).map((p) => Post.fromToaster(p)).toList();
+    } else {
+      throw Exception('Failed to fetchPostsByUserId');
     }
   }
 }

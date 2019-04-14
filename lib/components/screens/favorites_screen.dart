@@ -175,11 +175,11 @@ class _Presenter extends StatelessWidget {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: new Text("Remove from favourites?"),
+                    title: Text("Remove from favourites?"),
                     actions: <Widget>[
-                      FlatButton(child: new Text('Cancel'), onPressed: () => Navigator.of(context).pop()),
+                      FlatButton(child: Text('Cancel'), onPressed: () => Navigator.of(context).pop()),
                       FlatButton(
-                          child: new Text('Confirm'),
+                          child: Text('Confirm'),
                           onPressed: () {
                             onConfirm();
                             Navigator.of(context).pop();

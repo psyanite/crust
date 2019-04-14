@@ -229,7 +229,7 @@ class _Props {
       favoriteStore: (storeId) => store.dispatch(FavoriteStoreRequest(storeId)),
       unfavoriteStore: (storeId) => store.dispatch(UnfavoriteStoreRequest(storeId)),
       isLoggedIn: store.state.me.user != null,
-      fetchPostsByStoreId: (storeId) => store.dispatch(FetchPostsByStoreIdRequest(storeId)),
+      fetchPostsByStoreId: () => store.dispatch(FetchPostsByStoreIdRequest(storeId)),
     );
   }
 }

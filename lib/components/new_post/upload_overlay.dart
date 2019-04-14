@@ -12,6 +12,8 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:multi_image_picker/asset.dart';
 import 'package:tuple/tuple.dart';
 
+// https://stackoverflow.com/questions/40057798/firebase-token-authentication-error
+
 class UploadOverlay extends StatefulWidget {
   final Post post;
   final Function fetchPostsByStoreId;

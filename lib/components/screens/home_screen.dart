@@ -69,10 +69,6 @@ class _Presenter extends StatelessWidget {
     );
   }
 
-  Widget _error() {
-    return SliverCenter(child: Text('Oops! Something went wrong, please restart the app'));
-  }
-
   Widget _skelly() {
     return SliverGrid(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
