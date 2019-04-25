@@ -21,6 +21,7 @@ class _PostLikeButtonState extends State<PostLikeButton> with TickerProviderStat
 
   _PostLikeButtonState({this.postId});
 
+  @override
   initState() {
     super.initState();
     paddingCtrl = AnimationController(upperBound: 2.0, vsync: this, duration: Duration(milliseconds: 300));

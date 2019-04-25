@@ -60,6 +60,9 @@ class Post {
       id,
       name,
       cover_image,
+      location,
+      suburb,
+      cuisines,
     },
     posted_by {
       id,

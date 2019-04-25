@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crust/components/carousel.dart';
 import 'package:crust/components/confirm.dart';
 import 'package:crust/components/dialog.dart';
+import 'package:crust/components/new_post/edit_post_screen.dart';
 import 'package:crust/components/post_list/carousel_wrapper.dart';
 import 'package:crust/components/post_list/post_like_button.dart';
 import 'package:crust/components/screens/profile_screen.dart';
@@ -249,7 +250,9 @@ class _MoreButtonPresenter extends StatelessWidget {
   }
 
   Widget _moreDialog(BuildContext context) {
-    var options = <DialogOption>[DialogOption(display: 'Edit Post', onTap: () {})];
+    var options = <DialogOption>[DialogOption(display: 'Edit Post', onTap: () {
+      Navigator.push(context, MaterialPageRoute(builder: (_) => EditPostScreen(post: post)));
+    })];
     options.add(
       DialogOption(
           display: 'Delete Post',

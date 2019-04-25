@@ -22,6 +22,33 @@ class PostService {
     }
   }
 
+  static Future<Post> updateReviewPost(Post post) async {
+    var body = post.postReview.body != null ? "${post.postReview.body}" : null;
+    String query = """
+      mutation {
+        updatePost(
+          id: ${post.id},
+          body: $body,
+          overallScore: ${EnumUtil.format(post.postReview.overallScore.toString())},
+          tasteScore: ${EnumUtil.format(post.postReview.tasteScore.toString())},
+          serviceScore: ${EnumUtil.format(post.postReview.serviceScore.toString())},
+          valueScore: ${EnumUtil.format(post.postReview.valueScore.toString())},
+          ambienceScore: ${EnumUtil.format(post.postReview.ambienceScore.toString())},
+          photos: [${post.postPhotos.map((p) => '"$p"').join(", ")}],
+        ) {
+          ${Post.attributes}
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['updatePost'];
+    if (json != null) {
+      return Post.fromToaster(json);
+    } else {
+      throw Exception('Failed to updatePost');
+    }
+  }
+
   static Future<Post> submitReviewPost(Post post) async {
     var body = post.postReview.body != null ? "${post.postReview.body}" : null;
     String query = """

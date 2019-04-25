@@ -210,7 +210,7 @@ class MeService {
             ${Store.attributes}
           },
           favorite_posts {
-            ${Post.attributes}
+            id
           },
         }
       }
