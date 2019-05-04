@@ -12,12 +12,13 @@ import 'package:multi_image_picker/multi_image_picker.dart';
 class PhotoSelector extends StatelessWidget {
   final List<Uint8List> images;
   final Function(List<Asset>) onSelectImages;
+  final String addText;
 
-  PhotoSelector({Key key, this.images, this.onSelectImages}): super(key: key);
+  PhotoSelector({Key key, this.images, this.onSelectImages, this.addText = 'Add Photos'}): super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var buttonText = images.isNotEmpty ? 'Change Photos' : 'Add Photos';
+    var buttonText = images.isNotEmpty ? 'Change Photos' : addText;
     return Column(
       children: <Widget>[
         if (images.length == 1) ImagePreview(images[0]),

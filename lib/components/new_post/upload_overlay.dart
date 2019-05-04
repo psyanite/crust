@@ -13,27 +13,30 @@ import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:multi_image_picker/asset.dart';
 import 'package:tuple/tuple.dart';
 
-// https://stackoverflow.com/questions/40057798/firebase-token-authentication-error
-
 class UploadOverlay extends StatefulWidget {
   final Post post;
   final Function fetchPostsByStoreId;
   final List<Asset> images;
+  final List<PostPhoto> deletePhotosQueue;
 
-  UploadOverlay({Key key, this.post, this.fetchPostsByStoreId, this.images}) : super(key: key);
+  UploadOverlay({Key key, this.post, this.fetchPostsByStoreId, this.images, deletePhotosQueue})
+      : deletePhotosQueue = deletePhotosQueue ?? List<PostPhoto>(),
+        super(key: key);
 
   @override
-  UploadOverlayState createState() => UploadOverlayState(post: post, fetchPostsByStoreId: fetchPostsByStoreId, images: images);
+  UploadOverlayState createState() =>
+      UploadOverlayState(post: post, fetchPostsByStoreId: fetchPostsByStoreId, images: images, deletePhotosQueue: deletePhotosQueue);
 }
 
 class UploadOverlayState extends State<UploadOverlay> {
   final Post post;
   final Function fetchPostsByStoreId;
   final List<Asset> images;
+  final List<PostPhoto> deletePhotosQueue;
   String loadingText;
   String error;
 
-  UploadOverlayState({this.post, this.fetchPostsByStoreId, this.images});
+  UploadOverlayState({this.post, this.fetchPostsByStoreId, this.images, this.deletePhotosQueue});
 
   @override
   initState() {
@@ -71,13 +74,13 @@ class UploadOverlayState extends State<UploadOverlay> {
   }
 
   Future<bool> _submit() async {
-    List<String> photoStrings = [];
+    List<String> photoUrls = [];
     if (images.isNotEmpty) {
-      photoStrings = await _uploadPhotos();
+      photoUrls = await _uploadPhotos();
     }
-    var postPhotos = photoStrings.map((s) => PostPhoto(url: s)).toList(growable: false);
+    var postPhotos = photoUrls.map((s) => PostPhoto(url: s)).toList(growable: false);
     var update = post.copyWith(postPhotos: postPhotos);
-    var result = await (post.id == null ? PostService.updateReviewPost(update) : PostService.submitReviewPost(update));
+    var result = await (post.id == null ? PostService.submitReviewPost(update) : PostService.updateReviewPost(update));
     if (result == null) {
       setState(() {
         error = "Oops! Something went wrong, please try again";
@@ -85,6 +88,7 @@ class UploadOverlayState extends State<UploadOverlay> {
       return false;
     }
     fetchPostsByStoreId(post.store.id);
+    deletePhotosQueue.forEach((p) => PostService.deletePhoto(p.id));
     Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
     Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: post.store.id)));
     return true;

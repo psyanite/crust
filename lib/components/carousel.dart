@@ -14,7 +14,7 @@ class Carousel extends StatefulWidget {
     this.images,
     this.left,
     this.centreDots = false,
-  })  : assert(images != null),
+  }) : assert(images != null),
         super(key: key);
 
   @override

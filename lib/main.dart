@@ -27,7 +27,8 @@ void main() async {
       thunkMiddleware,
       persistor.createMiddleware(),
       LoggingMiddleware.printer(),
-    ]..addAll(createAppMiddleware());
+      ...createAppMiddleware(),
+    ];
   }
 
   final store = Store<AppState>(

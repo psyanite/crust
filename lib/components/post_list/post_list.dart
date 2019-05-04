@@ -263,6 +263,7 @@ class _MoreButtonPresenter extends StatelessWidget {
       DialogOption(
           display: 'Edit Post',
           onTap: () {
+            closeMoreDialog();
             Navigator.push(context, MaterialPageRoute(builder: (_) => EditPostScreen(post: post)));
           })
     ];

@@ -174,7 +174,7 @@ class _PresenterState extends State<_Presenter> {
                   ),
                 ]),
               ),
-              _submitButton(context),
+              _buttons(context),
             ],
           ),
     );
@@ -376,27 +376,52 @@ class _PresenterState extends State<_Presenter> {
 //    }
 //  }
 
-  _submitButton(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        _submit(context);
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 20.0),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(2.0)),
-            gradient: LinearGradient(
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
-              stops: [0, 0.6, 1.0],
-              colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-            )),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[Text('SUBMIT', style: TextStyle(fontSize: 20.0, color: Colors.white, letterSpacing: 3.0))],
-        ),
+  _buttons(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(bottom: 30.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          InkWell(
+            onTap: () => Navigator.pop(context),
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Burnt.primary,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(2.0)),
+              padding: EdgeInsets.symmetric(vertical: 11.0, horizontal: 15.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[Text('CANCEL', style: TextStyle(fontSize: 16.0, color: Burnt.primary, letterSpacing: 3.0))],
+              ),
+            ),
+          ),
+          Container(width: 8.0),
+          InkWell(
+            onTap: () => _submit(context),
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(2.0),
+                gradient: LinearGradient(
+                  begin: Alignment.bottomLeft,
+                  end: Alignment.topRight,
+                  stops: [0, 0.6, 1.0],
+                  colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
+                )),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[Text('SUBMIT', style: TextStyle(fontSize: 16.0, color: Colors.white, letterSpacing: 3.0))],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

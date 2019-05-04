@@ -1,9 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:crust/components/confirm.dart';
 import 'package:crust/models/post.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
-import 'package:crust/state/post/post_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -81,7 +79,10 @@ class _PresenterState extends State<PhotoOverlay> {
           Padding(
             padding: EdgeInsets.only(bottom: 30.0),
             child: SmallButton(
-              onPressed: () => showDialog(context: context, builder: _deleteDialog),
+              onPressed: () {
+                onPhotoDelete(photo);
+                Navigator.pop(context);
+              },
               padding: EdgeInsets.only(left: 7.0, right: 12.0, top: 10.0, bottom: 10.0),
               child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 Icon(
@@ -90,23 +91,10 @@ class _PresenterState extends State<PhotoOverlay> {
                   color: Colors.white,
                 ),
                 Container(width: 2.0),
-                Text('Delete Photo', style: TextStyle(fontSize: 16.0, color: Colors.white))
+                Text('Remove Photo', style: TextStyle(fontSize: 16.0, color: Colors.white))
               ]),
             ),
           )
         ]);
-  }
-
-  Widget _deleteDialog(BuildContext context) {
-    return Confirm(
-        title: 'Delete Photo',
-        description: 'This photo will be removed from your review and lost forever.',
-        action: 'Delete',
-        onTap: () async {
-          var success = await PostService.deletePhoto(photo.id);
-          if (success) onPhotoDelete(photo.id);
-          Navigator.pop(context);
-          Navigator.pop(context);
-        });
   }
 }

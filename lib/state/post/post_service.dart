@@ -34,7 +34,7 @@ class PostService {
   }
 
   static Future<Post> updateReviewPost(Post post) async {
-    var body = post.postReview.body != null ? '"${post.postReview.body}"' : null;
+    var body = post.postReview.body != null && post.postReview.body.isNotEmpty ? '"${post.postReview.body}"' : null;
     String query = """
       mutation {
         updatePost(
@@ -45,7 +45,7 @@ class PostService {
           serviceScore: ${EnumUtil.format(post.postReview.serviceScore.toString())},
           valueScore: ${EnumUtil.format(post.postReview.valueScore.toString())},
           ambienceScore: ${EnumUtil.format(post.postReview.ambienceScore.toString())},
-          photos: [${post.postPhotos.map((p) => '"$p"').join(", ")}],
+          photos: [${post.postPhotos.map((p) => '"${p.url}"').join(", ")}],
         ) {
           ${Post.attributes}
         }
@@ -58,7 +58,7 @@ class PostService {
   }
 
   static Future<Post> submitReviewPost(Post post) async {
-    var body = post.postReview.body != null ? '"${post.postReview.body}"' : null;
+    var body = post.postReview.body != null && post.postReview.body.isNotEmpty ? '"${post.postReview.body}"' : null;
     String query = """
       mutation {
         addReviewPost(

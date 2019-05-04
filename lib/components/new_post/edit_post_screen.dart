@@ -52,25 +52,27 @@ class _PresenterState extends State<_Presenter> {
   Score serviceScore;
   Score valueScore;
   Score ambienceScore;
-  String reviewBody;
   List<PostPhoto> currentPhotos;
   List<Asset> images = List<Asset>();
   List<Uint8List> imageData = List<Uint8List>();
+  List<PostPhoto> deletePhotosQueue = List<PostPhoto>();
   bool showUploadOverlay = false;
+  TextEditingController bodyCtrl = TextEditingController();
 
   _PresenterState({this.currentPost, this.fetchPostsByStoreId});
 
   @override
   initState() {
     super.initState();
+    var review = currentPost.postReview;
     store = currentPost.store;
-    overallScore = currentPost.postReview.overallScore;
-    tasteScore = currentPost.postReview.tasteScore;
-    serviceScore = currentPost.postReview.serviceScore;
-    valueScore = currentPost.postReview.valueScore;
-    ambienceScore = currentPost.postReview.ambienceScore;
-    reviewBody = currentPost.postReview.body;
-    currentPhotos = currentPost.postPhotos;
+    overallScore = review.overallScore;
+    tasteScore = review.tasteScore;
+    serviceScore = review.serviceScore;
+    valueScore = review.valueScore;
+    ambienceScore = review.ambienceScore;
+    currentPhotos = [...currentPost.postPhotos];
+    if (review.body != null) bodyCtrl = TextEditingController.fromValue(TextEditingValue(text: review.body));
   }
 
   @override
@@ -81,18 +83,20 @@ class _PresenterState extends State<_Presenter> {
         Scaffold(
           body: Builder(
             builder: (context) => CustomScrollView(
-              slivers: <Widget>[
-                _appBar(context),
-                _questions(),
-                if (currentPhotos.isNotEmpty) CurrentPhotos(photos: currentPhotos, onPhotoDelete: removePhoto),
-//      _photoSelector(context),
-                _reviewBody(),
-                _buttons(context),
-              ],
-            ),
+                  slivers: <Widget>[
+                    _appBar(context),
+                    _questions(),
+//                    if (currentPhotos.isNotEmpty) _currentPhotos(),
+                    if (currentPhotos.isNotEmpty) CurrentPhotos(photos: currentPhotos, onPhotoDelete: removePhoto),
+                    _photoSelector(context),
+                    _reviewBody(context),
+                    _buttons(context),
+                  ],
+                ),
           ),
         ),
-        if (showUploadOverlay) UploadOverlay(post: post, fetchPostsByStoreId: fetchPostsByStoreId, images: images),
+        if (showUploadOverlay)
+          UploadOverlay(post: post, fetchPostsByStoreId: fetchPostsByStoreId, images: images, deletePhotosQueue: deletePhotosQueue),
       ],
     );
   }
@@ -153,7 +157,7 @@ class _PresenterState extends State<_Presenter> {
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 15.0),
         child: Container(
-          height: 545.0,
+          height: 555.0,
           child: Column(children: <Widget>[
             _overallQuestion(),
             _tasteQuestion(),
@@ -166,7 +170,20 @@ class _PresenterState extends State<_Presenter> {
     );
   }
 
+  Widget _currentPhotos() {
+    return SliverToBoxAdapter(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Text("Photos", style: TextStyle(fontSize: 18.0)),
+          Container(height: 10.0),
+        ],
+      ),
+    );
+  }
+
   Widget _photoSelector(BuildContext context) {
+    var addPhotosButtonText = currentPhotos.isEmpty ? 'Add Photos' : 'Add More Photos';
     Function(List<Asset>) onSelectImages = (photos) {
       setState(() {
         images = photos;
@@ -174,42 +191,62 @@ class _PresenterState extends State<_Presenter> {
       });
       _loadImages(photos);
     };
-    return SliverToBoxAdapter(
-        child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15.0),
-      child: ListView(children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(top: 20.0, bottom: 30.0),
-          child: PhotoSelector(images: imageData, onSelectImages: onSelectImages),
-        ),
-      ]),
-    ));
+    return SliverPadding(
+      padding: EdgeInsets.only(top: 20.0, right: 15.0, bottom: 30.0, left: 15.0),
+      sliver: SliverToBoxAdapter(
+        child: PhotoSelector(images: imageData, onSelectImages: onSelectImages, addText: addPhotosButtonText),
+      ),
+    );
   }
 
-  Widget _reviewBody() {
-    return SliverToBoxAdapter(
-      child: Container(
-        width: 10.0,
-        padding: EdgeInsets.only(bottom: 30.0, left: 15.0, right: 15.0),
-        child: TextField(
-          onChanged: (text) {
-            setState(() {
-              reviewBody = text;
-            });
-          },
-          keyboardType: TextInputType.multiline,
-          maxLines: null,
-          decoration: InputDecoration(
-            hintText: 'Add your thoughts here',
-            hintStyle: TextStyle(color: Burnt.hintTextColor),
-            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.lightGrey)),
-            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.primaryLight, width: 1.0)),
-          ),
-          textAlign: TextAlign.center,
+  Widget _reviewBody(BuildContext context) {
+    return SliverPadding(
+      padding: EdgeInsets.only(bottom: 30.0),
+      sliver: SliverToBoxAdapter(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              width: 300.0,
+              child: TextField(
+                controller: bodyCtrl,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                decoration: InputDecoration(
+                  hintText: 'Add your thoughts here',
+                  hintStyle: TextStyle(color: Burnt.hintTextColor),
+                  enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.lightGrey)),
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.primaryLight, width: 1.0)),
+                ),
+                textAlign: TextAlign.center,
+              ),
+            )
+          ],
         ),
       ),
     );
   }
+
+//  Widget _reviewBody(BuildContext context) {
+//    var padding = (MediaQuery.of(context).size.width - 300.0) / 2;
+//    return SliverToBoxAdapter(
+//      child: Padding(
+//        padding: EdgeInsets.only(bottom: 30.0, left: padding, right: padding),
+//        child: TextField(
+//          controller: bodyCtrl,
+//          keyboardType: TextInputType.multiline,
+//          maxLines: null,
+//          decoration: InputDecoration(
+//            hintText: 'Add your thoughts here',
+//            hintStyle: TextStyle(color: Burnt.hintTextColor),
+//            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.lightGrey)),
+//            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.primaryLight, width: 1.0)),
+//          ),
+//          textAlign: TextAlign.center,
+//        ),
+//      ),
+//    );
+//  }
 
   Widget _toastQuestion(String question, Function onTap, Score currentScore) {
     return Padding(
@@ -306,7 +343,7 @@ class _PresenterState extends State<_Presenter> {
       snack(context, "Select a toast for how the ambience was");
       return false;
     }
-    if ((reviewBody == null || reviewBody.isEmpty) && images.isEmpty && currentPhotos.isEmpty) {
+    if ((bodyCtrl.text == null || bodyCtrl.text.isEmpty) && images.isEmpty && currentPhotos.isEmpty) {
       snack(context, "Add some photos or add some thoughts");
       return false;
     }
@@ -347,7 +384,7 @@ class _PresenterState extends State<_Presenter> {
       store: store,
       postPhotos: [],
       postReview: PostReview(
-          body: reviewBody,
+          body: bodyCtrl.text,
           overallScore: overallScore,
           tasteScore: tasteScore,
           serviceScore: serviceScore,
@@ -372,12 +409,11 @@ class _PresenterState extends State<_Presenter> {
               onTap: () => Navigator.pop(context),
               child: Container(
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Burnt.primary,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(2.0)
-                ),
+                    border: Border.all(
+                      color: Burnt.primary,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(2.0)),
                 padding: EdgeInsets.symmetric(vertical: 11.0, horizontal: 15.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
@@ -389,7 +425,7 @@ class _PresenterState extends State<_Presenter> {
             ),
             Container(width: 8.0),
             InkWell(
-              onTap: () =>_submit(context),
+              onTap: () => _submit(context),
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
                 decoration: BoxDecoration(
@@ -414,8 +450,9 @@ class _PresenterState extends State<_Presenter> {
     );
   }
 
-  void removePhoto(int id) {
-    currentPhotos.removeWhere((p) => p.id == id);
+  void removePhoto(PostPhoto photo) {
+    currentPhotos.removeWhere((p) => p.id == photo.id);
+    deletePhotosQueue.add(photo);
   }
 
   void _loadImages(List<Asset> photos) async {
