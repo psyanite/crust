@@ -4,6 +4,7 @@ import 'package:crust/presentation/platform_adaptive.dart';
 import 'package:crust/state/app/app_middleware.dart';
 import 'package:crust/state/app/app_reducer.dart';
 import 'package:crust/state/app/app_state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -62,7 +63,33 @@ class Main extends StatelessWidget {
           routes: <String, WidgetBuilder>{
             MainRoutes.splash: (context) => SplashScreen(),
             MainRoutes.root: (context) => MainTabNavigator(),
-          }),
+          },
+          localizationsDelegates: [
+            CustomLocalizationDelegate(),
+          ]),
     );
   }
+}
+
+class CustomLocalizationDelegate extends LocalizationsDelegate<MaterialLocalizations> {
+  const CustomLocalizationDelegate();
+
+  @override
+  bool isSupported(Locale locale) => locale.languageCode == 'en';
+
+  @override
+  Future<MaterialLocalizations> load(Locale locale) => SynchronousFuture<MaterialLocalizations>(const CustomLocalization());
+
+  @override
+  bool shouldReload(CustomLocalizationDelegate old) => false;
+
+  @override
+  String toString() => 'CustomLocalization.delegate(en_US)';
+}
+
+class CustomLocalization extends DefaultMaterialLocalizations {
+  const CustomLocalization();
+
+  @override
+  String get searchFieldLabel => "Search restaurants, cuisines...";
 }

@@ -62,6 +62,7 @@ class PostService {
     String query = """
       mutation {
         addReviewPost(
+          hidden: false,
           storeId: ${post.store.id},
           body: $body,
           overallScore: ${EnumUtil.format(post.postReview.overallScore.toString())},

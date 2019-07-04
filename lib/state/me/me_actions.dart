@@ -1,4 +1,5 @@
 import 'package:crust/models/post.dart';
+import 'package:crust/models/search.dart';
 import 'package:crust/models/user.dart';
 import 'package:crust/models/user_reward.dart';
 
@@ -132,4 +133,16 @@ class AddUserRewardRequest {
   final int rewardId;
 
   AddUserRewardRequest(this.rewardId);
+}
+
+class AddSearchHistoryItem {
+  final SearchHistoryItem item;
+
+  AddSearchHistoryItem(this.item);
+}
+
+class SetMyLocation {
+  final SearchLocationItem location;
+
+  SetMyLocation(this.location);
 }

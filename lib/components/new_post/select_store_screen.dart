@@ -73,11 +73,7 @@ class _PresenterState extends State<_Presenter> {
     return SliverToBoxAdapter(
       child: TextField(
         onChanged: (text) {
-          if (text.trim() != query.trim()) {
-            setState(() {
-              query = text;
-            });
-          }
+          if (text.trim() != query.trim()) setState(() => query = text);
         },
         style: TextStyle(fontSize: 18.0),
         autofocus: true,
@@ -106,7 +102,7 @@ class _PresenterState extends State<_Presenter> {
             if (snapshot.hasError) {
               return SliverCenter(child: Text('Oops! Something went wrong, please try again'));
             } else if (snapshot.data.length == 0) {
-              return SliverCenter(child: Text("No Results Found"));
+              return SliverCenter(child: Text("Oops! We couldn't find anything, maybe try something different?"));
             }
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, i) {

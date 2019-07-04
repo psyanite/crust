@@ -14,14 +14,14 @@ class MyProfileNavigator extends StatelessWidget {
     return StoreConnector<AppState, dynamic>(
         converter: (Store<AppState> store) => store.state.me.user,
         builder: (context, user) => Scaffold(
-              body: new Navigator(
+              body: Navigator(
                 initialRoute: '/',
                 onGenerateRoute: (routeSettings) {
                   switch (routeSettings.name) {
-                    case '/':
-                      return MaterialPageRoute(builder: (_) => user == null ? LoginScreen() : MyProfileScreen());
                     case '/register':
                       return MaterialPageRoute(builder: (_) => RegisterScreen());
+                    default:
+                      return MaterialPageRoute(builder: (_) => user == null ? LoginScreen() : MyProfileScreen());
                   }
                 },
               ),

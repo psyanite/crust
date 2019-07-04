@@ -43,13 +43,21 @@
 </div>
 
 ## To Do
-* Add edit post feature
-* Add delete post feature
+* Pull to refresh
+* Re-test create/edit posts
+* Fetch recommendations
 * Fix new post page to show location of store
-* Add search name in category feature
+* Are you sure you want to quit? https://stackoverflow.com/questions/49356664/how-to-override-the-back-button-in-flutter
+* Implement comments
 * Implement pagination
 
 ## Done
+* Implement search screen
+* Implement search location screen
+* Implement location_search table
+* Implement cuisine_search table
+* Add edit post feature
+* Add delete post feature
 * Validate file size maximum 5000x5000
 * Add keys everywhere
 * Add like post feature

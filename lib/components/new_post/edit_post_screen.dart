@@ -76,6 +76,12 @@ class _PresenterState extends State<_Presenter> {
   }
 
   @override
+  void dispose() {
+    bodyCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Stack(
       fit: StackFit.expand,
@@ -170,17 +176,17 @@ class _PresenterState extends State<_Presenter> {
     );
   }
 
-  Widget _currentPhotos() {
-    return SliverToBoxAdapter(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Text("Photos", style: TextStyle(fontSize: 18.0)),
-          Container(height: 10.0),
-        ],
-      ),
-    );
-  }
+//  Widget _currentPhotos() {
+//    return SliverToBoxAdapter(
+//      child: Column(
+//        crossAxisAlignment: CrossAxisAlignment.center,
+//        children: <Widget>[
+//          Text("Photos", style: TextStyle(fontSize: 18.0)),
+//          Container(height: 10.0),
+//        ],
+//      ),
+//    );
+//  }
 
   Widget _photoSelector(BuildContext context) {
     var addPhotosButtonText = currentPhotos.isEmpty ? 'Add Photos' : 'Add More Photos';

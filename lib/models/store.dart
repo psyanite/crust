@@ -44,6 +44,34 @@ class Store {
         burntCount: this.burntCount);
   }
 
+  Map<String, dynamic> toPersist() {
+    return <String, dynamic>{
+      'id': this.id,
+      'name': this.name,
+      'coverImage': this.coverImage,
+      'location': this.location,
+      'suburb': this.suburb,
+      'cuisines': this.cuisines,
+      'heartCount': this.heartCount,
+      'okayCount': this.okayCount,
+      'burntCount': this.burntCount
+    };
+  }
+
+  factory Store.rehydrate(Map<String, dynamic> json) {
+    return Store(
+      id: json['id'],
+      name: json['name'],
+      coverImage: json['coverImage'],
+      location: json['location'],
+      suburb: json['suburb'],
+      cuisines: List<String>.from(json['cuisines']),
+      heartCount: json['heartCount'],
+      okayCount: json['okayCount'],
+      burntCount: json['burntCount'],
+    );
+  }
+
   factory Store.fromToaster(Map<String, dynamic> json) {
     if (json == null) return null;
     return Store(

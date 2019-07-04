@@ -50,7 +50,7 @@ class _Presenter extends StatelessWidget {
   Widget build(BuildContext context) {
     FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
     FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
-    return CustomScrollView(slivers: <Widget>[_appBar(), _content()]);
+    return Scaffold(body: CustomScrollView(slivers: <Widget>[_appBar(), _content()]));
   }
 
   Widget _appBar() {
@@ -63,7 +63,11 @@ class _Presenter extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[Text('BURNTOAST', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)), SearchIcon()],
+          children: <Widget>[
+//            Text('BURNTOAST', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
+            Text('Burntoast', style: TextStyle(color: Burnt.primary, fontSize: 44.0, fontFamily: Burnt.fontFancy, fontWeight: Burnt.fontLight, letterSpacing: 0.0)),
+            SearchIcon()
+          ],
         ),
       )),
     );

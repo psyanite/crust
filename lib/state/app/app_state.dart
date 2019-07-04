@@ -14,13 +14,14 @@ class AppState {
   final ErrorState error;
 
   AppState({MeState me, StoreState store, UserState user, RewardState reward, ErrorState error})
-      : me = me ?? MeState(),
+      : me = me ?? MeState.initialState(),
         store = store ?? StoreState.initialState(),
         user = user ?? UserState(),
         reward = reward ?? RewardState(),
         error = error ?? ErrorState();
 
   static AppState rehydrate(dynamic json) {
+    if (json == null) return AppState();
     try {
       return AppState(
         me: json['me'] != null ? MeState.rehydrate(json['me']) : null
