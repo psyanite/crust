@@ -32,6 +32,7 @@ class CrustCons {
   static const IconData search = const IconData(0xe805, fontFamily: _kFontFam);
   static const IconData star = const IconData(0xe806, fontFamily: _kFontFam);
   static const IconData triple_dot = const IconData(0xe807, fontFamily: _kFontFam);
+  static const IconData padlock = const IconData(0xe808, fontFamily: _kFontFam);
   static const IconData bread_heart = const IconData(0xe809, fontFamily: _kFontFam);
   static const IconData bubble_heart = const IconData(0xe80a, fontFamily: _kFontFam);
   static const IconData camera = const IconData(0xe80b, fontFamily: _kFontFam);

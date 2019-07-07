@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:crust/components/dialog.dart';
 import 'package:crust/components/new_post/photo_selector.dart';
 import 'package:crust/components/new_post/upload_overlay.dart';
 import 'package:crust/models/post.dart';
@@ -52,6 +53,7 @@ class _PresenterState extends State<_Presenter> {
   Score serviceScore;
   Score valueScore;
   Score ambienceScore;
+  bool makeSecret;
   List<PostPhoto> currentPhotos;
   List<Asset> images = List<Asset>();
   List<Uint8List> imageData = List<Uint8List>();
@@ -71,6 +73,7 @@ class _PresenterState extends State<_Presenter> {
     serviceScore = review.serviceScore;
     valueScore = review.valueScore;
     ambienceScore = review.ambienceScore;
+    makeSecret = currentPost.hidden;
     currentPhotos = [...currentPost.postPhotos];
     if (review.body != null) bodyCtrl = TextEditingController.fromValue(TextEditingValue(text: review.body));
   }
@@ -92,10 +95,10 @@ class _PresenterState extends State<_Presenter> {
                   slivers: <Widget>[
                     _appBar(context),
                     _questions(),
-//                    if (currentPhotos.isNotEmpty) _currentPhotos(),
                     if (currentPhotos.isNotEmpty) CurrentPhotos(photos: currentPhotos, onPhotoDelete: removePhoto),
                     _photoSelector(context),
                     _reviewBody(context),
+                    _secretSwitch(context),
                     _buttons(context),
                   ],
                 ),
@@ -176,18 +179,6 @@ class _PresenterState extends State<_Presenter> {
     );
   }
 
-//  Widget _currentPhotos() {
-//    return SliverToBoxAdapter(
-//      child: Column(
-//        crossAxisAlignment: CrossAxisAlignment.center,
-//        children: <Widget>[
-//          Text("Photos", style: TextStyle(fontSize: 18.0)),
-//          Container(height: 10.0),
-//        ],
-//      ),
-//    );
-//  }
-
   Widget _photoSelector(BuildContext context) {
     var addPhotosButtonText = currentPhotos.isEmpty ? 'Add Photos' : 'Add More Photos';
     Function(List<Asset>) onSelectImages = (photos) {
@@ -233,26 +224,41 @@ class _PresenterState extends State<_Presenter> {
     );
   }
 
-//  Widget _reviewBody(BuildContext context) {
-//    var padding = (MediaQuery.of(context).size.width - 300.0) / 2;
-//    return SliverToBoxAdapter(
-//      child: Padding(
-//        padding: EdgeInsets.only(bottom: 30.0, left: padding, right: padding),
-//        child: TextField(
-//          controller: bodyCtrl,
-//          keyboardType: TextInputType.multiline,
-//          maxLines: null,
-//          decoration: InputDecoration(
-//            hintText: 'Add your thoughts here',
-//            hintStyle: TextStyle(color: Burnt.hintTextColor),
-//            enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.lightGrey)),
-//            focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.primaryLight, width: 1.0)),
-//          ),
-//          textAlign: TextAlign.center,
-//        ),
-//      ),
-//    );
-//  }
+  Widget _secretSwitch(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Container(
+        padding: EdgeInsets.only(bottom: 30.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(makeSecret ? 'Keep Secret' : 'Make Public'),
+                IconButton(icon: Icon(Icons.help_outline, color: Burnt.lightGrey), onPressed: () => _showSecretDialog(context)),
+                CupertinoSwitch(
+                  value: !makeSecret,
+                  activeColor: Color(0xFF64D2FF),
+                  onChanged: (bool value) {
+                    setState(() => makeSecret = !value);
+                  },
+                )
+              ],
+            ),
+          ],
+        )
+      ),
+    );
+  }
+
+  _showSecretDialog(BuildContext context) {
+    var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
+    showDialog(
+      context: context,
+      builder: (context) => BurntDialog(
+        options: options,
+        description: 'Posting publically will allow anyone on Burntoast to see your review on the store page and your profile page.\n\nPosting secretly will only allow you to see your own review on your own profile page.'));
+  }
 
   Widget _toastQuestion(String question, Function onTap, Score currentScore) {
     return Padding(
@@ -330,7 +336,7 @@ class _PresenterState extends State<_Presenter> {
 
   bool _isValid(BuildContext context) {
     if (overallScore == null) {
-      snack(context, "Select a toast for how it was all over");
+      snack(context, "Select a toast for how it was overall");
       return false;
     }
     if (tasteScore == null) {
@@ -387,6 +393,7 @@ class _PresenterState extends State<_Presenter> {
     var newPost = Post(
       id: currentPost.id,
       type: PostType.review,
+      hidden: makeSecret,
       store: store,
       postPhotos: [],
       postReview: PostReview(

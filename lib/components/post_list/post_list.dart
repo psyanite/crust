@@ -106,9 +106,11 @@ class _PostCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var children = <Widget>[_header()];
+    children.add(_content());
     return Container(
         decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))),
-        child: Column(children: <Widget>[_header(), _content()]));
+        child: Column(children: children));
   }
 
   Widget _header() {
@@ -180,7 +182,29 @@ class _PostCard extends StatelessWidget {
   }
 
   List<Widget> _stuff() {
-    return <Widget>[PostLikeButton(postId: post.id), _MoreButton(post: post, removeFromList: removeFromList, index: index)];
+    var stuff = <Widget>[PostLikeButton(postId: post.id)];
+    if (post.hidden == true) stuff.add(_secretIcon());
+    stuff.add(_MoreButton(post: post, removeFromList: removeFromList, index: index));
+    return stuff;
+  }
+
+  Widget _secretIcon() {
+    return Builder(
+      builder: (context) => InkWell(
+        child: Padding(
+          padding: EdgeInsets.only(left: 10.0, right: 5.0),
+          child: Icon(CrustCons.padlock, color: Burnt.lightGrey, size: 28.0),
+        ),
+        onTap: () {
+          var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
+          showDialog(
+            context: context,
+            builder: (context) => BurntDialog(
+              options: options,
+              description: 'This post is secret, only you can see it. You can make it public by editing the post.'));
+        },
+      ),
+    );
   }
 
   Widget _textEnd() {
@@ -245,12 +269,12 @@ class _MoreButtonPresenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-        padding: EdgeInsets.all(0.0),
-        icon: Icon(CrustCons.triple_dot),
-        color: Burnt.lightGrey,
-        iconSize: 15.0,
-        onPressed: () => _showMoreDialog(context));
+    return InkWell(
+        child: Padding(
+          padding: EdgeInsets.only(left: 5.0),
+          child: Icon(CrustCons.triple_dot, size: 15.0, color: Burnt.lightGrey),
+        ),
+        onTap: () => _showMoreDialog(context));
   }
 
   _showMoreDialog(BuildContext context) {

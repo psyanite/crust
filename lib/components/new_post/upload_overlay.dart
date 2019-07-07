@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:crust/components/my_profile/my_profile_screen.dart';
 import 'package:crust/components/screens/store_screen.dart';
 import 'package:crust/main.dart';
 import 'package:crust/models/post.dart';
@@ -83,14 +84,18 @@ class UploadOverlayState extends State<UploadOverlay> {
     var result = await (post.id == null ? PostService.submitReviewPost(update) : PostService.updateReviewPost(update));
     if (result == null) {
       setState(() {
-        error = "Oops! Something went wrong, please try again";
+        error = "Oops! Something went wrong, please try again.";
       });
       return false;
     }
     fetchPostsByStoreId(post.store.id);
     deletePhotosQueue.forEach((p) => PostService.deletePhoto(p.id));
     Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
-    Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: post.store.id)));
+    if (post.hidden) {
+      Navigator.push(context, MaterialPageRoute(builder: (_) => MyProfileScreen()));
+    } else {
+      Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: post.store.id)));
+    }
     return true;
   }
 

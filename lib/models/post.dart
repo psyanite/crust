@@ -5,18 +5,20 @@ import 'package:crust/utils/enum_util.dart';
 class Post {
   final int id;
   final PostType type;
+  final bool hidden;
   final Store store;
   final User postedBy;
   final DateTime postedAt;
   final List<PostPhoto> postPhotos;
   final PostReview postReview;
 
-  Post({this.id, this.type, this.store, this.postedBy, this.postedAt, this.postPhotos, this.postReview});
+  Post({this.id, this.type, this.hidden, this.store, this.postedBy, this.postedAt, this.postPhotos, this.postReview});
 
   Post copyWith({List<PostPhoto> postPhotos}) {
     return Post(
       id: this.id,
       type: this.type,
+      hidden: this.hidden,
       store: this.store,
       postedBy: this.postedBy,
       postedAt: this.postedAt,
@@ -33,6 +35,7 @@ class Post {
     return Post(
         id: post['id'],
         type: EnumUtil.fromString(PostType.values, post['type']),
+        hidden: post['hidden'],
         store: Store.fromToaster(post['store']),
         postedBy: User(
           id: postedBy['id'],
@@ -60,6 +63,7 @@ class Post {
   static const attributes = """
     id,
     type,
+    hidden,
     store {
       id,
       name,

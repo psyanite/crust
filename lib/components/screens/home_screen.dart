@@ -6,6 +6,7 @@ import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
+import 'package:crust/state/reward/reward_actions.dart';
 import 'package:crust/state/store/store_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,8 @@ class HomeScreen extends StatelessWidget {
         onInit: (Store<AppState> store) {
           store.dispatch(FetchStoresRequest());
           store.dispatch(FetchFavoritesRequest());
+          if (store.state.me.user != null) store.dispatch(FetchMyPostsRequest(store.state.me.user.id));
+          store.dispatch(FetchRewardsRequested());
         },
         converter: (Store<AppState> store) => _Props.fromStore(store),
         builder: (BuildContext context, _Props props) => _Presenter(

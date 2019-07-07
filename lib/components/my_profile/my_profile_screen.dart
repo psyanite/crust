@@ -41,7 +41,7 @@ class _PresenterState extends State<_Presenter> {
           posts: widget.user.posts,
           postListType: PostListType.forProfile)
     ]);
-    return RefreshIndicator(onRefresh: _refresh, child: body);
+    return Scaffold(body: RefreshIndicator(onRefresh: _refresh, child: body));
   }
 
   Future<void> _refresh() async {

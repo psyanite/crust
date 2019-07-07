@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:crust/components/dialog.dart';
 import 'package:crust/components/new_post/photo_selector.dart';
 import 'package:crust/components/new_post/upload_overlay.dart';
 import 'package:crust/models/post.dart';
@@ -56,6 +57,7 @@ class _PresenterState extends State<_Presenter> {
   Score valueScore;
   Score ambienceScore;
   String reviewBody;
+  bool makeSecret = false;
   List<Asset> images = List<Asset>();
   List<Uint8List> imageData = List<Uint8List>();
   bool showOverlay = false;
@@ -152,26 +154,8 @@ class _PresenterState extends State<_Presenter> {
                     padding: EdgeInsets.only(top: 20.0, bottom: 30.0),
                     child: PhotoSelector(images: imageData, onSelectImages: onSelectImages),
                   ),
-                  Container(
-                    width: 300.0,
-                    padding: EdgeInsets.only(bottom: 30.0),
-                    child: TextField(
-                      onChanged: (text) {
-                        setState(() {
-                          reviewBody = text;
-                        });
-                      },
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      decoration: InputDecoration(
-                        hintText: 'Add your thoughts here',
-                        hintStyle: TextStyle(color: Burnt.hintTextColor),
-                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.lightGrey)),
-                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.primaryLight, width: 1.0)),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                  _reviewBody(),
+                  _secretSwitch(context),
                 ]),
               ),
               _buttons(context),
@@ -258,9 +242,61 @@ class _PresenterState extends State<_Presenter> {
         highlightColor: Colors.transparent);
   }
 
+  Widget _reviewBody() {
+    return Container(
+      width: 300.0,
+      padding: EdgeInsets.only(bottom: 30.0),
+      child: TextField(
+        onChanged: (text) {
+          setState(() {
+            reviewBody = text;
+          });
+        },
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
+        decoration: InputDecoration(
+          hintText: 'Add your thoughts here',
+          hintStyle: TextStyle(color: Burnt.hintTextColor),
+          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.lightGrey)),
+          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.primaryLight, width: 1.0)),
+        ),
+        textAlign: TextAlign.center,
+      ),
+    );
+  }
+
+  Widget _secretSwitch(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(bottom: 30.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text(makeSecret ? 'Keep Secret' : 'Make Public'),
+          IconButton(icon: Icon(Icons.help_outline, color: Burnt.lightGrey), onPressed: () => _showSecretDialog(context)),
+          CupertinoSwitch(
+            value: !makeSecret,
+            activeColor: Color(0xFF64D2FF),
+            onChanged: (bool value) {
+              setState(() => makeSecret = !value);
+            },
+          )
+        ],
+      )
+    );
+  }
+
+  _showSecretDialog(BuildContext context) {
+    var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
+    showDialog(
+        context: context,
+        builder: (context) => BurntDialog(
+            options: options,
+            description: 'Posting publically will allow anyone on Burntoast to see your review on the store page and your profile page.\n\nPosting secretly will only allow you to see your own review on your own profile page.'));
+  }
+
   bool _isValid(BuildContext context) {
     if (overallScore == null) {
-      snack(context, "Select a toast for how it was all over");
+      snack(context, "Select a toast for how it was overall");
       return false;
     }
     if (tasteScore == null) {
@@ -316,6 +352,7 @@ class _PresenterState extends State<_Presenter> {
 
     var newPost = Post(
       type: PostType.review,
+      hidden: makeSecret,
       store: store,
       postPhotos: [],
       postReview: PostReview(
@@ -386,11 +423,11 @@ class _PresenterState extends State<_Presenter> {
             onTap: () => Navigator.pop(context),
             child: Container(
               decoration: BoxDecoration(
-                border: Border.all(
-                  color: Burnt.primary,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(2.0)),
+                  border: Border.all(
+                    color: Burnt.primary,
+                    width: 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(2.0)),
               padding: EdgeInsets.symmetric(vertical: 11.0, horizontal: 15.0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
@@ -406,13 +443,13 @@ class _PresenterState extends State<_Presenter> {
             child: Container(
               padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(2.0),
-                gradient: LinearGradient(
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                  stops: [0, 0.6, 1.0],
-                  colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-                )),
+                  borderRadius: BorderRadius.circular(2.0),
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight,
+                    stops: [0, 0.6, 1.0],
+                    colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
+                  )),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -49,7 +49,7 @@ Middleware<AppState> _addUser(MeService service) {
 
 Middleware<AppState> _fetchMyPosts(PostService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
-    service.fetchPostsByUserId(action.userId).then(
+    service.fetchMyPosts(action.userId).then(
       (posts) {
         store.dispatch(FetchMyPostsSuccess(posts));
       },

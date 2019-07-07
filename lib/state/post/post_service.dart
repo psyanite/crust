@@ -39,6 +39,7 @@ class PostService {
       mutation {
         updatePost(
           id: ${post.id},
+          hidden: ${post.hidden},
           body: $body,
           overallScore: ${EnumUtil.format(post.postReview.overallScore.toString())},
           tasteScore: ${EnumUtil.format(post.postReview.tasteScore.toString())},
@@ -62,7 +63,7 @@ class PostService {
     String query = """
       mutation {
         addReviewPost(
-          hidden: false,
+          hidden: ${post.hidden},
           storeId: ${post.store.id},
           body: $body,
           overallScore: ${EnumUtil.format(post.postReview.overallScore.toString())},
@@ -86,7 +87,21 @@ class PostService {
   Future<List<Post>> fetchPostsByUserId(int userId) async {
     String query = """
     query {
-      postsByUserId(userId: $userId) {
+      postsByUserId(userId: $userId, showHiddenPosts: false) {
+        ${Post.attributes}
+      }
+    }
+  """;
+    final response = await Toaster.get(query);
+    if (response == null) return null;
+    var json = response['postsByUserId'];
+    return (json as List).map((p) => Post.fromToaster(p)).toList();
+  }
+
+  Future<List<Post>> fetchMyPosts(int userId) async {
+    String query = """
+    query {
+      postsByUserId(userId: $userId, showHiddenPosts: true) {
         ${Post.attributes}
       }
     }
