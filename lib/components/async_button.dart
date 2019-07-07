@@ -52,8 +52,7 @@ class _AsyncButtonState extends State<AsyncButton> {
           valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
         ),
       );
-    }
-    else {
+    } else {
       return Text(text, style: TextStyle(fontSize: 20.0, color: Colors.white, letterSpacing: 3.0));
     }
   }

@@ -138,7 +138,7 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _footer() {
-    return userReward?.isRedeemed == true ? Text('You\'ve already redeemed this reward!') : _redeemContent();
+    return userReward?.isRedeemed() == true ? Text('You\'ve already redeemed this reward!') : _redeemContent();
   }
 
   Widget _redeemContent() {

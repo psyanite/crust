@@ -41,7 +41,11 @@ class QrScreen extends StatelessWidget {
       Text(userReward.uniqueCode, style: TextStyle(fontSize: 30.0, fontWeight: Burnt.fontBold)),
       Padding(
         padding: EdgeInsets.only(top: 5.0),
-        child: Text('Simply show this code at the counter'),
+        child: Text('Simply show this code at the counter.'),
+      ),
+      Padding(
+        padding: EdgeInsets.only(top: 5.0),
+        child: Text('Enjoy!'),
       )
     ]));
   }

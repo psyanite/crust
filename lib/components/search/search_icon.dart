@@ -17,7 +17,6 @@ class _SearchIconState extends State<SearchIcon> {
   Widget build(BuildContext context) {
     return IconButton(
         icon: Icon(CrustCons.search, color: Burnt.lightGrey, size: 18.0),
-        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SearchScreen()))
-    );
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SearchScreen())));
   }
 }
