@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/screens/settings_screen.dart';
 import 'package:crust/models/user.dart';
@@ -15,22 +17,35 @@ class MyProfileScreen extends StatelessWidget {
     return StoreConnector<AppState, dynamic>(
         onInit: (Store<AppState> store) => store.dispatch(FetchMyPostsRequest(store.state.me.user.id)),
         converter: _Props.fromStore,
-        builder: (context, props) => _Presenter(user: props.user));
+        builder: (context, props) => _Presenter(user: props.user, refreshPage: props.refreshPage));
   }
 }
 
-class _Presenter extends StatelessWidget {
+class _Presenter extends StatefulWidget {
   final User user;
+  final Function refreshPage;
 
-  _Presenter({Key key, this.user}) : super(key: key);
+  _Presenter({Key key, this.user, this.refreshPage}) : super(key: key);
 
   @override
+  _PresenterState createState() => _PresenterState();
+}
+
+class _PresenterState extends State<_Presenter> {
+  @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: <Widget>[
+    var body = CustomScrollView(slivers: <Widget>[
       _appBar(),
       PostList(
-          noPostsView: Text('Your posts are displayed here, start posting now!'), posts: user.posts, postListType: PostListType.forProfile)
+          noPostsView: Text('Your posts are displayed here, start posting now!'),
+          posts: widget.user.posts,
+          postListType: PostListType.forProfile)
     ]);
+    return RefreshIndicator(onRefresh: _refresh, child: body);
+  }
+
+  Future<void> _refresh() async {
+    await widget.refreshPage();
   }
 
   Widget _appBar() {
@@ -45,7 +60,7 @@ class _Presenter extends StatelessWidget {
             height: 100.0,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(user.profilePicture),
+                image: NetworkImage(widget.user.profilePicture),
                 fit: BoxFit.cover,
               ),
             )),
@@ -81,14 +96,14 @@ class _Presenter extends StatelessWidget {
                     color: Colors.white,
                     width: 4.0,
                   ),
-                  image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(user.profilePicture)))),
+                  image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(widget.user.profilePicture)))),
           Padding(
             padding: EdgeInsets.only(left: 8.0, top: 12.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(user.displayName, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
-                Text("@${user.username}")
+                Text(widget.user.displayName, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
+                Text("@${widget.user.username}")
               ],
             ),
           )
@@ -100,10 +115,11 @@ class _Presenter extends StatelessWidget {
 
 class _Props {
   final User user;
+  final Function refreshPage;
 
-  _Props({this.user});
+  _Props({this.user, this.refreshPage});
 
   static fromStore(Store<AppState> store) {
-    return _Props(user: store.state.me.user);
+    return _Props(user: store.state.me.user, refreshPage: () => store.dispatch(FetchMyPostsRequest(store.state.me.user.id)));
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/screens/loading_screen.dart';
 import 'package:crust/components/screens/settings_screen.dart';
@@ -24,31 +26,43 @@ class ProfileScreen extends StatelessWidget {
             return store.dispatch(FetchUserByUserIdRequest(userId));
         },
         converter: (Store<AppState> store) => _Props.fromStore(store, userId),
-        builder: (context, props) => _Presenter(user: props.user));
+        builder: (context, props) => _Presenter(user: props.user, refreshPage: props.refreshPage));
   }
 }
 
-class _Presenter extends StatelessWidget {
+class _Presenter extends StatefulWidget {
   final User user;
+  final Function refreshPage;
 
-  _Presenter({Key key, this.user}) : super(key: key);
+  _Presenter({Key key, this.user, this.refreshPage}) : super(key: key);
 
   @override
+  _PresenterState createState() => _PresenterState();
+}
+
+class _PresenterState extends State<_Presenter> {
+  @override
   Widget build(BuildContext context) {
+    var user = widget.user;
     if (user == null) {
       return LoadingScreen();
     }
-    return Scaffold(
-        body: CustomScrollView(slivers: <Widget>[
+    var body = CustomScrollView(slivers: <Widget>[
       _appBar(),
       PostList(
           noPostsView: Text('Looks like ${user.firstName} hasn\'t posted anything yet.'),
           posts: user.posts,
           postListType: PostListType.forProfile)
-    ]));
+    ]);
+    return Scaffold(body: RefreshIndicator(onRefresh: _refresh, child: body));
+  }
+
+  Future<void> _refresh() async {
+    await widget.refreshPage();
   }
 
   Widget _appBar() {
+    var user = widget.user;
     return SliverToBoxAdapter(
         child: Container(
             child: Stack(children: <Widget>[
@@ -114,10 +128,15 @@ class _Presenter extends StatelessWidget {
 
 class _Props {
   final User user;
+  final Function refreshPage;
 
-  _Props({this.user});
+  _Props({this.user, this.refreshPage});
 
   static fromStore(Store<AppState> store, int userId) {
-    return _Props(user: store.state.user.users == null ? null : store.state.user.users[userId]);
+    if (store.state.user.users == null) {
+      return _Props(user: null, refreshPage: null);
+    }
+
+    return _Props(user: store.state.user.users[userId], refreshPage: () => store.dispatch(FetchUserByUserIdRequest(userId)));
   }
 }
