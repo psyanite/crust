@@ -73,6 +73,7 @@ MeState addSearchHistoryItem(MeState state, AddSearchHistoryItem action) {
     history.removeWhere((i) => i.store != null && i.store.name == item.store.name);
   }
   history.insert(0, action.item);
+  if (history.length > 15) history = history.sublist(0, 15);
   return state.copyWith(searchHistory: history);
 }
 

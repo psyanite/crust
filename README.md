@@ -43,8 +43,8 @@
 </div>
 
 ## To Do
-* Pull to refresh
 * Re-test create/edit posts
+* Add write a review button from store screen
 * Fetch recommendations
 * Fix new post page to show location of store
 * Are you sure you want to quit? https://stackoverflow.com/questions/49356664/how-to-override-the-back-button-in-flutter
@@ -52,6 +52,9 @@
 * Implement pagination
 
 ## Done
+* Implement pull to refresh on store screen
+* Implement pull to refresh on my profile screen
+* Implement pull to refresh on profile screen
 * Implement search screen
 * Implement search location screen
 * Implement location_search table
