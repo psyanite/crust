@@ -27,7 +27,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
   }
 
   @override
-  void dispose() {
+  dispose() {
     queryCtrl.dispose();
     super.dispose();
   }

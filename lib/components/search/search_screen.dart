@@ -54,7 +54,7 @@ class _PresenterState extends State<_Presenter> {
   }
 
   @override
-  void dispose() {
+  dispose() {
     queryCtrl.dispose();
     super.dispose();
   }
@@ -70,7 +70,7 @@ class _PresenterState extends State<_Presenter> {
     return Scaffold(body: CustomScrollView(slivers: slivers));
   }
 
-  void selectLocation(SearchLocationItem newLocation) {
+  selectLocation(SearchLocationItem newLocation) {
     this.setState(() => location = newLocation);
     widget.setMyLocation(newLocation);
   }

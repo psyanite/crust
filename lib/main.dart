@@ -13,7 +13,7 @@ import 'package:redux_persist/redux_persist.dart';
 import 'package:redux_persist_flutter/redux_persist_flutter.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
-void main() async {
+main() async {
   final persistor = Persistor<AppState>(storage: FlutterStorage(), serializer: JsonSerializer<AppState>(AppState.rehydrate));
 
   var initialState;

@@ -43,11 +43,13 @@
 </div>
 
 ## To Do
-* Re-test create/edit posts
+* Update upload to have secret/public option
+* Create endpoint that fetches public posts of a given store
+* Update store screen to call new endpoint
+* Fetch hidden and public posts for me
+* Mark hidden posts on my profile
 * Add write a review button from store screen
 * Fetch recommendations
-* Fix new post page to show location of store
-* Are you sure you want to quit? https://stackoverflow.com/questions/49356664/how-to-override-the-back-button-in-flutter
 * Implement comments
 * Implement pagination
 

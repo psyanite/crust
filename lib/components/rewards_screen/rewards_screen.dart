@@ -76,7 +76,7 @@ class RewardsScreenState extends State<RewardsScreen> {
         layout: currentLayout);
   }
 
-  void _toggleLayout() {
+  _toggleLayout() {
     setState(() {
       if (currentLayout == 'card') {
         currentLayout = 'list';

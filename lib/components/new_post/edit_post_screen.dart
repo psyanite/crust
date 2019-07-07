@@ -76,7 +76,7 @@ class _PresenterState extends State<_Presenter> {
   }
 
   @override
-  void dispose() {
+  dispose() {
     bodyCtrl.dispose();
     super.dispose();
   }
@@ -456,12 +456,12 @@ class _PresenterState extends State<_Presenter> {
     );
   }
 
-  void removePhoto(PostPhoto photo) {
+  removePhoto(PostPhoto photo) {
     currentPhotos.removeWhere((p) => p.id == photo.id);
     deletePhotosQueue.add(photo);
   }
 
-  void _loadImages(List<Asset> photos) async {
+  _loadImages(List<Asset> photos) async {
     images.asMap().forEach((i, image) async {
       await image.requestOriginal(quality: 80);
       imageData[i] = image.imageData.buffer.asUint8List();

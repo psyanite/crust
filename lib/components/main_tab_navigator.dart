@@ -14,7 +14,7 @@ class MainTabNavigator extends StatefulWidget {
 }
 
 class MainTabNavigatorState extends State<MainTabNavigator> {
-  PageController _tabController = PageController();
+  PageController _pageCtrl = PageController();
   int _currentIndex = 0;
   Map<TabType, Tab> _tabs = {
     TabType.home: Tab(widget: HomeScreen(), icon: CrustCons.bread_heart),
@@ -26,21 +26,35 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: PageView(controller: _tabController, onPageChanged: _onPageChanged, children: _tabs.values.map((t) => t.widget).toList()),
-      bottomNavigationBar: Card(
-          margin: const EdgeInsets.all(0.0),
-          elevation: 24.0,
-          child: CupertinoTabBar(
-            border: null,
-            backgroundColor: Burnt.paper,
-            activeColor: Burnt.primary,
-            inactiveColor: Burnt.lightGrey,
-            currentIndex: _currentIndex,
-            onTap: _onTap,
-            items: _tabs.values.map((t) => new BottomNavigationBarItem(icon: Icon(t.icon))).toList(),
-          )),
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        body: PageView(controller: _pageCtrl, onPageChanged: _onPageChanged, children: _tabs.values.map((t) => t.widget).toList()),
+        bottomNavigationBar: Card(
+            margin: const EdgeInsets.all(0.0),
+            elevation: 24.0,
+            child: CupertinoTabBar(
+              border: null,
+              backgroundColor: Burnt.paper,
+              activeColor: Burnt.primary,
+              inactiveColor: Burnt.lightGrey,
+              currentIndex: _currentIndex,
+              onTap: _onTap,
+              items: _tabs.values.map((t) => new BottomNavigationBarItem(icon: Icon(t.icon))).toList(),
+            )),
+      ),
     );
+  }
+
+  Future<bool> _onWillPop() {
+    if (_pageCtrl.page.round() == _pageCtrl.initialPage) {
+      return Future(() => true);
+    } else {
+      return _pageCtrl.previousPage(
+        duration: Duration(milliseconds: 200),
+        curve: Curves.linear,
+      );
+    }
   }
 
   _onPageChanged(int index) {
@@ -50,7 +64,7 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
   }
 
   _onTap(int index) {
-    _tabController.jumpToPage(index);
+    _pageCtrl.jumpToPage(index);
   }
 }
 

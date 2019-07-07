@@ -43,7 +43,7 @@ class _PresenterState extends State<_Presenter> {
   TextEditingController queryCtrl = TextEditingController();
 
   @override
-  void dispose() {
+  dispose() {
     queryCtrl.dispose();
     super.dispose();
   }
@@ -107,7 +107,7 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _suggestions() {
     var filtered = [...widget.searchHistory].where((i) => i.store != null);
-    var children = filtered.map<Widget>((i) => _SuggestCard(storeId: i.store.id)).toList();
+    var children = filtered.map<Widget>((i) => _SuggestCard(storeId: i.store.id, addSearchHistoryItem: widget.addSearchHistoryItem)).toList();
     return SliverToBoxAdapter(child: Column(children: children));
   }
 

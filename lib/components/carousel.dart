@@ -25,7 +25,7 @@ class _CarouselState extends State<Carousel> {
   PageController _controller = PageController();
 
   @override
-  void dispose() {
+  dispose() {
     _controller.dispose();
     _controller = null;
     super.dispose();

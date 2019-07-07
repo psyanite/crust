@@ -67,7 +67,7 @@ class _PostListState extends State<_PostList> {
   _PostListState({this.noPostsView, this.posts, this.postListType});
 
   @override
-  void didUpdateWidget(_PostList old) {
+  didUpdateWidget(_PostList old) {
     if (old.posts != widget.posts) {
       super.didUpdateWidget(old);
       this.setState(() => posts = widget.posts);
