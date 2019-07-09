@@ -43,13 +43,13 @@
 </div>
 
 ## To Do
-* Update store screen for multiple same user posts
 * Implement comments
 * Add write a review button from store screen
 * Fetch recommendations
 * Implement pagination
 
 ## Done
+* Update store screen for multiple same user posts
 * Mark hidden posts on my profile
 * Fetch hidden and public posts for me
 * Update new post form to have secret/public option

@@ -42,7 +42,7 @@ class StoreService {
   Future<List<Post>> fetchPostsByStoreId(int storeId) async {
     String query = """
       query {
-        postsByStoreId(storeId: $storeId, showHiddenPosts: false) {
+        postsByStoreId(storeId: $storeId) {
           ${Post.attributes}
         }
       }
