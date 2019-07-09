@@ -72,7 +72,7 @@ class PostService {
           valueScore: ${EnumUtil.format(post.postReview.valueScore.toString())},
           ambienceScore: ${EnumUtil.format(post.postReview.ambienceScore.toString())},
           photos: [${post.postPhotos.map((p) => '"${p.url}"').join(", ")}],
-          postedById: ${post.postedBy.id}
+          postedBy: ${post.postedBy.id}
         ) {
           ${Post.attributes}
         }
