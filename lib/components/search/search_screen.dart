@@ -42,20 +42,20 @@ class _Presenter extends StatefulWidget {
 }
 
 class _PresenterState extends State<_Presenter> {
-  String query = '';
-  SearchLocationItem location;
-  bool submit = false;
-  TextEditingController queryCtrl = TextEditingController();
+  String _query = '';
+  SearchLocationItem _location;
+  bool _submit = false;
+  TextEditingController _queryCtrl = TextEditingController();
 
   @override
   initState() {
     super.initState();
-    location = widget.location;
+    _location = widget.location;
   }
 
   @override
   dispose() {
-    queryCtrl.dispose();
+    _queryCtrl.dispose();
     super.dispose();
   }
 
@@ -65,13 +65,13 @@ class _PresenterState extends State<_Presenter> {
       _appBar(),
       _locationBar(),
       _searchBar(),
-      submit ? _searchResults(context) : _suggestions(),
+      _submit ? _searchResults(context) : _suggestions(),
     ];
     return Scaffold(body: CustomScrollView(slivers: slivers));
   }
 
   selectLocation(SearchLocationItem newLocation) {
-    this.setState(() => location = newLocation);
+    this.setState(() => _location = newLocation);
     widget.setMyLocation(newLocation);
   }
 
@@ -106,7 +106,7 @@ class _PresenterState extends State<_Presenter> {
     return SliverToBoxAdapter(
         child: InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => SelectLocationScreen(current: location, selectLocation: selectLocation)));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => SelectLocationScreen(current: _location, selectLocation: selectLocation)));
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +118,7 @@ class _PresenterState extends State<_Presenter> {
               Container(width: 14.0),
               Icon(CrustCons.location_bold, color: Burnt.lightGrey, size: 22.0),
               Container(width: 12.0),
-              Text("${location.name}, ${location.description}", style: TextStyle(fontSize: 18.0)),
+              Text("${_location.name}, ${_location.description}", style: TextStyle(fontSize: 18.0)),
             ],
           ),
         ],
@@ -129,11 +129,11 @@ class _PresenterState extends State<_Presenter> {
   Widget _searchBar() {
     return SliverToBoxAdapter(
       child: TextField(
-        controller: queryCtrl,
+        controller: _queryCtrl,
         onChanged: (text) {
-          if (text.trim() != query.trim()) setState(() => query = text);
+          if (text.trim() != _query.trim()) setState(() => _query = text);
         },
-        onSubmitted: (text) => this.setState(() => submit = true),
+        onSubmitted: (text) => this.setState(() => _submit = true),
         style: TextStyle(fontSize: 18.0),
         autofocus: true,
         decoration: InputDecoration(
@@ -142,10 +142,10 @@ class _PresenterState extends State<_Presenter> {
           suffixIcon: IconButton(
               icon: Icon(Icons.clear),
               onPressed: () {
-                queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
+                _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
                 this.setState(() {
-                  submit = false;
-                  query = '';
+                  _submit = false;
+                  _query = '';
                 });
               }),
           border: InputBorder.none,
@@ -156,11 +156,11 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _suggestions() {
     var suggests = [...widget.searchHistory];
-    var filtered = query.isEmpty
+    var filtered = _query.isEmpty
         ? suggests
         : suggests.where((i) {
-            return (i.cuisineName == null || i.cuisineName.toLowerCase().contains(query.toLowerCase())) &&
-                (i.store == null || i.store.name.toLowerCase().contains(query.toLowerCase()));
+            return (i.cuisineName == null || i.cuisineName.toLowerCase().contains(_query.toLowerCase())) &&
+                (i.store == null || i.store.name.toLowerCase().contains(_query.toLowerCase()));
           });
     var children = filtered.map<Widget>((i) {
       switch (i.type) {
@@ -183,10 +183,10 @@ class _PresenterState extends State<_Presenter> {
             splashColor: Burnt.lightGrey,
             onTap: () {
               widget.addSearchHistoryItem(item);
-              queryCtrl = TextEditingController.fromValue(TextEditingValue(text: item.cuisineName));
+              _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: item.cuisineName));
               this.setState(() {
-                submit = true;
-                query = item.cuisineName;
+                _submit = true;
+                _query = item.cuisineName;
               });
             },
             child: Padding(
@@ -269,11 +269,11 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _searchResults(BuildContext context) {
-    if (query.isEmpty) {
+    if (_query.isEmpty) {
       return SliverCenter(child: Container());
     }
     return FutureBuilder<List<MyStore.Store>>(
-      future: SearchService.searchStores(query.trim()),
+      future: SearchService.searchStores(_query.trim()),
       builder: (context, AsyncSnapshot<List<MyStore.Store>> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.active:

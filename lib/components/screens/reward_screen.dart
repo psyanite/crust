@@ -173,7 +173,7 @@ class _Presenter extends StatelessWidget {
                 favoriteReward(reward.id);
                 snack(context, 'Added to favourites');
               } else {
-                snack(context, 'Please login to favourite reward');
+                snack(context, 'Login now to favourite reward');
               }
             },
             onUnfavorite: () {

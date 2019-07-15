@@ -39,12 +39,12 @@ class _Presenter extends StatefulWidget {
 }
 
 class _PresenterState extends State<_Presenter> {
-  String query = '';
-  TextEditingController queryCtrl = TextEditingController();
+  String _query = '';
+  TextEditingController _queryCtrl = TextEditingController();
 
   @override
   dispose() {
-    queryCtrl.dispose();
+    _queryCtrl.dispose();
     super.dispose();
   }
 
@@ -55,7 +55,7 @@ class _PresenterState extends State<_Presenter> {
       slivers.add(CenterTextSliver(text: 'Login now to write a review!'));
     } else {
       slivers.add(_searchBar());
-      slivers.add(query.trim().isEmpty ? _suggestions() : _searchResults(context));
+      slivers.add(_query.trim().isEmpty ? _suggestions() : _searchResults(context));
     }
     return CustomScrollView(slivers: slivers);
   }
@@ -86,9 +86,9 @@ class _PresenterState extends State<_Presenter> {
   Widget _searchBar() {
     return SliverToBoxAdapter(
       child: TextField(
-        controller: queryCtrl,
+        controller: _queryCtrl,
         onChanged: (text) {
-          if (text.trim() != query.trim()) setState(() => query = text);
+          if (text.trim() != _query.trim()) setState(() => _query = text);
         },
         style: TextStyle(fontSize: 18.0),
         autofocus: true,
@@ -96,8 +96,8 @@ class _PresenterState extends State<_Presenter> {
           hintText: 'Search for a restaurant, cafe, or eatery to review',
           prefixIcon: Icon(CrustCons.search, color: Burnt.lightGrey, size: 18.0),
           suffixIcon: IconButton(icon: Icon(Icons.clear), onPressed: () {
-            queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
-            this.setState(() => query = '');
+            _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
+            this.setState(() => _query = '');
           }),
           border: InputBorder.none,
         ),
@@ -113,7 +113,7 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _searchResults(BuildContext context) {
     return FutureBuilder<List<MyStore.Store>>(
-      future: SearchService.searchStores(query),
+      future: SearchService.searchStores(_query),
       builder: (context, AsyncSnapshot<List<MyStore.Store>> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.active:

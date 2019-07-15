@@ -183,8 +183,9 @@ class CenterTextSliver extends StatelessWidget {
   Widget build(BuildContext context) {
     return SliverFillRemaining(
       child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 50.0),
         child: Center(
-          child: Text(text),
+          child: Text(text, textAlign: TextAlign.center),
         ),
       ),
     );

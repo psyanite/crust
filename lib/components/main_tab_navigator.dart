@@ -42,7 +42,7 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
       child: Scaffold(
         body: PageView(controller: _pageCtrl, onPageChanged: _onPageChanged, children: _tabs.values.map((t) => t.widget).toList()),
         bottomNavigationBar: Card(
-            margin: const EdgeInsets.all(0.0),
+            margin: EdgeInsets.all(0.0),
             elevation: 24.0,
             child: CupertinoTabBar(
               border: null,
@@ -51,7 +51,7 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
               inactiveColor: Burnt.lightGrey,
               currentIndex: _currentIndex,
               onTap: _onTap,
-              items: _tabs.values.map((t) => new BottomNavigationBarItem(icon: Icon(t.icon))).toList(),
+              items: _tabs.values.map((t) => BottomNavigationBarItem(icon: Icon(t.icon))).toList(),
             )),
       ),
     );

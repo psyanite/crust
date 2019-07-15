@@ -1,3 +1,4 @@
+import 'package:crust/state/comment/comment_state.dart';
 import 'package:crust/state/me/me_state.dart';
 import 'package:crust/state/error/error_state.dart';
 import 'package:crust/state/store/store_state.dart';
@@ -11,13 +12,15 @@ class AppState {
   final StoreState store;
   final UserState user;
   final RewardState reward;
+  final CommentState comment;
   final ErrorState error;
 
-  AppState({MeState me, StoreState store, UserState user, RewardState reward, ErrorState error})
+  AppState({MeState me, StoreState store, UserState user, RewardState reward, CommentState comment, ErrorState error})
       : me = me ?? MeState.initialState(),
         store = store ?? StoreState.initialState(),
         user = user ?? UserState(),
         reward = reward ?? RewardState(),
+        comment = comment ?? CommentState.initialState(),
         error = error ?? ErrorState();
 
   static AppState rehydrate(dynamic json) {
@@ -34,7 +37,7 @@ class AppState {
   }
 
   // Used by persistor
-  Map<String, dynamic> toJson() => {'me': me.toPersist()};
+  Map<String, dynamic> toJson() => {'me': me.toPersist() };
 
   AppState copyWith({MeState me}) {
     return AppState(me: me ?? this.me);
@@ -47,6 +50,7 @@ class AppState {
       store: $store,
       user: $user,
       reward: $reward,
+      comment: $comment,
       error: $error
     }''';
   }

@@ -23,7 +23,7 @@ class RewardsScreenState extends State<RewardsScreen> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
         onInit: (Store<AppState> store) {
-          store.dispatch(FetchRewardsRequested());
+          store.dispatch(FetchRewardsRequest());
           store.dispatch(FetchFavoritesRequest());
         },
         converter: (Store<AppState> store) => _Props.fromStore(store),

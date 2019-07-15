@@ -14,7 +14,7 @@ ThemeData getTheme(context) => ThemeData(
             displayColor: Burnt.textBodyColor,
           )
           .merge(TextTheme(
-              body1: TextStyle(fontSize: 16.0),
+              body1: TextStyle(fontSize: 18.0),
       )),
     );
 

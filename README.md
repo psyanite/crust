@@ -43,12 +43,18 @@
 </div>
 
 ## To Do
-* Implement comments
+* Implement like and comment count on posts
+* Implement QR scanner
+* Implement home screen
+* Implement follow functionality
+* Display followers on profile screen
 * Add write a review button from store screen
 * Fetch recommendations
 * Implement pagination
+* Implement chat
 
 ## Done
+* Implement comments
 * Update store screen for multiple same user posts
 * Mark hidden posts on my profile
 * Fetch hidden and public posts for me

@@ -32,6 +32,7 @@ class Post {
     var postedBy = post['posted_by'];
     var postPhotos = post['post_photos'];
     var postReview = post['post_review'];
+    var profile = postedBy['profile'];
     return Post(
         id: post['id'],
         type: EnumUtil.fromString(PostType.values, post['type']),
@@ -39,9 +40,9 @@ class Post {
         store: Store.fromToaster(post['store']),
         postedBy: User(
           id: postedBy['id'],
-          username: postedBy['profile']['username'],
-          displayName: postedBy['profile']['preferred_name'],
-          profilePicture: postedBy['profile']['profile_picture'],
+          username: profile['username'],
+          displayName: profile['preferred_name'],
+          profilePicture: profile['profile_picture'],
         ),
         postedAt: DateTime.parse(post['posted_at']),
         postPhotos: (postPhotos as List).map<PostPhoto>((postPhoto) {
@@ -57,7 +58,8 @@ class Post {
                 ambienceScore: EnumUtil.fromString(Score.values, postReview['ambience_score']),
                 body: postReview['body'],
               )
-            : null);
+            : null,
+    );
   }
 
   static const attributes = """

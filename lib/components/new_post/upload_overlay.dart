@@ -79,7 +79,7 @@ class UploadOverlayState extends State<UploadOverlay> {
     if (images.isNotEmpty) {
       photoUrls = await _uploadPhotos();
     }
-    var postPhotos = photoUrls.map((s) => PostPhoto(url: s)).toList(growable: false);
+    var postPhotos = photoUrls.map((s) => PostPhoto(url: s)).toList();
     var update = post.copyWith(postPhotos: postPhotos);
     var result = await (post.id == null ? PostService.submitReviewPost(update) : PostService.updateReviewPost(update));
     if (result == null) {

@@ -1,23 +1,13 @@
 import 'package:crust/models/post.dart';
 
-class FetchPostsForUserRequested {
+class FetchPostsForUserRequest {
   final int userId;
 
-  FetchPostsForUserRequested(this.userId);
-
-  @override
-  String toString() {
-    return 'RequestFailure';
-  }
+  FetchPostsForUserRequest(this.userId);
 }
 
 class FetchPostsForUserSuccess {
   final List<Post> posts;
 
   FetchPostsForUserSuccess(this.posts);
-
-  @override
-  String toString() {
-    return 'RequestFailure';
-  }
 }

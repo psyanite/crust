@@ -39,6 +39,7 @@ class CrustCons {
   static const IconData heart = const IconData(0xe80c, fontFamily: _kFontFam);
   static const IconData logout = const IconData(0xe80d, fontFamily: _kFontFam);
   static const IconData view_mode = const IconData(0xe80f, fontFamily: _kFontFam);
+  static const IconData post_comment = const IconData(0xe810, fontFamily: _kFontFam);
   static const IconData location = const IconData(0xe81a, fontFamily: _kFontFam);
   static const IconData location_bold = const IconData(0xe81c, fontFamily: _kFontFam);
 }

@@ -3,6 +3,7 @@ import 'package:crust/state/store/store_middleware.dart';
 import 'package:crust/state/me/me_middleware.dart';
 import 'package:crust/state/reward/reward_middleware.dart';
 import 'package:crust/state/user/user_middleware.dart';
+import 'package:crust/state/comment/comment_middleware.dart';
 import 'package:redux/redux.dart';
 
 List<Middleware<AppState>> createAppMiddleware() {
@@ -10,5 +11,6 @@ List<Middleware<AppState>> createAppMiddleware() {
     ..addAll(createMeMiddleware())
     ..addAll(createStoreMiddleware())
     ..addAll(createUserMiddleware())
-    ..addAll(createRewardMiddleware());
+    ..addAll(createRewardMiddleware())
+    ..addAll(createCommentMiddleware());
 }

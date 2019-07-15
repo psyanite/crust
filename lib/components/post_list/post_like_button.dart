@@ -8,8 +8,9 @@ import 'package:redux/redux.dart';
 
 class PostLikeButton extends StatefulWidget {
   final int postId;
+  final double size;
 
-  PostLikeButton({Key key, this.postId}) : super(key: key);
+  PostLikeButton({Key key, this.postId, this.size = 34.0}) : super(key: key);
 
   @override
   _PostLikeButtonState createState() => _PostLikeButtonState(postId: postId);
@@ -42,13 +43,13 @@ class _PostLikeButtonState extends State<PostLikeButton> with TickerProviderStat
         builder: (context, props) {
           var onFavorite = () {
             if (props.isLoggedIn) {
-              props.favoritePost(postId);
+              props.favoriteComment(postId);
             } else {
-              snack(context, 'Please login to favourite posts');
+              snack(context, 'Login now to favourite posts');
             }
           };
           var onUnfavorite =  () {
-            props.unfavoritePost(postId);
+            props.unfavoriteComment(postId);
           };
           var onTap = () {
             paddingCtrl.forward(from: 0.0);
@@ -57,6 +58,7 @@ class _PostLikeButtonState extends State<PostLikeButton> with TickerProviderStat
           return _Presenter(
               onTap: onTap,
               isFavorited: props.isFavorited,
+              size: widget.size,
               padding: 2.0 - paddingCtrl.value);
         });
   }
@@ -65,23 +67,24 @@ class _PostLikeButtonState extends State<PostLikeButton> with TickerProviderStat
 class _Presenter extends StatelessWidget {
   final Function onTap;
   final bool isFavorited;
+  final double size;
   final double padding;
 
-  _Presenter({Key key, this.onTap, this.isFavorited, this.padding}) : super(key: key);
+  _Presenter({Key key, this.onTap, this.isFavorited, this.size, this.padding}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: padding, bottom: padding),
-      width: 34.0,
-      height: 34.0,
+      width: size,
+      height: size,
       child: InkWell(
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         onTap: onTap,
         child: SvgPicture.asset(
           isFavorited ? 'assets/svgs/like-filled.svg' : 'assets/svgs/like-outlined.svg',
-          alignment: Alignment.centerRight,
+          alignment: Alignment.center,
         ),
       ),
     );

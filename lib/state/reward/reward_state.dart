@@ -20,9 +20,7 @@ class RewardState {
     if (rewards != null) {
       rewardsUpdate.addAll(Map.fromEntries(rewards.map((r) => MapEntry<int, Reward>(r.id, r))));
     }
-    return RewardState(
-      rewards: rewardsUpdate,
-    );
+    return RewardState(rewards: rewardsUpdate);
   }
 
   @override

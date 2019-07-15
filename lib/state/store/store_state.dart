@@ -23,9 +23,7 @@ class StoreState {
     if (store != null) {
       storesUpdate[store.id] = store;
     }
-    return StoreState(
-      stores: storesUpdate,
-    );
+    return StoreState(stores: storesUpdate);
   }
 
   StoreState addStores(List<Store> stores) {

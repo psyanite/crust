@@ -17,18 +17,18 @@ class SelectLocationScreen extends StatefulWidget {
 }
 
 class SelectLocationScreenState extends State<SelectLocationScreen> {
-  String query = '';
-  TextEditingController queryCtrl;
+  String _query = '';
+  TextEditingController _queryCtrl;
 
   @override
   initState() {
     super.initState();
-    queryCtrl = TextEditingController.fromValue(TextEditingValue(text: widget.current.name));
+    _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: widget.current.name));
   }
 
   @override
   dispose() {
-    queryCtrl.dispose();
+    _queryCtrl.dispose();
     super.dispose();
   }
 
@@ -73,7 +73,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
     return SliverToBoxAdapter(
       child: TextField(
         onChanged: (text) {
-          if (text.trim() != query.trim()) setState(() => query = text);
+          if (text.trim() != _query.trim()) setState(() => _query = text);
         },
         style: TextStyle(fontSize: 18.0),
         autofocus: true,
@@ -83,8 +83,8 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
           suffixIcon: IconButton(
               icon: Icon(Icons.clear),
               onPressed: () {
-                queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
-                this.setState(() => query = '');
+                _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
+                this.setState(() => _query = '');
               }),
           border: InputBorder.none,
         ),
@@ -93,7 +93,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
   }
 
   Widget _searchResults(BuildContext context) {
-    var queryTerm = query.trim().isEmpty ? 's' : query.trim();
+    var queryTerm = _query.trim().isEmpty ? 's' : _query.trim();
     return FutureBuilder<List<SearchLocationItem>>(
       future: SearchService.searchLocations(queryTerm),
       builder: (context, AsyncSnapshot<List<SearchLocationItem>> snapshot) {

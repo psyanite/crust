@@ -19,13 +19,13 @@ class CarouselWrapper extends StatelessWidget {
         builder: (context, props) => _Presenter(
             onFavorite: () {
               if (props.isLoggedIn) {
-                props.favoritePost(postId);
+                props.favoriteComment(postId);
               } else {
-                snack(context, 'Please login to favourite posts');
+                snack(context, 'Login now to favourite posts');
               }
             },
             onUnfavorite: () {
-              props.unfavoritePost(postId);
+              props.unfavoriteComment(postId);
             },
             isFavorited: props.favoritePosts.contains(postId),
             child: child,
@@ -75,5 +75,3 @@ class _Presenter extends StatelessWidget {
         child: child);
   }
 }
-
-enum PostListType { forStore, forProfile }

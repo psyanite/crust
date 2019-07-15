@@ -24,7 +24,7 @@ class HomeScreen extends StatelessWidget {
           store.dispatch(FetchStoresRequest());
           store.dispatch(FetchFavoritesRequest());
           if (store.state.me.user != null) store.dispatch(FetchMyPostsRequest(store.state.me.user.id));
-          store.dispatch(FetchRewardsRequested());
+          store.dispatch(FetchRewardsRequest());
         },
         converter: (Store<AppState> store) => _Props.fromStore(store),
         builder: (BuildContext context, _Props props) => _Presenter(
@@ -95,7 +95,8 @@ class _Presenter extends StatelessWidget {
                     color: Colors.white,
                   ),
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                    Container(height: 8.0, width: 200.0, color: Colors.white),
+                    Container(height: 8.0),
+                    Container(height: 8.0, width: 150.0, color: Colors.white),
                     Container(height: 8.0),
                     Container(height: 8.0, width: 100.0, color: Colors.white),
                   ])
@@ -167,7 +168,7 @@ class _Presenter extends StatelessWidget {
                 favoriteStore(store.id);
                 snack(context, 'Added to favourites');
               } else {
-                snack(context, 'Please login to favorite store');
+                snack(context, 'Login now to favorite store');
               }
             },
             onUnfavorite: () {

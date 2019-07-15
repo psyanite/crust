@@ -19,9 +19,10 @@ class BurntDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var children = <Widget>[];
-    if (title != null || description != null) children.add(_leading(context));
-    if (options != null) children.add(_options(context));
+    var children = <Widget>[
+      if (title != null || description != null) _leading(context),
+      if (options != null) _options(context),
+    ];
     return AlertDialog(
       contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
       content: Container(
@@ -32,11 +33,11 @@ class BurntDialog extends StatelessWidget {
   }
 
   Widget _leading(BuildContext context) {
-    var children = <Widget>[];
-    if (title != null) children.add(Text(title, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)));
-    if (title != null && description != null) children.add(Container(height: 5.0));
-    if (description != null) children.add(Container(width: 200.0,
-      child: Text(description, textAlign: TextAlign.center, style: TextStyle(color: Color(0xAA604B41), fontSize: 14.0))));
+    var children = <Widget>[
+      if (title != null) Text(title, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
+      if (title != null && description != null) Container(height: 5.0),
+      if (description != null) Container(width: 200.0, child: Text(description, textAlign: TextAlign.center, style: TextStyle(color: Color(0xAA604B41), fontSize: 16.0))),
+    ];
     return Container(
       padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
       child: Column(children: children)

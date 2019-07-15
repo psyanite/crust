@@ -1,12 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:crust/components/carousel.dart';
 import 'package:crust/components/confirm.dart';
 import 'package:crust/components/dialog.dart';
 import 'package:crust/components/new_post/edit_post_screen.dart';
-import 'package:crust/components/post_list/carousel_wrapper.dart';
+import 'package:crust/components/post_list/comment_screen.dart';
+import 'package:crust/components/post_list/post_info.dart';
 import 'package:crust/components/post_list/post_like_button.dart';
-import 'package:crust/components/screens/profile_screen.dart';
-import 'package:crust/components/screens/store_screen.dart';
 import 'package:crust/models/post.dart';
 import 'package:crust/models/user.dart';
 import 'package:crust/presentation/components.dart';
@@ -14,7 +11,6 @@ import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/post/post_service.dart';
-import 'package:crust/utils/time_util.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -35,8 +31,8 @@ class PostList extends StatelessWidget {
   }
 
   Widget _noPostsNotice() {
-    return SliverSafeArea(
-      minimum: EdgeInsets.symmetric(horizontal: 16.0),
+    return SliverPadding(
+      padding: EdgeInsets.only(top: 10.0, left: 16.0, right: 16.0),
       sliver: SliverList(
         delegate: SliverChildListDelegate(<Widget>[
           Column(children: <Widget>[
@@ -56,7 +52,7 @@ class _PostList extends StatefulWidget {
   _PostList({Key key, this.posts, this.postListType}) : super(key: key);
 
   @override
-  _PostListState createState() => new _PostListState(posts: posts, postListType: postListType);
+  _PostListState createState() => _PostListState(posts: posts, postListType: postListType);
 }
 
 class _PostListState extends State<_PostList> {
@@ -76,11 +72,11 @@ class _PostListState extends State<_PostList> {
 
   @override
   Widget build(BuildContext context) {
-    return SliverSafeArea(
-        minimum: EdgeInsets.symmetric(horizontal: 15.0),
+    return SliverPadding(
+        padding: EdgeInsets.symmetric(horizontal: 15.0),
         sliver: SliverList(
             delegate: SliverChildBuilderDelegate(
-                (builder, i) => _PostCard(
+                (builder, i) => PostCard(
                       post: posts[i],
                       postListType: postListType,
                       removeFromList: removeFromList,
@@ -96,148 +92,69 @@ class _PostListState extends State<_PostList> {
   }
 }
 
-class _PostCard extends StatelessWidget {
+class PostCard extends StatelessWidget {
   final Post post;
   final PostListType postListType;
   final int index;
   final Function removeFromList;
 
-  _PostCard({Key key, this.post, this.postListType, this.index, this.removeFromList}) : super(key: key);
+  PostCard({Key key, this.post, this.postListType, this.index, this.removeFromList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var children = <Widget>[_header()];
-    children.add(_content());
-    return Container(
-        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))),
-        child: Column(children: children));
+    return PostInfo(post: post, postListType: postListType, buttons: _buttons());
   }
 
-  Widget _header() {
-    var image = postListType == PostListType.forProfile ? post.store.coverImage : post.postedBy.profilePicture;
-    var name = postListType == PostListType.forProfile
-        ? Text(post.store.name, style: Burnt.titleStyle)
-        : Row(children: <Widget>[Text(post.postedBy.displayName, style: Burnt.titleStyle), Text(" @${post.postedBy.username}")]);
-    var details = Row(children: <Widget>[
-      Container(
-          width: 50.0,
-          height: 50.0,
-          decoration:
-              BoxDecoration(color: Burnt.imgPlaceholderColor, image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image)))),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[name, Text(TimeUtil.format(post.postedAt))]),
-      )
-    ]);
-    if (post.type == PostType.review) {
-      details = Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[details, ScoreIcon(score: post.postReview.overallScore, size: 30.0)]);
-    }
-    var nextScreen =
-        postListType == PostListType.forProfile ? StoreScreen(storeId: post.store.id) : ProfileScreen(userId: post.postedBy.id);
-    return Builder(
-      builder: (context) => InkWell(
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => nextScreen)),
-            child: Column(
-              children: <Widget>[Container(padding: EdgeInsets.only(top: 15.0, bottom: 10.0), child: details)],
-            ),
-          ),
-    );
-  }
-
-  Widget _reviewBody() {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 10.0),
-      child: Text(post.postReview.body),
-    );
-  }
-
-  Widget _content() {
-    var renderReview = post.type == PostType.review && post.postReview.body != null;
-    return Container(
-        padding: EdgeInsets.only(top: 10.0),
-        child: Column(children: <Widget>[
-          if (renderReview) _reviewBody(),
-          post.postPhotos.isNotEmpty ? CarouselWrapper(postId: post.id, child: _carousel()) : _textEnd()
-        ]));
-  }
-
-  Widget _carousel() {
-    if (post.postPhotos.length == 1) {
-      return _singlePhoto();
-    }
-    final List<Widget> widgets = post.postPhotos
-        .map<Widget>((photo) => CachedNetworkImage(
-              imageUrl: photo.url,
-              fit: BoxFit.cover,
-              fadeInDuration: Duration(milliseconds: 100),
-            ))
-        .toList(growable: false);
-    return Carousel(
-        images: widgets,
-        left: Row(
-          children: _stuff(),
-        ));
-  }
-
-  List<Widget> _stuff() {
-    var stuff = <Widget>[PostLikeButton(postId: post.id)];
+  List<Widget> _buttons() {
+    var stuff = <Widget>[
+      _postLikeButton(),
+      _commentButton(),
+    ];
     if (post.hidden == true) stuff.add(_secretIcon());
     stuff.add(_MoreButton(post: post, removeFromList: removeFromList, index: index));
     return stuff;
   }
 
+  Widget _postLikeButton() {
+    return Padding(
+      padding: EdgeInsets.only(top: 2.0),
+      child: PostLikeButton(postId: post.id),
+    );
+  }
+
+  Widget _commentButton() {
+    return Builder(
+      builder: (context) => InkWell(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: Padding(
+              padding: EdgeInsets.only(left: 10.0, right: 5.0),
+              child: Icon(CrustCons.post_comment, color: Burnt.lightGrey, size: 28.0),
+            ),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CommentScreen(post: post))),
+          ),
+    );
+  }
+
   Widget _secretIcon() {
     return Builder(
       builder: (context) => InkWell(
-        child: Padding(
-          padding: EdgeInsets.only(left: 10.0, right: 5.0),
-          child: Icon(CrustCons.padlock, color: Burnt.lightGrey, size: 28.0),
-        ),
-        onTap: () {
-          var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
-          showDialog(
-            context: context,
-            builder: (context) => BurntDialog(
-              options: options,
-              description: 'This post is secret, only you can see it. You can make it public by editing the post.'));
-        },
-      ),
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            child: Padding(
+              padding: EdgeInsets.only(left: 3.0, right: 5.0),
+              child: Icon(CrustCons.padlock, color: Burnt.lightGrey, size: 28.0),
+            ),
+            onTap: () {
+              var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
+              showDialog(
+                  context: context,
+                  builder: (context) => BurntDialog(
+                      options: options,
+                      description: 'This post is secret, only you can see it. You can make it public by editing the post.'));
+            },
+          ),
     );
-  }
-
-  Widget _textEnd() {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: _stuff(),
-      ),
-    );
-  }
-
-  Widget _singlePhoto() {
-    return Builder(
-        builder: (context) => Column(
-              children: <Widget>[
-                Container(
-                    height: MediaQuery.of(context).size.width - 30.0,
-                    decoration: BoxDecoration(
-                        color: Burnt.imgPlaceholderColor,
-                        border: Border(bottom: BorderSide(color: Burnt.separator)),
-                        image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.postPhotos[0].url)))),
-                Padding(
-                  padding: EdgeInsets.only(top: 6.0, bottom: 10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: _stuff(),
-                  ),
-                )
-              ],
-            ));
   }
 }
 
@@ -270,6 +187,8 @@ class _MoreButtonPresenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
         child: Padding(
           padding: EdgeInsets.only(left: 5.0),
           child: Icon(CrustCons.triple_dot, size: 15.0, color: Burnt.lightGrey),

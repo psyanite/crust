@@ -148,7 +148,7 @@ class RewardCards extends StatelessWidget {
                 favoriteReward(reward.id);
                 snack(context, 'Added to favourites');
               } else {
-                snack(context, 'Please login to favorite rewards');
+                snack(context, 'Login now to favorite rewards');
               }
             },
             onUnfavorite: () {

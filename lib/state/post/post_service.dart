@@ -86,12 +86,12 @@ class PostService {
 
   Future<List<Post>> fetchPostsByUserId(int userId) async {
     String query = """
-    query {
-      postsByUserId(userId: $userId, showHiddenPosts: false) {
-        ${Post.attributes}
+      query {
+        postsByUserId(userId: $userId, showHiddenPosts: false) {
+          ${Post.attributes}
+        }
       }
-    }
-  """;
+    """;
     final response = await Toaster.get(query);
     if (response == null) return null;
     var json = response['postsByUserId'];
@@ -100,12 +100,12 @@ class PostService {
 
   Future<List<Post>> fetchMyPosts(int userId) async {
     String query = """
-    query {
-      postsByUserId(userId: $userId, showHiddenPosts: true) {
-        ${Post.attributes}
+      query {
+        postsByUserId(userId: $userId, showHiddenPosts: true) {
+          ${Post.attributes}
+        }
       }
-    }
-  """;
+    """;
     final response = await Toaster.get(query);
     if (response == null) return null;
     var json = response['postsByUserId'];
