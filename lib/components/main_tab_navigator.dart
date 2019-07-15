@@ -1,9 +1,11 @@
+import 'dart:collection';
+
 import 'package:crust/components/my_profile/my_profile_tab.dart';
 import 'package:crust/components/new_post/select_store_screen.dart';
-import 'package:crust/presentation/crust_cons_icons.dart';
-import 'package:crust/components/screens/home_screen.dart';
-import 'package:crust/components/screens/favorites_screen.dart';
 import 'package:crust/components/rewards_screen/rewards_screen.dart';
+import 'package:crust/components/screens/favorites_screen.dart';
+import 'package:crust/components/screens/home_screen.dart';
+import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,8 @@ class MainTabNavigator extends StatefulWidget {
 
 class MainTabNavigatorState extends State<MainTabNavigator> {
   PageController _pageCtrl = PageController();
+  Queue<int> _history;
+  bool _lastActionWasGo;
   int _currentIndex = 0;
   Map<TabType, Tab> _tabs = {
     TabType.home: Tab(widget: HomeScreen(), icon: CrustCons.bread_heart),
@@ -23,6 +27,13 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
     TabType.favorites: Tab(widget: FavoritesScreen(), icon: CrustCons.heart),
     TabType.myProfile: Tab(widget: MyProfileTab(), icon: CrustCons.person)
   };
+
+  @override
+  initState() {
+    super.initState();
+    _history = Queue<int>();
+    _history.addLast(0);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,23 +58,32 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
   }
 
   Future<bool> _onWillPop() {
-    if (_pageCtrl.page.round() == _pageCtrl.initialPage) {
+    if (_history.length == 0) {
       return Future(() => true);
     } else {
-      return _pageCtrl.previousPage(
-        duration: Duration(milliseconds: 200),
-        curve: Curves.linear,
-      );
+      var history = Queue<int>.from(_history);
+      if (_lastActionWasGo) history.removeLast();
+      var previousPage = history.removeLast();
+      setState(() {
+        _history = history;
+        _lastActionWasGo = false;
+      });
+      _pageCtrl.jumpToPage(previousPage);
+      return Future(() => false);
     }
   }
 
   _onPageChanged(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
+    setState(() => _currentIndex = index);
   }
 
   _onTap(int index) {
+    var history = Queue<int>.from(_history);
+    history.addLast(index);
+    setState(() {
+      _history = history;
+      _lastActionWasGo = true;
+    });
     _pageCtrl.jumpToPage(index);
   }
 }
