@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crust/components/carousel.dart';
 import 'package:crust/components/post_list/carousel_wrapper.dart';
+import 'package:crust/components/post_list/comment_screen.dart';
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/screens/profile_screen.dart';
 import 'package:crust/components/screens/store_screen.dart';
@@ -61,12 +62,21 @@ class PostInfo extends StatelessWidget {
     );
   }
 
+
   Widget _reviewBody() {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 10.0),
-      child: Text(post.postReview.body),
+    return Builder(
+      builder: (context) => InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 10.0),
+          child: Text(post.postReview.body)
+        ),
+        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CommentScreen(post: post))),
+      ),
     );
   }
+
 
   Widget _content() {
     var renderReview = post.type == PostType.review && post.postReview.body != null;

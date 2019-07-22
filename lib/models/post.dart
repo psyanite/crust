@@ -11,8 +11,10 @@ class Post {
   final DateTime postedAt;
   final List<PostPhoto> postPhotos;
   final PostReview postReview;
+  final int likeCount;
+  final int commentCount;
 
-  Post({this.id, this.type, this.hidden, this.store, this.postedBy, this.postedAt, this.postPhotos, this.postReview});
+  Post({this.id, this.type, this.hidden, this.store, this.postedBy, this.postedAt, this.postPhotos, this.postReview, this.likeCount, this.commentCount});
 
   Post copyWith({List<PostPhoto> postPhotos}) {
     return Post(
@@ -24,6 +26,8 @@ class Post {
       postedAt: this.postedAt,
       postPhotos: postPhotos ?? this.postPhotos,
       postReview: this.postReview,
+      likeCount: this.likeCount,
+      commentCount: this.commentCount,
     );
   }
 
@@ -59,6 +63,8 @@ class Post {
                 body: postReview['body'],
               )
             : null,
+        likeCount: post['like_count'],
+        commentCount: post['comment_count'],
     );
   }
 
@@ -104,7 +110,9 @@ class Post {
       value_score,
       ambience_score,
       body,
-    }
+    },
+    like_count,
+    comment_count
   """;
 
   @override

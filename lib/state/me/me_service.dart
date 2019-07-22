@@ -21,11 +21,7 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['userProfileByUsername'];
-    if (json != null) {
-      return json['user_account']['id'];
-    } else {
-      throw Exception('Failed to getUserIdByUsername');
-    }
+    return json['user_account']['id'];
   }
 
   static Future<User> getUser(User user) async {
@@ -48,15 +44,11 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['userLoginBy'];
-    if (json != null) {
-      return user.copyWith(
-          id: json['user_account']['id'],
-          profilePicture: json['user_account']['profile']['profile_picture'],
-          displayName: json['user_account']['profile']['preferred_name'],
-          username: json['user_account']['profile']['username']);
-    } else {
-      throw Exception('Failed to getUser');
-    }
+    return user.copyWith(
+        id: json['user_account']['id'],
+        profilePicture: json['user_account']['profile']['profile_picture'],
+        displayName: json['user_account']['profile']['preferred_name'],
+        username: json['user_account']['profile']['username']);
   }
 
   Future<int> addUser(User user) async {
@@ -78,11 +70,7 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['addUser'];
-    if (json != null) {
-      return json['user_account']['id'];
-    } else {
-      throw Exception('Failed to addUser');
-    }
+    return json['user_account']['id'];
   }
 
   Future<Set<int>> favoriteReward({ userId, rewardId }) async {
@@ -97,11 +85,7 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['favoriteReward'];
-    if (json != null) {
-      return Set<int>.from(json['favorite_rewards'].map((r) => r['id']));
-    } else {
-      throw Exception('Failed to favoriteReward(userId: $userId, rewardId: $rewardId)');
-    }
+    return Set<int>.from(json['favorite_rewards'].map((r) => r['id']));
   }
 
   Future<Set<int>> unfavoriteReward({ userId, rewardId }) async {
@@ -116,11 +100,7 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['unfavoriteReward'];
-    if (json != null) {
-      return Set<int>.from(json['favorite_rewards'].map((r) => r['id']));
-    } else {
-      throw Exception('Failed to unfavoriteReward(userId: $userId, rewardId: $rewardId)');
-    }
+    return Set<int>.from(json['favorite_rewards'].map((r) => r['id']));
   }
 
   Future<Set<int>> favoriteStore({ userId, storeId }) async {
@@ -135,11 +115,7 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['favoriteStore'];
-    if (json != null) {
-      return Set<int>.from(json['favorite_stores'].map((s) => s['id']));
-    } else {
-      throw Exception('Failed to favoriteStore(userId: $userId, storeId: $storeId)');
-    }
+    return Set<int>.from(json['favorite_stores'].map((s) => s['id']));
   }
 
   Future<Set<int>> unfavoriteStore({ userId, storeId }) async {
@@ -154,11 +130,7 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['unfavoriteStore'];
-    if (json != null) {
-      return Set<int>.from(json['favorite_stores'].map((s) => s['id']));
-    } else {
-      throw Exception('Failed to unfavoriteStore(userId: $userId, storeId: $storeId)');
-    }
+    return Set<int>.from(json['favorite_stores'].map((s) => s['id']));
   }
 
   Future<Set<int>> favoritePost({ userId, postId }) async {
@@ -173,11 +145,7 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['favoritePost'];
-    if (json != null) {
-      return Set<int>.from(json['favorite_posts'].map((p) => p['id']));
-    } else {
-      throw Exception('Failed to favoritePost(userId: $userId, postId: $postId)');
-    }
+    return Set<int>.from(json['favorite_posts'].map((p) => p['id']));
   }
 
   Future<Set<int>> unfavoritePost({ userId, postId }) async {
@@ -192,11 +160,7 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['unfavoritePost'];
-    if (json != null) {
-      return Set<int>.from(json['favorite_posts'].map((p) => p['id']));
-    } else {
-      throw Exception('Failed to unfavoritePost(userId: $userId, storeId: $postId)');
-    }
+    return Set<int>.from(json['favorite_posts'].map((p) => p['id']));
   }
 
   Future<Map<String, dynamic>> fetchFavorites(userId) async {
@@ -217,14 +181,10 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['userAccountById'];
-    if (json != null) {
-      var rewards = (json['favorite_rewards'] as List).map((r) => Reward.fromToaster(r)).toList();
-      var stores = (json['favorite_stores'] as List).map((s) => Store.fromToaster(s)).toList();
-      var posts = (json['favorite_posts'] as List).map((s) => Post.fromToaster(s)).toList();
-      return { 'rewards': rewards, 'stores': stores, 'posts': posts };
-    } else {
-      throw Exception('Failed to fetchFavorites(userId: $userId)');
-    }
+    var rewards = (json['favorite_rewards'] as List).map((r) => Reward.fromToaster(r)).toList();
+    var stores = (json['favorite_stores'] as List).map((s) => Store.fromToaster(s)).toList();
+    var posts = (json['favorite_posts'] as List).map((s) => Post.fromToaster(s)).toList();
+    return { 'rewards': rewards, 'stores': stores, 'posts': posts };
   }
 
   Future<UserReward> fetchUserReward({ userId, rewardId }) async {
@@ -241,12 +201,8 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['userRewardBy'];
-    if (json != null) {
-      var result = (json as List).map((u) => UserReward.fromToaster(u)).toList();
-      return result.isNotEmpty ? result.first : null;
-    } else {
-      throw Exception('Failed to fetchUserReward(userId: $userId, rewardId: $rewardId)');
-    }
+    var result = (json as List).map((u) => UserReward.fromToaster(u)).toList();
+    return result.isNotEmpty ? result.first : null;
   }
 
   Future<UserReward> addUserReward({ userId, rewardId }) async {
@@ -263,11 +219,7 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['addUserReward'];
-    if (json != null) {
-      var result = (json as List).map((u) => UserReward.fromToaster(u)).toList();
-      return result.isNotEmpty ? result.first : null;
-    } else {
-      throw Exception('Failed to addUserReward(userId: $userId, rewardId: $rewardId)');
-    }
+    var result = (json as List).map((u) => UserReward.fromToaster(u)).toList();
+    return result.isNotEmpty ? result.first : null;
   }
 }

@@ -26,11 +26,7 @@ class SearchService {
     """;
     final response = await Toaster.get(query);
     var json = response['locationsBySearch'];
-    if (json != null) {
-      return (json as List).map((s) => SearchLocationItem.fromToaster(s)).toList();
-    } else {
-      throw Exception('searchLocations');
-    }
+    return (json as List).map((s) => SearchLocationItem.fromToaster(s)).toList();
   }
 
   static Future<List<Store>> searchStores(String queryString) async {
@@ -43,10 +39,6 @@ class SearchService {
     """;
     final response = await Toaster.get(query);
     var json = response['storesBySearch'];
-    if (json != null) {
-      return (json as List).map((s) => Store.fromToaster(s)).toList();
-    } else {
-      throw Exception('searchStores');
-    }
+    return (json as List).map((s) => Store.fromToaster(s)).toList();
   }
 }

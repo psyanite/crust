@@ -15,11 +15,7 @@ class StoreService {
     """;
     final response = await Toaster.get(query);
     var json = response['allStores'];
-    if (json != null) {
-      return (json as List).map((s) => Store.fromToaster(s)).toList();
-    } else {
-      throw Exception('Failed to fetchStores');
-    }
+    return (json as List).map((s) => Store.fromToaster(s)).toList();
   }
 
   Future<Store> fetchStoreById(int storeId) async {
@@ -32,11 +28,7 @@ class StoreService {
     """;
     final response = await Toaster.get(query);
     var json = response['storeById'];
-    if (json != null) {
-      return Store.fromToaster(json);
-    } else {
-      throw Exception('Failed to storeById');
-    }
+    return Store.fromToaster(json);
   }
 
   Future<List<Post>> fetchPostsByStoreId(int storeId) async {
@@ -49,10 +41,6 @@ class StoreService {
     """;
     final response = await Toaster.get(query);
     var json = response['postsByStoreId'];
-    if (json != null) {
-      return (json as List).map((p) => Post.fromToaster(p)).toList();
-    } else {
-      throw Exception('Failed to fetchPostsByStoreId');
-    }
+    return (json as List).map((p) => Post.fromToaster(p)).toList();
   }
 }

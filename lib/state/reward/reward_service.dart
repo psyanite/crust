@@ -14,10 +14,6 @@ class RewardService {
     """;
     final response = await Toaster.get(query);
     var json = response['allRewards'];
-    if (json != null) {
-      return (json as List).map((r) => Reward.fromToaster(r)).toList();
-    } else {
-      throw Exception('Failed to fetchRewards');
-    }
+    return (json as List).map((r) => Reward.fromToaster(r)).toList();
   }
 }

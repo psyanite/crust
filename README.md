@@ -43,7 +43,6 @@
 </div>
 
 ## To Do
-* Implement like and comment count on posts
 * Implement QR scanner
 * Implement home screen
 * Implement follow functionality
@@ -51,9 +50,9 @@
 * Add write a review button from store screen
 * Fetch recommendations
 * Implement pagination
-* Implement chat
 
 ## Done
+* Implement comment count
 * Implement comments
 * Update store screen for multiple same user posts
 * Mark hidden posts on my profile

@@ -24,10 +24,6 @@ class UserService {
     """;
     final response = await Toaster.get(query);
     var json = response['userAccountById'];
-    if (json != null) {
-      return User.fromToaster(json);
-    } else {
-      throw Exception('Failed to fetchUserByUserId');
-    }
+    return User.fromToaster(json);
   }
 }

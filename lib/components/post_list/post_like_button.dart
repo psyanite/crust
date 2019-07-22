@@ -43,13 +43,13 @@ class _PostLikeButtonState extends State<PostLikeButton> with TickerProviderStat
         builder: (context, props) {
           var onFavorite = () {
             if (props.isLoggedIn) {
-              props.favoriteComment(postId);
+              props.favoritePost(postId);
             } else {
               snack(context, 'Login now to favourite posts');
             }
           };
           var onUnfavorite =  () {
-            props.unfavoriteComment(postId);
+            props.unfavoritePost(postId);
           };
           var onTap = () {
             paddingCtrl.forward(from: 0.0);

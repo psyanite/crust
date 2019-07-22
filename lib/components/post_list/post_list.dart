@@ -129,7 +129,11 @@ class PostCard extends StatelessWidget {
             highlightColor: Colors.transparent,
             child: Padding(
               padding: EdgeInsets.only(left: 10.0, right: 5.0),
-              child: Icon(CrustCons.post_comment, color: Burnt.lightGrey, size: 28.0),
+              child: Row(children: <Widget>[
+                Icon(CrustCons.post_comment, color: Burnt.lightGrey, size: 28.0),
+                Container(width: 3.0),
+                if (post.commentCount > 0) Text(post.commentCount.toString(), style: TextStyle(color: Burnt.lightTextColor, fontSize: 15.0)),
+              ]),
             ),
             onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CommentScreen(post: post))),
           ),
