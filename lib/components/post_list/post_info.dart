@@ -66,8 +66,6 @@ class PostInfo extends StatelessWidget {
   Widget _reviewBody() {
     return Builder(
       builder: (context) => InkWell(
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
         child: Padding(
           padding: EdgeInsets.only(bottom: 10.0),
           child: Text(post.postReview.body)

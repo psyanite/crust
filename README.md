@@ -43,11 +43,11 @@
 </div>
 
 ## To Do
+* Add write a review button from store screen
 * Implement QR scanner
 * Implement home screen
 * Implement follow functionality
 * Display followers on profile screen
-* Add write a review button from store screen
 * Fetch recommendations
 * Implement pagination
 

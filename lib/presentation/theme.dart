@@ -7,6 +7,7 @@ class Burnt {
   static const textBodyColor = Color(0xDD604B41);
   static const hintTextColor = Color(0xBB604B41);
   static const lightTextColor = Color(0x82604B41);
+  static const primaryTextColor = Color(0xFFFFB41B);
   static const paper = Color(0xFFFAFAFA);
   static const separator = Color(0xFFEEEEEE);
   static const lightGrey = Color(0x44604B41);
