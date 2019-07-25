@@ -13,7 +13,7 @@ class BackArrow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(CrustCons.back, color: color),
+      icon: Icon(CrustCons.back, color: color, size: 30.0),
       onPressed: () => Navigator.of(context).pop(),
     );
   }

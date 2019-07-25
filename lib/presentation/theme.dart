@@ -4,6 +4,7 @@ class Burnt {
   static const materialPrimary = Colors.orange;
   static const primary = Color(0xFFFFAB40);
   static const primaryLight = Color(0xFFFFC86B);
+  static const primaryExtraLight = Color(0xFFFFD173);
   static const textBodyColor = Color(0xDD604B41);
   static const hintTextColor = Color(0xBB604B41);
   static const lightTextColor = Color(0x82604B41);
@@ -11,6 +12,9 @@ class Burnt {
   static const paper = Color(0xFFFAFAFA);
   static const separator = Color(0xFFEEEEEE);
   static const lightGrey = Color(0x44604B41);
+  static const iconGrey = Color(0x44604B41);
+  static const iconOrange = Color(0xFFFFD173);
+  static const splashOrange = Color(0x30FFD173);
   static const imgPlaceholderColor = Color(0x08604B41);
   static const lightBlue = Color(0x6C007AFF);
   static const blue = Color(0xFF007AFF);

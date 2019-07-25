@@ -13,6 +13,8 @@ class FavoriteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       onTap: () { isFavorited ? onUnfavorite() : onFavorite(); },
       child: Padding(
         padding: EdgeInsets.all(padding),

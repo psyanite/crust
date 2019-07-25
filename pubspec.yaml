@@ -36,6 +36,7 @@ dependencies:
     shimmer: ^1.0.0
     timeago: ^2.0.9
     tuple: ^1.0.2
+    url_launcher: ^5.1.0
 
     # Firebase
     firebase_core: 0.4.0+6

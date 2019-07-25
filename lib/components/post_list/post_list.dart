@@ -130,7 +130,7 @@ class PostCard extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(left: 10.0, right: 5.0),
               child: Row(children: <Widget>[
-                Icon(CrustCons.post_comment, color: Burnt.lightGrey, size: 28.0),
+                Icon(CrustCons.post_comment, color: Burnt.iconGrey, size: 28.0),
                 Container(width: 3.0),
                 if (post.commentCount > 0) Text(post.commentCount.toString(), style: TextStyle(color: Burnt.lightTextColor, fontSize: 15.0)),
               ]),
@@ -147,7 +147,7 @@ class PostCard extends StatelessWidget {
             highlightColor: Colors.transparent,
             child: Padding(
               padding: EdgeInsets.only(left: 3.0, right: 5.0),
-              child: Icon(CrustCons.padlock, color: Burnt.lightGrey, size: 28.0),
+              child: Icon(CrustCons.padlock, color: Burnt.iconGrey, size: 28.0),
             ),
             onTap: () {
               var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];

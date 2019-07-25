@@ -26,7 +26,9 @@ class PostInfo extends StatelessWidget {
       _content(),
     ];
     return Container(
-        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))), child: Column(children: children));
+        padding: EdgeInsets.only(top: 30.0, bottom: 10.0),
+        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))),
+        child: Column(children: children));
   }
 
   Widget _header() {
@@ -56,18 +58,17 @@ class PostInfo extends StatelessWidget {
       builder: (context) => InkWell(
             onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => nextScreen)),
             child: Column(
-              children: <Widget>[Container(padding: EdgeInsets.only(top: 15.0, bottom: 10.0), child: details)],
+              children: <Widget>[Container(padding: EdgeInsets.only(bottom: 20.0), child: details)],
             ),
           ),
     );
   }
 
-
   Widget _reviewBody() {
     return Builder(
       builder: (context) => InkWell(
         child: Padding(
-          padding: EdgeInsets.only(bottom: 10.0),
+          padding: EdgeInsets.only(bottom: 20.0),
           child: Text(post.postReview.body)
         ),
         onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CommentScreen(post: post))),
@@ -75,11 +76,9 @@ class PostInfo extends StatelessWidget {
     );
   }
 
-
   Widget _content() {
     var renderReview = post.type == PostType.review && post.postReview.body != null;
     return Container(
-        padding: EdgeInsets.only(top: 10.0),
         child: Column(children: <Widget>[
           if (renderReview) _reviewBody(),
           post.postPhotos.isNotEmpty ? CarouselWrapper(postId: post.id, child: _carousel()) : _textEnd()
@@ -120,10 +119,10 @@ class PostInfo extends StatelessWidget {
         builder: (context) => Column(
               children: <Widget>[
                 Container(
-                    height: MediaQuery.of(context).size.width - 30.0,
+                  margin: EdgeInsets.only(top: 5.0, bottom: 10.0),
+                  height: MediaQuery.of(context).size.width - 30.0,
                     decoration: BoxDecoration(
                         color: Burnt.imgPlaceholderColor,
-                        border: Border(bottom: BorderSide(color: Burnt.separator)),
                         image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.postPhotos[0].url)))),
                 Padding(
                   padding: EdgeInsets.only(top: 6.0, bottom: 10.0),

@@ -43,7 +43,8 @@
 </div>
 
 ## To Do
-* Add write a review button from store screen
+* Add whitelist userIds for rewards, secret rewards
+* Update favorite store and reward behaviour to be live
 * Implement QR scanner
 * Implement home screen
 * Implement follow functionality
@@ -52,6 +53,7 @@
 * Implement pagination
 
 ## Done
+* Add write a review button from store screen
 * Implement comment count
 * Implement comments
 * Update store screen for multiple same user posts

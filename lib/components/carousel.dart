@@ -40,6 +40,7 @@ class _CarouselState extends State<Carousel> {
           height: MediaQuery.of(context).size.width - 30.0,
           child: _gallery(),
         ),
+        Container(height: 10.0),
         Container(
           padding: EdgeInsets.only(top: 6.0, bottom: 10.0),
           height: 50.0,

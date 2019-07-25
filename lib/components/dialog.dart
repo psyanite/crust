@@ -3,11 +3,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class DialogOption {
+  final IconData icon;
   final String display;
   final Function onTap;
   final TextStyle style;
 
-  DialogOption({this.display, this.onTap, this.style});
+  DialogOption({this.icon, this.display, this.onTap, this.style});
 }
 
 class BurntDialog extends StatelessWidget {
