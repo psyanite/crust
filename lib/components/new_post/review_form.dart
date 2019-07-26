@@ -84,7 +84,7 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _appBar() {
     return Container(
-      padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 40.0, bottom: 20.0),
+      padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 40.0, bottom: 20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -143,7 +143,7 @@ class _PresenterState extends State<_Presenter> {
       builder: (context) => Column(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(children: <Widget>[
                   _overallQuestion(),
                   _tasteQuestion(),
@@ -428,7 +428,7 @@ class _PresenterState extends State<_Presenter> {
                     width: 1.0,
                   ),
                   borderRadius: BorderRadius.circular(2.0)),
-              padding: EdgeInsets.symmetric(vertical: 11.0, horizontal: 15.0),
+              padding: EdgeInsets.symmetric(vertical: 11.0, horizontal: 16.0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,

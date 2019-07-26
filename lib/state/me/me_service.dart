@@ -187,6 +187,23 @@ class MeService {
     return { 'rewards': rewards, 'stores': stores, 'posts': posts };
   }
 
+  static Future<List<UserReward>> fetchUserRewards(userId) async {
+    String query = """
+      query {
+        allUserRewardsByUserId(userId: $userId) {
+          reward {
+            ${Reward.attributes}
+          },
+          unique_code,
+          redeemed_at
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['allUserRewardsByUserId'];
+    return (json as List).map((u) => UserReward.fromToaster(u)).toList();
+  }
+
   Future<UserReward> fetchUserReward({ userId, rewardId }) async {
     String query = """
       query {
@@ -201,8 +218,7 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['userRewardBy'];
-    var result = (json as List).map((u) => UserReward.fromToaster(u)).toList();
-    return result.isNotEmpty ? result.first : null;
+    return UserReward.fromToaster(json);
   }
 
   Future<UserReward> addUserReward({ userId, rewardId }) async {
@@ -219,7 +235,6 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['addUserReward'];
-    var result = (json as List).map((u) => UserReward.fromToaster(u)).toList();
-    return result.isNotEmpty ? result.first : null;
+    return UserReward.fromToaster(json);
   }
 }

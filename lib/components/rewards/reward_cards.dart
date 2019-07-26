@@ -1,20 +1,15 @@
-import 'package:crust/components/favorite_button.dart';
+import 'package:crust/components/rewards/favorite_reward_button.dart';
 import 'package:crust/components/rewards/reward_screen.dart';
 import 'package:crust/models/reward.dart';
-import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/material.dart';
 
 class RewardCards extends StatelessWidget {
   final List<Reward> rewards;
-  final Set<int> favoriteRewards;
-  final Function favoriteReward;
-  final Function unfavoriteReward;
-  final bool isLoggedIn;
   final String layout;
+  final bool confirmUnfavorite;
 
-  RewardCards({Key key, this.rewards, this.favoriteRewards, this.favoriteReward, this.unfavoriteReward, this.isLoggedIn, this.layout})
-      : super(key: key);
+  RewardCards({Key key, this.rewards, this.layout, this.confirmUnfavorite}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,10 +32,9 @@ class RewardCards extends StatelessWidget {
 
   Widget _card(Reward reward) {
     return Padding(
-      padding: EdgeInsets.only(right: 15.0, bottom: 20.0, left: 15.0),
+      padding: EdgeInsets.only(top: 10.0, right: 16.0, bottom: 15.0, left: 16.0),
       child: Container(
         padding: EdgeInsets.only(bottom: 20.0),
-        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -60,7 +54,7 @@ class RewardCards extends StatelessWidget {
 
   Widget _listItem(Reward reward) {
     return Padding(
-      padding: EdgeInsets.only(top: 10.0, right: 15.0, bottom: 10.0, left: 15.0),
+      padding: EdgeInsets.only(top: 10.0, right: 16.0, bottom: 10.0, left: 16.0),
       child: Container(
         padding: EdgeInsets.only(bottom: 20.0),
         decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))),
@@ -91,11 +85,12 @@ class RewardCards extends StatelessWidget {
   }
 
   Widget _cardBanner(Reward reward) {
+    var expired = reward.isExpired();
     return Container(
       padding: EdgeInsets.symmetric(vertical: 7.0),
-      color: Burnt.separator,
+      color: expired ? Burnt.primary : Burnt.separator,
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text(reward.bannerText(), style: TextStyle(color: Burnt.lightTextColor)),
+        Text(reward.bannerText(), style: TextStyle(color: expired ? Colors.white : Burnt.lightTextColor)),
       ]),
     );
   }
@@ -117,7 +112,7 @@ class RewardCards extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             )),
-        _favoriteButton(reward),
+        FavoriteRewardButton(reward: reward, padding: EdgeInsets.all(15.0), size: 27.0, confirmUnfavorite: confirmUnfavorite),
       ],
     );
   }
@@ -135,26 +130,8 @@ class RewardCards extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             )),
-        _favoriteButton(reward)
+        FavoriteRewardButton(reward: reward, confirmUnfavorite: confirmUnfavorite)
       ],
     );
-  }
-
-  Widget _favoriteButton(Reward reward) {
-    return Builder(
-        builder: (context) => FavoriteButton(
-            isFavorited: favoriteRewards.contains(reward.id),
-            onFavorite: () {
-              if (isLoggedIn) {
-                favoriteReward(reward.id);
-                snack(context, 'Added to favourites');
-              } else {
-                snack(context, 'Login now to favorite rewards');
-              }
-            },
-            onUnfavorite: () {
-              unfavoriteReward(reward.id);
-              snack(context, 'Removed from favourites');
-            }));
   }
 }

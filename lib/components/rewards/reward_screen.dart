@@ -1,4 +1,5 @@
-import 'package:crust/components/favorite_button.dart';
+import 'package:crust/components/dialog.dart';
+import 'package:crust/components/rewards/favorite_reward_button.dart';
 import 'package:crust/components/screens/qr_screen.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/user_reward.dart';
@@ -13,20 +14,20 @@ import 'package:redux/redux.dart';
 
 class RewardScreen extends StatelessWidget {
   final int rewardId;
+  final UserReward userReward;
 
-  RewardScreen({Key key, this.rewardId}) : super(key: key);
+  RewardScreen({Key key, this.rewardId, this.userReward}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-        onInit: (Store<AppState> store) => store.dispatch(FetchUserRewardRequest(rewardId)),
-        converter: (Store<AppState> store) => _Props.fromStore(store, rewardId),
+        onInit: (Store<AppState> store) {
+          if (rewardId != null) store.dispatch(FetchUserRewardRequest(rewardId));
+        },
+        converter: (Store<AppState> store) =>_Props.fromStore(store, rewardId),
         builder: (context, props) => _Presenter(
-            reward: props.reward,
-            userReward: props.userReward,
-            favoriteRewards: props.favoriteRewards,
-            favoriteReward: props.favoriteReward,
-            unfavoriteReward: props.unfavoriteReward,
+            reward: userReward?.reward ?? props.reward,
+            userReward: userReward ?? props.userReward,
             addUserReward: props.addUserReward,
             isLoggedIn: props.isLoggedIn));
   }
@@ -35,9 +36,6 @@ class RewardScreen extends StatelessWidget {
 class _Presenter extends StatelessWidget {
   final Reward reward;
   final UserReward userReward;
-  final Set<int> favoriteRewards;
-  final Function favoriteReward;
-  final Function unfavoriteReward;
   final Function addUserReward;
   final bool isLoggedIn;
 
@@ -45,21 +43,23 @@ class _Presenter extends StatelessWidget {
       {Key key,
       this.reward,
       this.userReward,
-      this.favoriteReward,
-      this.favoriteRewards,
-      this.unfavoriteReward,
       this.addUserReward,
       this.isLoggedIn})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Column(mainAxisAlignment: MainAxisAlignment.spaceBetween, crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[Column(
-      children: <Widget>[
-        _appBar(),
-        _description()
-      ],
-    ), _footer()])));
+    return Scaffold(
+        body: Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+          Column(
+            children: <Widget>[_appBar(), _description()],
+          ),
+          _footer()
+        ])));
   }
 
   Widget _appBar() {
@@ -69,7 +69,7 @@ class _Presenter extends StatelessWidget {
           alignment: AlignmentDirectional.topStart,
           children: <Widget>[
             Container(
-                height: 150.0,
+                height: 300.0,
                 decoration: BoxDecoration(
                   color: Burnt.imgPlaceholderColor,
                   image: DecorationImage(
@@ -77,15 +77,21 @@ class _Presenter extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 )),
+            Container(height: 150.0, decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: [0, 0.2, 1.0],
+                colors: [Color(0x30000000), Color(0x30000000), Color(0x0000000)],
+              ))),
             SafeArea(
               child: Container(
-                height: 55.0,
+                height: 106.0,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     BackArrow(color: Colors.white),
-                    Padding(child: _favoriteButton(reward), padding: EdgeInsets.only(right: 10.0))
                   ],
                 ),
               ),
@@ -98,13 +104,19 @@ class _Presenter extends StatelessWidget {
 
   Widget _description() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(bottom: 5.0),
-            child: Text(reward.name, style: Burnt.display4),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(bottom: 5.0),
+                child: Text(reward.name, style: Burnt.display4),
+              ),
+              Padding(child: FavoriteRewardButton(reward: reward, size: 30.0), padding: EdgeInsets.only(right: 10.0))
+            ],
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,6 +126,8 @@ class _Presenter extends StatelessWidget {
               _location(reward),
               Container(height: 10.0),
               Text(reward.description),
+              Container(height: 10.0),
+              _termsAndConditions(),
             ],
           )
         ],
@@ -137,13 +151,40 @@ class _Presenter extends StatelessWidget {
     );
   }
 
+  Widget _termsAndConditions() {
+    return Builder(builder: (context) {
+      return InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          onTap: () {
+            var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
+            showDialog(context: context, builder: (context) => BurntDialog(options: options, description: reward.termsAndConditions));
+          },
+          child: Text('See terms and conditions', style: TextStyle(color: Burnt.primaryTextColor)));
+    });
+  }
+
   Widget _footer() {
-    return userReward?.isRedeemed() == true ? Text('You\'ve already redeemed this reward!') : _redeemContent();
+    if (userReward?.isRedeemed() == true) {
+      return _renderFooterText('You\'ve already redeemed this reward!');
+    } else if (reward.isExpired() == true) {
+      return _renderFooterText('Sorry, this reward has already expired!');
+    }
+    return _redeemContent();
+  }
+
+  Widget _renderFooterText(text) {
+    return Padding(
+      padding: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 40.0),
+      child: Center(
+        child: Text(text),
+      ),
+    );
   }
 
   Widget _redeemContent() {
     return Padding(
-      padding: const EdgeInsets.all(15.0),
+      padding: EdgeInsets.all(16.0),
       child: Builder(
         builder: (context) => SolidButton(
               onPressed: () {
@@ -162,55 +203,25 @@ class _Presenter extends StatelessWidget {
       ),
     );
   }
-
-  Widget _favoriteButton(Reward reward) {
-    return Builder(
-      builder: (context) => FavoriteButton(
-            padding: 0,
-            isFavorited: favoriteRewards.contains(reward.id),
-            onFavorite: () {
-              if (isLoggedIn) {
-                favoriteReward(reward.id);
-                snack(context, 'Added to favourites');
-              } else {
-                snack(context, 'Login now to favourite reward');
-              }
-            },
-            onUnfavorite: () {
-              unfavoriteReward(reward.id);
-              snack(context, 'Removed from favourites');
-            },
-          ),
-    );
-  }
 }
 
 class _Props {
   final Reward reward;
   final UserReward userReward;
-  final Set<int> favoriteRewards;
-  final Function favoriteReward;
-  final Function unfavoriteReward;
   final Function addUserReward;
   final bool isLoggedIn;
 
   _Props({
     this.reward,
     this.userReward,
-    this.favoriteRewards,
-    this.favoriteReward,
-    this.unfavoriteReward,
     this.addUserReward,
     this.isLoggedIn,
   });
 
   static fromStore(Store<AppState> store, int rewardId) {
     return _Props(
-      reward: store.state.reward.rewards[rewardId],
-      userReward: store.state.me.userReward,
-      favoriteRewards: store.state.me.favoriteRewards ?? Set<int>(),
-      favoriteReward: (rewardId) => store.dispatch(FavoriteRewardRequest(rewardId)),
-      unfavoriteReward: (rewardId) => store.dispatch(UnfavoriteRewardRequest(rewardId)),
+      reward: rewardId != null ? store.state.reward.rewards[rewardId] : null,
+      userReward: rewardId != null ? store.state.me.userReward : null,
       addUserReward: (rewardId) => store.dispatch(AddUserRewardRequest(rewardId)),
       isLoggedIn: store.state.me.user != null,
     );

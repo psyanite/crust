@@ -43,6 +43,7 @@
 </div>
 
 ## To Do
+* Render all store locations in reward screen
 * Move like button reward screen
 * Add whitelist userIds for rewards, secret rewards
 * Implement QR scanner

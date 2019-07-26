@@ -13,6 +13,8 @@ class Reward {
   final DateTime validFrom;
   final DateTime validUntil;
   final String promoImage;
+  final String termsAndConditions;
+  final bool hidden;
 
   Reward({
     this.id,
@@ -24,12 +26,26 @@ class Reward {
     this.validFrom,
     this.validUntil,
     this.promoImage,
+    this.termsAndConditions,
+    this.hidden,
   });
 
+  bool isExpired() {
+    var today = new DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    var lastDay = this.validUntil;
+    return lastDay == null || lastDay.isBefore(today);
+  }
+
+  bool isHidden() {
+    return hidden;
+  }
+
   String bannerText() {
+    var lastDay = this.validUntil;
+    if (isExpired() == true) return 'Expired ${DateFormat.MMMEd("en_US").format(lastDay)}';
+
     var today = new DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     var firstDay = this.validFrom;
-    var lastDay = this.validUntil;
     if (firstDay != null && lastDay != null) {
       if (firstDay == lastDay) {
         if (today == firstDay) return 'Only available TODAY. Get in quick!';
@@ -74,6 +90,8 @@ class Reward {
       validFrom: json['valid_from'] != null ? DateTime.parse(json['valid_from']) : null,
       validUntil: json['valid_until'] != null ? DateTime.parse(json['valid_until']) : null,
       promoImage: json['promo_image'],
+      termsAndConditions: json['terms_and_conditions'],
+      hidden: json['hidden'],
     );
   }
 
@@ -149,6 +167,8 @@ class Reward {
     valid_from,
     valid_until,
     promo_image,
+    terms_and_conditions,
+    hidden,
   """;
 }
 

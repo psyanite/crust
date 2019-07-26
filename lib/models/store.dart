@@ -142,18 +142,6 @@ class Cuisine {
   }
 }
 
-class Location {
-  final int id;
-  final String name;
-
-  Location({this.id, this.name});
-
-  factory Location.fromToaster(Map<String, dynamic> json) {
-    if (json == null) return null;
-    return Location(id: json['id'], name: json['name']);
-  }
-}
-
 class Suburb {
   final int id;
   final String name;

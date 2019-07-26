@@ -79,7 +79,7 @@ class _PresenterState extends State<_Presenter> {
     return SliverSafeArea(
       sliver: SliverToBoxAdapter(
           child: Container(
-        padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 35.0, bottom: 20.0),
+        padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 35.0, bottom: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -187,7 +187,7 @@ class _PresenterState extends State<_Presenter> {
               });
             },
             child: Padding(
-              padding: EdgeInsets.only(top: 10.0, right: 15.0, left: 15.0),
+              padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
               child: Container(
                 color: Colors.transparent,
                 child: IntrinsicHeight(
@@ -225,7 +225,7 @@ class _PresenterState extends State<_Presenter> {
               widget.addSearchHistoryItem(item);
             },
             child: Padding(
-              padding: EdgeInsets.only(top: 10.0, right: 15.0, left: 15.0),
+              padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
               child: Container(
                 child: IntrinsicHeight(
                   child: Row(
@@ -302,7 +302,7 @@ class _PresenterState extends State<_Presenter> {
             Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id)));
           },
           child: Padding(
-            padding: EdgeInsets.only(top: 10.0, right: 15.0, left: 15.0),
+            padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
             child: Container(
               child: IntrinsicHeight(
                 child: Row(

@@ -93,7 +93,7 @@ class _Presenter extends StatelessWidget {
         child: Column(children: <Widget>[
           _bannerImage(),
           _metaInfo(),
-          _writeAReviewButton()])));
+          _writeReviewButton()])));
 }
 
   Widget _bannerImage() {
@@ -118,7 +118,7 @@ class _Presenter extends StatelessWidget {
         ))),
         SafeArea(
           child: Container(
-            height: 55.0,
+            height: 106.0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,7 +135,7 @@ class _Presenter extends StatelessWidget {
 
   Widget _metaInfo() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 20.0),
+      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -204,29 +204,22 @@ class _Presenter extends StatelessWidget {
     );
   }
 
-  Widget _writeAReviewButton() {
+  Widget _writeReviewButton() {
     return Builder(
       builder: (context) => Padding(
-        padding: EdgeInsets.only(bottom: 20.0, left: 16.0, right: 16.0),
-        child: InkWell(
-          splashColor: Burnt.splashOrange,
-          highlightColor: Colors.transparent,
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ReviewForm(store: store))),
-          child: Container(
-            decoration: BoxDecoration(border: Border.all(color: Color(0xFFFFD173), width: 1.0, style: BorderStyle.solid), borderRadius: BorderRadius.circular(2.0)),
-            padding: EdgeInsets.symmetric(vertical: 10.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Text('Write a review', style: TextStyle(fontSize: 18.0, color: Burnt.primaryTextColor)),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        child: HollowButton(
+        onTap: () {
+          if (isLoggedIn == false) {
+            snack(context, 'Login now to write a review');
+          } else {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => ReviewForm(store: store)));
+          }
+        },
+        children: <Widget>[
+          Text('Write a review', style: TextStyle(fontSize: 18.0, color: Burnt.primaryTextColor)),
+        ]
+      )));
   }
 
   Widget _ratingCount(int count, Score score) {
@@ -247,20 +240,21 @@ class _Presenter extends StatelessWidget {
   Widget _addressLong() {
     var address = store.address;
     var firstSentence = '';
-    if (address.firstLine != null) firstSentence += "${address.firstLine}";
-    if (address.secondLine != null) firstSentence += ", ${address.secondLine}";
+    if (address.firstLine != null) firstSentence += address.firstLine;
+    if (address.secondLine != null) firstSentence += ', ${address.secondLine}';
     var secondSentence = '';
-    secondSentence += "${address.streetNumber} ${address.streetName}, ";
-    if (store.location != null) secondSentence += "${store.location}";
-    if (store.suburb != null) secondSentence += "${store.suburb}";
-    return Container(
-      padding: EdgeInsets.only(right: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          if (firstSentence.isNotEmpty) Text(firstSentence, style: TextStyle(color: Burnt.hintTextColor)),
-          if (secondSentence.isNotEmpty) Text(secondSentence, style: TextStyle(color: Burnt.hintTextColor)),
-        ],
+    secondSentence += '${address.streetNumber} ${address.streetName}, ';
+    secondSentence += store.location != null ? store.location : store.suburb;
+    return Flexible(
+      child: Container(
+        padding: EdgeInsets.only(right: 8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            if (firstSentence.isNotEmpty) Text(firstSentence, style: TextStyle(color: Burnt.hintTextColor)),
+            if (secondSentence.isNotEmpty) Text(secondSentence, style: TextStyle(color: Burnt.hintTextColor)),
+          ],
+        ),
       ),
     );
   }
@@ -316,7 +310,6 @@ class _Presenter extends StatelessWidget {
     return Builder(
       builder: (context) => FavoriteButton(
         size: 30.0,
-        padding: 0,
         isFavorited: favoriteStores.contains(store.id),
         onFavorite: () {
           if (isLoggedIn) {

@@ -107,15 +107,17 @@ class SolidButton extends StatelessWidget {
   final double iconSize;
   final String text;
   final Function onPressed;
+  final double padding;
+  final double fontSize;
 
-  SolidButton({Key key, this.icon, this.iconSize, this.text, this.onPressed}) : super(key: key);
+  SolidButton({Key key, this.icon, this.iconSize, this.text, this.onPressed, this.padding, this.fontSize}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onPressed,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: 20.0),
+        padding: EdgeInsets.symmetric(vertical: padding ?? 20.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(2.0)),
             gradient: LinearGradient(
@@ -131,8 +133,35 @@ class SolidButton extends StatelessWidget {
           children: <Widget>[
             if (icon != null) Icon(icon, size: iconSize ?? 20.0, color: Colors.white),
             if (icon != null) Container(width: 8.0),
-            Text(text, style: TextStyle(fontSize: 22.0, color: Colors.white)),
+            Text(text, style: TextStyle(fontSize: fontSize ?? 22.0, color: Colors.white)),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class HollowButton extends StatelessWidget {
+  final Function onTap;
+  final List<Widget> children;
+  final double padding;
+
+  HollowButton({Key key, this.onTap, this.children, this.padding}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      splashColor: Burnt.splashOrange,
+      highlightColor: Colors.transparent,
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(border: Border.all(color: Color(0xFFFFD173), width: 1.0, style: BorderStyle.solid), borderRadius: BorderRadius.circular(2.0)),
+        padding: EdgeInsets.symmetric(vertical: padding ?? 10.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: children,
         ),
       ),
     );
@@ -168,12 +197,8 @@ class SliverCenter extends StatelessWidget {
 class LoadingSliver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SliverFillRemaining(
-      child: Container(
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
+    return SliverCenter(
+        child: CircularProgressIndicator(),
     );
   }
 }

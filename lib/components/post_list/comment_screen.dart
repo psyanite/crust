@@ -108,7 +108,7 @@ class _PresenterState extends State<_Presenter> {
     return SliverSafeArea(
       sliver: SliverToBoxAdapter(
           child: Container(
-        padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 35.0, bottom: 2.0),
+        padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 35.0, bottom: 2.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -211,7 +211,7 @@ class _PresenterState extends State<_Presenter> {
               InkWell(
                   highlightColor: Colors.transparent,
                   child: Container(
-                      padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 15.0, right: 20.0),
+                      padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 16.0, right: 20.0),
                       child: Text("Submit", style: TextStyle(color: _enableSubmit ? Burnt.primary : Burnt.lightBlue))),
                   onTap: () => _handleSubmit(context, _bodyCtrl.text)),
             ],
@@ -371,7 +371,7 @@ class _CommentCardState extends State<_CommentCard> with TickerProviderStateMixi
               },
               child: Container(
                 color: _colorTween.value,
-                padding: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
+                padding: EdgeInsets.only(top: 10.0, left: 16.0, right: 16.0),
                 child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   _profilePicture(widget.comment.commentedBy.profilePicture),
                   _body(),

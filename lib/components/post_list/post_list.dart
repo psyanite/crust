@@ -31,16 +31,10 @@ class PostList extends StatelessWidget {
   }
 
   Widget _noPostsNotice() {
-    return SliverPadding(
-      padding: EdgeInsets.only(top: 10.0, left: 16.0, right: 16.0),
-      sliver: SliverList(
-        delegate: SliverChildListDelegate(<Widget>[
-          Column(children: <Widget>[
-            noPostsView
-//            RaisedButton(child: Text('Add One Now'), onPressed: () {},)
-          ])
-        ]),
-      ),
+    return SliverToBoxAdapter(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 16.0),
+        child: Center(child: noPostsView))
     );
   }
 }
@@ -73,7 +67,7 @@ class _PostListState extends State<_PostList> {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-        padding: EdgeInsets.symmetric(horizontal: 15.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
         sliver: SliverList(
             delegate: SliverChildBuilderDelegate(
                 (builder, i) => PostCard(

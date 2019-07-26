@@ -15,6 +15,10 @@ class UserReward {
     return redeemedAt != null;
   }
 
+  bool isExpired() {
+    return reward.isExpired();
+  }
+
   factory UserReward.fromToaster(Map<String, dynamic> json) {
     if (json == null) return null;
     return UserReward(

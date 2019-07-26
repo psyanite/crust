@@ -1,8 +1,6 @@
-import 'package:crust/components/favorite_button.dart';
-import 'package:crust/components/screens/store_screen.dart';
 import 'package:crust/components/search/search_icon.dart';
+import 'package:crust/components/stores/stores_grid.dart';
 import 'package:crust/models/store.dart' as MyStore;
-import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
@@ -13,10 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:redux/redux.dart';
-import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
@@ -53,7 +49,7 @@ class _Presenter extends StatelessWidget {
   Widget build(BuildContext context) {
     FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
     FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
-    return Scaffold(body: CustomScrollView(slivers: <Widget>[_appBar(), _content()]));
+    return Scaffold(body: CustomScrollView(slivers: <Widget>[_appBar(), StoresGrid(stores: stores)]));
   }
 
   Widget _appBar() {
@@ -61,121 +57,20 @@ class _Presenter extends StatelessWidget {
       sliver: SliverToBoxAdapter(
           child: Container(
         height: 100.0,
-        padding: EdgeInsets.symmetric(horizontal: 15.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
 //            Text('BURNTOAST', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
-            Text('Burntoast', style: TextStyle(color: Burnt.primary, fontSize: 44.0, fontFamily: Burnt.fontFancy, fontWeight: Burnt.fontLight, letterSpacing: 0.0)),
+            Text('Burntoast',
+                style: TextStyle(
+                    color: Burnt.primary, fontSize: 44.0, fontFamily: Burnt.fontFancy, fontWeight: Burnt.fontLight, letterSpacing: 0.0)),
             SearchIcon()
           ],
         ),
       )),
-    );
-  }
-
-  Widget _skelly() {
-    return SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1.2,
-          crossAxisSpacing: 5.0,
-          mainAxisSpacing: 5.0,
-        ),
-        delegate: SliverChildBuilderDelegate(
-            (builder, i) => Shimmer.fromColors(
-                baseColor: Color(0xFFF0F0F0),
-                highlightColor: Color(0xFFF7F7F7),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
-                  Container(
-                    width: 100.0,
-                    height: 100.0,
-                    color: Colors.white,
-                  ),
-                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                    Container(height: 8.0),
-                    Container(height: 8.0, width: 150.0, color: Colors.white),
-                    Container(height: 8.0),
-                    Container(height: 8.0, width: 100.0, color: Colors.white),
-                  ])
-                ])),
-            childCount: 20));
-  }
-
-  Widget _content() {
-//    if (error != null) return _error();
-    if (stores.isEmpty) return _skelly();
-    stores.sort((a, b) => a.id.compareTo(b.id));
-    return SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1.2,
-          crossAxisSpacing: 5.0,
-          mainAxisSpacing: 5.0,
-        ),
-        delegate: SliverChildBuilderDelegate((builder, i) => _storeCard(stores[i]), childCount: stores.length));
-  }
-
-  Widget _storeCard(MyStore.Store store) {
-    return Builder(
-      builder: (context) {
-        return InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id)),
-            );
-          },
-          child: Container(
-              child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
-            Stack(
-              alignment: AlignmentDirectional.topEnd,
-              children: <Widget>[
-                Container(
-                    height: 100.0,
-                    decoration: BoxDecoration(
-                      color: Burnt.imgPlaceholderColor,
-                      image: DecorationImage(
-                        image: NetworkImage(store.coverImage),
-                        fit: BoxFit.cover,
-                      ),
-                    )),
-                _favoriteButton(store),
-              ],
-            ),
-            Padding(
-                padding: EdgeInsets.only(left: 8.0, top: 5.0),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                  Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                  Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
-                  Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
-                ]))
-          ])),
-        );
-      },
-    );
-  }
-
-  Widget _favoriteButton(MyStore.Store store) {
-    return Builder(
-      builder: (context) => FavoriteButton(
-            padding: 10.0,
-            isFavorited: favoriteStores.contains(store.id),
-            onFavorite: () {
-              if (isLoggedIn) {
-                favoriteStore(store.id);
-                snack(context, 'Added to favourites');
-              } else {
-                snack(context, 'Login now to favorite store');
-              }
-            },
-            onUnfavorite: () {
-              unfavoriteStore(store.id);
-              snack(context, 'Removed from favourites');
-            },
-          ),
     );
   }
 }

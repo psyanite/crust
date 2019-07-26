@@ -1,7 +1,9 @@
 import 'package:crust/components/confirm.dart';
 import 'package:crust/components/favorite_button.dart';
+import 'package:crust/components/rewards/favorite_rewards_screen.dart';
 import 'package:crust/components/rewards/reward_screen.dart';
 import 'package:crust/components/screens/store_screen.dart';
+import 'package:crust/components/stores/favorite_stores_screen.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
@@ -14,7 +16,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 class FavoritesScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
@@ -56,14 +57,14 @@ class _Presenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: <Widget>[_appBar(), _content()]);
+    return CustomScrollView(slivers: <Widget>[_appBar(), _content(context)]);
   }
 
   Widget _appBar() {
     return SliverSafeArea(
       sliver: SliverToBoxAdapter(
           child: Container(
-        padding: EdgeInsets.only(left: 15.0, right: 15.0, top: 20.0, bottom: 20.0),
+        padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 20.0, bottom: 20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -76,20 +77,26 @@ class _Presenter extends StatelessWidget {
                 Container(height: 50, width: 50),
               ],
             ),
-            Text('Access all your favourited stores and rewards')
+            Text('All your favourited stores and rewards')
           ],
         ),
       )),
     );
   }
 
-  Widget _content() {
+  Widget _content(BuildContext context) {
     if (!isLoggedIn) return CenterTextSliver(text: 'Login now to see your favorites!');
     if (rewards == null && stores == null) return LoadingSliver();
+    var storeCards = stores != null ? List<Widget>.from(stores.take(5).map(_storeCard)) : List<Widget>();
+    var rewardCards = rewards != null ? List<Widget>.from(rewards.take(5).map(_rewardCard)) : List<Widget>();
     return SliverList(
       delegate: SliverChildListDelegate(<Widget>[
-        _list("Favourite Stores", () {}, stores != null ? List<Widget>.from(stores.map(_storeCard)) : List<Widget>()),
-        _list("Favourite Rewards", () {}, rewards != null ? List<Widget>.from(rewards.map(_rewardCard)) : List<Widget>()),
+        _list("Favourite Stores", () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteStoresScreen()));
+        }, storeCards),
+        _list("Favourite Rewards", () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteRewardsScreen()));
+        }, rewardCards),
       ]),
     );
   }
@@ -97,18 +104,28 @@ class _Presenter extends StatelessWidget {
   Widget _list(String title, Function onTap, List<Widget> children) {
     return Column(
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.only(bottom: 5.0, left: 15.0, right: 15.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Text(title, style: TextStyle(fontSize: 23.0, fontWeight: Burnt.fontBold)),
-              InkWell(
-                  child: Text("See All", style: TextStyle(fontSize: 14.0, fontWeight: Burnt.fontBold, color: Burnt.primary)), onTap: onTap)
-            ],
-          ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(left: 16.0, bottom: 10.0),
+              child: Text(title, style: TextStyle(fontSize: 23.0, fontWeight: Burnt.fontBold)),
+            ),
+            InkWell(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 8.0, right: 16.0, bottom: 10.0, top: 10.0),
+                  child: Text('See All', style: TextStyle(fontSize: 14.0, fontWeight: Burnt.fontBold, color: Burnt.primary)),
+                ),
+                onTap: onTap)
+          ],
         ),
-        Container(margin: EdgeInsets.only(left: 15.0), height: 180.0, child: ListView(scrollDirection: Axis.horizontal, children: children))
+        Container(
+            margin: EdgeInsets.only(left: 16.0, bottom: 20.0),
+            height: 160.0,
+            child: ListView(scrollDirection: Axis.horizontal, children: children))
       ],
     );
   }
@@ -124,12 +141,12 @@ class _Presenter extends StatelessWidget {
             },
             child: Container(
                 width: 200.0,
-                height: 200.0,
+                height: 160.0,
                 padding: EdgeInsets.only(right: 10.0),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   Stack(alignment: AlignmentDirectional.topEnd, children: <Widget>[
                     Container(height: 100.0, width: 200.0, child: Image.network(store.coverImage, fit: BoxFit.cover)),
-                      _favoriteButton('Remove Store', 'This store will be removed from favourites', () => unfavoriteReward(store.id))
+                    _favoriteButton('Remove Store', 'This store will be removed from favourites', () => unfavoriteReward(store.id))
                   ]),
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                     Container(height: 5.0),
@@ -151,11 +168,15 @@ class _Presenter extends StatelessWidget {
             },
             child: Container(
                 width: 200.0,
-                height: 200.0,
+                height: 160.0,
                 padding: EdgeInsets.only(right: 10.0),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   Stack(alignment: AlignmentDirectional.topEnd, children: <Widget>[
-                    Container(height: 100.0, width: 200.0, color: Burnt.imgPlaceholderColor, child: Image.network(reward.promoImage, fit: BoxFit.cover)),
+                    Container(
+                        height: 100.0,
+                        width: 200.0,
+                        color: Burnt.imgPlaceholderColor,
+                        child: Image.network(reward.promoImage, fit: BoxFit.cover)),
                     _favoriteButton('Remove Reward', 'This reward will be removed from favourites', () => unfavoriteReward(reward.id))
                   ]),
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
@@ -169,24 +190,23 @@ class _Presenter extends StatelessWidget {
   Widget _favoriteButton(String title, String description, Function onConfirm) {
     return Builder(
       builder: (context) => FavoriteButton(
-        padding: 7.0,
-        isFavorited: true,
-        onUnfavorite: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return Confirm(
-                title: title,
-                description: description,
-                action: 'Remove',
-                onTap: () {
-                  onConfirm();
-                  Navigator.of(context, rootNavigator: true).pop(true);
-                });
-            }
-          );
-        },
-      ),
+            padding: EdgeInsets.all(7.0),
+            isFavorited: true,
+            onUnfavorite: () {
+              showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return Confirm(
+                        title: title,
+                        description: description,
+                        action: 'Remove',
+                        onTap: () {
+                          onConfirm();
+                          Navigator.of(context, rootNavigator: true).pop(true);
+                        });
+                  });
+            },
+          ),
     );
   }
 }
