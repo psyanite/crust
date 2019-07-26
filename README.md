@@ -44,7 +44,6 @@
 
 ## To Do
 * Add whitelist userIds for rewards, secret rewards
-* Update favorite store and reward behaviour to be live
 * Implement QR scanner
 * Implement home screen
 * Implement follow functionality
@@ -53,6 +52,7 @@
 * Implement pagination
 
 ## Done
+* Update favorite store and reward behaviour to be instant
 * Add write a review button from store screen
 * Implement comment count
 * Implement comments

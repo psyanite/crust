@@ -32,27 +32,27 @@ MeState fetchMyPosts(MeState state, FetchMyPostsSuccess action) {
 }
 
 MeState favoriteReward(MeState state, FavoriteRewardSuccess action) {
-  return state.copyWith(favoriteRewards: action.rewards);
+  return state.copyWith(favoriteRewards: Set.from(state.favoriteRewards)..add(action.rewardId));
 }
 
 MeState unfavoriteReward(MeState state, UnfavoriteRewardSuccess action) {
-  return state.copyWith(favoriteRewards: action.rewards);
+  return state.copyWith(favoriteRewards: Set.from(state.favoriteRewards)..remove(action.rewardId));
 }
 
 MeState favoriteStore(MeState state, FavoriteStoreSuccess action) {
-  return state.copyWith(favoriteStores: action.stores);
+  return state.copyWith(favoriteStores: Set.from(state.favoriteStores)..add(action.storeId));
 }
 
 MeState unfavoriteStore(MeState state, UnfavoriteStoreSuccess action) {
-  return state.copyWith(favoriteStores: action.stores);
+  return state.copyWith(favoriteStores: Set.from(state.favoriteStores)..remove(action.storeId));
 }
 
 MeState favoritePost(MeState state, FavoritePostSuccess action) {
-  return state.copyWith(favoritePosts: action.posts);
+  return state.copyWith(favoritePosts: Set.from(state.favoritePosts)..add(action.postId));
 }
 
 MeState unfavoritePost(MeState state, UnfavoritePostSuccess action) {
-  return state.copyWith(favoritePosts: action.posts);
+  return state.copyWith(favoritePosts: Set.from(state.favoritePosts)..remove(action.postId));
 }
 
 MeState fetchFavorites(MeState state, FetchFavoritesSuccess action) {

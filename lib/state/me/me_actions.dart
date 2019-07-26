@@ -38,9 +38,9 @@ class FavoriteRewardRequest {
 }
 
 class FavoriteRewardSuccess {
-  final Set<int> rewards;
+  final int rewardId;
 
-  FavoriteRewardSuccess(this.rewards);
+  FavoriteRewardSuccess(this.rewardId);
 }
 
 class UnfavoriteRewardRequest {
@@ -50,9 +50,9 @@ class UnfavoriteRewardRequest {
 }
 
 class UnfavoriteRewardSuccess {
-  final Set<int> rewards;
+  final int rewardId;
 
-  UnfavoriteRewardSuccess(this.rewards);
+  UnfavoriteRewardSuccess(this.rewardId);
 }
 
 class FavoriteStoreRequest {
@@ -62,9 +62,9 @@ class FavoriteStoreRequest {
 }
 
 class FavoriteStoreSuccess {
-  final Set<int> stores;
+  final int storeId;
 
-  FavoriteStoreSuccess(this.stores);
+  FavoriteStoreSuccess(this.storeId);
 }
 
 class UnfavoriteStoreRequest {
@@ -74,9 +74,9 @@ class UnfavoriteStoreRequest {
 }
 
 class UnfavoriteStoreSuccess {
-  final Set<int> stores;
+  final int storeId;
 
-  UnfavoriteStoreSuccess(this.stores);
+  UnfavoriteStoreSuccess(this.storeId);
 }
 
 class FavoritePostRequest {
@@ -86,9 +86,9 @@ class FavoritePostRequest {
 }
 
 class FavoritePostSuccess {
-  final Set<int> posts;
+  final int postId;
 
-  FavoritePostSuccess(this.posts);
+  FavoritePostSuccess(this.postId);
 }
 
 class UnfavoritePostRequest {
@@ -98,9 +98,9 @@ class UnfavoritePostRequest {
 }
 
 class UnfavoritePostSuccess {
-  final Set<int> posts;
+  final int postId;
 
-  UnfavoritePostSuccess(this.posts);
+  UnfavoritePostSuccess(this.postId);
 }
 
 class FetchFavoritesRequest {

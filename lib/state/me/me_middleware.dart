@@ -60,8 +60,9 @@ Middleware<AppState> _fetchMyPosts(PostService service) {
 
 Middleware<AppState> _favoriteReward(MeService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
+    store.dispatch(FavoriteRewardSuccess(action.rewardId));
     service.favoriteReward(userId: store.state.me.user.id, rewardId: action.rewardId).then((rewards) {
-      store.dispatch(FavoriteRewardSuccess(rewards));
+      store.dispatch(FetchFavoritesSuccess(favoriteRewards: rewards));
     }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     next(action);
   };
@@ -69,8 +70,9 @@ Middleware<AppState> _favoriteReward(MeService service) {
 
 Middleware<AppState> _unfavoriteReward(MeService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
+    store.dispatch(UnfavoriteRewardSuccess(action.rewardId));
     service.unfavoriteReward(userId: store.state.me.user.id, rewardId: action.rewardId).then((rewards) {
-      store.dispatch(UnfavoriteRewardSuccess(rewards));
+      store.dispatch(FetchFavoritesSuccess(favoriteRewards: rewards));
     }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     next(action);
   };
@@ -78,8 +80,9 @@ Middleware<AppState> _unfavoriteReward(MeService service) {
 
 Middleware<AppState> _favoriteStore(MeService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
+    store.dispatch(FavoriteStoreSuccess(action.storeId));
     service.favoriteStore(userId: store.state.me.user.id, storeId: action.storeId).then((stores) {
-      store.dispatch(FavoriteStoreSuccess(stores));
+      store.dispatch(FetchFavoritesSuccess(favoriteStores: stores));
     }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     next(action);
   };
@@ -87,8 +90,9 @@ Middleware<AppState> _favoriteStore(MeService service) {
 
 Middleware<AppState> _unfavoriteStore(MeService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
+    store.dispatch(UnfavoriteStoreSuccess(action.storeId));
     service.unfavoriteStore(userId: store.state.me.user.id, storeId: action.storeId).then((stores) {
-      store.dispatch(UnfavoriteStoreSuccess(stores));
+      store.dispatch(FetchFavoritesSuccess(favoriteStores: stores));
     }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     next(action);
   };
@@ -96,8 +100,9 @@ Middleware<AppState> _unfavoriteStore(MeService service) {
 
 Middleware<AppState> _favoritePost(MeService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
+    store.dispatch(FavoritePostSuccess(action.postId));
     service.favoritePost(userId: store.state.me.user.id, postId: action.postId).then((posts) {
-      store.dispatch(FavoritePostSuccess(posts));
+      store.dispatch(FetchFavoritesSuccess(favoritePosts: posts));
     }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     next(action);
   };
@@ -105,8 +110,9 @@ Middleware<AppState> _favoritePost(MeService service) {
 
 Middleware<AppState> _unfavoritePost(MeService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
+    store.dispatch(UnfavoritePostSuccess(action.postId));
     service.unfavoritePost(userId: store.state.me.user.id, postId: action.postId).then((posts) {
-      store.dispatch(UnfavoritePostSuccess(posts));
+      store.dispatch(FetchFavoritesSuccess(favoritePosts: posts));
     }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     next(action);
   };
