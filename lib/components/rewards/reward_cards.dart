@@ -1,5 +1,5 @@
 import 'package:crust/components/favorite_button.dart';
-import 'package:crust/components/screens/reward_screen.dart';
+import 'package:crust/components/rewards/reward_screen.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
@@ -81,6 +81,7 @@ class RewardCards extends StatelessWidget {
                   ],
                 ),
               ),
+              Container(width: 10.0),
               _listItemPromoImage(reward),
             ],
           ),
@@ -92,9 +93,9 @@ class RewardCards extends StatelessWidget {
   Widget _cardBanner(Reward reward) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 7.0),
-      color: Burnt.primary,
+      color: Burnt.separator,
       child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text(reward.bannerText(), style: TextStyle(color: Colors.white)),
+        Text(reward.bannerText(), style: TextStyle(color: Burnt.lightTextColor)),
       ]),
     );
   }

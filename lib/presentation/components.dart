@@ -103,10 +103,12 @@ class BottomButton extends StatelessWidget {
 }
 
 class SolidButton extends StatelessWidget {
+  final IconData icon;
+  final double iconSize;
   final String text;
   final Function onPressed;
 
-  SolidButton({Key key, this.text, this.onPressed}) : super(key: key);
+  SolidButton({Key key, this.icon, this.iconSize, this.text, this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -127,6 +129,8 @@ class SolidButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
+            if (icon != null) Icon(icon, size: iconSize ?? 20.0, color: Colors.white),
+            if (icon != null) Container(width: 8.0),
             Text(text, style: TextStyle(fontSize: 22.0, color: Colors.white)),
           ],
         ),

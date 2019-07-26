@@ -1,4 +1,4 @@
-import 'package:crust/components/rewards_screen/reward_cards.dart';
+import 'package:crust/components/rewards/reward_cards.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
@@ -27,7 +27,11 @@ class RewardsScreenState extends State<RewardsScreen> {
           store.dispatch(FetchFavoritesRequest());
         },
         converter: (Store<AppState> store) => _Props.fromStore(store),
-        builder: (BuildContext context, _Props props) => CustomScrollView(slivers: <Widget>[_appBar(), _content(props)]));
+        builder: (BuildContext context, _Props props) => CustomScrollView(slivers: <Widget>[
+          _appBar(),
+          _myRewardsButton(),
+          _rewardsListTitle(),
+          _rewardsList(props)]));
   }
 
   Widget _appBar() {
@@ -38,16 +42,7 @@ class RewardsScreenState extends State<RewardsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('REWARDS', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
-                  _viewModeIcon()
-                ],
-              ),
-              Text('Browse through all available rewards near you')
+              Text('REWARDS', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
             ],
           ),
         )
@@ -65,7 +60,37 @@ class RewardsScreenState extends State<RewardsScreen> {
       onPressed: _toggleLayout);
   }
 
-  Widget _content(_Props props) {
+  Widget _myRewardsButton() {
+    return SliverToBoxAdapter(
+      child: Container(
+        padding: EdgeInsets.only(top: 10.0, bottom: 20.0, left: 16.0, right: 16.0),
+        child: SolidButton(
+          icon: CrustCons.present,
+          iconSize: 25.0,
+          text: 'View My Rewards',
+          onPressed: () {},
+        ),
+      ));
+  }
+
+  Widget _rewardsListTitle() {
+    return SliverToBoxAdapter(
+      child: Container(
+        padding: EdgeInsets.only(top: 25.0, bottom: 10.0, left: 15.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text('Rewards near you'),
+            _viewModeIcon()
+          ],
+        )
+      )
+    );
+  }
+
+  Widget _rewardsList(_Props props) {
     if (props.rewards == null) return LoadingSliver();
     return RewardCards(
         rewards: props.rewards,

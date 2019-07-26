@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:crust/components/my_profile/my_profile_tab.dart';
 import 'package:crust/components/new_post/select_store_screen.dart';
-import 'package:crust/components/rewards_screen/rewards_screen.dart';
+import 'package:crust/components/rewards/rewards_screen.dart';
 import 'package:crust/components/screens/favorites_screen.dart';
 import 'package:crust/components/screens/home_screen.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';

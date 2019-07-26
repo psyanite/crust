@@ -43,6 +43,7 @@
 </div>
 
 ## To Do
+* Move like button reward screen
 * Add whitelist userIds for rewards, secret rewards
 * Implement QR scanner
 * Implement home screen

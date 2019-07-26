@@ -1,6 +1,6 @@
 import 'package:crust/components/confirm.dart';
 import 'package:crust/components/favorite_button.dart';
-import 'package:crust/components/screens/reward_screen.dart';
+import 'package:crust/components/rewards/reward_screen.dart';
 import 'package:crust/components/screens/store_screen.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/store.dart' as MyStore;
