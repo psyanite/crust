@@ -26,8 +26,8 @@ class Confirm extends StatelessWidget {
                   padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
                   child: Column(children: <Widget>[
                     Text(title, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                    Container(height: 5.0),
-                    Container(width: 200.0, child: Text(description, textAlign: TextAlign.center, style: TextStyle(color: Color(0xAA604B41), fontSize: 14.0))),
+                    if (description != null) Container(height: 5.0),
+                    if (description != null) Container(width: 200.0, child: Text(description, textAlign: TextAlign.center, style: TextStyle(color: Color(0xAA604B41), fontSize: 14.0))),
                   ])),
               Container(
                 child: Column(

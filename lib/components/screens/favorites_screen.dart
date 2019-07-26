@@ -1,3 +1,4 @@
+import 'package:crust/components/confirm.dart';
 import 'package:crust/components/favorite_button.dart';
 import 'package:crust/components/screens/reward_screen.dart';
 import 'package:crust/components/screens/store_screen.dart';
@@ -128,7 +129,7 @@ class _Presenter extends StatelessWidget {
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   Stack(alignment: AlignmentDirectional.topEnd, children: <Widget>[
                     Container(height: 100.0, width: 200.0, child: Image.network(store.coverImage, fit: BoxFit.cover)),
-                    _favoriteButton(() => unfavoriteStore(store.id))
+                      _favoriteButton('Remove Store', 'This store will be removed from favourites', () => unfavoriteReward(store.id))
                   ]),
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                     Container(height: 5.0),
@@ -155,7 +156,7 @@ class _Presenter extends StatelessWidget {
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   Stack(alignment: AlignmentDirectional.topEnd, children: <Widget>[
                     Container(height: 100.0, width: 200.0, color: Burnt.imgPlaceholderColor, child: Image.network(reward.promoImage, fit: BoxFit.cover)),
-                    _favoriteButton(() => unfavoriteReward(reward.id))
+                    _favoriteButton('Remove Reward', 'This reward will be removed from favourites', () => unfavoriteReward(reward.id))
                   ]),
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                     Container(height: 5.0),
@@ -165,31 +166,27 @@ class _Presenter extends StatelessWidget {
                 ]))));
   }
 
-  Widget _favoriteButton(Function onConfirm) {
+  Widget _favoriteButton(String title, String description, Function onConfirm) {
     return Builder(
       builder: (context) => FavoriteButton(
-            padding: 7.0,
-            isFavorited: true,
-            onUnfavorite: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text("Remove from favourites?"),
-                    actions: <Widget>[
-                      FlatButton(child: Text('Cancel'), onPressed: () => Navigator.of(context).pop()),
-                      FlatButton(
-                          child: Text('Confirm'),
-                          onPressed: () {
-                            onConfirm();
-                            Navigator.of(context).pop();
-                          }),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
+        padding: 7.0,
+        isFavorited: true,
+        onUnfavorite: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return Confirm(
+                title: title,
+                description: description,
+                action: 'Remove',
+                onTap: () {
+                  onConfirm();
+                  Navigator.of(context, rootNavigator: true).pop(true);
+                });
+            }
+          );
+        },
+      ),
     );
   }
 }
