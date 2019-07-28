@@ -43,17 +43,21 @@
 </div>
 
 ## To Do
-* Render all store locations in reward screen
-* Move like button reward screen
-* Add whitelist userIds for rewards, secret rewards
 * Implement QR scanner
+* Implement secret rewards
+
+* Implement firebase dynamic urls
+* Render all store locations in reward screen
 * Implement home screen
 * Implement follow functionality
 * Display followers on profile screen
 * Fetch recommendations
 * Implement pagination
 
+* Enable firebase dynamic urls in iOS
+
 ## Done
+* Move like button reward screen
 * Update favorite store and reward behaviour to be instant
 * Add write a review button from store screen
 * Implement comment count

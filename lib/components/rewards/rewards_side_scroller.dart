@@ -45,7 +45,7 @@ class RewardsSideScroller extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(title, style: TextStyle(fontSize: 23.0, fontWeight: Burnt.fontBold)),
-              InkWell(
+              if (children.isNotEmpty) InkWell(
                   child: Text('See All', style: TextStyle(fontSize: 14.0, fontWeight: Burnt.fontBold, color: Burnt.primary)),
                   onTap: seeAll)
             ],
