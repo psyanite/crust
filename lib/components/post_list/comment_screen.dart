@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:crust/components/confirm.dart';
 import 'package:crust/components/post_list/comment_like_button.dart';
 import 'package:crust/components/post_list/reply_like_button.dart';
@@ -39,7 +41,7 @@ class CommentScreen extends StatelessWidget {
 
 class _Presenter extends StatefulWidget {
   final int postId;
-  final List<Comment> comments;
+  final LinkedHashMap<int, Comment> comments;
   final int myId;
 
   _Presenter({Key key, this.postId, this.comments, this.myId}) : super(key: key);
@@ -49,7 +51,7 @@ class _Presenter extends StatefulWidget {
 }
 
 class _PresenterState extends State<_Presenter> {
-  List<Comment> comments;
+  LinkedHashMap<int, Comment> comments;
   TextEditingController _bodyCtrl = TextEditingController();
   ScrollController _scrollCtrl = ScrollController();
   String _body = '';
@@ -58,11 +60,8 @@ class _PresenterState extends State<_Presenter> {
   bool _enableSubmit = false;
   User _replyTo;
   bool _flashReplyTo = false;
-
-  bool _showNewCommentLoader = false;
-
+  bool _showSpinner = false;
   int _flashComment;
-  Reply _newReply;
 
   _PresenterState({this.comments});
 
@@ -92,7 +91,6 @@ class _PresenterState extends State<_Presenter> {
     var slivers = <Widget>[
       _appBar(context),
       _content(),
-      if (_showNewCommentLoader) _newCommentLoader(),
     ];
     return Scaffold(
         body: Column(children: <Widget>[
@@ -131,16 +129,6 @@ class _PresenterState extends State<_Presenter> {
     );
   }
 
-  Widget _newCommentLoader() {
-    return SliverToBoxAdapter(
-      child: Container(
-          height: 100,
-          child: Center(
-            child: CircularProgressIndicator(),
-          )),
-    );
-  }
-
   Widget _noComments() {
     return CenterTextSliver(text: 'Looks like there aren\'t any comments yet.\nBe the first to add one!');
   }
@@ -148,19 +136,20 @@ class _PresenterState extends State<_Presenter> {
   Widget _content() {
     if (comments == null) return LoadingSliver();
     if (comments.isEmpty) return _noComments();
+    var array = comments.values.toList();
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, i) {
-        var comment = comments[i];
+        var comment = array[i];
         return _CommentCard(
           postId: widget.postId,
           comment: comment,
           setReplyToComment: _setReplyToComment,
           removeComment: _removeComment,
+          removeReply: _removeReply,
           myId: widget.myId,
           flash: _flashComment == comment.id,
-          newReply: (_newReply != null && _newReply.commentId == comment.id) ? _newReply : null,
         );
-      }, childCount: comments.length),
+      }, childCount: array.length),
     );
   }
 
@@ -208,12 +197,7 @@ class _PresenterState extends State<_Presenter> {
                   ],
                 ),
               ),
-              InkWell(
-                  highlightColor: Colors.transparent,
-                  child: Container(
-                      padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 16.0, right: 20.0),
-                      child: Text("Submit", style: TextStyle(color: _enableSubmit ? Burnt.primary : Burnt.lightBlue))),
-                  onTap: () => _handleSubmit(context, _bodyCtrl.text)),
+              _submitButton(),
             ],
           ),
         ),
@@ -236,10 +220,30 @@ class _PresenterState extends State<_Presenter> {
           onSubmitted: (text) => _handleSubmit(context, text),
           autofocus: true,
           maxLines: null,
+          enabled: !_showSpinner,
           decoration: InputDecoration(contentPadding: EdgeInsets.all(0.0), border: InputBorder.none),
         ),
       ),
     );
+  }
+
+  Widget _submitButton() {
+    if (_showSpinner) {
+      return Padding(
+        padding: EdgeInsets.only(top: 18.0, right: 30.0, bottom: 20.0),
+        child: SizedBox(
+          width: 20.0,
+          height: 20.0,
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+    return InkWell(
+      highlightColor: Colors.transparent,
+      child: Container(
+        padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 16.0, right: 20.0),
+        child: Text("Submit", style: TextStyle(color: _enableSubmit ? Burnt.primary : Burnt.lightBlue))),
+      onTap: () => _handleSubmit(context, _bodyCtrl.text));
   }
 
   _onBodyChange(String text) {
@@ -258,10 +262,12 @@ class _PresenterState extends State<_Presenter> {
     _scrollCtrl.jumpTo(_scrollCtrl.position.maxScrollExtent);
   }
 
-  _handleSubmit(BuildContext context, String text) {
+  _handleSubmit(BuildContext context, String text) async {
     if (widget.myId == null) snack(context, 'Login now to add comments');
     if (!_enableSubmit) return;
-    _form.type == FormType.comment ? _addComment() : _addReply();
+    this.setState(() => _showSpinner = true);
+    _form.type == FormType.comment ? await _addComment() : await _addReply();
+    this.setState(() => _showSpinner = false);
     FocusScope.of(context).requestFocus(FocusNode());
     _bodyCtrl.clear();
     setState(() => _body = '');
@@ -269,12 +275,13 @@ class _PresenterState extends State<_Presenter> {
 
   _addComment() async {
     _scrollToBottom();
-    this.setState(() => _showNewCommentLoader = true);
     var newComment = await CommentService.addComment(Comment(body: _body, postId: widget.postId, commentedBy: User(id: widget.myId)));
-    this.setState(() => _showNewCommentLoader = false);
+    this.setState(() => _showSpinner = false);
     if (newComment != null) {
+      var clone = LinkedHashMap<int, Comment>.from(comments);
+      clone[newComment.id] = newComment;
       this.setState(() {
-        comments = List.from(comments)..add(newComment);
+        comments = clone;
         _flashComment = newComment.id;
       });
     }
@@ -284,11 +291,25 @@ class _PresenterState extends State<_Presenter> {
   _addReply() async {
     var body = _replyTo != null ? "@${_replyTo.username} $_body" : _body;
     var newReply = await CommentService.addReply(Reply(body: body, commentId: _form.commentId, repliedBy: User(id: widget.myId)));
-    if (newReply != null) this.setState(() => _newReply = newReply);
+    if (newReply != null) {
+      var clone = LinkedHashMap<int, Comment>.from(comments);
+      var cloneReplies = LinkedHashMap<int, Reply>.from(clone[newReply.commentId].replies);
+      cloneReplies[newReply.id] = newReply;
+      clone[newReply.commentId] = clone[newReply.commentId].copyWith(replies: cloneReplies);
+      this.setState(() {
+        comments = clone;
+      });
+    }
+  }
+
+  _removeReply(Reply reply) {
+    var clone = LinkedHashMap<int, Comment>.from(comments);
+    clone[reply.commentId].replies.remove(reply.id);
+    this.setState(() => comments = clone);
   }
 
   _removeComment(Comment comment) {
-    this.setState(() => comments = List.from(comments)..remove(comment));
+    this.setState(() => comments = LinkedHashMap<int, Comment>.from(comments)..remove(comment.id));
   }
 
   _setCommentToPost(BuildContext context) {
@@ -315,11 +336,11 @@ class _CommentCard extends StatefulWidget {
   final Comment comment;
   final Function setReplyToComment;
   final Function removeComment;
+  final Function removeReply;
   final int myId;
   final bool flash;
-  final Reply newReply;
 
-  _CommentCard({Key key, this.postId, this.comment, this.setReplyToComment, this.removeComment, this.myId, this.flash, this.newReply})
+  _CommentCard({Key key, this.postId, this.comment, this.setReplyToComment, this.removeComment, this.removeReply, this.myId, this.flash})
       : super(key: key);
 
   @override
@@ -330,6 +351,15 @@ class _CommentCardState extends State<_CommentCard> with TickerProviderStateMixi
   bool _showReplies = false;
   AnimationController _colorCtrl;
   Animation<Color> _colorTween;
+
+  @override
+  void didUpdateWidget(_CommentCard old) {
+    if (old.comment.replies.length < widget.comment.replies.length) {
+      _showReplies = true;
+    }
+    super.didUpdateWidget(old);
+  }
+
 
   @override
   initState() {
@@ -439,7 +469,7 @@ class _CommentCardState extends State<_CommentCard> with TickerProviderStateMixi
                 replies: comment.replies.values.toList(),
                 myId: widget.myId,
                 setReplyToComment: widget.setReplyToComment,
-                newReply: widget.newReply,
+                removeReply: widget.removeReply,
               ),
           ],
         ),
@@ -480,28 +510,29 @@ class _Replies extends StatefulWidget {
   final List<Reply> replies;
   final int myId;
   final Function setReplyToComment;
-  final Reply newReply;
+  final Function removeReply;
 
-  _Replies({Key key, this.postId, this.replies, this.myId, this.setReplyToComment, this.newReply}) : super(key: key);
+  _Replies({Key key, this.postId, this.replies, this.myId, this.setReplyToComment, this.removeReply}) : super(key: key);
 
   @override
-  _RepliesState createState() => _RepliesState(replies: replies);
+  _RepliesState createState() => _RepliesState();
 }
 
 class _RepliesState extends State<_Replies> {
-  List<Reply> replies;
   bool _showReplies = false;
-  int _flashReply;
-
-  _RepliesState({this.replies});
+  bool _flashLastReply = false;
 
   @override
   void didUpdateWidget(_Replies old) {
-    if (old.newReply != widget.newReply) {
-      replies = List.from(replies)..add(widget.newReply);
-      _flashReply = widget.newReply.id;
+    if (widget.replies.length > old.replies.length) {
+      _flashLastReply = true;
     }
     super.didUpdateWidget(old);
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -513,22 +544,18 @@ class _RepliesState extends State<_Replies> {
             padding: EdgeInsets.only(top: 5.0, bottom: 15.0),
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
-            itemCount: replies.length,
+            itemCount: widget.replies.length,
             itemBuilder: (context, i) {
-              var reply = replies[i];
+              var reply = widget.replies[i];
               return _ReplyCard(
                 postId: widget.postId,
                 reply: reply,
                 myId: widget.myId,
-                flash: _flashReply == reply.id,
+                flash: _flashLastReply && i == widget.replies.length - 1,
                 onTapReply: _onTapReply,
-                removeReply: _removeReply,
+                removeReply: widget.removeReply,
               );
             }));
-  }
-
-  _removeReply(Reply reply) {
-    this.setState(() => replies = List.from(replies)..remove(reply));
   }
 
   _onTapReply(Reply reply) {
@@ -679,14 +706,14 @@ Widget _deleteDialog(BuildContext context, Function delete) {
 
 class _Props {
   final int myId;
-  final List<Comment> comments;
+  final LinkedHashMap<int, Comment> comments;
 
   _Props({this.myId, this.comments});
 
   static fromStore(Store<AppState> store, int postId) {
     return _Props(
       myId: store.state.me.user?.id,
-      comments: store.state.comment.comments[postId]?.values?.toList(),
+      comments: store.state.comment.comments[postId],
     );
   }
 }
