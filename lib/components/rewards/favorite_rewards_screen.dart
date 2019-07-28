@@ -12,7 +12,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 class FavoriteRewardsScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
@@ -58,23 +57,24 @@ class _PresenterState extends State<_Presenter> {
               ],
             ),
             Text('MY FAVOURITES', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text('All your favourited rewards'),
-                ViewModeIcon(toggleLayout: () {
-                  setState(() {
-                    if (currentLayout == 'card') {
-                      currentLayout = 'list';
-                    } else {
-                      currentLayout = 'card';
-                    }
-                  });
-                })
-              ],
-            )
+            if (widget.favoriteRewards != null && widget.favoriteRewards.isNotEmpty)
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('All your favourited rewards'),
+                  ViewModeIcon(toggleLayout: () {
+                    setState(() {
+                      if (currentLayout == 'card') {
+                        currentLayout = 'list';
+                      } else {
+                        currentLayout = 'card';
+                      }
+                    });
+                  })
+                ],
+              ),
           ],
         ),
       )),
@@ -83,7 +83,12 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _content() {
     if (widget.favoriteRewards == null) return LoadingSliver();
+    if (widget.favoriteRewards.isEmpty) return _noRewards();
     return RewardCards(rewards: widget.favoriteRewards, layout: currentLayout, confirmUnfavorite: true);
+  }
+
+  Widget _noRewards() {
+    return CenterTextSliver(text: 'Looks like you haven\'t favourited any rewards yet.\nDon\'t miss out!');
   }
 }
 

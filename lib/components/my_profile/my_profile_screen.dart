@@ -37,7 +37,7 @@ class _PresenterState extends State<_Presenter> {
     var body = CustomScrollView(slivers: <Widget>[
       _appBar(),
       PostList(
-          noPostsView: Text('Your posts are displayed here, start posting now!'),
+          noPostsView: Text('Start reviewing now and your reviews will show up here!'),
           posts: widget.user.posts,
           postListType: PostListType.forProfile)
     ]);

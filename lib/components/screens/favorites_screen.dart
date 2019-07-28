@@ -1,9 +1,7 @@
-import 'package:crust/components/confirm.dart';
-import 'package:crust/components/favorite_button.dart';
 import 'package:crust/components/rewards/favorite_rewards_screen.dart';
-import 'package:crust/components/rewards/reward_screen.dart';
-import 'package:crust/components/screens/store_screen.dart';
+import 'package:crust/components/rewards/rewards_side_scroller.dart';
 import 'package:crust/components/stores/favorite_stores_screen.dart';
+import 'package:crust/components/stores/stores_side_scroller.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
@@ -87,126 +85,24 @@ class _Presenter extends StatelessWidget {
   Widget _content(BuildContext context) {
     if (!isLoggedIn) return CenterTextSliver(text: 'Login now to see your favorites!');
     if (rewards == null && stores == null) return LoadingSliver();
-    var storeCards = stores != null ? List<Widget>.from(stores.take(5).map(_storeCard)) : List<Widget>();
-    var rewardCards = rewards != null ? List<Widget>.from(rewards.take(5).map(_rewardCard)) : List<Widget>();
     return SliverList(
       delegate: SliverChildListDelegate(<Widget>[
-        _list("Favourite Stores", () {
-          Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteStoresScreen()));
-        }, storeCards),
-        _list("Favourite Rewards", () {
-          Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteRewardsScreen()));
-        }, rewardCards),
-      ]),
-    );
-  }
-
-  Widget _list(String title, Function onTap, List<Widget> children) {
-    return Column(
-      children: <Widget>[
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(left: 16.0, bottom: 10.0),
-              child: Text(title, style: TextStyle(fontSize: 23.0, fontWeight: Burnt.fontBold)),
-            ),
-            InkWell(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 8.0, right: 16.0, bottom: 10.0, top: 10.0),
-                  child: Text('See All', style: TextStyle(fontSize: 14.0, fontWeight: Burnt.fontBold, color: Burnt.primary)),
-                ),
-                onTap: onTap)
-          ],
+        StoresSideScroller(
+          stores: stores,
+          title: 'Favourite Stores',
+          emptyMessage: 'Start favouriting stores and they\'ll show up here.',
+          seeAll: () => Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteStoresScreen())),
+          confirmUnfavorite: true,
         ),
-        Container(
-            margin: EdgeInsets.only(left: 16.0, bottom: 20.0),
-            height: 160.0,
-            child: ListView(scrollDirection: Axis.horizontal, children: children))
-      ],
-    );
-  }
-
-  Widget _storeCard(MyStore.Store store) {
-    return Builder(
-        builder: (context) => InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id)),
-              );
-            },
-            child: Container(
-                width: 200.0,
-                height: 160.0,
-                padding: EdgeInsets.only(right: 10.0),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                  Stack(alignment: AlignmentDirectional.topEnd, children: <Widget>[
-                    Container(height: 100.0, width: 200.0, child: Image.network(store.coverImage, fit: BoxFit.cover)),
-                    _favoriteButton('Remove Store', 'This store will be removed from favourites', () => unfavoriteReward(store.id))
-                  ]),
-                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                    Container(height: 5.0),
-                    Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                    Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
-                    Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
-                  ])
-                ]))));
-  }
-
-  Widget _rewardCard(Reward reward) {
-    return Builder(
-        builder: (context) => InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => RewardScreen(rewardId: reward.id)),
-              );
-            },
-            child: Container(
-                width: 200.0,
-                height: 160.0,
-                padding: EdgeInsets.only(right: 10.0),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                  Stack(alignment: AlignmentDirectional.topEnd, children: <Widget>[
-                    Container(
-                        height: 100.0,
-                        width: 200.0,
-                        color: Burnt.imgPlaceholderColor,
-                        child: Image.network(reward.promoImage, fit: BoxFit.cover)),
-                    _favoriteButton('Remove Reward', 'This reward will be removed from favourites', () => unfavoriteReward(reward.id))
-                  ]),
-                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                    Container(height: 5.0),
-                    Text(reward.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                    Text(reward.locationText(), style: TextStyle(fontSize: 14.0)),
-                  ])
-                ]))));
-  }
-
-  Widget _favoriteButton(String title, String description, Function onConfirm) {
-    return Builder(
-      builder: (context) => FavoriteButton(
-            padding: EdgeInsets.all(7.0),
-            isFavorited: true,
-            onUnfavorite: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Confirm(
-                        title: title,
-                        description: description,
-                        action: 'Remove',
-                        onTap: () {
-                          onConfirm();
-                          Navigator.of(context, rootNavigator: true).pop(true);
-                        });
-                  });
-            },
-          ),
+        RewardsSideScroller(
+          rewards: rewards,
+          title: 'Favourite Rewards',
+          emptyMessage: 'Start favouriting rewards and they\'ll show up here.',
+          seeAll: () => Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteRewardsScreen())),
+          showExpiredBanner: true,
+          confirmUnfavorite: true,
+        )
+      ]),
     );
   }
 }

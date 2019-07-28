@@ -59,13 +59,21 @@ class WhiteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      textColor: Burnt.primary,
-      color: Burnt.paper,
-      padding: EdgeInsets.symmetric(vertical: 20.0),
-      child: Text(text, style: TextStyle(fontSize: 22.0)),
-      onPressed: onPressed,
-    );
+    return InkWell(
+        onTap: onPressed,
+        child: Container(
+            padding: EdgeInsets.symmetric(vertical: 12.0),
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(2.0)),
+                boxShadow: [BoxShadow(color: Color(0x10000000), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 1.0)]),
+            child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(text, style: TextStyle(fontSize: 20.0, color: Burnt.primary)),
+                ])));
   }
 }
 
@@ -155,7 +163,8 @@ class HollowButton extends StatelessWidget {
       highlightColor: Colors.transparent,
       onTap: onTap,
       child: Container(
-        decoration: BoxDecoration(border: Border.all(color: Color(0xFFFFD173), width: 1.0, style: BorderStyle.solid), borderRadius: BorderRadius.circular(2.0)),
+        decoration: BoxDecoration(
+            border: Border.all(color: Color(0xFFFFD173), width: 1.0, style: BorderStyle.solid), borderRadius: BorderRadius.circular(2.0)),
         padding: EdgeInsets.symmetric(vertical: padding ?? 10.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -198,7 +207,7 @@ class LoadingSliver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverCenter(
-        child: CircularProgressIndicator(),
+      child: CircularProgressIndicator(),
     );
   }
 }

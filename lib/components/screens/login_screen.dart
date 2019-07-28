@@ -4,6 +4,7 @@ import 'package:crust/components/screens/register_screen.dart';
 import 'package:crust/main.dart';
 import 'package:crust/models/user.dart';
 import 'package:crust/presentation/components.dart';
+import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
 import 'package:crust/state/me/me_service.dart';
@@ -34,6 +35,7 @@ class _Presenter extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
+//          color: Burnt.primary,
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -45,18 +47,40 @@ class _Presenter extends StatelessWidget {
             ],
           ),
         ),
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Image.asset('assets/images/loading-icon.png', height: 250.0),
-              WhiteButton(text: "Login with Facebook", onPressed: () => _loginWithFacebook(context)),
-              Container(height: 10.0),
-              WhiteButton(text: "Login with Google", onPressed: () => _loginWithGoogle(context)),
-              Container(height: 10.0),
-              WhiteButton(text: "Login with Test Profile", onPressed: () => _loginWithTestProfile(context)),
-            ]),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Image.asset('assets/images/loading-icon.png', height: 200.0),
+                Container(height: 15.0),
+                WhiteButton(text: "Login with Facebook", onPressed: () => _loginWithFacebook(context)),
+                Container(height: 15.0),
+                WhiteButton(text: "Login with Google", onPressed: () => _loginWithGoogle(context)),
+                Container(height: 15.0),
+                WhiteButton(text: "Login with Data Profile", onPressed: () => _loginWithDataProfile(context)),
+                Container(height: 15.0),
+                WhiteButton(text: "Login with Empty Profile", onPressed: () => _loginWithEmptyProfile(context)),
+                Container(height: 20.0),
+                Column(
+                  children: <Widget>[
+                    Text('By continuing you agree to our ', style: TextStyle(color: Colors.white)),
+                    RichText(
+                      text: TextSpan(
+                        style: TextStyle(color: Colors.white, fontFamily: Burnt.fontBase),
+                        children: <TextSpan>[
+                          TextSpan(text: 'Terms of Use', style: TextStyle(decoration: TextDecoration.underline)),
+                          TextSpan(text: ' and '),
+                          TextSpan(text: 'Privacy Policy', style: TextStyle(decoration: TextDecoration.underline)),
+                          TextSpan(text: '.'),
+                        ],
+                      ))
+                  ],
+                ),
+              ]),
+        ),
       ),
     );
   }
@@ -82,7 +106,7 @@ class _Presenter extends StatelessWidget {
     await _login(User.fromGoogle(googleUser), context);
   }
 
-  _loginWithTestProfile(context) async {
+  _loginWithDataProfile(context) async {
     var user = User(
         firstName: "Neila",
         lastName: "Nyan",
@@ -93,6 +117,20 @@ class _Presenter extends StatelessWidget {
         socialId: "1905457732907903",
         token:
             "EAAdWJ8R7ISsBAOZCfBqwJQmxbNV6cpgZCp8DBjTuufciDUqIvzJxLq5ZBaecbPyKUq5SRgJrpWWKJY5fQd72GfV0cVuTDk84cAZBlSb00pZBTBQULk2ybauUsqeL3sa9NBMM3GuBrqX5KcZCFo8ovZC0xuiZCFGo9ZAH5gSRTuKugrIkw0q8p1e53RHZBbFqzFUQ3o9cZCjSgNtCQZDZD");
+    await _login(user, context);
+  }
+
+  _loginWithEmptyProfile(context) async {
+    var user = User(
+      firstName: "Sophia",
+      lastName: "King",
+      displayName: "Sophia",
+      email: "sophia_king@gmail.com",
+      profilePicture: "meow",
+      socialType: SocialType.google,
+      socialId: "sophia123",
+      token:
+      "EAAdWJ8R7ISsBAOZCfBqwJQmxbNV6cpgZCp8DBjTuufciDUqIvzJxLq5ZBaecbPyKUq5SRgJrpWWKJY5fQd72GfV0cVuTDk84cAZBlSb00pZBTBQULk2ybauUsqeL3sa9NBMM3GuBrqX5KcZCFo8ovZC0xuiZCFGo9ZAH5gSRTuKugrIkw0q8p1e53RHZBbFqzFUQ3o9cZCjSgNtCQZDZD");
     await _login(user, context);
   }
 
