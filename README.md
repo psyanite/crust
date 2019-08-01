@@ -43,9 +43,7 @@
 </div>
 
 ## To Do
-* Implement QR scanner
-* Implement secret rewards
-
+* Enable user to scan and save a reward from a QR code
 * Implement firebase dynamic urls
 * Render all store locations in reward screen
 * Implement home screen
@@ -55,8 +53,11 @@
 * Implement pagination
 
 * Enable firebase dynamic urls in iOS
+* Add link previews to dynamic links
 
 ## Done
+* Implement QR scanner
+* Implement secret rewards
 * Move like button reward screen
 * Update favorite store and reward behaviour to be instant
 * Add write a review button from store screen

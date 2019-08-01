@@ -16,11 +16,19 @@ class RewardState {
   }
 
   RewardState addRewards(List<Reward> rewards) {
-    var rewardsUpdate = this.rewards ?? LinkedHashMap<int, Reward>();
-    if (rewards != null) {
-      rewardsUpdate.addAll(Map.fromEntries(rewards.map((r) => MapEntry<int, Reward>(r.id, r))));
-    }
-    return RewardState(rewards: rewardsUpdate);
+    var clone = cloneRewards();
+    clone.addAll(Map.fromEntries(rewards.map((r) => MapEntry<int, Reward>(r.id, r))));
+    return RewardState(rewards: clone);
+  }
+
+  RewardState addReward(Reward reward) {
+    var clone = cloneRewards();
+    clone[reward.id] = reward;
+    return RewardState(rewards: clone);
+  }
+
+  LinkedHashMap<int, Reward> cloneRewards() {
+    return this.rewards != null ? LinkedHashMap<int, Reward>.from(this.rewards) : LinkedHashMap<int, Reward>();
   }
 
   @override

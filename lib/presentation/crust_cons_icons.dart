@@ -40,6 +40,7 @@ class CrustCons {
   static const IconData logout = const IconData(0xe80d, fontFamily: _kFontFam);
   static const IconData view_mode = const IconData(0xe80f, fontFamily: _kFontFam);
   static const IconData menu_bold = const IconData(0xe814, fontFamily: _kFontFam);
+  static const IconData qr = const IconData(0xe815, fontFamily: _kFontFam);
   static const IconData location = const IconData(0xe81a, fontFamily: _kFontFam);
   static const IconData location_bold_1 = const IconData(0xe81c, fontFamily: _kFontFam);
   static const IconData phone_bold = const IconData(0xe821, fontFamily: _kFontFam);

@@ -21,7 +21,6 @@ Middleware<AppState> _fetchRewards(RewardService service) {
         store.dispatch(FetchRewardsSuccess(rewards));
       },
     ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
-
     next(action);
   };
 }

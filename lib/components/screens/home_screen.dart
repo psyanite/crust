@@ -1,6 +1,8 @@
-import 'package:crust/components/search/search_icon.dart';
+import 'package:crust/components/screens/scan_qr_screen.dart';
+import 'package:crust/components/search/search_screen.dart';
 import 'package:crust/components/stores/stores_grid.dart';
 import 'package:crust/models/store.dart' as MyStore;
+import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
@@ -67,11 +69,28 @@ class _Presenter extends StatelessWidget {
             Text('Burntoast',
                 style: TextStyle(
                     color: Burnt.primary, fontSize: 44.0, fontFamily: Burnt.fontFancy, fontWeight: Burnt.fontLight, letterSpacing: 0.0)),
-            SearchIcon()
+            Row(
+              children: <Widget>[_searchIcon(), _qrIcon()],
+            )
           ],
         ),
       )),
     );
+  }
+
+  Widget _searchIcon() {
+    return Builder(
+      builder: (context) => IconButton(
+          icon: Icon(CrustCons.search, color: Burnt.lightGrey, size: 21.0),
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SearchScreen()))),
+    );
+  }
+
+  Widget _qrIcon() {
+    return Builder(
+        builder: (context) => IconButton(icon: Icon(CrustCons.qr, color: Color(0x50604B41), size: 23.0), onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => ScanQrScreen()));
+        }));
   }
 }
 

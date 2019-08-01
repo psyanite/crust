@@ -1,123 +1,154 @@
-import 'package:crust/components/search/search_screen.dart';
-import 'package:crust/components/stores/stores_grid.dart';
-import 'package:crust/models/store.dart' as MyStore;
-import 'package:crust/presentation/crust_cons_icons.dart';
-import 'package:crust/presentation/theme.dart';
-import 'package:crust/state/app/app_state.dart';
-import 'package:crust/state/me/me_actions.dart';
-import 'package:crust/state/reward/reward_actions.dart';
-import 'package:crust/state/store/store_actions.dart';
+import 'package:barcode_scan/barcode_scan.dart';
+import 'package:crust/components/rewards/reward_screen.dart';
+import 'package:crust/components/screens/profile_screen.dart';
+import 'package:crust/components/screens/store_screen.dart';
+import 'package:crust/presentation/components.dart';
+import 'package:crust/state/reward/reward_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
-import 'package:redux/redux.dart';
+import 'package:flutter/services.dart';
 
-class HomeScreen extends StatelessWidget {
+class ScanQrScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return StoreConnector<AppState, _Props>(
-        onInit: (Store<AppState> store) {
-          store.dispatch(FetchStoresRequest());
-          store.dispatch(FetchFavoritesRequest());
-          if (store.state.me.user != null) store.dispatch(FetchMyPostsRequest(store.state.me.user.id));
-          store.dispatch(FetchRewardsRequest());
-        },
-        converter: (Store<AppState> store) => _Props.fromStore(store),
-        builder: (BuildContext context, _Props props) => _Presenter(
-              stores: props.stores,
-              favoriteStores: props.favoriteStores,
-              favoriteStore: props.favoriteStore,
-              unfavoriteStore: props.unfavoriteStore,
-              isLoggedIn: props.isLoggedIn,
-              error: props.error,
-            ));
-  }
+  State<StatefulWidget> createState() => ScanQrScreenState();
 }
 
-class _Presenter extends StatelessWidget {
-  final List<MyStore.Store> stores;
-  final Set<int> favoriteStores;
-  final Function favoriteStore;
-  final Function unfavoriteStore;
-  final bool isLoggedIn;
-  final String error;
+// https://burntoast.page.link/?link=https://burntoast.com/stores/?id=1
+// https://burntoast.page.link/?link=https://burntoast.com/profiles/?id=1
+// https://burntoast.page.link/?link=https://burntoast.com/rewards/?code=4pPfr
+// https://burntoast.page.link/?link=https://burntoast.com/rewards/?code=BKKWL
+class ScanQrScreenState extends State<ScanQrScreen> {
+  String error;
 
-  _Presenter({Key key, this.stores, this.favoriteStores, this.favoriteStore, this.unfavoriteStore, this.isLoggedIn, this.error})
-      : super(key: key);
+  @override
+  initState() {
+    super.initState();
+    _load();
+  }
+
+  _load() async {
+    var scanResult = await _scan();
+    if (scanResult == null) return;
+
+    var link = _parseScanResult(scanResult);
+    if (link == null) return;
+
+    var validateHost = _validateHost(link);
+    if (validateHost == false) return;
+
+    _parseLink(link);
+  }
+
+  _scan() async {
+    try {
+      var result = await BarcodeScanner.scan();
+      if (result != null) {
+        return result;
+      } else {
+        this.setState(() => error = 'Oops, an error has occurred');
+      }
+    } on PlatformException catch (e) {
+      if (e.code == BarcodeScanner.CameraAccessDenied) {
+        this.setState(() => error = 'Sorry, looks like camera access is disabled.');
+      } else {
+        this.setState(() => error = 'Sorry, an unknown error has occurred.');
+      }
+    } on FormatException {
+      // Back button is pressed
+      Navigator.pop(context);
+    } catch (e) {
+      this.setState(() => error = 'Sorry, an unknown error has occurred.');
+    }
+    return null;
+  }
+
+  _parseScanResult(scanResult) {
+    try {
+      var uri = Uri.parse(scanResult);
+      return Uri.parse(uri.queryParameters['link']);
+    } on FormatException {
+      this.setState(() => error = 'Sorry, an unknown error has occurred.');
+    } on Exception {
+      this.setState(() => error = 'Sorry, an unknown error has occurred.');
+    }
+    return null;
+  }
+
+  _validateHost(Uri link) {
+    var host = link.host;
+    if (host != 'burntoast.com') {
+      this.setState(() => error = 'Sorry, we couldn\'t recognise this QR code.');
+      return false;
+    }
+    return true;
+  }
+
+  _parseLink(Uri link) async {
+    var path = link.path;
+    var params = link.queryParameters;
+    var idParam = params['id'];
+    var id = idParam != null ? int.parse(idParam) : null;
+    
+    if (path == '/stores/') {
+      if (id != null) {
+        _redirect(StoreScreen(storeId: id));
+      } else {
+        this.setState(() => error = '/stores id param is invalid');
+      }
+
+    } else if (path == '/rewards/') {
+      var code = params['code'];
+      if (code != null) {
+        var reward = await RewardService.fetchRewardByCode(code);
+        if (reward != null) {
+          _redirect(RewardScreen(reward: reward, rewardId: reward.id));
+        } else {
+          this.setState(() => error = 'Sorry, it looks like this reward has expired.');
+        }
+      } else {
+        this.setState(() => error = '/rewards code param is invalid');
+      }
+
+    } else if (path == '/profiles/') {
+      if (id != null) {
+        _redirect(ProfileScreen(userId: id));
+      } else {
+        this.setState(() => error = '/profiles id param is invalid');
+      }
+
+    } else {
+      this.setState(() => error = 'Sorry, we couldn\'t recognise this QR code.');
+    }
+  }
+
+  _redirect(Widget screen) {
+    Navigator.pop(context);
+    Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
+  }
 
   @override
   Widget build(BuildContext context) {
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
-    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
-    return Scaffold(body: CustomScrollView(slivers: <Widget>[_appBar(), StoresGrid(stores: stores)]));
-  }
-
-  Widget _appBar() {
-    return SliverSafeArea(
-      sliver: SliverToBoxAdapter(
-          child: Container(
-        height: 100.0,
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-//            Text('BURNTOAST', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
-            Text('Burntoast',
-                style: TextStyle(
-                    color: Burnt.primary, fontSize: 44.0, fontFamily: Burnt.fontFancy, fontWeight: Burnt.fontLight, letterSpacing: 0.0)),
-            Row(
-              children: <Widget>[_searchIcon(), _qrIcon()],
-            )
-          ],
-        ),
-      )),
-    );
-  }
-
-  Widget _searchIcon() {
-    return Builder(
-      builder: (context) => IconButton(
-          icon: Icon(CrustCons.search, color: Burnt.lightGrey, size: 21.0),
-          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SearchScreen()))),
-    );
-  }
-
-  Widget _qrIcon() {
-    return Builder(
-      builder: (context) => IconButton(
-          icon: Icon(CrustCons.qr, color: Color(0x50604B41), size: 23.0),
-          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SearchScreen()))),
-    );
-  }
-}
-
-class _Props {
-  final List<MyStore.Store> stores;
-  final Set<int> favoriteStores;
-  final Function favoriteStore;
-  final Function unfavoriteStore;
-  final bool isLoggedIn;
-  final String error;
-
-  _Props({
-    this.stores,
-    this.favoriteStores,
-    this.favoriteStore,
-    this.unfavoriteStore,
-    this.isLoggedIn,
-    this.error,
-  });
-
-  static fromStore(Store<AppState> store) {
-    return _Props(
-        stores: store.state.store.stores != null ? store.state.store.stores.values.toList() : null,
-        favoriteStores: store.state.me.favoriteStores ?? Set<int>(),
-        favoriteStore: (storeId) => store.dispatch(FavoriteStoreRequest(storeId)),
-        unfavoriteStore: (storeId) => store.dispatch(UnfavoriteStoreRequest(storeId)),
-        isLoggedIn: store.state.me.user != null,
-        error: store.state.error.message);
+    if (error == null) return Scaffold(body: LoadingCenter());
+    return Scaffold(body: Center(
+      child:
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+        Text(error),
+        Container(height: 20.0),
+        SmallButton(
+          onPressed: () {
+            this.setState(() => error = null);
+            _load();
+          },
+          padding: EdgeInsets.only(left: 12.0, right: 12.0, top: 10.0, bottom: 10.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text('Try Again', style: TextStyle(fontSize: 16.0, color: Colors.white))
+            ]))
+        ],
+      )
+    ));
   }
 }

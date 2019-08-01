@@ -7,3 +7,9 @@ class FetchRewardsSuccess {
 
   FetchRewardsSuccess(this.rewards);
 }
+
+class FetchRewardSuccess {
+  final Reward reward;
+
+  FetchRewardSuccess(this.reward);
+}

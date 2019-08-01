@@ -106,7 +106,7 @@ class _PresenterState extends State<_Presenter> {
               width: 150.0,
               height: 150.0,
               decoration: BoxDecoration(
-                  color: Burnt.imgPlaceholderColor,
+                  color: Burnt.separator,
                   borderRadius: BorderRadius.circular(150.0),
                   border: Border.all(
                     color: Colors.white,

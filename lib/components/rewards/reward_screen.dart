@@ -1,35 +1,37 @@
 import 'package:crust/components/dialog.dart';
 import 'package:crust/components/rewards/favorite_reward_button.dart';
-import 'package:crust/components/screens/qr_screen.dart';
+import 'package:crust/components/screens/reward_qr_screen.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/user_reward.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
+import 'package:crust/state/reward/reward_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 class RewardScreen extends StatelessWidget {
+  final Reward reward;
   final int rewardId;
   final UserReward userReward;
 
-  RewardScreen({Key key, this.rewardId, this.userReward}) : super(key: key);
+  RewardScreen({Key key, this.reward, this.rewardId, this.userReward}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
         onInit: (Store<AppState> store) {
+          if (reward != null) store.dispatch(FetchRewardSuccess(reward));
           if (rewardId != null) store.dispatch(FetchUserRewardRequest(rewardId));
         },
-        converter: (Store<AppState> store) =>_Props.fromStore(store, rewardId),
-        builder: (context, props) => _Presenter(
-            reward: userReward?.reward ?? props.reward,
-            userReward: userReward ?? props.userReward,
-            addUserReward: props.addUserReward,
-            isLoggedIn: props.isLoggedIn));
+        converter: (Store<AppState> store) => _Props.fromStore(store, userReward, rewardId),
+        builder: (context, props) {
+          return _Presenter(
+              reward: props.reward, userReward: props.userReward, addUserReward: props.addUserReward, isLoggedIn: props.isLoggedIn);
+        });
   }
 }
 
@@ -38,17 +40,14 @@ class _Presenter extends StatelessWidget {
   final UserReward userReward;
   final Function addUserReward;
   final bool isLoggedIn;
+  final String error;
 
-  _Presenter(
-      {Key key,
-      this.reward,
-      this.userReward,
-      this.addUserReward,
-      this.isLoggedIn})
-      : super(key: key);
+  _Presenter({Key key, this.reward, this.userReward, this.addUserReward, this.isLoggedIn, this.error}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    if (error != null) return Scaffold(body: Center(child: Text(error)));
+    if (reward == null) return Scaffold(body: LoadingCenter());
     return Scaffold(
         body: Center(
             child: Column(
@@ -77,13 +76,15 @@ class _Presenter extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 )),
-            Container(height: 150.0, decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                stops: [0, 0.2, 1.0],
-                colors: [Color(0x30000000), Color(0x30000000), Color(0x0000000)],
-              ))),
+            Container(
+                height: 150.0,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  stops: [0, 0.2, 1.0],
+                  colors: [Color(0x30000000), Color(0x30000000), Color(0x0000000)],
+                ))),
             SafeArea(
               child: Container(
                 height: 106.0,
@@ -195,7 +196,7 @@ class _Presenter extends StatelessWidget {
                     addUserReward(reward.id);
                   }
                   while (userReward == null) {}
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => QrScreen(userReward: userReward)));
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => RewardQrScreen(userReward: userReward)));
                 }
               },
               text: 'Redeem Now',
@@ -218,10 +219,10 @@ class _Props {
     this.isLoggedIn,
   });
 
-  static fromStore(Store<AppState> store, int rewardId) {
+  static fromStore(Store<AppState> store, UserReward userReward, int rewardId) {
     return _Props(
-      reward: rewardId != null ? store.state.reward.rewards[rewardId] : null,
-      userReward: rewardId != null ? store.state.me.userReward : null,
+      reward: userReward?.reward ?? (rewardId != null ? store.state.reward.rewards[rewardId] : null),
+      userReward: userReward ?? store.state.me.userReward,
       addUserReward: (rewardId) => store.dispatch(AddUserRewardRequest(rewardId)),
       isLoggedIn: store.state.me.user != null,
     );

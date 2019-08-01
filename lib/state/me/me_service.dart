@@ -229,7 +229,7 @@ class MeService {
             id
           },
           unique_code,
-          is_redeemed
+          redeemed_at
         }
       }
     """;
