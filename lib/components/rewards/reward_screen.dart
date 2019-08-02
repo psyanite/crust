@@ -1,6 +1,7 @@
 import 'package:crust/components/dialog.dart';
 import 'package:crust/components/rewards/favorite_reward_button.dart';
 import 'package:crust/components/screens/reward_qr_screen.dart';
+import 'package:crust/components/screens/store_screen.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/user_reward.dart';
 import 'package:crust/presentation/components.dart';
@@ -105,7 +106,7 @@ class _Presenter extends StatelessWidget {
 
   Widget _description() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+      padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -119,37 +120,82 @@ class _Presenter extends StatelessWidget {
               Padding(child: FavoriteRewardButton(reward: reward, size: 30.0), padding: EdgeInsets.only(right: 10.0))
             ],
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(reward.bannerText()),
-              Container(height: 10.0),
-              _location(reward),
-              Container(height: 10.0),
-              Text(reward.description),
-              Container(height: 10.0),
-              _termsAndConditions(),
-            ],
-          )
+          Text(reward.bannerText()),
+          Container(height: 30.0),
+          if (reward.isHidden()) _secretBanner(),
+          _storeDetails(),
+          Container(height: 20.0),
+          Text(reward.description),
+          Container(height: 10.0),
+          _termsAndConditions(),
         ],
       ),
     );
   }
 
-  Widget _location(Reward reward) {
-    var content = <Widget>[];
-    if (reward.store != null) {
-      var store = reward.store;
-      content.add(Text(store.name));
-      store.address.firstLine != null ?? content.add(Text(store.address.firstLine));
-      store.address.secondLine != null ?? content.add(Text(store.address.secondLine));
-      content.add(Text("${store.address.streetNumber} ${store.address.streetName}"));
-      content.add(Text(store.location ?? store.suburb));
-    }
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: content,
+  Widget _secretBanner() {
+    var onTap = (BuildContext context) {
+      var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
+      showDialog(
+        context: context,
+        builder: (context) => BurntDialog(
+          options: options,
+          description: 'Secret rewards do not show up when browsing the app, they can only be accessed via a shared link or a QR code. Save it to your favourites or you may not find it again!'));
+    };
+    return Builder(
+      builder: (context) {
+        return InkWell(
+          onTap: () => onTap(context),
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 20.0),
+            decoration: BoxDecoration(border: Border(top: BorderSide(color: Burnt.separator))),
+            child: Row(
+              children: <Widget>[
+                Text('🎉', style: TextStyle(fontSize: 55.0)),
+                Container(width: 15.0),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text('Congratulations!', style: TextStyle(fontWeight: Burnt.fontBold, color: Burnt.hintTextColor)),
+                      Text('You\'ve unlocked a secret reward.'),
+                      Text('Make sure you save it to your favourites!'),
+                    ],
+                  ),
+                )
+              ],
+            )),
+        );
+      }
     );
+  }
+
+  Widget _storeDetails() {
+    var store = reward.store;
+    if (store == null) return Container();
+    var content = <Widget>[
+      Text(store.name, style: TextStyle(fontSize: 20.0)),
+      Container(height: 3.0),
+      if (store.address.firstLine != null) Text(store.address.firstLine),
+      if (store.address.secondLine != null) Text(store.address.secondLine),
+      Text("${store.address.streetNumber} ${store.address.streetName}"),
+      if (store.location != null) Text(store.location),
+      if (store.suburb != null) Text(store.suburb),
+    ];
+    return Builder(
+      builder: (context) {
+        return InkWell(
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id))),
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 20.0),
+              decoration: BoxDecoration(border: Border(top: BorderSide(color: Burnt.separator), bottom: BorderSide(color: Burnt.separator))),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: content,
+              ),
+            ),
+        );
+      });
   }
 
   Widget _termsAndConditions() {
@@ -184,25 +230,25 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _redeemContent() {
+    var onPressed = (BuildContext context) {
+      if (!isLoggedIn) {
+        snack(context, 'Login to start redeeming rewards!');
+      } else {
+        if (userReward == null) {
+          addUserReward(reward.id);
+        }
+        while (userReward == null) {}
+        Navigator.push(context, MaterialPageRoute(builder: (_) => RewardQrScreen(userReward: userReward)));
+      }
+    };
     return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Builder(
-        builder: (context) => SolidButton(
-              onPressed: () {
-                if (!isLoggedIn) {
-                  snack(context, 'Login to start redeeming rewards!');
-                } else {
-                  if (userReward == null) {
-                    addUserReward(reward.id);
-                  }
-                  while (userReward == null) {}
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => RewardQrScreen(userReward: userReward)));
-                }
-              },
-              text: 'Redeem Now',
-            ),
-      ),
-    );
+        padding: EdgeInsets.all(16.0),
+        child: Builder(builder: (context) {
+          return SolidButton(
+            onPressed: () => onPressed(context),
+            text: 'Redeem Now',
+          );
+        }));
   }
 }
 

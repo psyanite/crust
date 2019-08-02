@@ -2,6 +2,7 @@ import 'package:crust/components/rewards/favorite_rewards_screen.dart';
 import 'package:crust/components/rewards/redeemed_rewards_screen.dart';
 import 'package:crust/components/rewards/reward_cards.dart';
 import 'package:crust/components/rewards/view_mode_icon.dart';
+import 'package:crust/components/screens/scan_qr_screen.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
@@ -46,12 +47,26 @@ class RewardsScreenState extends State<RewardsScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text('REWARDS', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('REWARDS', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
+                  _qrIcon()
+                ],
+              ),
             ],
           ),
         )
       ),
     );
+  }
+
+  Widget _qrIcon() {
+    return Builder(
+      builder: (context) =>
+        IconButton(icon: Icon(CrustCons.qr, color: Color(0x50604B41), size: 23.0), onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => ScanQrScreen()));
+        }));
   }
 
   Widget _seeRedeemedButton(BuildContext context, bool isLoggedIn) {
