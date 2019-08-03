@@ -50,66 +50,74 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _appBar() {
     return SliverToBoxAdapter(
-        child: Container(
-            child: Stack(children: <Widget>[
-      Container(
-        height: 200.0,
-      ),
-      Stack(children: <Widget>[
-        Container(
-            height: 100.0,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: NetworkImage(widget.user.profilePicture),
-                fit: BoxFit.cover,
-              ),
-            )),
-        Container(
-            height: 100.0,
-            decoration: BoxDecoration(color: Color(0x55000000)),
-            child: SafeArea(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Builder(
-                      builder: (context) => IconButton(
-                            icon: Icon(CupertinoIcons.ellipsis),
-                            color: Colors.white,
-                            iconSize: 40.0,
-                            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsScreen())),
-                          )),
-                ],
-              ),
-            )),
-      ]),
-      Positioned(
-        left: 50.0,
-        top: 50.0,
-        child: Row(children: <Widget>[
-          Container(
-              width: 150.0,
-              height: 150.0,
+      child: Container(
+        child: Stack(children: <Widget>[
+          Container(height: 200.0),
+          Stack(children: <Widget>[
+            Container(
+              height: 100.0,
               decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: NetworkImage(widget.user.profilePicture),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+            Container(
+              height: 100.0,
+              decoration: BoxDecoration(color: Color(0x55000000)),
+              child: SafeArea(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Builder(builder: (context) {
+                      return IconButton(
+                        icon: Icon(CupertinoIcons.ellipsis),
+                        color: Colors.white,
+                        iconSize: 40.0,
+                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsScreen())),
+                      );
+                    }),
+                  ],
+                ),
+              ),
+            ),
+          ]),
+          Positioned(
+            left: 50.0,
+            top: 50.0,
+            child: Row(children: <Widget>[
+              Container(
+                width: 150.0,
+                height: 150.0,
+                decoration: BoxDecoration(
                   color: Burnt.separator,
                   borderRadius: BorderRadius.circular(150.0),
                   border: Border.all(
                     color: Colors.white,
                     width: 4.0,
                   ),
-                  image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(widget.user.profilePicture)))),
-          Padding(
-            padding: EdgeInsets.only(left: 8.0, top: 12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(widget.user.displayName, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
-                Text("@${widget.user.username}")
-              ],
-            ),
-          )
+                  image: DecorationImage(
+                    fit: BoxFit.fill,
+                    image: NetworkImage(widget.user.profilePicture),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 8.0, top: 12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(widget.user.displayName, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
+                    Text("@${widget.user.username}")
+                  ],
+                ),
+              )
+            ]),
+          ),
         ]),
       ),
-    ])));
+    );
   }
 }
 

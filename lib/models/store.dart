@@ -157,7 +157,7 @@ class Suburb {
 class Address {
   final String firstLine;
   final String secondLine;
-  final int streetNumber;
+  final String streetNumber;
   final String streetName;
   final String googleUrl;
 
@@ -168,7 +168,7 @@ class Address {
     return Address(
       firstLine: json['address_first_line'],
       secondLine: json['address_second_line'],
-      streetNumber: int.tryParse(json['address_street_number']),
+      streetNumber: json['address_street_number'],
       streetName: json['address_street_name'],
       googleUrl: json['google_url'],
     );

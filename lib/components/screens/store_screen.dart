@@ -27,23 +27,27 @@ class StoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-        onInit: (Store<AppState> store) {
-          if (store.state.store.stores == null) {
-            store.dispatch(FetchStoreByIdRequest(storeId));
-            store.dispatch(FetchPostsByStoreIdRequest(storeId));
-          } else {
-            store.dispatch(FetchPostsByStoreIdRequest(storeId));
-          }
-        },
-        converter: (Store<AppState> store) => _Props.fromStore(store, storeId),
-        builder: (context, props) => _Presenter(
-            store: props.store,
-            favoriteStores: props.favoriteStores,
-            favoriteStore: props.favoriteStore,
-            unfavoriteStore: props.unfavoriteStore,
-            isLoggedIn: props.isLoggedIn,
-            fetchPostsByStoreId: props.fetchPostsByStoreId,
-            favoritePosts: props.favoritePosts));
+      onInit: (Store<AppState> store) {
+        if (store.state.store.stores == null) {
+          store.dispatch(FetchStoreByIdRequest(storeId));
+          store.dispatch(FetchPostsByStoreIdRequest(storeId));
+        } else {
+          store.dispatch(FetchPostsByStoreIdRequest(storeId));
+        }
+      },
+      converter: (Store<AppState> store) => _Props.fromStore(store, storeId),
+      builder: (context, props) {
+        return _Presenter(
+          store: props.store,
+          favoriteStores: props.favoriteStores,
+          favoriteStore: props.favoriteStore,
+          unfavoriteStore: props.unfavoriteStore,
+          isLoggedIn: props.isLoggedIn,
+          fetchPostsByStoreId: props.fetchPostsByStoreId,
+          favoritePosts: props.favoritePosts,
+        );
+      },
+    );
   }
 }
 
@@ -70,17 +74,20 @@ class _Presenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: RefreshIndicator(
-      onRefresh: _onRefresh,
-      child: CustomScrollView(slivers: <Widget>[
-        _appBar(),
-        PostList(
-          noPostsView: Text('Looks like ${store.name} doesn\'t have any posts yet.'),
-          posts: store.posts,
-          postListType: PostListType.forStore,
-        )
-      ]),
-    ));
+      body: RefreshIndicator(
+        onRefresh: _onRefresh,
+        child: CustomScrollView(
+          slivers: <Widget>[
+            _appBar(),
+            PostList(
+              noPostsView: Text('Looks like ${store.name} doesn\'t have any posts yet.'),
+              posts: store.posts,
+              postListType: PostListType.forStore,
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _onRefresh() async {
@@ -88,13 +95,8 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _appBar() {
-    return SliverToBoxAdapter(
-      child: Container(
-        child: Column(children: <Widget>[
-          _bannerImage(),
-          _metaInfo(),
-          _writeReviewButton()])));
-}
+    return SliverToBoxAdapter(child: Container(child: Column(children: <Widget>[_bannerImage(), _metaInfo(), _writeReviewButton()])));
+  }
 
   Widget _bannerImage() {
     return Stack(
@@ -109,23 +111,22 @@ class _Presenter extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             )),
-        Container(height: 150.0, decoration: BoxDecoration(
-          gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          stops: [0, 0.2, 1.0],
-          colors: [Color(0x30000000), Color(0x30000000), Color(0x0000000)],
-        ))),
+        Container(
+            height: 150.0,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: [0, 0.2, 1.0],
+              colors: [Color(0x30000000), Color(0x30000000), Color(0x0000000)],
+            ))),
         SafeArea(
           child: Container(
             height: 106.0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                BackArrow(color: Colors.white),
-                Padding(child: _menuButton(), padding: EdgeInsets.only(right: 10.0))
-              ],
+              children: <Widget>[BackArrow(color: Colors.white), Padding(child: _menuButton(), padding: EdgeInsets.only(right: 10.0))],
             ),
           ),
         ),
@@ -205,21 +206,23 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _writeReviewButton() {
-    return Builder(
-      builder: (context) => Padding(
+    return Builder(builder: (context) {
+      return Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.0),
         child: HollowButton(
-        onTap: () {
-          if (isLoggedIn == false) {
-            snack(context, 'Login now to write a review');
-          } else {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => ReviewForm(store: store)));
-          }
-        },
-        children: <Widget>[
-          Text('Write a review', style: TextStyle(fontSize: 18.0, color: Burnt.primaryTextColor)),
-        ]
-      )));
+          onTap: () {
+            if (isLoggedIn == false) {
+              snack(context, 'Login now to write a review');
+            } else {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => ReviewForm(store: store)));
+            }
+          },
+          children: <Widget>[
+            Text('Write a review', style: TextStyle(fontSize: 18.0, color: Burnt.primaryTextColor)),
+          ],
+        ),
+      );
+    });
   }
 
   Widget _ratingCount(int count, Score score) {
@@ -266,64 +269,61 @@ class _Presenter extends StatelessWidget {
     ];
     var showBottomSheet = (context) {
       showModalBottomSheet(
-        context: context,
-        builder: (context) {
-          return Container(
-            padding: EdgeInsets.symmetric(vertical: 20.0),
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemBuilder: (context, index) => _option(options[index]),
-              separatorBuilder: (context, index) => Divider(height: 1.0, color: Color(0x16007AFF)),
-              itemCount: options.length)
-          );
-        }
-      );
+          context: context,
+          builder: (context) {
+            return Container(
+                padding: EdgeInsets.symmetric(vertical: 20.0),
+                child: ListView.separated(
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) => _option(options[index]),
+                    separatorBuilder: (context, index) => Divider(height: 1.0, color: Burnt.separatorBlue),
+                    itemCount: options.length));
+          });
     };
     return Builder(
-      builder: (context) => InkWell(
-        onTap: () => showBottomSheet(context),
-        child: Icon(CrustCons.menu_bold, color: Colors.white, size: 30.0)));
+        builder: (context) =>
+            InkWell(onTap: () => showBottomSheet(context), child: Icon(CrustCons.menu_bold, color: Colors.white, size: 30.0)));
   }
-
 
   Widget _option(DialogOption option) {
     return InkWell(
-      splashColor: Burnt.splashOrange,
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8.0),
-        padding: EdgeInsets.only(left: 40.0),
-        height: 40.0,
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Icon(option.icon, size: 35.0, color: Burnt.iconOrange),
-            Container(width: 10.0),
-            Text(option.display, style: TextStyle(color: Burnt.hintTextColor, fontSize: 17.0))],
+        splashColor: Burnt.splashOrange,
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 8.0),
+          padding: EdgeInsets.only(left: 40.0),
+          height: 40.0,
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Icon(option.icon, size: 35.0, color: Burnt.iconOrange),
+              Container(width: 10.0),
+              Text(option.display, style: TextStyle(color: Burnt.hintTextColor, fontSize: 17.0))
+            ],
+          ),
         ),
-      ),
-      onTap: option.onTap);
+        onTap: option.onTap);
   }
 
   Widget _favoriteButton() {
     return Builder(
       builder: (context) => FavoriteButton(
-        size: 30.0,
-        isFavorited: favoriteStores.contains(store.id),
-        onFavorite: () {
-          if (isLoggedIn) {
-            favoriteStore(store.id);
-            snack(context, 'Added to favourites');
-          } else {
-            snack(context, 'Login now to favourite store');
-          }
-        },
-        onUnfavorite: () {
-          unfavoriteStore(store.id);
-          snack(context, 'Removed from favourites');
-        },
-      ),
+            size: 30.0,
+            isFavorited: favoriteStores.contains(store.id),
+            onFavorite: () {
+              if (isLoggedIn) {
+                favoriteStore(store.id);
+                snack(context, 'Added to favourites');
+              } else {
+                snack(context, 'Login now to favourite store');
+              }
+            },
+            onUnfavorite: () {
+              unfavoriteStore(store.id);
+              snack(context, 'Removed from favourites');
+            },
+          ),
     );
   }
 }

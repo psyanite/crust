@@ -1,4 +1,5 @@
 import 'package:crust/models/reward.dart';
+import 'package:crust/models/user_reward.dart';
 import 'package:crust/services/toaster.dart';
 
 class RewardService {
@@ -16,6 +17,42 @@ class RewardService {
     if (response == null) return null;
     var json = response['rewardByCode'];
     return Reward.fromToaster(json);
+  }
+
+  static Future<UserReward> fetchUserReward({ userId, rewardId }) async {
+    String query = """
+      query {
+        userRewardBy(userId: $userId, rewardId: $rewardId) {
+          reward {
+            id
+          },
+          unique_code,
+          redeemed_at
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    if (response == null) return null;
+    var json = response['userRewardBy'];
+    return UserReward.fromToaster(json);
+  }
+
+  static Future<UserReward> addUserReward({ userId, rewardId }) async {
+    String query = """
+      mutation {
+        addUserReward(userId: $userId, rewardId: $rewardId) {
+          reward {
+            id
+          },
+          unique_code,
+          redeemed_at
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    if (response == null) return null;
+    var json = response['addUserReward'];
+    return UserReward.fromToaster(json);
   }
 
   Future<List<Reward>> fetchRewards() async {

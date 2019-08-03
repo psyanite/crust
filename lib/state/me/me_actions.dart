@@ -117,24 +117,6 @@ class FetchFavoritesSuccess {
   FetchFavoritesSuccess({this.favoriteRewards, this.favoriteStores, this.favoritePosts});
 }
 
-class FetchUserRewardRequest {
-  final int rewardId;
-
-  FetchUserRewardRequest(this.rewardId);
-}
-
-class FetchUserRewardSuccess {
-  final UserReward userReward;
-
-  FetchUserRewardSuccess(this.userReward);
-}
-
-class AddUserRewardRequest {
-  final int rewardId;
-
-  AddUserRewardRequest(this.rewardId);
-}
-
 class AddSearchHistoryItem {
   final SearchHistoryItem item;
 

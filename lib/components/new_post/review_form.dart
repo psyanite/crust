@@ -24,13 +24,16 @@ class ReviewForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
-        converter: (Store<AppState> store) => _Props.fromStore(store),
-        builder: (BuildContext context, _Props props) => _Presenter(
-              isLoggedIn: props.isLoggedIn,
-              me: props.me,
-              store: store,
-              fetchPostsByStoreId: props.fetchPostsByStoreId,
-            ));
+      converter: (Store<AppState> store) => _Props.fromStore(store),
+      builder: (BuildContext context, _Props props) {
+        return _Presenter(
+          isLoggedIn: props.isLoggedIn,
+          me: props.me,
+          store: store,
+          fetchPostsByStoreId: props.fetchPostsByStoreId,
+        );
+      },
+    );
   }
 }
 
@@ -104,15 +107,16 @@ class _PresenterState extends State<_Presenter> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
-                  width: 60.0,
-                  height: 50.0,
-                  decoration: BoxDecoration(
-                    color: Burnt.imgPlaceholderColor,
-                    image: DecorationImage(
-                      image: NetworkImage(store.coverImage),
-                      fit: BoxFit.cover,
-                    ),
-                  )),
+                width: 60.0,
+                height: 50.0,
+                decoration: BoxDecoration(
+                  color: Burnt.imgPlaceholderColor,
+                  image: DecorationImage(
+                    image: NetworkImage(store.coverImage),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -139,29 +143,29 @@ class _PresenterState extends State<_Presenter> {
       });
       _loadImages(photos);
     };
-    return Builder(
-      builder: (context) => Column(
-            children: <Widget>[
+    return Builder(builder: (context) {
+      return Column(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(children: <Widget>[
+              _overallQuestion(),
+              _tasteQuestion(),
+              _serviceQuestion(),
+              _valueQuestion(),
+              _ambienceQuestion(),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Column(children: <Widget>[
-                  _overallQuestion(),
-                  _tasteQuestion(),
-                  _serviceQuestion(),
-                  _valueQuestion(),
-                  _ambienceQuestion(),
-                  Padding(
-                    padding: EdgeInsets.only(top: 20.0, bottom: 30.0),
-                    child: PhotoSelector(images: imageData, onSelectImages: onSelectImages),
-                  ),
-                  _reviewBody(),
-                  _secretSwitch(context),
-                ]),
+                padding: EdgeInsets.only(top: 20.0, bottom: 30.0),
+                child: PhotoSelector(images: imageData, onSelectImages: onSelectImages),
               ),
-              _buttons(context),
-            ],
+              _reviewBody(),
+              _secretSwitch(context),
+            ]),
           ),
-    );
+          _buttons(context),
+        ],
+      );
+    });
   }
 
   Widget _toastQuestion(
@@ -236,10 +240,11 @@ class _PresenterState extends State<_Presenter> {
   Widget _toastButton(Score score, Function onTap, bool isSelected) {
     var opacity = isSelected ? 1.0 : 0.6;
     return InkWell(
-        onTap: () => onTap(score),
-        child: Container(key: UniqueKey(), padding: EdgeInsets.all(10.0), child: ScoreIcon(opacity: opacity, score: score, size: 50.0)),
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent);
+      onTap: () => onTap(score),
+      child: Container(key: UniqueKey(), padding: EdgeInsets.all(10.0), child: ScoreIcon(opacity: opacity, score: score, size: 50.0)),
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+    );
   }
 
   Widget _reviewBody() {
@@ -281,17 +286,22 @@ class _PresenterState extends State<_Presenter> {
             },
           )
         ],
-      )
+      ),
     );
   }
 
   _showSecretDialog(BuildContext context) {
     var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
     showDialog(
-        context: context,
-        builder: (context) => BurntDialog(
-            options: options,
-            description: 'Posting publically will allow anyone on Burntoast to see your review on the store page and your profile page.\n\nPosting secretly will only allow you to see your own review on your own profile page.'));
+      context: context,
+      builder: (context) {
+        return BurntDialog(
+          options: options,
+          description:
+              'Posting publically will allow anyone on Burntoast to see your review on the store page and your profile page.\n\nPosting secretly will only allow you to see your own review on your own profile page.',
+        );
+      },
+    );
   }
 
   bool _isValid(BuildContext context) {
@@ -356,12 +366,13 @@ class _PresenterState extends State<_Presenter> {
       store: store,
       postPhotos: [],
       postReview: PostReview(
-          body: reviewBody,
-          overallScore: overallScore,
-          tasteScore: tasteScore,
-          serviceScore: serviceScore,
-          valueScore: valueScore,
-          ambienceScore: ambienceScore),
+        body: reviewBody,
+        overallScore: overallScore,
+        tasteScore: tasteScore,
+        serviceScore: serviceScore,
+        valueScore: valueScore,
+        ambienceScore: ambienceScore,
+      ),
       postedBy: me,
     );
 
@@ -370,48 +381,6 @@ class _PresenterState extends State<_Presenter> {
       showOverlay = true;
     });
   }
-
-//  Future<bool> _submit(BuildContext context) async {
-//    if (!_isValid(context)) return false;
-//
-//    showDialog(
-//      context: context,
-//      builder: (BuildContext context) {
-//        return AlertDialog(
-//          content: CircularProgressIndicator(),
-//        );
-//      });
-//
-//    List<String> photoStrings = [];
-//    if (images.isNotEmpty) {
-//      photoStrings = await _uploadPhotos();
-//    }
-//
-//    var post = Post(
-//      type: PostType.review,
-//      store: store,
-//      postPhotos: photoStrings,
-//      postReview: PostReview(
-//        body: reviewBody,
-//        overallScore: overallScore,
-//        tasteScore: tasteScore,
-//        serviceScore: serviceScore,
-//        valueScore: valueScore,
-//        ambienceScore: ambienceScore),
-//      postedBy: me,
-//    );
-//
-//    var result = await PostService.submitReviewPost(post);
-//    if (result != null) {
-//      fetchPostsByStoreId(store.id);
-//      Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
-//      Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id)));
-//      return true;
-//    } else {
-//      snack(context, "Oops! Something went wrong, please try again");
-//      return false;
-//    }
-//  }
 
   _buttons(BuildContext context) {
     return Container(

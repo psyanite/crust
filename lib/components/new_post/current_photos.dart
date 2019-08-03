@@ -25,9 +25,9 @@ class _PresenterState extends State<CurrentPhotos> {
   Widget build(BuildContext context) {
     var size = (MediaQuery.of(context).size.width - 20.0 - 5 * 2.0) / 5;
     return SliverPadding(
-        padding: EdgeInsets.symmetric(horizontal: 10.0),
-        sliver: SliverToBoxAdapter(
-            child: Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.0),
+      sliver: SliverToBoxAdapter(
+        child: Container(
           height: images.length < 6 ? size + 3.0 : size * 2 + 6.0,
           child: Column(
             children: <Widget>[
@@ -35,47 +35,29 @@ class _PresenterState extends State<CurrentPhotos> {
               if (images.length > 5) _row(images.sublist(5, images.length), size)
             ],
           ),
-        ))
-//      sliver: SliverGrid(
-//          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//            crossAxisCount: 5,
-//            childAspectRatio: 1.0,
-//            crossAxisSpacing: 5.0,
-//            mainAxisSpacing: 5.0,
-//          ),
-//          delegate: SliverChildBuilderDelegate((builder, i) {
-//            var image = images[i];
-//            return InkWell(
-//              child: Container(
-//                  height: size,
-//                  width: size,
-//                  child: CachedNetworkImage(
-//                    imageUrl: image.photo,
-//                    fit: BoxFit.cover,
-//                    fadeInDuration: Duration(milliseconds: 100),
-//                  )),
-//              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ImageOverlay(image: image, deletePhoto: deletePhoto))),
-//            );
-//          }, childCount: images.length)),
-        );
+        ),
+      ),
+    );
   }
 
   Widget _row(List<PostPhoto> images, double size) {
-    var children = List<Widget>.from(images.map(
-      (i) => InkWell(
-            child: Container(
-                color: Burnt.imgPlaceholderColor,
-                padding: EdgeInsets.symmetric(horizontal: 1.0),
-                width: size,
-                height: size,
-                child: CachedNetworkImage(
-                  imageUrl: i.url,
-                  fit: BoxFit.cover,
-                  fadeInDuration: Duration(milliseconds: 100),
-                )),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => PhotoOverlay(photo: i, onPhotoDelete: onPhotoDelete))),
-          ),
-    ));
+    var children = List<Widget>.from(
+      images.map((i) {
+        return InkWell(
+          child: Container(
+              color: Burnt.imgPlaceholderColor,
+              padding: EdgeInsets.symmetric(horizontal: 1.0),
+              width: size,
+              height: size,
+              child: CachedNetworkImage(
+                imageUrl: i.url,
+                fit: BoxFit.cover,
+                fadeInDuration: Duration(milliseconds: 100),
+              )),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => PhotoOverlay(photo: i, onPhotoDelete: onPhotoDelete))),
+        );
+      }),
+    );
     return Padding(
       padding: EdgeInsets.only(bottom: 3.0),
       child: Row(

@@ -227,27 +227,26 @@ class _PresenterState extends State<_Presenter> {
   Widget _secretSwitch(BuildContext context) {
     return SliverToBoxAdapter(
       child: Container(
-        padding: EdgeInsets.only(bottom: 30.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text(makeSecret ? 'Keep Secret' : 'Make Public'),
-                IconButton(icon: Icon(Icons.help_outline, color: Burnt.lightGrey), onPressed: () => _showSecretDialog(context)),
-                CupertinoSwitch(
-                  value: !makeSecret,
-                  activeColor: Color(0xFF64D2FF),
-                  onChanged: (bool value) {
-                    setState(() => makeSecret = !value);
-                  },
-                )
-              ],
-            ),
-          ],
-        )
-      ),
+          padding: EdgeInsets.only(bottom: 30.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(makeSecret ? 'Keep Secret' : 'Make Public'),
+                  IconButton(icon: Icon(Icons.help_outline, color: Burnt.lightGrey), onPressed: () => _showSecretDialog(context)),
+                  CupertinoSwitch(
+                    value: !makeSecret,
+                    activeColor: Color(0xFF64D2FF),
+                    onChanged: (bool value) {
+                      setState(() => makeSecret = !value);
+                    },
+                  )
+                ],
+              ),
+            ],
+          )),
     );
   }
 
@@ -255,9 +254,14 @@ class _PresenterState extends State<_Presenter> {
     var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
     showDialog(
       context: context,
-      builder: (context) => BurntDialog(
-        options: options,
-        description: 'Posting publically will allow anyone on Burntoast to see your review on the store page and your profile page.\n\nPosting secretly will only allow you to see your own review on your own profile page.'));
+      builder: (context) {
+        return BurntDialog(
+          options: options,
+          description:
+              'Posting publically will allow anyone on Burntoast to see your review on the store page and your profile page.\n\nPosting secretly will only allow you to see your own review on your own profile page.',
+        );
+      },
+    );
   }
 
   Widget _toastQuestion(String question, Function onTap, Score currentScore) {
@@ -397,12 +401,13 @@ class _PresenterState extends State<_Presenter> {
       store: store,
       postPhotos: [],
       postReview: PostReview(
-          body: bodyCtrl.text,
-          overallScore: overallScore,
-          tasteScore: tasteScore,
-          serviceScore: serviceScore,
-          valueScore: valueScore,
-          ambienceScore: ambienceScore),
+        body: bodyCtrl.text,
+        overallScore: overallScore,
+        tasteScore: tasteScore,
+        serviceScore: serviceScore,
+        valueScore: valueScore,
+        ambienceScore: ambienceScore,
+      ),
     );
 
     setState(() {
@@ -442,13 +447,14 @@ class _PresenterState extends State<_Presenter> {
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2.0),
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomLeft,
-                      end: Alignment.topRight,
-                      stops: [0, 0.6, 1.0],
-                      colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-                    )),
+                  borderRadius: BorderRadius.circular(2.0),
+                  gradient: LinearGradient(
+                    begin: Alignment.bottomLeft,
+                    end: Alignment.topRight,
+                    stops: [0, 0.6, 1.0],
+                    colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
+                  ),
+                ),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,

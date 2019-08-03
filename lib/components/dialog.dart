@@ -49,7 +49,7 @@ class BurntDialog extends StatelessWidget {
     return ListView.separated(
       shrinkWrap: true,
       itemBuilder: (context, index) => _option(options[index]),
-      separatorBuilder: (context, index) => Divider(color: Color(0x16007AFF)),
+      separatorBuilder: (context, index) => Divider(color: Burnt.separatorBlue),
       itemCount: options.length);
   }
 

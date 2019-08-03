@@ -14,7 +14,6 @@ Reducer<MeState> meReducer = combineReducers([
   new TypedReducer<MeState, FavoritePostSuccess>(favoritePost),
   new TypedReducer<MeState, UnfavoritePostSuccess>(unfavoritePost),
   new TypedReducer<MeState, FetchFavoritesSuccess>(fetchFavorites),
-  new TypedReducer<MeState, FetchUserRewardSuccess>(fetchUserReward),
   new TypedReducer<MeState, AddSearchHistoryItem>(addSearchHistoryItem),
   new TypedReducer<MeState, SetMyLocation>(setMyLocation),
 ]);
@@ -58,10 +57,6 @@ MeState unfavoritePost(MeState state, UnfavoritePostSuccess action) {
 MeState fetchFavorites(MeState state, FetchFavoritesSuccess action) {
   return state.copyWith(
       favoriteRewards: action.favoriteRewards, favoriteStores: action.favoriteStores, favoritePosts: action.favoritePosts);
-}
-
-MeState fetchUserReward(MeState state, FetchUserRewardSuccess action) {
-  return state.copyWith(userReward: action.userReward);
 }
 
 MeState addSearchHistoryItem(MeState state, AddSearchHistoryItem action) {

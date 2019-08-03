@@ -14,7 +14,7 @@ class PhotoSelector extends StatelessWidget {
   final Function(List<Asset>) onSelectImages;
   final String addText;
 
-  PhotoSelector({Key key, this.images, this.onSelectImages, this.addText = 'Add Photos'}): super(key: key);
+  PhotoSelector({Key key, this.images, this.onSelectImages, this.addText = 'Add Photos'}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +36,9 @@ class PhotoSelector extends StatelessWidget {
               ),
               Container(width: 2.0),
               Text(buttonText, style: TextStyle(fontSize: 16.0, color: Colors.white))
-            ]),
-        )
+            ],
+          ),
+        ),
       ],
     );
   }

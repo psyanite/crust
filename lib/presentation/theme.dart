@@ -11,6 +11,7 @@ class Burnt {
   static const primaryTextColor = Color(0xFFF9AB0F);
   static const paper = Color(0xFFFAFAFA);
   static const separator = Color(0xFFEEEEEE);
+  static const separatorBlue = Color(0x16007AFF);
   static const lightGrey = Color(0x44604B41);
   static const iconGrey = Color(0x44604B41);
   static const iconOrange = Color(0xFFFFD173);

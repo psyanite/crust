@@ -20,8 +20,6 @@ List<Middleware<AppState>> createMeMiddleware([MeService meService = const MeSer
   final favoritePost = _favoritePost(meService);
   final unfavoritePost = _unfavoritePost(meService);
   final fetchFavorites = _fetchFavorites(meService);
-  final fetchUserReward = _fetchUserReward(meService);
-  final addUserReward = _addUserReward(meService);
 
   return [
     TypedMiddleware<AppState, AddUserRequest>(addUser),
@@ -33,8 +31,6 @@ List<Middleware<AppState>> createMeMiddleware([MeService meService = const MeSer
     TypedMiddleware<AppState, FavoritePostRequest>(favoritePost),
     TypedMiddleware<AppState, UnfavoritePostRequest>(unfavoritePost),
     TypedMiddleware<AppState, FetchFavoritesRequest>(fetchFavorites),
-    TypedMiddleware<AppState, FetchUserRewardRequest>(fetchUserReward),
-    TypedMiddleware<AppState, AddUserRewardRequest>(addUserReward),
   ];
 }
 
@@ -133,28 +129,6 @@ Middleware<AppState> _fetchFavorites(MeService service) {
           store.dispatch(FetchRewardsSuccess(rewards));
           store.dispatch(FetchStoresSuccess(stores));
         }
-      }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
-    }
-    next(action);
-  };
-}
-
-Middleware<AppState> _fetchUserReward(MeService service) {
-  return (Store<AppState> store, action, NextDispatcher next) {
-    if (store.state.me.user != null) {
-      service.fetchUserReward(userId: store.state.me.user.id, rewardId: action.rewardId).then((userReward) {
-        store.dispatch(FetchUserRewardSuccess(userReward));
-      }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
-    }
-    next(action);
-  };
-}
-
-Middleware<AppState> _addUserReward(MeService service) {
-  return (Store<AppState> store, action, NextDispatcher next) {
-    if (store.state.me.user != null) {
-      service.addUserReward(userId: store.state.me.user.id, rewardId: action.rewardId).then((userReward) {
-        store.dispatch(FetchUserRewardSuccess(userReward));
       }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     }
     next(action);

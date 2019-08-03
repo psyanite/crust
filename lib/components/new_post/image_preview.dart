@@ -17,9 +17,9 @@ class ImagePreview extends StatelessWidget {
         height: MediaQuery.of(context).size.width - 30.0,
         decoration: BoxDecoration(
           color: Burnt.imgPlaceholderColor,
-          image: DecorationImage(fit: BoxFit.cover, image: MemoryImage(_data))
-        )
-      )
+          image: DecorationImage(fit: BoxFit.cover, image: MemoryImage(_data)),
+        ),
+      ),
     );
   }
 
@@ -33,7 +33,7 @@ class ImagePreview extends StatelessWidget {
         height: size,
         child: Center(
           child: CircularProgressIndicator(),
-        )
+        ),
       ),
     );
   }

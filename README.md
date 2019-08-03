@@ -43,9 +43,6 @@
 </div>
 
 ## To Do
-* Enable user to scan and save a reward from a QR code
-* Implement firebase dynamic urls
-* Render all store locations in reward screen
 * Implement home screen
 * Implement follow functionality
 * Display followers on profile screen
@@ -56,7 +53,10 @@
 * Add link previews to dynamic links
 
 ## Done
+* Display store locations on reward screen
+* Enable user to scan and save a reward from a QR code
 * Implement QR scanner
+* Implement firebase dynamic urls
 * Implement secret rewards
 * Move like button reward screen
 * Update favorite store and reward behaviour to be instant

@@ -16,11 +16,10 @@ class MeState {
   final Set<int> favoriteRewards;
   final Set<int> favoriteStores;
   final Set<int> favoritePosts;
-  final UserReward userReward;
   final List<SearchHistoryItem> searchHistory;
   final SearchLocationItem location;
 
-  MeState({this.user, this.favoriteRewards, this.favoriteStores, this.favoritePosts, this.userReward, searchHistory, location})
+  MeState({this.user, this.favoriteRewards, this.favoriteStores, this.favoritePosts, searchHistory, location})
   : this.searchHistory = searchHistory ?? defaultSearchHistory, this.location = location ?? defaultLocation;
 
   MeState.initialState()
@@ -28,7 +27,6 @@ class MeState {
         favoriteRewards = null,
         favoriteStores = null,
         favoritePosts = null,
-        userReward = null,
         searchHistory = defaultSearchHistory,
         location = defaultLocation;
 
@@ -45,7 +43,6 @@ class MeState {
       favoriteRewards: favoriteRewards ?? this.favoriteRewards,
       favoriteStores: favoriteStores ?? this.favoriteStores,
       favoritePosts: favoritePosts ?? this.favoritePosts,
-      userReward: userReward ?? this.userReward,
       searchHistory: searchHistory ?? this.searchHistory,
       location: location ?? this.location,
     );
@@ -78,7 +75,6 @@ class MeState {
         favoriteRewards: ${favoriteRewards != null ? '${favoriteRewards.length} rewards' : null},
         favoriteStores: ${favoriteStores != null ? '${favoriteStores.length} stores' : null},
         favoritePosts: ${favoritePosts != null ? '${favoritePosts.length} posts' : null},
-        userReward: $userReward,
         searchHistory: ${searchHistory != null ? '${searchHistory.length} items' : null},
         location: $location,
       }''';

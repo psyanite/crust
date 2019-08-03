@@ -25,18 +25,19 @@ class _PresenterState extends State<PhotoOverlay> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Burnt.paper,
-        body: SafeArea(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              _closeButton(context),
-              _photo(context),
-              Container(),
-            ],
-          ),
-        ));
+      backgroundColor: Burnt.paper,
+      body: SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            _closeButton(context),
+            _photo(context),
+            Container(),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget _closeButton(BuildContext context) {
@@ -46,8 +47,9 @@ class _PresenterState extends State<PhotoOverlay> {
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         Padding(
-            padding: EdgeInsets.all(10.0),
-            child: IconButton(icon: Icon(Icons.clear, size: 30.0), color: Burnt.textBodyColor, onPressed: () => Navigator.pop(context)))
+          padding: EdgeInsets.all(10.0),
+          child: IconButton(icon: Icon(Icons.clear, size: 30.0), color: Burnt.textBodyColor, onPressed: () => Navigator.pop(context)),
+        )
       ],
     );
   }
@@ -57,13 +59,14 @@ class _PresenterState extends State<PhotoOverlay> {
     return Column(
       children: <Widget>[
         Container(
-            height: size,
-            width: size,
-            child: CachedNetworkImage(
-              imageUrl: photo.url,
-              fit: BoxFit.cover,
-              fadeInDuration: Duration(milliseconds: 100),
-            )),
+          height: size,
+          width: size,
+          child: CachedNetworkImage(
+            imageUrl: photo.url,
+            fit: BoxFit.cover,
+            fadeInDuration: Duration(milliseconds: 100),
+          ),
+        ),
         Container(height: 10.0),
         _deleteButton(context),
       ],
@@ -72,29 +75,30 @@ class _PresenterState extends State<PhotoOverlay> {
 
   Widget _deleteButton(BuildContext context) {
     return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(bottom: 30.0),
-            child: SmallButton(
-              onPressed: () {
-                onPhotoDelete(photo);
-                Navigator.pop(context);
-              },
-              padding: EdgeInsets.only(left: 7.0, right: 12.0, top: 10.0, bottom: 10.0),
-              child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                Icon(
-                  Icons.delete_outline,
-                  size: 16.0,
-                  color: Colors.white,
-                ),
-                Container(width: 2.0),
-                Text('Remove Photo', style: TextStyle(fontSize: 16.0, color: Colors.white))
-              ]),
-            ),
-          )
-        ]);
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Padding(
+          padding: EdgeInsets.only(bottom: 30.0),
+          child: SmallButton(
+            onPressed: () {
+              onPhotoDelete(photo);
+              Navigator.pop(context);
+            },
+            padding: EdgeInsets.only(left: 7.0, right: 12.0, top: 10.0, bottom: 10.0),
+            child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+              Icon(
+                Icons.delete_outline,
+                size: 16.0,
+                color: Colors.white,
+              ),
+              Container(width: 2.0),
+              Text('Remove Photo', style: TextStyle(fontSize: 16.0, color: Colors.white))
+            ]),
+          ),
+        )
+      ],
+    );
   }
 }

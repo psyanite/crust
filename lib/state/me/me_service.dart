@@ -203,38 +203,4 @@ class MeService {
     var json = response['allUserRewardsByUserId'];
     return (json as List).map((u) => UserReward.fromToaster(u)).toList();
   }
-
-  Future<UserReward> fetchUserReward({ userId, rewardId }) async {
-    String query = """
-      query {
-        userRewardBy(userId: $userId, rewardId: $rewardId) {
-          reward {
-            id
-          },
-          unique_code,
-          redeemed_at
-        }
-      }
-    """;
-    final response = await Toaster.get(query);
-    var json = response['userRewardBy'];
-    return UserReward.fromToaster(json);
-  }
-
-  Future<UserReward> addUserReward({ userId, rewardId }) async {
-    String query = """
-      mutation {
-        addUserReward(userId: $userId, rewardId: $rewardId) {
-          reward {
-            id
-          },
-          unique_code,
-          redeemed_at
-        }
-      }
-    """;
-    final response = await Toaster.get(query);
-    var json = response['addUserReward'];
-    return UserReward.fromToaster(json);
-  }
 }
