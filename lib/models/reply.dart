@@ -18,7 +18,7 @@ class Reply {
       commentId: reply['comment_id'],
       body: reply['body'],
       likedBy: List<int>.from((reply['liked_by']).map((l) => l['user_id'])),
-      repliedBy: repliedBy != null ? User.fromToaster(repliedBy) : null,
+      repliedBy: repliedBy != null ? User.fromProfileToaster(repliedBy) : null,
       repliedAt: DateTime.parse(reply['replied_at']),
     );
   }
@@ -31,12 +31,10 @@ class Reply {
       user_id,
     }
     replied_by {
-      id,
-      profile {
-        username,
-        preferred_name,
-        profile_picture
-      }
+      user_id,
+      username,
+      preferred_name,
+      profile_picture
     }
     replied_at
   """;

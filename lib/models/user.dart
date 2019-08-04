@@ -87,6 +87,16 @@ class User {
     );
   }
 
+  factory User.fromProfileToaster(Map<String, dynamic> json) {
+    if (json == null) return null;
+    return User(
+      id: json['user_id'],
+      username: json['username'],
+      displayName: json['preferred_name'],
+      profilePicture: json['profile_picture'],
+    );
+  }
+
   factory User.fromFacebook(String token, Map<String, dynamic> json) {
     return User(
       firstName: json['first_name'],

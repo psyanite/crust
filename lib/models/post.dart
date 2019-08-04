@@ -36,18 +36,12 @@ class Post {
     var postedBy = post['posted_by'];
     var postPhotos = post['post_photos'];
     var postReview = post['post_review'];
-    var profile = postedBy['profile'];
     return Post(
         id: post['id'],
         type: EnumUtil.fromString(PostType.values, post['type']),
         hidden: post['hidden'],
         store: Store.fromToaster(post['store']),
-        postedBy: User(
-          id: postedBy['id'],
-          username: profile['username'],
-          displayName: profile['preferred_name'],
-          profilePicture: profile['profile_picture'],
-        ),
+        postedBy: User.fromProfileToaster(postedBy),
         postedAt: DateTime.parse(post['posted_at']),
         postPhotos: (postPhotos as List).map<PostPhoto>((postPhoto) {
           return PostPhoto(id: postPhoto['id'], url: postPhoto['url']);
@@ -90,12 +84,10 @@ class Post {
       },
     },
     posted_by {
-      id,
-      profile {
-        username,
-        preferred_name,
-        profile_picture,
-      }
+      user_id,
+      username,
+      preferred_name,
+      profile_picture,
     },
     posted_at,
     post_photos {

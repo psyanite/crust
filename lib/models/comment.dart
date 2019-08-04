@@ -35,7 +35,7 @@ class Comment {
         postId: comment['post_id'],
         body: comment['body'],
         likedBy: List<int>.from(comment['liked_by'].map((l) => l['user_id'])),
-        commentedBy: commentedBy != null ? User.fromToaster(commentedBy) : null,
+        commentedBy: commentedBy != null ? User.fromProfileToaster(commentedBy) : null,
         replies: LinkedHashMap<int, Reply>.fromEntries(replies.map((r) => MapEntry<int, Reply>(r.id, r))),
         commentedAt: DateTime.parse(comment['commented_at']));
   }
@@ -51,12 +51,10 @@ class Comment {
       user_id,
     }
     commented_by {
-      id,
-      profile {
-        username,
-        preferred_name,
-        profile_picture
-      }
+      user_id,
+      username,
+      preferred_name,
+      profile_picture
     }
     commented_at
   """;

@@ -43,6 +43,9 @@
 </div>
 
 ## To Do
+* Show store posted posts on store page
+* Show store-exclusive rewards
+
 * Implement home feed
 * Implement follow functionality
 * Display followers on profile screen
