@@ -136,7 +136,7 @@ class RewardsScreenState extends State<RewardsScreen> {
   }
 
   Widget _rewardsList(_Props props) {
-    if (props.rewards == null) return LoadingSliver();
+    if (props.rewards.isEmpty) return LoadingSliver();
     return RewardCards(rewards: props.rewards, layout: currentLayout);
   }
 }
@@ -151,9 +151,9 @@ class _Props {
   });
 
   static fromStore(Store<AppState> store) {
-    var rewards = store.state.reward.rewards != null ? store.state.reward.rewards.values.toList() : null;
+    var rewards = store.state.reward.rewards.values.toList();
     return _Props(
-      rewards: rewards?.where((r) => r.isExpired() == false && r.isHidden() == false)?.toList(),
+      rewards: rewards.where((r) => r.isExpired() == false && r.isHidden() == false).toList(),
       isLoggedIn: store.state.me.user != null,
     );
   }

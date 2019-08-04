@@ -13,3 +13,11 @@ class FetchRewardSuccess {
 
   FetchRewardSuccess(this.reward);
 }
+
+class FetchTopRewardsRequest {}
+
+class FetchTopRewardsSuccess {
+  final List<Reward> rewards;
+
+  FetchTopRewardsSuccess(this.rewards);
+}

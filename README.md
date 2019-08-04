@@ -43,7 +43,7 @@
 </div>
 
 ## To Do
-* Implement home screen
+* Implement home feed
 * Implement follow functionality
 * Display followers on profile screen
 * Fetch recommendations
@@ -53,6 +53,7 @@
 * Add link previews to dynamic links
 
 ## Done
+* Implement top stores and top rewards on home screen
 * Display store locations on reward screen
 * Enable user to scan and save a reward from a QR code
 * Implement QR scanner

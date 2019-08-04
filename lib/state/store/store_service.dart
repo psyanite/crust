@@ -18,6 +18,19 @@ class StoreService {
     return (json as List).map((s) => Store.fromToaster(s)).toList();
   }
 
+  Future<List<Store>> fetchTopStores() async {
+    String query = """
+      query {
+        topStores {
+          ${Store.attributes}
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['topStores'];
+    return (json as List).map((s) => Store.fromToaster(s)).toList();
+  }
+
   Future<Store> fetchStoreById(int storeId) async {
     String query = """
       query {

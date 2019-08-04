@@ -61,20 +61,23 @@ class Reward {
     }
   }
 
+  String storeNameText() {
+    return this.store?.name ?? this.storeGroup.name;
+  }
+
   String locationText() {
     var store = this.store;
     if (store != null) {
-      var text = store.name;
-      if (store.suburb != null) text = '$text · ${store.suburb}';
-      if (store.location != null) text = '$text, ${store.location}';
+      var text = '';
+      if (store.suburb != null) text += '${store.suburb}';
+      if (store.location != null) text += ', ${store.location}';
       return text;
     }
     var stores = this.storeGroup.stores;
     var text = stores.take(2).map((s) {
       return s.suburb != null ? s.suburb : s.location;
     }).join(', ');
-    text = '${this.storeGroup.name} · $text';
-    if (stores.length > 2) text = '$text, +${stores.length - 2} locations';
+    if (stores.length > 2) text += ', +${stores.length - 2} locations';
     return text;
   }
 

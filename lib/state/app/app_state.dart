@@ -19,7 +19,7 @@ class AppState {
       : me = me ?? MeState.initialState(),
         store = store ?? StoreState.initialState(),
         user = user ?? UserState(),
-        reward = reward ?? RewardState(),
+        reward = reward ?? RewardState.initialState(),
         comment = comment ?? CommentState.initialState(),
         error = error ?? ErrorState();
 

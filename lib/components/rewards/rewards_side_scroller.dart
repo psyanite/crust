@@ -96,7 +96,7 @@ class RewardsSideScroller extends StatelessWidget {
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                     Container(height: 5.0),
                     Text(reward.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                    Text(reward.locationText(), style: TextStyle(fontSize: 14.0)),
+                    Text('${reward.storeNameText()} · ${reward.locationText()}', style: TextStyle(fontSize: 14.0)),
                   ])
                 ]))));
   }

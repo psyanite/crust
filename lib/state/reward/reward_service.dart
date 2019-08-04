@@ -68,4 +68,18 @@ class RewardService {
     var json = response['allRewards'];
     return (json as List).map((r) => Reward.fromToaster(r)).toList();
   }
+
+  Future<List<Reward>> fetchTopRewards() async {
+    String query = """
+      query {
+        topRewards {
+          ${Reward.attributes}
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    if (response == null) return null;
+    var json = response['topRewards'];
+    return (json as List).map((r) => Reward.fromToaster(r)).toList();
+  }
 }

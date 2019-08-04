@@ -4,17 +4,22 @@ import 'package:crust/state/store/store_state.dart';
 import 'package:redux/redux.dart';
 
 Reducer<StoreState> storeReducer = combineReducers([
-  new TypedReducer<StoreState, FetchStoreSuccess>(fetchStoreSuccess),
   new TypedReducer<StoreState, FetchStoresSuccess>(fetchStoresSuccess),
+  new TypedReducer<StoreState, FetchTopStoresSuccess>(fetchTopStoresSuccess),
+  new TypedReducer<StoreState, FetchStoreSuccess>(fetchStoreSuccess),
   new TypedReducer<StoreState, FetchPostsByStoreIdSuccess>(fetchPostsByStoreIdSuccess),
 ]);
 
-StoreState fetchStoreSuccess(StoreState state, FetchStoreSuccess action) {
-  return state.addStore(action.store);
-}
-
 StoreState fetchStoresSuccess(StoreState state, FetchStoresSuccess action) {
   return state.addStores(action.stores);
+}
+
+StoreState fetchTopStoresSuccess(StoreState state, FetchTopStoresSuccess action) {
+  return state.addTopStores(action.stores);
+}
+
+StoreState fetchStoreSuccess(StoreState state, FetchStoreSuccess action) {
+  return state.addStore(action.store);
 }
 
 StoreState fetchPostsByStoreIdSuccess(StoreState state, FetchPostsByStoreIdSuccess action) {

@@ -103,23 +103,26 @@ class _Presenter extends StatelessWidget {
       alignment: AlignmentDirectional.topStart,
       children: <Widget>[
         Container(
-            height: 300.0,
-            decoration: BoxDecoration(
-              color: Burnt.imgPlaceholderColor,
-              image: DecorationImage(
-                image: NetworkImage(store.coverImage),
-                fit: BoxFit.cover,
-              ),
-            )),
+          height: 300.0,
+          decoration: BoxDecoration(
+            color: Burnt.imgPlaceholderColor,
+            image: DecorationImage(
+              image: NetworkImage(store.coverImage),
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
         Container(
-            height: 150.0,
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
+          height: 150.0,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               stops: [0, 0.2, 1.0],
               colors: [Color(0x30000000), Color(0x30000000), Color(0x0000000)],
-            ))),
+            ),
+          ),
+        ),
         SafeArea(
           child: Container(
             height: 106.0,

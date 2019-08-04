@@ -8,11 +8,13 @@ List<Middleware<AppState>> createStoreMiddleware([
   StoreService service = const StoreService(),
 ]) {
   final fetchStores = _fetchStores(service);
+  final fetchTopStores = _fetchTopStores(service);
   final fetchStoreById = _fetchStoreById(service);
   final fetchPostsByStoreId = _fetchPostsByStoreId(service);
 
   return [
     TypedMiddleware<AppState, FetchStoresRequest>(fetchStores),
+    TypedMiddleware<AppState, FetchTopStoresRequest>(fetchTopStores),
     TypedMiddleware<AppState, FetchStoreByIdRequest>(fetchStoreById),
     TypedMiddleware<AppState, FetchPostsByStoreIdRequest>(fetchPostsByStoreId),
   ];
@@ -25,7 +27,17 @@ Middleware<AppState> _fetchStores(StoreService service) {
         store.dispatch(FetchStoresSuccess(stores));
       },
     ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    next(action);
+  };
+}
 
+Middleware<AppState> _fetchTopStores(StoreService service) {
+  return (Store<AppState> store, action, NextDispatcher next) {
+    service.fetchTopStores().then(
+      (stores) {
+        store.dispatch(FetchTopStoresSuccess(stores));
+      },
+    ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     next(action);
   };
 }
@@ -37,7 +49,6 @@ Middleware<AppState> _fetchStoreById(StoreService service) {
         store.dispatch(FetchStoreSuccess(s));
       },
     ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
-
     next(action);
   };
 }
@@ -49,7 +60,6 @@ Middleware<AppState> _fetchPostsByStoreId(StoreService service) {
         store.dispatch(FetchPostsByStoreIdSuccess(action.storeId, posts));
       },
     ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
-
     next(action);
   };
 }

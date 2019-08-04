@@ -6,35 +6,52 @@ import 'package:meta/meta.dart';
 @immutable
 class RewardState {
   final LinkedHashMap<int, Reward> rewards;
+  final LinkedHashMap<int, Reward> topRewards;
 
-  RewardState({this.rewards});
+  RewardState({this.rewards, this.topRewards});
 
-  RewardState copyWith({LinkedHashMap<int, Reward> rewards}) {
+  RewardState.initialState()
+    : rewards = LinkedHashMap<int, Reward>(),
+      topRewards = LinkedHashMap<int, Reward>();
+
+  RewardState copyWith({LinkedHashMap<int, Reward> rewards, LinkedHashMap<int, Reward> topRewards}) {
     return RewardState(
       rewards: rewards ?? this.rewards,
+      topRewards: topRewards ?? this.topRewards,
     );
   }
 
   RewardState addRewards(List<Reward> rewards) {
     var clone = cloneRewards();
-    clone.addAll(Map.fromEntries(rewards.map((r) => MapEntry<int, Reward>(r.id, r))));
-    return RewardState(rewards: clone);
+    clone.addEntries(rewards.map((r) => MapEntry<int, Reward>(r.id, r)));
+    return copyWith(rewards: clone);
+  }
+
+  RewardState addTopRewards(List<Reward> rewards) {
+    var clone = cloneTopRewards();
+    clone.addEntries(rewards.map((r) => MapEntry<int, Reward>(r.id, r)));
+    return copyWith(topRewards: clone);
   }
 
   RewardState addReward(Reward reward) {
     var clone = cloneRewards();
     clone[reward.id] = reward;
-    return RewardState(rewards: clone);
+    return copyWith(rewards: clone);
   }
 
   LinkedHashMap<int, Reward> cloneRewards() {
-    return this.rewards != null ? LinkedHashMap<int, Reward>.from(this.rewards) : LinkedHashMap<int, Reward>();
+    return LinkedHashMap<int, Reward>.from(this.rewards);
+  }
+
+  LinkedHashMap<int, Reward> cloneTopRewards() {
+    return LinkedHashMap<int, Reward>.from(this.topRewards);
   }
 
   @override
   String toString() {
     return '''{
-        rewards: ${rewards != null ? '${rewards.length} rewards' : null},
+        rewards: ${rewards.length} rewards,
+        topRewards: ${topRewards.length} rewards,
       }''';
   }
 }

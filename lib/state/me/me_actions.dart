@@ -1,7 +1,6 @@
 import 'package:crust/models/post.dart';
 import 'package:crust/models/search.dart';
 import 'package:crust/models/user.dart';
-import 'package:crust/models/user_reward.dart';
 
 class AddUserRequest {
   final User user;

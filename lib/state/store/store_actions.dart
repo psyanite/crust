@@ -21,6 +21,14 @@ class FetchStoresSuccess {
   FetchStoresSuccess(this.stores);
 }
 
+class FetchTopStoresRequest {}
+
+class FetchTopStoresSuccess {
+  final List<Store> stores;
+
+  FetchTopStoresSuccess(this.stores);
+}
+
 class FetchPostsByStoreIdRequest {
   final int storeId;
 

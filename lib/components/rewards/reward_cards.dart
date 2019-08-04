@@ -17,15 +17,12 @@ class RewardCards extends StatelessWidget {
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, i) {
         var reward = rewards[i];
-        return Builder(
-            builder: (context) => InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => RewardScreen(rewardId: reward.id)),
-                  );
-                },
-                child: type(reward)));
+        return Builder(builder: (context) {
+          return InkWell(
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => RewardScreen(rewardId: reward.id))),
+            child: type(reward),
+          );
+        });
       }, childCount: rewards.length),
     );
   }
@@ -40,11 +37,9 @@ class RewardCards extends StatelessWidget {
           children: <Widget>[
             _cardPromoImage(reward),
             _cardBanner(reward),
-            Padding(
-              padding: EdgeInsets.only(top: 10.0),
-              child: Text(reward.name, style: Burnt.titleStyle),
-            ),
-            Text(reward.locationText()),
+            Container(height: 10.0),
+            Text(reward.name, style: Burnt.titleStyle),
+            Text('${reward.storeNameText()} · ${reward.locationText()}'),
             Text(reward.description),
           ],
         ),
@@ -69,7 +64,7 @@ class RewardCards extends StatelessWidget {
                       padding: EdgeInsets.only(top: 10.0),
                       child: Text(reward.name, style: Burnt.titleStyle),
                     ),
-                    Text(reward.locationText()),
+                    Text('${reward.storeNameText()} · ${reward.locationText()}'),
                     Text(reward.description),
                     _listItemBanner(reward),
                   ],

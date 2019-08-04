@@ -84,7 +84,7 @@ class StoresGrid extends StatelessWidget {
                 padding: EdgeInsets.only(left: 8.0, top: 5.0),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                  Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
+                  Text(store.location ?? store.suburb, style: TextStyle(fontSize: 14.0)),
                   Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
                 ]))
           ])),
