@@ -168,7 +168,7 @@ class _MoreButton extends StatelessWidget {
     return StoreConnector<AppState, dynamic>(converter: (Store<AppState> store) {
       return store.state.me.user;
     }, builder: (context, me) {
-      if (me == null || me.id != post.postedBy.id) return Container();
+      if (me == null || post.postedBy == null || me.id != post.postedBy.id) return Container();
       return _MoreButtonPresenter(removeFromList: removeFromList, index: index, post: post, me: me);
     });
   }

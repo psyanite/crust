@@ -31,48 +31,62 @@ class PostInfo extends StatelessWidget {
         child: Column(children: children));
   }
 
+  Widget _name() {
+    if (postListType == PostListType.forProfile) {
+      return Text(post.store.name, style: Burnt.titleStyle);
+    } else {
+      if (post.postedBy == null) {
+        return Text('Burn\'s Cafe ⭐', style: Burnt.titleStyle);
+      } else {
+        return Row(children: <Widget>[
+          Text(post.postedBy.displayName, style: Burnt.titleStyle),
+          Text(" @${post.postedBy.username}", style: TextStyle(color: Burnt.hintTextColor))
+        ]);
+      }
+    }
+  }
+
   Widget _header() {
-    var image = postListType == PostListType.forProfile ? post.store.coverImage : post.postedBy.profilePicture;
-    var name = postListType == PostListType.forProfile
-        ? Text(post.store.name, style: Burnt.titleStyle)
-        : Row(children: <Widget>[Text(post.postedBy.displayName, style: Burnt.titleStyle), Text(" @${post.postedBy.username}", style: TextStyle(color: Burnt.hintTextColor))]);
-    var details = Row(children: <Widget>[
-      Container(
-          width: 50.0,
-          height: 50.0,
-          decoration:
-              BoxDecoration(color: Burnt.imgPlaceholderColor, image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image)))),
-      Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[name, Text(TimeUtil.format(post.postedAt), style: TextStyle(color: Burnt.hintTextColor))]),
-      )
-    ]);
-    if (post.type == PostType.review) {
+    var image = postListType == PostListType.forProfile || post.postedBy == null ? post.store.coverImage : post.postedBy.profilePicture;
+    var details = Row(
+      children: <Widget>[
+        if (post.postedBy != null) Container(
+            width: 50.0,
+            height: 50.0,
+            decoration:
+                BoxDecoration(color: Burnt.imgPlaceholderColor, image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image)))),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: post.postedBy != null ? 10.0 : 0.0),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[_name(), Text(TimeUtil.format(post.postedAt), style: TextStyle(color: Burnt.hintTextColor))]),
+        ),
+      ],
+    );
+    if (post.type == PostType.review && post.postedBy != null) {
       details = Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[details, ScoreIcon(score: post.postReview.overallScore, size: 30.0)]);
+          children: <Widget>[details, ScoreIcon(score: post.postReview.overallScore, size: 30.0)],
+      );
     }
     var nextScreen =
-        postListType == PostListType.forProfile ? StoreScreen(storeId: post.store.id) : ProfileScreen(userId: post.postedBy.id);
-    return Builder(
-      builder: (context) => InkWell(
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => nextScreen)),
-            child: Column(
-              children: <Widget>[Container(padding: EdgeInsets.only(bottom: 20.0), child: details)],
-            ),
-          ),
-    );
+        postListType == PostListType.forProfile || post.postedBy == null ? StoreScreen(storeId: post.store.id) : ProfileScreen(userId: post.postedBy.id);
+    return Builder(builder: (context) {
+      return InkWell(
+        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => nextScreen)),
+        child: Column(
+          children: <Widget>[Container(padding: EdgeInsets.only(bottom: 20.0), child: details)],
+        ),
+      );
+    });
   }
 
   Widget _reviewBody() {
     return Builder(
       builder: (context) => InkWell(
-        child: Padding(
-          padding: EdgeInsets.only(bottom: 20.0),
-          child: Text(post.postReview.body)
-        ),
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CommentScreen(post: post))),
-      ),
+            child: Padding(padding: EdgeInsets.only(bottom: 20.0), child: Text(post.postReview.body)),
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CommentScreen(post: post))),
+          ),
     );
   }
 
@@ -80,9 +94,9 @@ class PostInfo extends StatelessWidget {
     var renderReview = post.type == PostType.review && post.postReview.body != null;
     return Container(
         child: Column(children: <Widget>[
-          if (renderReview) _reviewBody(),
-          post.postPhotos.isNotEmpty ? CarouselWrapper(postId: post.id, child: _carousel()) : _textEnd()
-        ]));
+      if (renderReview) _reviewBody(),
+      post.postPhotos.isNotEmpty ? CarouselWrapper(postId: post.id, child: _carousel()) : _textEnd()
+    ]));
   }
 
   Widget _textEnd() {
@@ -119,8 +133,8 @@ class PostInfo extends StatelessWidget {
         builder: (context) => Column(
               children: <Widget>[
                 Container(
-                  margin: EdgeInsets.only(top: 5.0, bottom: 10.0),
-                  height: MediaQuery.of(context).size.width - 30.0,
+                    margin: EdgeInsets.only(top: 5.0, bottom: 10.0),
+                    height: MediaQuery.of(context).size.width - 30.0,
                     decoration: BoxDecoration(
                         color: Burnt.imgPlaceholderColor,
                         image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.postPhotos[0].url)))),

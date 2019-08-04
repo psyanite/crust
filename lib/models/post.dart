@@ -33,7 +33,6 @@ class Post {
 
   factory Post.fromToaster(Map<String, dynamic> post) {
     if (post == null) return null;
-    var postedBy = post['posted_by'];
     var postPhotos = post['post_photos'];
     var postReview = post['post_review'];
     return Post(
@@ -41,7 +40,7 @@ class Post {
         type: EnumUtil.fromString(PostType.values, post['type']),
         hidden: post['hidden'],
         store: Store.fromToaster(post['store']),
-        postedBy: User.fromProfileToaster(postedBy),
+        postedBy: User.fromProfileToaster(post['posted_by']),
         postedAt: DateTime.parse(post['posted_at']),
         postPhotos: (postPhotos as List).map<PostPhoto>((postPhoto) {
           return PostPhoto(id: postPhoto['id'], url: postPhoto['url']);

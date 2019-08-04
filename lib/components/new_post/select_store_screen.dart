@@ -91,7 +91,6 @@ class _PresenterState extends State<_Presenter> {
           if (text.trim() != _query.trim()) setState(() => _query = text);
         },
         style: TextStyle(fontSize: 18.0),
-        autofocus: true,
         decoration: InputDecoration(
           hintText: 'Search for a restaurant, cafe, or eatery to review',
           prefixIcon: Icon(CrustCons.search, color: Burnt.lightGrey, size: 18.0),

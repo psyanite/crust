@@ -15,7 +15,7 @@ class FavoriteRewardButton extends StatelessWidget {
   final EdgeInsets padding;
   final bool confirmUnfavorite;
 
-  FavoriteRewardButton({Key key, this.reward, this.size, this.padding, this.confirmUnfavorite}) : super(key: key);
+  FavoriteRewardButton({Key key, this.reward, this.size, this.padding, this.confirmUnfavorite = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

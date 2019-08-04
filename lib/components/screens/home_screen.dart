@@ -1,5 +1,9 @@
+import 'package:crust/components/rewards/favorite_reward_button.dart';
+import 'package:crust/components/rewards/reward_screen.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
+import 'package:crust/components/screens/store_screen.dart';
 import 'package:crust/components/search/search_screen.dart';
+import 'package:crust/components/stores/favorite_store_button.dart';
 import 'package:crust/components/stores/stores_grid.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/store.dart' as MyStore;
@@ -120,29 +124,39 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _topStoreCard(MyStore.Store store) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Container(
-          height: 300.0,
-          decoration: BoxDecoration(
-            color: Burnt.imgPlaceholderColor,
-            image: DecorationImage(
-              image: NetworkImage(store.coverImage),
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.only(top: 16.0, bottom: 20.0, left: 16.0, right: 16.0),
+    return Builder(
+      builder: (context) {
+        return InkWell(
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id))),
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(store.name, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
-              Text(store.location ?? store.suburb, style: TextStyle(fontSize: 16.0)),
-              Text(store.cuisines.join(', '), style: TextStyle(fontSize: 16.0)),
-            ],
-          ),
-        ),
+              Stack(
+                alignment: AlignmentDirectional.topEnd,
+                children: <Widget>[
+                  Container(
+                    height: 300.0,
+                    decoration: BoxDecoration(
+                      color: Burnt.imgPlaceholderColor,
+                      image: DecorationImage(
+                        image: NetworkImage(store.coverImage),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  FavoriteStoreButton(store: store, size: 30.0, padding: EdgeInsets.all(20.0)),
+                ],
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 16.0, bottom: 20.0, left: 16.0, right: 16.0),
+                child: Column(
+                  children: <Widget>[
+                    Text(store.name, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
+                    Text(store.location ?? store.suburb, style: TextStyle(fontSize: 16.0)),
+                    Text(store.cuisines.join(', '), style: TextStyle(fontSize: 16.0)),
+                  ],
+                ),
+              ),
 //        Container(
 //          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
 //          height: 100.0,
@@ -171,7 +185,10 @@ class _Presenter extends StatelessWidget {
 //            ],
 //          ),
 //        ),
-      ],
+            ],
+          ),
+        );
+      }
     );
   }
 
@@ -212,29 +229,42 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _topRewardCard(Reward reward) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Container(
-          height: 300.0,
-          decoration: BoxDecoration(
-            color: Burnt.imgPlaceholderColor,
-            image: DecorationImage(
-              image: NetworkImage(reward.promoImage),
-              fit: BoxFit.cover,
-            ),
+    return Builder(
+      builder: (context) {
+        return InkWell(
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => RewardScreen(rewardId: reward.id))),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Stack(
+                alignment: AlignmentDirectional.topEnd,
+                children: <Widget>[
+                  Container(
+                    height: 300.0,
+                    decoration: BoxDecoration(
+                      color: Burnt.imgPlaceholderColor,
+                      image: DecorationImage(
+                        image: NetworkImage(reward.promoImage),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  FavoriteRewardButton(reward: reward, size: 30.0, padding: EdgeInsets.all(20.0)),
+                ],
+              ),
+              Container(height: 20.0),
+              Text(reward.name, style: Burnt.titleStyle.copyWith(fontSize: 22.0)),
+              Container(height: 2.0),
+              Text(reward.storeNameText(), style: TextStyle(fontSize: 16.0)),
+              Container(height: 2.0),
+              Text(reward.locationText(), style: TextStyle(fontSize: 16.0)),
+              Container(height: 3.0),
+              Text(reward.bannerText(), style: TextStyle(color: Burnt.hintTextColor, fontSize: 16.0)),
+              Container(height: 20.0),
+            ],
           ),
-        ),
-        Container(height: 20.0),
-        Text(reward.name, style: Burnt.titleStyle.copyWith(fontSize: 22.0)),
-        Container(height: 2.0),
-        Text(reward.storeNameText(), style: TextStyle(fontSize: 16.0)),
-        Container(height: 2.0),
-        Text(reward.locationText(), style: TextStyle(fontSize: 16.0)),
-        Container(height: 3.0),
-        Text(reward.bannerText(), style: TextStyle(color: Burnt.hintTextColor, fontSize: 16.0)),
-        Container(height: 20.0),
-      ],
+        );
+      }
     );
   }
 

@@ -43,6 +43,8 @@
 </div>
 
 ## To Do
+* Allow multiline text on post submission
+* Allow multiline text on terms and conditions
 * Show store posted posts on store page
 * Show store-exclusive rewards
 
