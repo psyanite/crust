@@ -43,8 +43,6 @@
 </div>
 
 ## To Do
-* Allow multiline text on post submission
-* Allow multiline text on terms and conditions
 * Show store posted posts on store page
 * Show store-exclusive rewards
 
@@ -58,6 +56,8 @@
 * Add link previews to dynamic links
 
 ## Done
+* Allow multiline text on post submission
+* Allow multiline text on terms and conditions
 * Implement top stores and top rewards on home screen
 * Display store locations on reward screen
 * Enable user to scan and save a reward from a QR code

@@ -188,7 +188,7 @@ class _MoreButtonPresenter extends StatelessWidget {
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         child: Padding(
-          padding: EdgeInsets.only(left: 5.0),
+          padding: EdgeInsets.only(left: 5.0, top: 10.0, bottom: 10.0, right: 10.0),
           child: Icon(CrustCons.triple_dot, size: 15.0, color: Burnt.lightGrey),
         ),
         onTap: () => _showMoreDialog(context));

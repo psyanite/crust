@@ -234,7 +234,7 @@ class _Presenter extends StatelessWidget {
           highlightColor: Colors.transparent,
           onTap: () {
             var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
-            showDialog(context: context, builder: (context) => BurntDialog(options: options, description: reward.termsAndConditions));
+            showDialog(context: context, builder: (context) => TermsDialog(options: options, terms: reward.termsAndConditions));
           },
           child: Text('See terms and conditions', style: TextStyle(color: Burnt.primaryTextColor)));
     });

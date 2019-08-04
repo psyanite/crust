@@ -13,7 +13,7 @@ final Map<String, String> headers = {
 
 class Toaster {
   static Future<Map<String, dynamic>> get(String body, {Map<String, dynamic> variables}) async {
-    var requestBody = json.encode({'query': body.replaceAll('\n', '') });
+    var requestBody = json.encode({'query': body });
     var response = await http.post(url, body: requestBody, headers: headers);
     var responseBody = json.decode(response.body);
     if (response.statusCode != 200 || responseBody['errors'] != null) {
