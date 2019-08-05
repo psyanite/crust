@@ -43,19 +43,20 @@
 </div>
 
 ## To Do
-* Show store posted posts on store page
-* Show store-exclusive rewards
-
-* Implement home feed
 * Implement follow functionality
 * Display followers on profile screen
-* Fetch recommendations
+* Display followers on store screen
+* Implement home feed
+
 * Implement pagination
 
 * Enable firebase dynamic urls in iOS
 * Add link previews to dynamic links
 
 ## Done
+* Show store posted posts on store page
+* Add RewardSwiper to StoreScreen
+* Show store-exclusive rewards
 * Allow multiline text on post submission
 * Allow multiline text on terms and conditions
 * Implement top stores and top rewards on home screen

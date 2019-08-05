@@ -1,4 +1,5 @@
 import 'package:crust/models/post.dart';
+import 'package:crust/models/reward.dart';
 import 'package:crust/models/store.dart';
 import 'package:crust/services/toaster.dart';
 
@@ -55,5 +56,18 @@ class StoreService {
     final response = await Toaster.get(query);
     var json = response['postsByStoreId'];
     return (json as List).map((p) => Post.fromToaster(p)).toList();
+  }
+
+  Future<List<Reward>> fetchRewardsByStoreId(int storeId) async {
+    String query = """
+      query {
+        rewardsByStoreId(storeId: $storeId) {
+          ${Reward.attributes}
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['rewardsByStoreId'];
+    return (json as List).map((p) => Reward.fromToaster(p)).toList();
   }
 }

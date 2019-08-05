@@ -8,6 +8,7 @@ Reducer<StoreState> storeReducer = combineReducers([
   new TypedReducer<StoreState, FetchTopStoresSuccess>(fetchTopStoresSuccess),
   new TypedReducer<StoreState, FetchStoreSuccess>(fetchStoreSuccess),
   new TypedReducer<StoreState, FetchPostsByStoreIdSuccess>(fetchPostsByStoreIdSuccess),
+  new TypedReducer<StoreState, FetchRewardsByStoreIdSuccess>(fetchRewardsByStoreIdSuccess),
 ]);
 
 StoreState fetchStoresSuccess(StoreState state, FetchStoresSuccess action) {
@@ -23,5 +24,8 @@ StoreState fetchStoreSuccess(StoreState state, FetchStoreSuccess action) {
 }
 
 StoreState fetchPostsByStoreIdSuccess(StoreState state, FetchPostsByStoreIdSuccess action) {
-  return state.addStores(List<MyStore.Store>.from([state.stores[action.storeId].copyWith(posts: action.posts)]));
+  return state.addStore(state.stores[action.storeId].copyWith(posts: action.posts));
+}
+StoreState fetchRewardsByStoreIdSuccess(StoreState state, FetchRewardsByStoreIdSuccess action) {
+  return state.addStore(state.stores[action.storeId].copyWith(rewards: action.rewards));
 }

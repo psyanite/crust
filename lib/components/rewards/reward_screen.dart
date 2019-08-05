@@ -25,13 +25,14 @@ class RewardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-        onInit: (Store<AppState> store) {
-          if (reward != null) store.dispatch(FetchRewardSuccess(reward));
-        },
-        converter: (Store<AppState> store) => _Props.fromStore(store, userReward, rewardId),
-        builder: (context, props) {
-          return _Presenter(reward: props.reward, userReward: userReward, myId: props.myId);
-        });
+      onInit: (Store<AppState> store) {
+        if (reward != null) store.dispatch(FetchRewardSuccess(reward));
+      },
+      converter: (Store<AppState> store) => _Props.fromStore(store, userReward, rewardId),
+      builder: (context, props) {
+        return _Presenter(reward: props.reward, userReward: userReward, myId: props.myId);
+      },
+    );
   }
 }
 
@@ -116,7 +117,7 @@ class _Presenter extends StatelessWidget {
                 padding: EdgeInsets.only(bottom: 5.0),
                 child: Text(reward.name, style: Burnt.display4),
               ),
-              Padding(child: FavoriteRewardButton(reward: reward, size: 30.0), padding: EdgeInsets.only(right: 10.0))
+              FavoriteRewardButton(reward: reward, size: 30.0)
             ],
           ),
           Text(reward.bannerText()),
@@ -136,34 +137,39 @@ class _Presenter extends StatelessWidget {
     var onTap = (BuildContext context) {
       var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
       showDialog(
-          context: context,
-          builder: (context) => BurntDialog(
-              options: options,
-              description:
-                  'Secret rewards do not show up when browsing the app, they can only be accessed via a shared link or a QR code. Save it to your favourites or you may not find it again!'));
+        context: context,
+        builder: (context) {
+          return BurntDialog(
+            options: options,
+            description:
+                'Secret rewards do not show up when browsing the app, they can only be accessed via a shared link or a QR code. Save it to your favourites or you may not find it again!',
+          );
+        },
+      );
     };
     return Builder(builder: (context) {
       return InkWell(
         onTap: () => onTap(context),
         child: Container(
-            padding: EdgeInsets.symmetric(vertical: 20.0),
-            decoration: BoxDecoration(border: Border(top: BorderSide(color: Burnt.separator))),
-            child: Row(
-              children: <Widget>[
-                Text('🎉', style: TextStyle(fontSize: 55.0)),
-                Container(width: 15.0),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('Congratulations!', style: TextStyle(fontWeight: Burnt.fontBold, color: Burnt.hintTextColor)),
-                      Text('You\'ve unlocked a secret reward.'),
-                      Text('Make sure you save it to your favourites!'),
-                    ],
-                  ),
-                )
-              ],
-            )),
+          padding: EdgeInsets.symmetric(vertical: 20.0),
+          decoration: BoxDecoration(border: Border(top: BorderSide(color: Burnt.separator))),
+          child: Row(
+            children: <Widget>[
+              Text('🎉', style: TextStyle(fontSize: 55.0)),
+              Container(width: 15.0),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text('Congratulations!', style: TextStyle(fontWeight: Burnt.fontBold, color: Burnt.hintTextColor)),
+                    Text('You\'ve unlocked a secret reward.'),
+                    Text('Make sure you save it to your favourites!'),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
       );
     });
   }
@@ -205,38 +211,43 @@ class _Presenter extends StatelessWidget {
     var group = reward.storeGroup;
     return Builder(builder: (context) {
       return InkWell(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => RewardLocationsScreen(group: group))),
-          child: Container(
-              padding: EdgeInsets.symmetric(vertical: 20.0),
-              decoration:
-                  BoxDecoration(border: Border(top: BorderSide(color: Burnt.separator), bottom: BorderSide(color: Burnt.separator))),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(group.name, style: TextStyle(fontSize: 20.0)),
-                  Container(height: 7.0),
-                  Text('Available across ${group.stores.length.toString()} locations'),
-                  Container(height: 3.0),
-                  Text(group.stores.map((s) => s.location ?? s.suburb).join(", ")),
-                  Container(height: 10.0),
-                  Text('See more information', style: TextStyle(color: Burnt.primaryTextColor)),
-                ],
-              )));
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => RewardLocationsScreen(group: group))),
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 20.0),
+          decoration: BoxDecoration(border: Border(top: BorderSide(color: Burnt.separator), bottom: BorderSide(color: Burnt.separator))),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(group.name, style: TextStyle(fontSize: 20.0)),
+              Container(height: 7.0),
+              Text('Available across ${group.stores.length.toString()} locations'),
+              Container(height: 3.0),
+              Text(group.stores.map((s) => s.location ?? s.suburb).join(", ")),
+              Container(height: 10.0),
+              Text('See more information', style: TextStyle(color: Burnt.primaryTextColor)),
+            ],
+          ),
+        ),
+      );
     });
   }
 
   Widget _termsAndConditions() {
     return Builder(builder: (context) {
       return InkWell(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          onTap: () {
-            var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
-            showDialog(context: context, builder: (context) => TermsDialog(options: options, terms: reward.termsAndConditions));
-          },
-          child: Text('See terms and conditions', style: TextStyle(color: Burnt.primaryTextColor)));
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        onTap: () {
+          var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
+          showDialog(context: context, builder: (context) => TermsDialog(options: options, terms: reward.termsAndConditions));
+        },
+        child: Text(
+          'See terms and conditions',
+          style: TextStyle(color: Burnt.primaryTextColor),
+        ),
+      );
     });
   }
 
@@ -252,9 +263,7 @@ class _Presenter extends StatelessWidget {
   Widget _renderFooterText(text) {
     return Padding(
       padding: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 40.0),
-      child: Center(
-        child: Text(text),
-      ),
+      child: Center(child: Text(text)),
     );
   }
 }

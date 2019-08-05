@@ -14,7 +14,6 @@ class RewardService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['rewardByCode'];
     return Reward.fromToaster(json);
   }
@@ -32,7 +31,6 @@ class RewardService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['userRewardBy'];
     return UserReward.fromToaster(json);
   }
@@ -50,9 +48,21 @@ class RewardService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['addUserReward'];
     return UserReward.fromToaster(json);
+  }
+
+  static Future<Reward> rewardsByStoreId(int storeId) async {
+    String query = """
+      query {
+        rewardsByStoreId(storeId: $storeId) {
+          ${Reward.attributes}
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['rewardsByStoreId'];
+    return Reward.fromToaster(json);
   }
 
   Future<List<Reward>> fetchRewards() async {
@@ -64,7 +74,6 @@ class RewardService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['allRewards'];
     return (json as List).map((r) => Reward.fromToaster(r)).toList();
   }
@@ -78,7 +87,6 @@ class RewardService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['topRewards'];
     return (json as List).map((r) => Reward.fromToaster(r)).toList();
   }

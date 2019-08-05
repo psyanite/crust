@@ -19,7 +19,7 @@ class Toaster {
     if (response.statusCode != 200 || responseBody['errors'] != null) {
         print('Toaster request failed: {\n${body.trimRight()}\n}');
         print('${response.statusCode} response: ${response.body}');
-        return null;
+        return Map<String, dynamic>();
     }
     return responseBody['data'];
   }

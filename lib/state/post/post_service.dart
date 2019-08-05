@@ -14,7 +14,6 @@ class PostService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['deletePhoto'];
     return json['id'] == id;
   }
@@ -28,7 +27,6 @@ class PostService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['deletePost'];
     return json['id'] == postId;
   }
@@ -53,7 +51,6 @@ class PostService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['updatePost'];
     return Post.fromToaster(json);
   }
@@ -79,7 +76,6 @@ class PostService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['addReviewPost'];
     return Post.fromToaster(json);
   }
@@ -93,7 +89,6 @@ class PostService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['postsByUserId'];
     return (json as List).map((p) => Post.fromToaster(p)).toList();
   }
@@ -107,7 +102,6 @@ class PostService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['postsByUserId'];
     return (json as List).map((p) => Post.fromToaster(p)).toList();
   }

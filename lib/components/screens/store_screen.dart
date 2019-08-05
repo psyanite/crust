@@ -1,16 +1,17 @@
 import 'dart:async';
 
 import 'package:crust/components/dialog.dart';
-import 'package:crust/components/favorite_button.dart';
 import 'package:crust/components/new_post/review_form.dart';
 import 'package:crust/components/post_list/post_list.dart';
+import 'package:crust/components/rewards/reward_swiper.dart';
+import 'package:crust/components/stores/favorite_store_button.dart';
 import 'package:crust/models/post.dart';
+import 'package:crust/models/reward.dart';
 import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
-import 'package:crust/state/me/me_actions.dart';
 import 'package:crust/state/store/store_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,23 +29,20 @@ class StoreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
       onInit: (Store<AppState> store) {
-        if (store.state.store.stores == null) {
+        var stores = store.state.store.stores;
+        if (stores == null || stores[storeId] == null) {
           store.dispatch(FetchStoreByIdRequest(storeId));
-          store.dispatch(FetchPostsByStoreIdRequest(storeId));
-        } else {
-          store.dispatch(FetchPostsByStoreIdRequest(storeId));
         }
+        store.dispatch(FetchPostsByStoreIdRequest(storeId));
+        store.dispatch(FetchRewardsByStoreIdRequest(storeId));
       },
       converter: (Store<AppState> store) => _Props.fromStore(store, storeId),
       builder: (context, props) {
         return _Presenter(
           store: props.store,
-          favoriteStores: props.favoriteStores,
-          favoriteStore: props.favoriteStore,
-          unfavoriteStore: props.unfavoriteStore,
           isLoggedIn: props.isLoggedIn,
           fetchPostsByStoreId: props.fetchPostsByStoreId,
-          favoritePosts: props.favoritePosts,
+          rewards: props.rewards,
         );
       },
     );
@@ -53,23 +51,11 @@ class StoreScreen extends StatelessWidget {
 
 class _Presenter extends StatelessWidget {
   final MyStore.Store store;
-  final Set<int> favoriteStores;
-  final Set<int> favoritePosts;
-  final Function favoriteStore;
-  final Function unfavoriteStore;
   final bool isLoggedIn;
   final Function fetchPostsByStoreId;
+  final List<Reward> rewards;
 
-  _Presenter(
-      {Key key,
-      this.store,
-      this.favoriteStores,
-      this.favoritePosts,
-      this.favoriteStore,
-      this.unfavoriteStore,
-      this.isLoggedIn,
-      this.fetchPostsByStoreId})
-      : super(key: key);
+  _Presenter({Key key, this.store, this.isLoggedIn, this.fetchPostsByStoreId, this.rewards}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -79,8 +65,9 @@ class _Presenter extends StatelessWidget {
         child: CustomScrollView(
           slivers: <Widget>[
             _appBar(),
+            if (rewards.isNotEmpty) _rewards(context),
             PostList(
-              noPostsView: Text('Looks like ${store.name} doesn\'t have any posts yet.'),
+              noPostsView: Text('Looks like ${store.name} doesn\'t have any reviews yet.'),
               posts: store.posts,
               postListType: PostListType.forStore,
             )
@@ -150,7 +137,7 @@ class _Presenter extends StatelessWidget {
                 padding: EdgeInsets.only(bottom: 5.0),
                 child: Text(store.name, style: Burnt.display4),
               ),
-              _favoriteButton()
+              FavoriteStoreButton(store: store, size: 30.0),
             ],
           ),
           Text(store.cuisines.join(', '), style: TextStyle(color: Burnt.primary)),
@@ -245,20 +232,20 @@ class _Presenter extends StatelessWidget {
 
   Widget _addressLong() {
     var address = store.address;
-    var firstSentence = '';
-    if (address.firstLine != null) firstSentence += address.firstLine;
-    if (address.secondLine != null) firstSentence += ', ${address.secondLine}';
-    var secondSentence = '';
-    secondSentence += '${address.streetNumber} ${address.streetName}, ';
-    secondSentence += store.location != null ? store.location : store.suburb;
+    var first = '';
+    if (address.firstLine != null) first += address.firstLine;
+    if (address.secondLine != null) first += ', ${address.secondLine}';
+    var second = '';
+    second += '${address.streetNumber} ${address.streetName}, ';
+    second += store.location ?? store.suburb;
     return Flexible(
       child: Container(
         padding: EdgeInsets.only(right: 8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            if (firstSentence.isNotEmpty) Text(firstSentence, style: TextStyle(color: Burnt.hintTextColor)),
-            if (secondSentence.isNotEmpty) Text(secondSentence, style: TextStyle(color: Burnt.hintTextColor)),
+            if (first.isNotEmpty) Text(first, style: TextStyle(color: Burnt.hintTextColor)),
+            if (second.isNotEmpty) Text(second, style: TextStyle(color: Burnt.hintTextColor)),
           ],
         ),
       ),
@@ -272,92 +259,75 @@ class _Presenter extends StatelessWidget {
     ];
     var showBottomSheet = (context) {
       showModalBottomSheet(
-          context: context,
-          builder: (context) {
-            return Container(
-                padding: EdgeInsets.symmetric(vertical: 20.0),
-                child: ListView.separated(
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) => _option(options[index]),
-                    separatorBuilder: (context, index) => Divider(height: 1.0, color: Burnt.separatorBlue),
-                    itemCount: options.length));
-          });
+        context: context,
+        builder: (context) {
+          return Container(
+            padding: EdgeInsets.symmetric(vertical: 20.0),
+            child: ListView.separated(
+              shrinkWrap: true,
+              itemBuilder: (context, index) => _option(options[index]),
+              separatorBuilder: (context, index) => Divider(height: 1.0, color: Burnt.separatorBlue),
+              itemCount: options.length,
+            ),
+          );
+        },
+      );
     };
-    return Builder(
-        builder: (context) =>
-            InkWell(onTap: () => showBottomSheet(context), child: Icon(CrustCons.menu_bold, color: Colors.white, size: 30.0)));
+    return Builder(builder: (context) {
+      return InkWell(onTap: () => showBottomSheet(context), child: Icon(CrustCons.menu_bold, color: Colors.white, size: 30.0));
+    });
   }
 
   Widget _option(DialogOption option) {
     return InkWell(
-        splashColor: Burnt.splashOrange,
-        child: Container(
-          margin: EdgeInsets.symmetric(vertical: 8.0),
-          padding: EdgeInsets.only(left: 40.0),
-          height: 40.0,
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Icon(option.icon, size: 35.0, color: Burnt.iconOrange),
-              Container(width: 10.0),
-              Text(option.display, style: TextStyle(color: Burnt.hintTextColor, fontSize: 17.0))
-            ],
-          ),
+      splashColor: Burnt.splashOrange,
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 8.0),
+        padding: EdgeInsets.only(left: 40.0),
+        height: 40.0,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Icon(option.icon, size: 35.0, color: Burnt.iconOrange),
+            Container(width: 10.0),
+            Text(option.display, style: TextStyle(color: Burnt.hintTextColor, fontSize: 17.0))
+          ],
         ),
-        onTap: option.onTap);
+      ),
+      onTap: option.onTap,
+    );
   }
 
-  Widget _favoriteButton() {
-    return Builder(
-      builder: (context) => FavoriteButton(
-            size: 30.0,
-            isFavorited: favoriteStores.contains(store.id),
-            onFavorite: () {
-              if (isLoggedIn) {
-                favoriteStore(store.id);
-                snack(context, 'Added to favourites');
-              } else {
-                snack(context, 'Login now to favourite store');
-              }
-            },
-            onUnfavorite: () {
-              unfavoriteStore(store.id);
-              snack(context, 'Removed from favourites');
-            },
-          ),
+  Widget _rewards(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: RewardSwiper(
+        rewards: rewards,
+        header: Padding(
+          padding: EdgeInsets.only(top: 50.0, bottom: 15.0),
+          child: Text('REWARDS', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0, color: Burnt.hintTextColor)),
+        ),
+      ),
     );
   }
 }
 
 class _Props {
   final MyStore.Store store;
-  final Set<int> favoriteStores;
-  final Set<int> favoritePosts;
-  final Function favoriteStore;
-  final Function unfavoriteStore;
   final bool isLoggedIn;
   final Function fetchPostsByStoreId;
+  final List<Reward> rewards;
 
-  _Props(
-      {this.store,
-      this.favoriteStores,
-      this.favoritePosts,
-      this.favoriteStore,
-      this.unfavoriteStore,
-      this.isLoggedIn,
-      this.fetchPostsByStoreId});
+  _Props({this.store, this.isLoggedIn, this.fetchPostsByStoreId, this.rewards});
 
   static fromStore(Store<AppState> store, int storeId) {
+    var s = store.state.store.stores[storeId];
     return _Props(
-      store: store.state.store.stores[storeId],
-      favoriteStores: store.state.me.favoriteStores ?? Set<int>(),
-      favoritePosts: store.state.me.favoritePosts ?? Set<int>(),
-      favoriteStore: (storeId) => store.dispatch(FavoriteStoreRequest(storeId)),
-      unfavoriteStore: (storeId) => store.dispatch(UnfavoriteStoreRequest(storeId)),
+      store: s,
       isLoggedIn: store.state.me.user != null,
       fetchPostsByStoreId: () => store.dispatch(FetchPostsByStoreIdRequest(storeId)),
+      rewards: (s.rewards ?? List<int>()).map((r) => store.state.reward.rewards[r]).toList(),
     );
   }
 }

@@ -32,6 +32,7 @@ Middleware<AppState> _fetchTopRewards(RewardService service) {
     service.fetchTopRewards().then(
       (rewards) {
         store.dispatch(FetchTopRewardsSuccess(rewards));
+        store.dispatch(FetchRewardsSuccess(rewards));
       },
     ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     next(action);

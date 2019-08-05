@@ -1,4 +1,5 @@
 import 'package:crust/models/post.dart';
+import 'package:crust/models/reward.dart';
 
 class Store {
   final int id;
@@ -10,6 +11,7 @@ class Store {
   final String suburb;
   final List<String> cuisines;
   final List<Post> posts;
+  final List<int> rewards;
   final int heartCount;
   final int okayCount;
   final int burntCount;
@@ -24,12 +26,13 @@ class Store {
     this.suburb,
     this.cuisines,
     this.posts,
+    this.rewards,
     this.heartCount,
     this.okayCount,
     this.burntCount,
   });
 
-  Store copyWith({List<Post> posts, String name}) {
+  Store copyWith({List<Post> posts, String name, List<int> rewards}) {
     return Store(
         id: this.id,
         name: name ?? this.name,
@@ -39,6 +42,7 @@ class Store {
         suburb: this.suburb,
         cuisines: this.cuisines,
         posts: posts ?? this.posts,
+        rewards: rewards ?? this.rewards,
         heartCount: this.heartCount,
         okayCount: this.okayCount,
         burntCount: this.burntCount);
@@ -85,11 +89,7 @@ class Store {
       heartCount: json['ratings'] != null ? json['ratings']['heart_ratings'] : null,
       okayCount: json['ratings'] != null ? json['ratings']['okay_ratings'] : null,
       burntCount: json['ratings'] != null ? json['ratings']['burnt_ratings'] : null,
-      cuisines: json['cuisines'] != null
-          ? List<String>.from(json['cuisines'].map(
-              (c) => c['name'],
-            ))
-          : null,
+      cuisines: json['cuisines'] != null ? List<String>.from(json['cuisines'].map((c) => c['name'])) : null,
     );
   }
 

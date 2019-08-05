@@ -14,7 +14,6 @@ class CommentService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['commentsByPostId'];
     return (json as List).map((c) => Comment.fromToaster(c)).toList();
   }
@@ -28,7 +27,6 @@ class CommentService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['addComment'];
     return Comment.fromToaster(json);
   }
@@ -42,7 +40,6 @@ class CommentService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['deleteComment'];
     return json['id'] == comment.id;
   }
@@ -56,7 +53,6 @@ class CommentService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['addReply'];
     return Reply.fromToaster(json);
   }
@@ -70,7 +66,6 @@ class CommentService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['deleteReply'];
     return json['id'] == reply.id;
   }
@@ -84,7 +79,6 @@ class CommentService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['favoriteComment'];
     return json['comment_id'] == commentId;
   }
@@ -98,7 +92,6 @@ class CommentService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['unfavoriteComment'];
     return json['comment_id'] == commentId;
   }
@@ -112,7 +105,6 @@ class CommentService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['favoriteReply'];
     return json['reply_id'] == replyId;
   }
@@ -126,7 +118,6 @@ class CommentService {
       }
     """;
     final response = await Toaster.get(query);
-    if (response == null) return null;
     var json = response['unfavoriteReply'];
     return json['reply_id'] == replyId;
   }

@@ -41,3 +41,16 @@ class FetchPostsByStoreIdSuccess {
 
   FetchPostsByStoreIdSuccess(this.storeId, this.posts);
 }
+
+class FetchRewardsByStoreIdRequest {
+  final int storeId;
+
+  FetchRewardsByStoreIdRequest(this.storeId);
+}
+
+class FetchRewardsByStoreIdSuccess {
+  final int storeId;
+  final List<int> rewards;
+
+  FetchRewardsByStoreIdSuccess(this.storeId, this.rewards);
+}
