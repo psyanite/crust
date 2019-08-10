@@ -21,6 +21,7 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['userProfileByUsername'];
+    if (json == null) return null;
     return json['user_account']['id'];
   }
 
@@ -30,7 +31,7 @@ class MeService {
         userLoginBy(
           socialType: "${EnumUtil.format(user.socialType.toString())}", 
           socialId: "${user.socialId}"
-          ) {
+        ) {
           user_account {
             id,
             profile {
@@ -44,11 +45,13 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['userLoginBy'];
+    if (json == null) return null;
     return user.copyWith(
-        id: json['user_account']['id'],
-        profilePicture: json['user_account']['profile']['profile_picture'],
-        displayName: json['user_account']['profile']['preferred_name'],
-        username: json['user_account']['profile']['username']);
+      id: json['user_account']['id'],
+      profilePicture: json['user_account']['profile']['profile_picture'],
+      displayName: json['user_account']['profile']['preferred_name'],
+      username: json['user_account']['profile']['username'],
+    );
   }
 
   Future<int> addUser(User user) async {
@@ -73,7 +76,7 @@ class MeService {
     return json['user_account']['id'];
   }
 
-  Future<Set<int>> favoriteReward({ userId, rewardId }) async {
+  Future<Set<int>> favoriteReward({userId, rewardId}) async {
     String query = """
       mutation {
         favoriteReward(userId: $userId, rewardId: $rewardId) {
@@ -88,7 +91,7 @@ class MeService {
     return Set<int>.from(json['favorite_rewards'].map((r) => r['id']));
   }
 
-  Future<Set<int>> unfavoriteReward({ userId, rewardId }) async {
+  Future<Set<int>> unfavoriteReward({userId, rewardId}) async {
     String query = """
       mutation {
         unfavoriteReward(userId: $userId, rewardId: $rewardId) {
@@ -103,7 +106,7 @@ class MeService {
     return Set<int>.from(json['favorite_rewards'].map((r) => r['id']));
   }
 
-  Future<Set<int>> favoriteStore({ userId, storeId }) async {
+  Future<Set<int>> favoriteStore({userId, storeId}) async {
     String query = """
       mutation {
         favoriteStore(userId: $userId, storeId: $storeId) {
@@ -118,7 +121,7 @@ class MeService {
     return Set<int>.from(json['favorite_stores'].map((s) => s['id']));
   }
 
-  Future<Set<int>> unfavoriteStore({ userId, storeId }) async {
+  Future<Set<int>> unfavoriteStore({userId, storeId}) async {
     String query = """
       mutation {
         unfavoriteStore(userId: $userId, storeId: $storeId) {
@@ -133,7 +136,7 @@ class MeService {
     return Set<int>.from(json['favorite_stores'].map((s) => s['id']));
   }
 
-  Future<Set<int>> favoritePost({ userId, postId }) async {
+  Future<Set<int>> favoritePost({userId, postId}) async {
     String query = """
       mutation {
         favoritePost(userId: $userId, postId: $postId) {
@@ -148,7 +151,7 @@ class MeService {
     return Set<int>.from(json['favorite_posts'].map((p) => p['id']));
   }
 
-  Future<Set<int>> unfavoritePost({ userId, postId }) async {
+  Future<Set<int>> unfavoritePost({userId, postId}) async {
     String query = """
       mutation {
         unfavoritePost(userId: $userId, postId: $postId) {
@@ -184,7 +187,7 @@ class MeService {
     var rewards = (json['favorite_rewards'] as List).map((r) => Reward.fromToaster(r)).toList();
     var stores = (json['favorite_stores'] as List).map((s) => Store.fromToaster(s)).toList();
     var posts = (json['favorite_posts'] as List).map((s) => Post.fromToaster(s)).toList();
-    return { 'rewards': rewards, 'stores': stores, 'posts': posts };
+    return {'rewards': rewards, 'stores': stores, 'posts': posts};
   }
 
   static Future<List<UserReward>> fetchUserRewards(userId) async {
@@ -204,7 +207,7 @@ class MeService {
     return (json as List).map((u) => UserReward.fromToaster(u)).toList();
   }
 
-  Future<String> setTagline({ userId, tagline }) async {
+  Future<String> setTagline({userId, tagline}) async {
     String query = """
       mutation {
         setTagline(userId: $userId, tagline: "$tagline") {

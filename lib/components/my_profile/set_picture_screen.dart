@@ -233,22 +233,22 @@ class _UploadOverlayState extends State<_UploadOverlay> {
     );
   }
 
-  Future<bool> _submit() async {
+  _submit() async {
     String url = await _uploadPhoto();
     if (url == null) {
       this.setState(() => _error = 'Oops! Something went wrong, please try again');
-      return false;
+      return;
     }
 
     var result = await MeService.setProfilePicture(userId: widget.myId, pictureUrl: url);
     if (result != true) {
       setState(() => _error = "Oops! Something went wrong, please try again.");
-      return false;
+      return;
     }
 
     widget.setProfilePicture(url);
     Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
-    return true;
+    return;
   }
 
   Future<String> _uploadPhoto() async {

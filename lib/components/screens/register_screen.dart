@@ -1,10 +1,10 @@
-import 'package:crust/state/app/app_state.dart';
 import 'package:crust/main.dart';
 import 'package:crust/models/user.dart';
-import 'package:crust/state/me/me_actions.dart';
-import 'package:crust/state/me/me_service.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
+import 'package:crust/state/app/app_state.dart';
+import 'package:crust/state/me/me_actions.dart';
+import 'package:crust/state/me/me_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -25,6 +25,7 @@ class RegisterScreen extends StatelessWidget {
 class _Presenter extends StatefulWidget {
   final Function addUser;
   final User user;
+  final String allowedChars = '0123456789abcdefghijklmnopqrstuvwxyz._';
 
   _Presenter({Key key, this.addUser, this.user}) : super(key: key);
 
@@ -38,41 +39,50 @@ class _PresenterState extends State<_Presenter> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Builder(
-      builder: (context) => Container(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.max,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 100.0, bottom: 20.0),
-                    child: Text(
-                      "What's your username?",
-                      style: TextStyle(fontSize: 18.0),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40.0),
-                    child: TextField(
-                      decoration: new InputDecoration(hintText: "Username"),
-                      onChanged: (val) => setState(() {
-                            _username = val;
-                          }),
-                      style: TextStyle(fontSize: 18.0, color: Burnt.textBodyColor),
-                    ),
-                  ),
-                  SolidButton(text: "Next", onPressed: () => _press(context))
-                ]),
+      body: Builder(builder: (context) {
+        return Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(top: 100.0, bottom: 20.0),
+                child: Text(
+                  "Select your username",
+                  style: TextStyle(fontSize: 18.0),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 40.0),
+                child: TextField(
+                  decoration: InputDecoration(hintText: "Username"),
+                  onChanged: (val) => setState(() => _username = val),
+                  style: TextStyle(fontSize: 18.0, color: Burnt.textBodyColor),
+                ),
+              ),
+              SolidButton(text: "Next", onPressed: () => _press(context))
+            ],
           ),
-    ));
+        );
+      }),
+    );
   }
 
   _press(context) async {
     FocusScope.of(context).requestFocus(new FocusNode());
     if (_username == null || _username.isEmpty) {
-      snack(context, 'Please enter at least 8 characters');
+      snack(context, 'Oops! usernames can\'t be blank');
+      return;
+    }
+    if (_username.length > 24) {
+      snack(context, 'Sorry, usernames have to be shorter than 24 characters');
+      return;
+    }
+    var allows = widget.allowedChars.split('');
+    if (!_username.split('').every((char) => allows.contains(char))) {
+      snack(context, 'Sorry, usernames can only have lowercase letters, numbers, underscores, and periods');
       return;
     }
     var userId = await MeService.getUserIdByUsername(_username);

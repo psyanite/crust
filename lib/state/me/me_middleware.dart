@@ -40,8 +40,8 @@ List<Middleware<AppState>> createMeMiddleware([MeService meService = const MeSer
 
 Middleware<AppState> _addUser(MeService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
-    service.addUser(action.me).then((userId) {
-      store.dispatch(LoginSuccess(action.me.copyWith(id: userId)));
+    service.addUser(action.user).then((userId) {
+      store.dispatch(LoginSuccess(action.user.copyWith(id: userId)));
     }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     next(action);
   };

@@ -140,10 +140,7 @@ class _Presenter extends StatelessWidget {
       loginSuccess(fetchedUser);
       Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
     } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => RegisterScreen(user: user)),
-      );
+      Navigator.push(context, MaterialPageRoute(builder: (_) => RegisterScreen(user: user)));
     }
   }
 }
