@@ -143,3 +143,9 @@ class SetMyTaglineSuccess {
 class DeleteMyTagline {}
 
 class DeleteMyTaglineSuccess {}
+
+class SetMyProfilePicture {
+  final String picture;
+
+  SetMyProfilePicture(this.picture);
+}

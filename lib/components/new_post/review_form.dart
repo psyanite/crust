@@ -349,15 +349,15 @@ class _PresenterState extends State<_Presenter> {
     });
     if (!isValid) {
       if (images.length == 1) {
-        return "Oops! The photo is larger than 5000x5000";
+        return "Oops! Photo has to be smaller than 5000x5000";
       } else {
-        return "Oops! One of the photos is larger than 5000x5000";
+        return "Oops! All the photos have to be smaller than 5000x5000";
       }
     }
     return null;
   }
 
-  Future<void> _submit(BuildContext context) async {
+  _submit(BuildContext context) async {
     if (!_isValid(context)) return false;
 
     var newPost = Post(
@@ -385,40 +385,38 @@ class _PresenterState extends State<_Presenter> {
   Widget _buttons(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(bottom: 30.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          InkWell(
-            onTap: () => Navigator.pop(context),
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Burnt.primary,
-                    width: 1.0,
-                  ),
-                  borderRadius: BorderRadius.circular(2.0)),
-              padding: EdgeInsets.symmetric(vertical: 11.0, horizontal: 16.0),
-              child: Text('CANCEL', style: TextStyle(fontSize: 16.0, color: Burnt.primary, letterSpacing: 3.0)),
-            ),
+      child: Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+        InkWell(
+          onTap: () => Navigator.pop(context),
+          child: Container(
+            decoration: BoxDecoration(
+                border: Border.all(
+                  color: Burnt.primary,
+                  width: 1.0,
+                ),
+                borderRadius: BorderRadius.circular(2.0)),
+            padding: EdgeInsets.symmetric(vertical: 11.0, horizontal: 16.0),
+            child: Text('CANCEL', style: TextStyle(fontSize: 16.0, color: Burnt.primary, letterSpacing: 3.0)),
           ),
-          Container(width: 8.0),
-          InkWell(
-            onTap: () => _submit(context),
-            child: Container(
-              padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(2.0),
-                  gradient: LinearGradient(
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight,
-                    stops: [0, 0.6, 1.0],
-                    colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-                  )),
-              child: Text('SUBMIT', style: TextStyle(fontSize: 16.0, color: Colors.white, letterSpacing: 3.0)),
+        ),
+        Container(width: 8.0),
+        InkWell(
+          onTap: () => _submit(context),
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(2.0),
+              gradient: LinearGradient(
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                stops: [0, 0.6, 1.0],
+                colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
+              ),
             ),
+            child: Text('SUBMIT', style: TextStyle(fontSize: 16.0, color: Colors.white, letterSpacing: 3.0)),
           ),
-        ],
-      ),
+        ),
+      ]),
     );
   }
 

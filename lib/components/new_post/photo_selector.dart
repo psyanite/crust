@@ -13,12 +13,14 @@ class PhotoSelector extends StatelessWidget {
   final List<Uint8List> images;
   final Function(List<Asset>) onSelectImages;
   final String addText;
+  final String changeText;
+  final int max;
 
-  PhotoSelector({Key key, this.images, this.onSelectImages, this.addText = 'Add Photos'}) : super(key: key);
+  PhotoSelector({Key key, this.images, this.onSelectImages, this.addText = 'Add Photos', this.changeText = 'Change Photos', this.max = 10}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var buttonText = images.isNotEmpty ? 'Change Photos' : addText;
+    var buttonText = images.isNotEmpty ? changeText : addText;
     return Column(
       children: <Widget>[
         if (images.length == 1) ImagePreview(images[0]),
@@ -29,11 +31,7 @@ class PhotoSelector extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Icon(
-                Icons.add,
-                size: 16.0,
-                color: Colors.white,
-              ),
+              Icon(Icons.add, size: 16.0, color: Colors.white),
               Container(width: 2.0),
               Text(buttonText, style: TextStyle(fontSize: 16.0, color: Colors.white))
             ],
@@ -53,7 +51,7 @@ class PhotoSelector extends StatelessWidget {
 
     try {
       resultList = await MultiImagePicker.pickImages(
-        maxImages: 10,
+        maxImages: max,
         enableCamera: false,
         options: CupertinoOptions(takePhotoIcon: "chat"),
       );

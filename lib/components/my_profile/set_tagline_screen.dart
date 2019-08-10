@@ -49,7 +49,7 @@ class _PresenterState extends State<_Presenter> {
   void _submit(BuildContext context) {
     var tagline = _taglineCtrl.text;
     if (tagline.isNotEmpty && tagline.length > 64) {
-      snack(context, 'Tagline can\'t be more than 64 characters long');
+      snack(context, 'Oops! Tagline has to be less than 64 characters long');
       return;
     }
     if (tagline.isEmpty) {

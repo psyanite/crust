@@ -229,4 +229,17 @@ class MeService {
     var json = response['deleteTagline'];
     return userId == json['user_id'];
   }
+
+  static Future<bool> setProfilePicture({userId, pictureUrl}) async {
+    String query = """
+      mutation {
+        setProfilePicture(userId: $userId, picture: "$pictureUrl") {
+          profile_picture
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['setProfilePicture'];
+    return pictureUrl == json['profile_picture'];
+  }
 }

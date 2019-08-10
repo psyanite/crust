@@ -42,17 +42,18 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
       child: Scaffold(
         body: PageView(controller: _pageCtrl, onPageChanged: _onPageChanged, children: _tabs.values.map((t) => t.widget).toList()),
         bottomNavigationBar: Card(
-            margin: EdgeInsets.all(0.0),
-            elevation: 24.0,
-            child: CupertinoTabBar(
-              border: null,
-              backgroundColor: Burnt.paper,
-              activeColor: Burnt.primary,
-              inactiveColor: Burnt.lightGrey,
-              currentIndex: _currentIndex,
-              onTap: _onTap,
-              items: _tabs.values.map((t) => BottomNavigationBarItem(icon: Icon(t.icon))).toList(),
-            )),
+          margin: EdgeInsets.all(0.0),
+          elevation: 24.0,
+          child: CupertinoTabBar(
+            border: null,
+            backgroundColor: Burnt.paper,
+            activeColor: Burnt.primary,
+            inactiveColor: Burnt.lightGrey,
+            currentIndex: _currentIndex,
+            onTap: _onTap,
+            items: _tabs.values.map((t) => BottomNavigationBarItem(icon: Icon(t.icon))).toList(),
+          ),
+        ),
       ),
     );
   }

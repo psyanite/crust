@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:crust/components/my_profile/set_picture_screen.dart';
 import 'package:crust/components/my_profile/set_tagline_screen.dart';
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/screens/about_screen.dart';
 import 'package:crust/main.dart';
 import 'package:crust/models/user.dart';
+import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
@@ -30,6 +32,7 @@ class _Presenter extends StatelessWidget {
   final User user;
   final Function refreshPage;
   final Function logout;
+  final String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/burntoast-fix.appspot.com/o/users%2Fprofile-pictures%2F1565423370052-9201.jpg?alt=media&token=1a80c164-4ca6-4174-bd46-c8c265c17ae9';
 
   _Presenter({Key key, this.user, this.refreshPage, this.logout}) : super(key: key);
 
@@ -91,7 +94,7 @@ class _Presenter extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(user.displayName, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
-                      Text("@${user.username}")
+                      Text("@${user.username}"),
                     ],
                   ),
                 )
@@ -100,8 +103,29 @@ class _Presenter extends StatelessWidget {
           ]),
         ),
         if (user.tagline != null) Padding(padding: EdgeInsets.only(top: 13.0, right: 16.0, left: 16.0), child: Text(user.tagline)),
+        if (user.profilePicture == defaultProfilePic) _setProfilePictureButton()
       ]),
     );
+  }
+
+  Widget _setProfilePictureButton() {
+    return Builder(builder: (context) {
+      return Padding(
+        padding: EdgeInsets.only(top: 20.0),
+        child: SmallButton(
+          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SetPictureScreen())),
+          padding: EdgeInsets.only(left: 7.0, right: 12.0, top: 10.0, bottom: 10.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Icon(Icons.add, size: 16.0, color: Colors.white),
+              Container(width: 2.0),
+              Text('Set Profile Picture', style: TextStyle(fontSize: 16.0, color: Colors.white))
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   Widget _profilePicture() {
@@ -143,19 +167,22 @@ class _Presenter extends StatelessWidget {
     return Drawer(
       child: Center(
         child: ListView(padding: EdgeInsets.zero, children: <Widget>[
-          Container(
-            width: 300.0,
-            height: 300.0,
-            decoration: BoxDecoration(
-              color: Burnt.separator,
-              borderRadius: BorderRadius.circular(150.0),
-              border: Border.all(
-                color: Colors.white,
-                width: 4.0,
-              ),
-              image: DecorationImage(
-                fit: BoxFit.fill,
-                image: NetworkImage(user.profilePicture),
+          InkWell(
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SetPictureScreen())),
+            child: Container(
+              width: 300.0,
+              height: 300.0,
+              decoration: BoxDecoration(
+                color: Burnt.separator,
+                borderRadius: BorderRadius.circular(150.0),
+                border: Border.all(
+                  color: Colors.white,
+                  width: 4.0,
+                ),
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: NetworkImage(user.profilePicture),
+                ),
               ),
             ),
           ),
@@ -167,6 +194,13 @@ class _Presenter extends StatelessWidget {
                 Text("@${user.username}")
               ],
             ),
+          ),
+          ListTile(
+            title: Text('Set profile picture', style: TextStyle(fontSize: 18.0)),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (_) => SetPictureScreen()));
+            },
           ),
           ListTile(
             title: Text('Set profile tagline', style: TextStyle(fontSize: 18.0)),

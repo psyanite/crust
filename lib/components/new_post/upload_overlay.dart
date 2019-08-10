@@ -104,7 +104,7 @@ class UploadOverlayState extends State<UploadOverlay> {
     List<Uint8List> byteData = await Future.wait(images.map((a) => _getByteData(a)));
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseUser user = await auth.currentUser();
-    if (user == null) auth.signInAnonymously();
+    if (user == null) await auth.signInAnonymously();
     List<Tuple2<StorageUploadTask, StorageReference>> tasks = byteData.map((bd) {
       String fileName = "$timestamp-${Random().nextInt(10000)}.jpg";
       StorageReference ref = FirebaseStorage.instance.ref().child("reviews/post-photos/$fileName");
