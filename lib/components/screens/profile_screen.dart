@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/screens/loading_screen.dart';
-import 'package:crust/components/screens/settings_screen.dart';
 import 'package:crust/models/user.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
@@ -21,12 +20,14 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-        onInit: (Store<AppState> store) {
-          if (store.state.user.users == null || store.state.user.users[userId] == null)
-            return store.dispatch(FetchUserByUserIdRequest(userId));
-        },
-        converter: (Store<AppState> store) => _Props.fromStore(store, userId),
-        builder: (context, props) => _Presenter(user: props.user, refreshPage: props.refreshPage));
+      onInit: (Store<AppState> store) {
+        if (store.state.user.users == null || store.state.user.users[userId] == null) {
+          return store.dispatch(FetchUserByUserIdRequest(userId));
+        }
+      },
+      converter: (Store<AppState> store) => _Props.fromStore(store, userId),
+      builder: (context, props) => _Presenter(user: props.user, refreshPage: props.refreshPage),
+    );
   }
 }
 
@@ -44,17 +45,20 @@ class _PresenterState extends State<_Presenter> {
   @override
   Widget build(BuildContext context) {
     var user = widget.user;
-    if (user == null) {
-      return LoadingScreen();
-    }
-    var body = CustomScrollView(slivers: <Widget>[
-      _appBar(),
-      PostList(
-          noPostsView: Text('Looks like ${user.firstName} hasn\'t posted anything yet.'),
-          posts: user.posts,
-          postListType: PostListType.forProfile)
-    ]);
-    return Scaffold(body: RefreshIndicator(onRefresh: _refresh, child: body));
+    if (user == null) return LoadingScreen();
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: CustomScrollView(slivers: <Widget>[
+          _appBar(),
+          PostList(
+            noPostsView: Text('Looks like ${user.firstName} hasn\'t written any reviews yet.'),
+            posts: user.posts,
+            postListType: PostListType.forProfile,
+          )
+        ]),
+      ),
+    );
   }
 
   Future<void> _refresh() async {
@@ -64,65 +68,68 @@ class _PresenterState extends State<_Presenter> {
   Widget _appBar() {
     var user = widget.user;
     return SliverToBoxAdapter(
-        child: Container(
-            child: Stack(children: <Widget>[
-      Container(
-        height: 200.0,
-      ),
-      Stack(children: <Widget>[
+      child: Column(children: <Widget>[
         Container(
-            height: 100.0,
-            decoration: BoxDecoration(
-              color: Burnt.separator,
-              image: DecorationImage(
-                image: NetworkImage(user.profilePicture),
-                fit: BoxFit.cover,
-              ),
-            )),
-        Container(
-            height: 100.0,
-            decoration: BoxDecoration(color: Color(0x55000000)),
-            child: SafeArea(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  BackArrow(color: Colors.white),
-                  Builder(
-                      builder: (context) => IconButton(
-                            icon: const Icon(CupertinoIcons.ellipsis),
-                            color: Colors.white,
-                            iconSize: 40.0,
-                            onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SettingsScreen())),
-                          )),
-                ],
-              ),
-            )),
-      ]),
-      Positioned(
-        left: 50.0,
-        top: 50.0,
-        child: Row(children: <Widget>[
-          Container(
-              width: 150.0,
-              height: 150.0,
-              decoration: BoxDecoration(
-                  color: Burnt.separator,
-                  borderRadius: BorderRadius.circular(150.0),
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 4.0,
+          child: Stack(
+            children: <Widget>[
+              Container(height: 250.0),
+              Stack(children: <Widget>[
+                Container(
+                  height: 150.0,
+                  decoration: BoxDecoration(
+                    color: Burnt.separator,
+                    image: DecorationImage(image: NetworkImage(user.profilePicture), fit: BoxFit.cover),
                   ),
-                  image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(user.profilePicture)))),
-          Padding(
-            padding: EdgeInsets.only(left: 8.0, top: 12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[Text(user.displayName, style: Burnt.titleStyle), Text("@${user.username}")],
-            ),
-          )
-        ]),
+                ),
+                Container(
+                  height: 150.0,
+                  decoration: BoxDecoration(color: Color(0x55000000)),
+                  child: SafeArea(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: <Widget>[
+                        Container(height: 55.0, child: BackArrow(color: Colors.white)),
+                      ],
+                    ),
+                  ),
+                ),
+              ]),
+              Positioned(
+                left: 50.0,
+                top: 100.0,
+                child: Row(
+                  children: <Widget>[
+                    _profilePicture(user.profilePicture),
+                    Padding(
+                      padding: EdgeInsets.only(left: 8.0, top: 12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[Text(user.displayName, style: Burnt.titleStyle), Text("@${user.username}")],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+        if (user.tagline != null) Padding(padding: EdgeInsets.only(top: 13.0, right: 16.0, left: 16.0), child: Text(user.tagline)),
+      ]),
+    );
+  }
+
+  Widget _profilePicture(String picture) {
+    return Container(
+      width: 150.0,
+      height: 150.0,
+      decoration: BoxDecoration(
+        color: Burnt.separator,
+        borderRadius: BorderRadius.circular(150.0),
+        border: Border.all(color: Colors.white, width: 4.0),
+        image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(picture)),
       ),
-    ])));
+    );
   }
 }
 
@@ -134,9 +141,8 @@ class _Props {
 
   static fromStore(Store<AppState> store, int userId) {
     if (store.state.user.users == null) {
-      return _Props(user: null, refreshPage: null);
+      return _Props(user: null, refreshPage: () {});
     }
-
     return _Props(user: store.state.user.users[userId], refreshPage: () => store.dispatch(FetchUserByUserIdRequest(userId)));
   }
 }

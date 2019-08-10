@@ -87,7 +87,7 @@ class _Presenter extends StatelessWidget {
 
   Widget _bannerImage() {
     return Stack(
-      alignment: AlignmentDirectional.topStart,
+      alignment: AlignmentDirectional.bottomCenter,
       children: <Widget>[
         Container(
           height: 300.0,
@@ -100,19 +100,19 @@ class _Presenter extends StatelessWidget {
           ),
         ),
         Container(
-          height: 150.0,
+          height: 300.0,
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
-              stops: [0, 0.2, 1.0],
-              colors: [Color(0x30000000), Color(0x30000000), Color(0x0000000)],
+              stops: [0, 0.8],
+              colors: [Color(0x00000000), Color(0x30000000)],
             ),
           ),
         ),
         SafeArea(
           child: Container(
-            height: 106.0,
+            height: 60.0,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,

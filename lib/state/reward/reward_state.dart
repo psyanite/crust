@@ -28,6 +28,7 @@ class RewardState {
   }
 
   RewardState addTopRewards(List<Reward> rewards) {
+    rewards.shuffle();
     var clone = cloneTopRewards();
     clone.addEntries(rewards.map((r) => MapEntry<int, Reward>(r.id, r)));
     return copyWith(topRewards: clone);

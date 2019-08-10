@@ -1,4 +1,3 @@
-import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/state/store/store_actions.dart';
 import 'package:crust/state/store/store_state.dart';
 import 'package:redux/redux.dart';
@@ -26,6 +25,7 @@ StoreState fetchStoreSuccess(StoreState state, FetchStoreSuccess action) {
 StoreState fetchPostsByStoreIdSuccess(StoreState state, FetchPostsByStoreIdSuccess action) {
   return state.addStore(state.stores[action.storeId].copyWith(posts: action.posts));
 }
+
 StoreState fetchRewardsByStoreIdSuccess(StoreState state, FetchRewardsByStoreIdSuccess action) {
   return state.addStore(state.stores[action.storeId].copyWith(rewards: action.rewards));
 }

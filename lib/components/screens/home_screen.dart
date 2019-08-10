@@ -234,14 +234,10 @@ class _Props {
   });
 
   static fromStore(Store<AppState> store) {
-    var topStores = store.state.store.topStores.values.toList();
-    topStores.shuffle();
-    var topRewards = store.state.reward.topRewards.values.toList();
-    topRewards.shuffle();
     return _Props(
       stores: store.state.store.stores.values.toList(),
-      topStores: topStores,
-      topRewards: topRewards,
+      topStores: store.state.store.topStores.values.toList(),
+      topRewards: store.state.reward.topRewards.values.toList(),
     );
   }
 }

@@ -27,6 +27,7 @@ dependencies:
     barcode_scan: ^1.0.0
     cached_network_image: ^0.4.2
     cupertino_icons: ^0.1.2
+    device_info: ^0.4.0+1
     flutter_image_compress: ^0.6.1
     flutter_statusbarcolor: 0.2.0
     flutter_swiper : ^1.1.6

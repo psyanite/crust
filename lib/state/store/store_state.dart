@@ -34,6 +34,7 @@ class StoreState {
   }
 
   StoreState addTopStores(List<Store> stores) {
+    stores.shuffle();
     var clone = LinkedHashMap<int, Store>.from(this.topStores);
     clone.addEntries(stores.map((s) => MapEntry<int, Store>(s.id, s)));
     return copyWith(topStores: clone);

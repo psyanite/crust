@@ -1,5 +1,4 @@
 import 'package:crust/models/post.dart';
-import 'package:crust/models/reward.dart';
 
 class Store {
   final int id;

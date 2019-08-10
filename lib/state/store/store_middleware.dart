@@ -72,8 +72,10 @@ Middleware<AppState> _fetchRewardsByStoreId(StoreService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     service.fetchRewardsByStoreId(action.storeId).then(
       (rewards) {
-        store.dispatch(FetchRewardsSuccess(rewards));
-        store.dispatch(FetchRewardsByStoreIdSuccess(action.storeId, rewards.map((r) => r.id).toList()));
+        if (rewards != null) {
+          store.dispatch(FetchRewardsSuccess(rewards));
+          store.dispatch(FetchRewardsByStoreIdSuccess(action.storeId, rewards.map((r) => r.id).toList()));
+        }
       },
     ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     next(action);

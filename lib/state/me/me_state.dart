@@ -54,7 +54,6 @@ class MeState {
     var location = json['location'];
     return MeState(
       user: user != null ? User.rehydrate(user) : null,
-//      searchHistory: null,
       searchHistory: searchHistory != null ? searchHistory.map<SearchHistoryItem>((i) => SearchHistoryItem.rehydrate(i)).toList() : null,
       location: location != null ? SearchLocationItem.rehydrate(location) : null,
     );

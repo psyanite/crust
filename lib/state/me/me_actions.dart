@@ -127,3 +127,19 @@ class SetMyLocation {
 
   SetMyLocation(this.location);
 }
+
+class SetMyTagline {
+  final String tagline;
+
+  SetMyTagline(this.tagline);
+}
+
+class SetMyTaglineSuccess {
+  final String tagline;
+
+  SetMyTaglineSuccess(this.tagline);
+}
+
+class DeleteMyTagline {}
+
+class DeleteMyTaglineSuccess {}

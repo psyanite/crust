@@ -20,6 +20,8 @@ List<Middleware<AppState>> createMeMiddleware([MeService meService = const MeSer
   final favoritePost = _favoritePost(meService);
   final unfavoritePost = _unfavoritePost(meService);
   final fetchFavorites = _fetchFavorites(meService);
+  final setTagline = _setTagline(meService);
+  final deleteTagline = _deleteTagline(meService);
 
   return [
     TypedMiddleware<AppState, AddUserRequest>(addUser),
@@ -31,6 +33,8 @@ List<Middleware<AppState>> createMeMiddleware([MeService meService = const MeSer
     TypedMiddleware<AppState, FavoritePostRequest>(favoritePost),
     TypedMiddleware<AppState, UnfavoritePostRequest>(unfavoritePost),
     TypedMiddleware<AppState, FetchFavoritesRequest>(fetchFavorites),
+    TypedMiddleware<AppState, SetMyTagline>(setTagline),
+    TypedMiddleware<AppState, DeleteMyTagline>(deleteTagline),
   ];
 }
 
@@ -131,6 +135,24 @@ Middleware<AppState> _fetchFavorites(MeService service) {
         }
       }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     }
+    next(action);
+  };
+}
+
+Middleware<AppState> _setTagline(MeService service) {
+  return (Store<AppState> store, action, NextDispatcher next) {
+    service.setTagline(userId: store.state.me.user.id, tagline: action.tagline).then((tagline) {
+      store.dispatch(SetMyTaglineSuccess(tagline));
+    }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    next(action);
+  };
+}
+
+Middleware<AppState> _deleteTagline(MeService service) {
+  return (Store<AppState> store, action, NextDispatcher next) {
+    service.deleteTagline(store.state.me.user.id).then((result) {
+      if (result == true) store.dispatch(DeleteMyTaglineSuccess());
+    }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     next(action);
   };
 }

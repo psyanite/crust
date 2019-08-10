@@ -10,6 +10,7 @@ class User {
   final String displayName;
   final String email;
   final String profilePicture;
+  final String tagline;
   final SocialType socialType;
   final String socialId;
   final String token;
@@ -23,6 +24,7 @@ class User {
     this.displayName,
     this.email,
     this.profilePicture,
+    this.tagline,
     this.socialType,
     this.socialId,
     this.token,
@@ -38,10 +40,28 @@ class User {
       displayName: displayName ?? this.displayName,
       email: email,
       profilePicture: profilePicture ?? this.profilePicture,
+      tagline: tagline,
       socialType: socialType,
       socialId: socialId,
       token: token,
       posts: posts ?? this.posts,
+    );
+  }
+
+  User setTagline(String tagline) {
+    return User(
+      id: id,
+      username: username,
+      firstName: firstName,
+      lastName: lastName,
+      displayName: displayName,
+      email: email,
+      profilePicture: profilePicture,
+      tagline: tagline,
+      socialType: socialType,
+      socialId: socialId,
+      token: token,
+      posts: posts,
     );
   }
 
@@ -54,6 +74,7 @@ class User {
       'displayName': this.displayName,
       'email': this.email,
       'profilePicture': this.profilePicture,
+      'tagline': this.tagline,
       'socialType': EnumUtil.format(this.socialType.toString()),
       'socialId': this.socialId,
       'token': this.token,
@@ -69,6 +90,7 @@ class User {
       displayName: json['displayName'],
       email: json['email'],
       profilePicture: json['profilePicture'],
+      tagline: json['tagline'],
       socialType: EnumUtil.fromString(SocialType.values, json['socialType']),
       socialId: json['socialId'],
       token: json['token'],
@@ -83,6 +105,7 @@ class User {
       username: json['profile']['username'],
       displayName: json['profile']['preferred_name'],
       profilePicture: json['profile']['profile_picture'],
+      tagline: json['profile']['tagline'],
       posts: json['posts'] != null ? (json['posts'] as List).map((p) => Post.fromToaster(p)).toList() : null,
     );
   }
@@ -94,6 +117,7 @@ class User {
       username: json['username'],
       displayName: json['preferred_name'],
       profilePicture: json['profile_picture'],
+      tagline: json['tagline'],
     );
   }
 

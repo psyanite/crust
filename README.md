@@ -43,6 +43,7 @@
 </div>
 
 ## To Do
+* Set tagline
 * Implement follow functionality
 * Display followers on profile screen
 * Display followers on store screen

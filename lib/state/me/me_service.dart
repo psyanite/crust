@@ -203,4 +203,30 @@ class MeService {
     var json = response['allUserRewardsByUserId'];
     return (json as List).map((u) => UserReward.fromToaster(u)).toList();
   }
+
+  Future<String> setTagline({ userId, tagline }) async {
+    String query = """
+      mutation {
+        setTagline(userId: $userId, tagline: "$tagline") {
+          tagline
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['setTagline'];
+    return json['tagline'];
+  }
+
+  Future<bool> deleteTagline(int userId) async {
+    String query = """
+      mutation  {
+        deleteTagline(userId: $userId) {
+          user_id
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['deleteTagline'];
+    return userId == json['user_id'];
+  }
 }

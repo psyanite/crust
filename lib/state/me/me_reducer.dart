@@ -16,14 +16,16 @@ Reducer<MeState> meReducer = combineReducers([
   new TypedReducer<MeState, FetchFavoritesSuccess>(fetchFavorites),
   new TypedReducer<MeState, AddSearchHistoryItem>(addSearchHistoryItem),
   new TypedReducer<MeState, SetMyLocation>(setMyLocation),
+  new TypedReducer<MeState, SetMyTaglineSuccess>(setMyTagline),
+  new TypedReducer<MeState, DeleteMyTaglineSuccess>(deleteMyTagline),
 ]);
 
 MeState loginSuccess(MeState state, LoginSuccess action) {
-  return MeState().copyWith(user: action.user);
+  return MeState.initialState().copyWith(user: action.user);
 }
 
 MeState logout(MeState state, Logout action) {
-  return MeState();
+  return MeState.initialState();
 }
 
 MeState fetchMyPosts(MeState state, FetchMyPostsSuccess action) {
@@ -74,4 +76,12 @@ MeState addSearchHistoryItem(MeState state, AddSearchHistoryItem action) {
 
 MeState setMyLocation(MeState state, SetMyLocation action) {
   return state.copyWith(location: action.location);
+}
+
+MeState setMyTagline(MeState state, SetMyTaglineSuccess action) {
+  return state.copyWith(user: state.user.setTagline(action.tagline));
+}
+
+MeState deleteMyTagline(MeState state, DeleteMyTaglineSuccess action) {
+  return state.copyWith(user: state.user.setTagline(null));
 }

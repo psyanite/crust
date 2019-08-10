@@ -382,7 +382,7 @@ class _PresenterState extends State<_Presenter> {
     });
   }
 
-  _buttons(BuildContext context) {
+  Widget _buttons(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(bottom: 30.0),
       child: Row(
@@ -398,12 +398,7 @@ class _PresenterState extends State<_Presenter> {
                   ),
                   borderRadius: BorderRadius.circular(2.0)),
               padding: EdgeInsets.symmetric(vertical: 11.0, horizontal: 16.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[Text('CANCEL', style: TextStyle(fontSize: 16.0, color: Burnt.primary, letterSpacing: 3.0))],
-              ),
+              child: Text('CANCEL', style: TextStyle(fontSize: 16.0, color: Burnt.primary, letterSpacing: 3.0)),
             ),
           ),
           Container(width: 8.0),
@@ -419,12 +414,7 @@ class _PresenterState extends State<_Presenter> {
                     stops: [0, 0.6, 1.0],
                     colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
                   )),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[Text('SUBMIT', style: TextStyle(fontSize: 16.0, color: Colors.white, letterSpacing: 3.0))],
-              ),
+              child: Text('SUBMIT', style: TextStyle(fontSize: 16.0, color: Colors.white, letterSpacing: 3.0)),
             ),
           ),
         ],

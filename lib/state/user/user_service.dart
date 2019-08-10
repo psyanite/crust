@@ -14,11 +14,12 @@ class UserService {
           profile {
             profile_picture,
             preferred_name,
-            username
+            username,
+            tagline
           },
           posts {
             ${Post.attributes}
-          } 
+          }
         }
       }
     """;
