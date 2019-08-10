@@ -17,7 +17,7 @@ class MyProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-      onInit: (Store<AppState> store) => store.dispatch(FetchMyPostsRequest(store.state.me.user.id)),
+      onInit: (Store<AppState> store) => store.dispatch(FetchMyPosts(store.state.me.user.id)),
       converter: _Props.fromStore,
       builder: (context, props) {
         return _Presenter(user: props.user, refreshPage: props.refreshPage, logout: props.logout);
@@ -205,7 +205,7 @@ class _Props {
   static fromStore(Store<AppState> store) {
     return _Props(
       user: store.state.me.user,
-      refreshPage: () => store.dispatch(FetchMyPostsRequest(store.state.me.user.id)),
+      refreshPage: () => store.dispatch(FetchMyPosts(store.state.me.user.id)),
       logout: () => store.dispatch(Logout()),
     );
   }

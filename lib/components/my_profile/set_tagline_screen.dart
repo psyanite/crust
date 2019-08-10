@@ -11,7 +11,7 @@ class SetTaglineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-      onInit: (Store<AppState> store) => store.dispatch(FetchMyPostsRequest(store.state.me.user.id)),
+      onInit: (Store<AppState> store) => store.dispatch(FetchMyPosts(store.state.me.user.id)),
       converter: _Props.fromStore,
       builder: (context, props) {
         return _Presenter(tagline: props.tagline, setTagline: props.setTagline, deleteTagline: props.deleteTagline);

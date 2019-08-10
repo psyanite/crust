@@ -24,12 +24,12 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
       onInit: (Store<AppState> store) {
-        store.dispatch(FetchStoresRequest());
-        store.dispatch(FetchTopStoresRequest());
-        store.dispatch(FetchFavoritesRequest());
-        if (store.state.me.user != null) store.dispatch(FetchMyPostsRequest(store.state.me.user.id));
-        store.dispatch(FetchRewardsRequest());
-        store.dispatch(FetchTopRewardsRequest());
+        store.dispatch(FetchStores());
+        store.dispatch(FetchTopStores());
+        store.dispatch(FetchFavorites());
+        if (store.state.me.user != null) store.dispatch(FetchMyPosts(store.state.me.user.id));
+        store.dispatch(FetchRewards());
+        store.dispatch(FetchTopRewards());
       },
       converter: (Store<AppState> store) => _Props.fromStore(store),
       builder: (BuildContext context, _Props props) {

@@ -1,10 +1,10 @@
 import 'package:crust/models/post.dart';
 import 'package:crust/models/store.dart';
 
-class FetchStoreByIdRequest {
+class FetchStoreById {
   final int storeId;
 
-  FetchStoreByIdRequest(this.storeId);
+  FetchStoreById(this.storeId);
 }
 
 class FetchStoreSuccess {
@@ -13,7 +13,7 @@ class FetchStoreSuccess {
   FetchStoreSuccess(this.store);
 }
 
-class FetchStoresRequest {}
+class FetchStores {}
 
 class FetchStoresSuccess {
   final List<Store> stores;
@@ -21,7 +21,7 @@ class FetchStoresSuccess {
   FetchStoresSuccess(this.stores);
 }
 
-class FetchTopStoresRequest {}
+class FetchTopStores {}
 
 class FetchTopStoresSuccess {
   final List<Store> stores;
@@ -29,10 +29,10 @@ class FetchTopStoresSuccess {
   FetchTopStoresSuccess(this.stores);
 }
 
-class FetchPostsByStoreIdRequest {
+class FetchPostsByStoreId {
   final int storeId;
 
-  FetchPostsByStoreIdRequest(this.storeId);
+  FetchPostsByStoreId(this.storeId);
 }
 
 class FetchPostsByStoreIdSuccess {
@@ -42,10 +42,10 @@ class FetchPostsByStoreIdSuccess {
   FetchPostsByStoreIdSuccess(this.storeId, this.posts);
 }
 
-class FetchRewardsByStoreIdRequest {
+class FetchRewardsByStoreId {
   final int storeId;
 
-  FetchRewardsByStoreIdRequest(this.storeId);
+  FetchRewardsByStoreId(this.storeId);
 }
 
 class FetchRewardsByStoreIdSuccess {

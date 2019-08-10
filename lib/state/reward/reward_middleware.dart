@@ -11,8 +11,8 @@ List<Middleware<AppState>> createRewardMiddleware([
   final fetchTopRewards = _fetchTopRewards(service);
 
   return [
-    TypedMiddleware<AppState, FetchRewardsRequest>(fetchRewards),
-    TypedMiddleware<AppState, FetchRewardsRequest>(fetchTopRewards),
+    TypedMiddleware<AppState, FetchRewards>(fetchRewards),
+    TypedMiddleware<AppState, FetchRewards>(fetchTopRewards),
   ];
 }
 

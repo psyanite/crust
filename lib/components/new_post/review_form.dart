@@ -493,7 +493,7 @@ class _Props {
     return _Props(
       isLoggedIn: store.state.me.user != null,
       me: store.state.me.user,
-      fetchPostsByStoreId: (storeId) => store.dispatch(FetchPostsByStoreIdRequest(storeId)),
+      fetchPostsByStoreId: (storeId) => store.dispatch(FetchPostsByStoreId(storeId)),
     );
   }
 }

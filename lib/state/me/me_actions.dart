@@ -2,10 +2,10 @@ import 'package:crust/models/post.dart';
 import 'package:crust/models/search.dart';
 import 'package:crust/models/user.dart';
 
-class AddUserRequest {
+class AddUser {
   final User user;
 
-  AddUserRequest(this.user);
+  AddUser(this.user);
 }
 
 class LoginSuccess {
@@ -14,10 +14,10 @@ class LoginSuccess {
   LoginSuccess(this.user);
 }
 
-class FetchMyPostsRequest {
+class FetchMyPosts {
   final int userId;
 
-  FetchMyPostsRequest(this.userId);
+  FetchMyPosts(this.userId);
 }
 
 class FetchMyPostsSuccess {
@@ -30,10 +30,10 @@ class LogoutSuccess {}
 
 class Logout {}
 
-class FavoriteRewardRequest {
+class FavoriteReward {
   final int rewardId;
 
-  FavoriteRewardRequest(this.rewardId);
+  FavoriteReward(this.rewardId);
 }
 
 class FavoriteRewardSuccess {
@@ -42,10 +42,10 @@ class FavoriteRewardSuccess {
   FavoriteRewardSuccess(this.rewardId);
 }
 
-class UnfavoriteRewardRequest {
+class UnfavoriteReward {
   final int rewardId;
 
-  UnfavoriteRewardRequest(this.rewardId);
+  UnfavoriteReward(this.rewardId);
 }
 
 class UnfavoriteRewardSuccess {
@@ -54,10 +54,10 @@ class UnfavoriteRewardSuccess {
   UnfavoriteRewardSuccess(this.rewardId);
 }
 
-class FavoriteStoreRequest {
+class FavoriteStore {
   final int storeId;
 
-  FavoriteStoreRequest(this.storeId);
+  FavoriteStore(this.storeId);
 }
 
 class FavoriteStoreSuccess {
@@ -66,10 +66,10 @@ class FavoriteStoreSuccess {
   FavoriteStoreSuccess(this.storeId);
 }
 
-class UnfavoriteStoreRequest {
+class UnfavoriteStore {
   final int storeId;
 
-  UnfavoriteStoreRequest(this.storeId);
+  UnfavoriteStore(this.storeId);
 }
 
 class UnfavoriteStoreSuccess {
@@ -78,10 +78,10 @@ class UnfavoriteStoreSuccess {
   UnfavoriteStoreSuccess(this.storeId);
 }
 
-class FavoritePostRequest {
+class FavoritePost {
   final int postId;
 
-  FavoritePostRequest(this.postId);
+  FavoritePost(this.postId);
 }
 
 class FavoritePostSuccess {
@@ -90,10 +90,10 @@ class FavoritePostSuccess {
   FavoritePostSuccess(this.postId);
 }
 
-class UnfavoritePostRequest {
+class UnfavoritePost {
   final int postId;
 
-  UnfavoritePostRequest(this.postId);
+  UnfavoritePost(this.postId);
 }
 
 class UnfavoritePostSuccess {
@@ -102,10 +102,10 @@ class UnfavoritePostSuccess {
   UnfavoritePostSuccess(this.postId);
 }
 
-class FetchFavoritesRequest {
+class FetchFavorites {
   final bool updateStore;
 
-  FetchFavoritesRequest({this.updateStore: false});
+  FetchFavorites({this.updateStore: false});
 }
 
 class FetchFavoritesSuccess {

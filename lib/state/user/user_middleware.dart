@@ -10,7 +10,7 @@ List<Middleware<AppState>> createUserMiddleware([
   final fetchUserByUserId = _fetchUserByUserId(service);
 
   return [
-    TypedMiddleware<AppState, FetchUserByUserIdRequest>(fetchUserByUserId),
+    TypedMiddleware<AppState, FetchUserByUserId>(fetchUserByUserId),
   ];
 }
 

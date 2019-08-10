@@ -31,10 +31,10 @@ class StoreScreen extends StatelessWidget {
       onInit: (Store<AppState> store) {
         var stores = store.state.store.stores;
         if (stores == null || stores[storeId] == null) {
-          store.dispatch(FetchStoreByIdRequest(storeId));
+          store.dispatch(FetchStoreById(storeId));
         }
-        store.dispatch(FetchPostsByStoreIdRequest(storeId));
-        store.dispatch(FetchRewardsByStoreIdRequest(storeId));
+        store.dispatch(FetchPostsByStoreId(storeId));
+        store.dispatch(FetchRewardsByStoreId(storeId));
       },
       converter: (Store<AppState> store) => _Props.fromStore(store, storeId),
       builder: (context, props) {
@@ -326,7 +326,7 @@ class _Props {
     return _Props(
       store: s,
       isLoggedIn: store.state.me.user != null,
-      fetchPostsByStoreId: () => store.dispatch(FetchPostsByStoreIdRequest(storeId)),
+      fetchPostsByStoreId: () => store.dispatch(FetchPostsByStoreId(storeId)),
       rewards: (s.rewards ?? List<int>()).map((r) => store.state.reward.rewards[r]).toList(),
     );
   }

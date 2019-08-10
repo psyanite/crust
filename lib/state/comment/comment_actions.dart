@@ -1,10 +1,10 @@
 import 'package:crust/models/comment.dart';
 import 'package:crust/models/reply.dart';
 
-class FetchCommentsRequest {
+class FetchComments {
   final int postId;
 
-  FetchCommentsRequest(this.postId);
+  FetchComments(this.postId);
 }
 
 class FetchCommentsSuccess {
@@ -14,10 +14,10 @@ class FetchCommentsSuccess {
   FetchCommentsSuccess(this.postId, this.comments);
 }
 
-class FavoriteCommentRequest {
+class FavoriteComment {
   final Comment comment;
 
-  FavoriteCommentRequest(this.comment);
+  FavoriteComment(this.comment);
 }
 
 class FavoriteCommentSuccess {
@@ -27,10 +27,10 @@ class FavoriteCommentSuccess {
   FavoriteCommentSuccess(this.myId, this.comment);
 }
 
-class UnfavoriteCommentRequest {
+class UnfavoriteComment {
   final Comment comment;
 
-  UnfavoriteCommentRequest(this.comment);
+  UnfavoriteComment(this.comment);
 }
 
 class UnfavoriteCommentSuccess {
@@ -40,11 +40,11 @@ class UnfavoriteCommentSuccess {
   UnfavoriteCommentSuccess(this.myId, this.comment);
 }
 
-class FavoriteReplyRequest {
+class FavoriteReply {
   final int postId;
   final Reply reply;
 
-  FavoriteReplyRequest(this.postId, this.reply);
+  FavoriteReply(this.postId, this.reply);
 }
 
 class FavoriteReplySuccess {
@@ -55,11 +55,11 @@ class FavoriteReplySuccess {
   FavoriteReplySuccess(this.myId, this.postId, this.reply);
 }
 
-class UnfavoriteReplyRequest {
+class UnfavoriteReply {
   final int postId;
   final Reply reply;
 
-  UnfavoriteReplyRequest(this.postId, this.reply);
+  UnfavoriteReply(this.postId, this.reply);
 }
 
 class UnfavoriteReplySuccess {

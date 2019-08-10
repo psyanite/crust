@@ -27,8 +27,8 @@ class RewardsScreenState extends State<RewardsScreen> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
         onInit: (Store<AppState> store) {
-          store.dispatch(FetchRewardsRequest());
-          store.dispatch(FetchFavoritesRequest());
+          store.dispatch(FetchRewards());
+          store.dispatch(FetchFavorites());
         },
         converter: (Store<AppState> store) => _Props.fromStore(store),
         builder: (BuildContext context, _Props props) => CustomScrollView(slivers: <Widget>[

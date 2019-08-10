@@ -28,7 +28,7 @@ class CommentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
         onInit: (Store<AppState> store) {
-          store.dispatch(FetchCommentsRequest(post.id));
+          store.dispatch(FetchComments(post.id));
         },
         converter: (Store<AppState> store) => _Props.fromStore(store, post.id),
         builder: (BuildContext context, _Props props) => _Presenter(

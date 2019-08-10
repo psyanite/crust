@@ -16,7 +16,7 @@ class FavoriteRewardsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
         onInit: (Store<AppState> store) {
-          store.dispatch(FetchFavoritesRequest(updateStore: true));
+          store.dispatch(FetchFavorites(updateStore: true));
         },
         converter: (Store<AppState> store) => _Props.fromStore(store),
         builder: (context, props) => _Presenter(myId: props.myId, favoriteRewards: props.favoriteRewards));

@@ -17,7 +17,7 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-        converter: (Store<AppState> store) => (user) => store.dispatch(AddUserRequest(user)),
+        converter: (Store<AppState> store) => (user) => store.dispatch(AddUser(user)),
         builder: (context, addUser) => _Presenter(addUser: addUser, user: user));
   }
 }

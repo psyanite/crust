@@ -108,8 +108,8 @@ class _Props {
     var favoritePosts = store.state.me.favoritePosts ?? Set<int>();
     return _Props(
       isFavorited: favoritePosts.contains(postId),
-      favoritePost: (postId) => store.dispatch(FavoritePostRequest(postId)),
-      unfavoritePost: (postId) => store.dispatch(UnfavoritePostRequest(postId)),
+      favoritePost: (postId) => store.dispatch(FavoritePost(postId)),
+      unfavoritePost: (postId) => store.dispatch(UnfavoritePost(postId)),
       isLoggedIn: store.state.me.user != null,
     );
   }

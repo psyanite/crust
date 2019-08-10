@@ -14,11 +14,11 @@ List<Middleware<AppState>> createCommentMiddleware([
   final unfavoriteReply = _unfavoriteReply(service);
 
   return [
-    TypedMiddleware<AppState, FetchCommentsRequest>(fetchComments),
-    TypedMiddleware<AppState, FavoriteCommentRequest>(favoriteComment),
-    TypedMiddleware<AppState, UnfavoriteCommentRequest>(unfavoriteComment),
-    TypedMiddleware<AppState, FavoriteReplyRequest>(favoriteReply),
-    TypedMiddleware<AppState, UnfavoriteReplyRequest>(unfavoriteReply),
+    TypedMiddleware<AppState, FetchComments>(fetchComments),
+    TypedMiddleware<AppState, FavoriteComment>(favoriteComment),
+    TypedMiddleware<AppState, UnfavoriteComment>(unfavoriteComment),
+    TypedMiddleware<AppState, FavoriteReply>(favoriteReply),
+    TypedMiddleware<AppState, UnfavoriteReply>(unfavoriteReply),
   ];
 }
 

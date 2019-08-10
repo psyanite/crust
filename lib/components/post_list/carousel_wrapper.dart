@@ -49,8 +49,8 @@ class _Props {
   static fromStore(Store<AppState> store) {
     return _Props(
       favoritePosts: store.state.me.favoritePosts ?? Set<int>(),
-      favoritePost: (postId) => store.dispatch(FavoritePostRequest(postId)),
-      unfavoritePost: (postId) => store.dispatch(UnfavoritePostRequest(postId)),
+      favoritePost: (postId) => store.dispatch(FavoritePost(postId)),
+      unfavoritePost: (postId) => store.dispatch(UnfavoritePost(postId)),
       isLoggedIn: store.state.me.user != null,
     );
   }

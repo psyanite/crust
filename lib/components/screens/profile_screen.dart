@@ -22,7 +22,7 @@ class ProfileScreen extends StatelessWidget {
     return StoreConnector<AppState, dynamic>(
       onInit: (Store<AppState> store) {
         if (store.state.user.users == null || store.state.user.users[userId] == null) {
-          return store.dispatch(FetchUserByUserIdRequest(userId));
+          return store.dispatch(FetchUserByUserId(userId));
         }
       },
       converter: (Store<AppState> store) => _Props.fromStore(store, userId),
@@ -143,6 +143,6 @@ class _Props {
     if (store.state.user.users == null) {
       return _Props(user: null, refreshPage: () {});
     }
-    return _Props(user: store.state.user.users[userId], refreshPage: () => store.dispatch(FetchUserByUserIdRequest(userId)));
+    return _Props(user: store.state.user.users[userId], refreshPage: () => store.dispatch(FetchUserByUserId(userId)));
   }
 }

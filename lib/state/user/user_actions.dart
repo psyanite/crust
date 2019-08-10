@@ -1,9 +1,9 @@
 import 'package:crust/models/user.dart';
 
-class FetchUserByUserIdRequest {
+class FetchUserByUserId {
   final int userId;
 
-  FetchUserByUserIdRequest(this.userId);
+  FetchUserByUserId(this.userId);
 }
 
 class FetchUserByUserIdSuccess {

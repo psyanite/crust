@@ -147,7 +147,7 @@ class _SuggestCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
       onInit: (Store<AppState> store) {
-        if (store.state.store.stores == null) store.dispatch(FetchStoreByIdRequest(storeId));
+        if (store.state.store.stores == null) store.dispatch(FetchStoreById(storeId));
       },
       converter: (Store<AppState> store) => store.state.store.stores[storeId],
       builder: (context, store) => _ResultCard(store: store, addSearchHistoryItem: addSearchHistoryItem)

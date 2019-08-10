@@ -119,8 +119,8 @@ class _Props {
     return _Props(
       isLoggedIn: me != null,
       myId: me != null ? me.id : 0,
-      favoriteReply: (postId, reply) => store.dispatch(FavoriteReplyRequest(postId, reply)),
-      unfavoriteReply: (postId, reply) => store.dispatch(UnfavoriteReplyRequest(postId, reply)),
+      favoriteReply: (postId, reply) => store.dispatch(FavoriteReply(postId, reply)),
+      unfavoriteReply: (postId, reply) => store.dispatch(UnfavoriteReply(postId, reply)),
     );
   }
 }

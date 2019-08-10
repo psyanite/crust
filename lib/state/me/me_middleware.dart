@@ -24,15 +24,15 @@ List<Middleware<AppState>> createMeMiddleware([MeService meService = const MeSer
   final deleteTagline = _deleteTagline(meService);
 
   return [
-    TypedMiddleware<AppState, AddUserRequest>(addUser),
-    TypedMiddleware<AppState, FetchMyPostsRequest>(fetchMyPosts),
-    TypedMiddleware<AppState, FavoriteRewardRequest>(favoriteReward),
-    TypedMiddleware<AppState, UnfavoriteRewardRequest>(unfavoriteReward),
-    TypedMiddleware<AppState, FavoriteStoreRequest>(favoriteStore),
-    TypedMiddleware<AppState, UnfavoriteStoreRequest>(unfavoriteStore),
-    TypedMiddleware<AppState, FavoritePostRequest>(favoritePost),
-    TypedMiddleware<AppState, UnfavoritePostRequest>(unfavoritePost),
-    TypedMiddleware<AppState, FetchFavoritesRequest>(fetchFavorites),
+    TypedMiddleware<AppState, AddUser>(addUser),
+    TypedMiddleware<AppState, FetchMyPosts>(fetchMyPosts),
+    TypedMiddleware<AppState, FavoriteReward>(favoriteReward),
+    TypedMiddleware<AppState, UnfavoriteReward>(unfavoriteReward),
+    TypedMiddleware<AppState, FavoriteStore>(favoriteStore),
+    TypedMiddleware<AppState, UnfavoriteStore>(unfavoriteStore),
+    TypedMiddleware<AppState, FavoritePost>(favoritePost),
+    TypedMiddleware<AppState, UnfavoritePost>(unfavoritePost),
+    TypedMiddleware<AppState, FetchFavorites>(fetchFavorites),
     TypedMiddleware<AppState, SetMyTagline>(setTagline),
     TypedMiddleware<AppState, DeleteMyTagline>(deleteTagline),
   ];
@@ -151,7 +151,11 @@ Middleware<AppState> _setTagline(MeService service) {
 Middleware<AppState> _deleteTagline(MeService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     service.deleteTagline(store.state.me.user.id).then((result) {
-      if (result == true) store.dispatch(DeleteMyTaglineSuccess());
+      if (result == true) {
+        store.dispatch(DeleteMyTaglineSuccess());
+      } else {
+        store.dispatch(RequestFailure('Delete tagline request result was false'));
+      }
     }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     next(action);
   };

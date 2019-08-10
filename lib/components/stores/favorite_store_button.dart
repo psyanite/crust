@@ -102,8 +102,8 @@ class _Props {
   static fromStore(Store<AppState> store) {
     return _Props(
       favoriteStores: store.state.me.favoriteStores ?? Set<int>(),
-      favoriteStore: (storeId) => store.dispatch(FavoriteStoreRequest(storeId)),
-      unfavoriteStore: (storeId) => store.dispatch(UnfavoriteStoreRequest(storeId)),
+      favoriteStore: (storeId) => store.dispatch(FavoriteStore(storeId)),
+      unfavoriteStore: (storeId) => store.dispatch(UnfavoriteStore(storeId)),
       isLoggedIn: store.state.me.user != null,
     );
   }

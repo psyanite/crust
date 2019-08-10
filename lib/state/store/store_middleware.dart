@@ -15,11 +15,11 @@ List<Middleware<AppState>> createStoreMiddleware([
   final fetchRewardsByStoreId = _fetchRewardsByStoreId(service);
 
   return [
-    TypedMiddleware<AppState, FetchStoresRequest>(fetchStores),
-    TypedMiddleware<AppState, FetchTopStoresRequest>(fetchTopStores),
-    TypedMiddleware<AppState, FetchStoreByIdRequest>(fetchStoreById),
-    TypedMiddleware<AppState, FetchPostsByStoreIdRequest>(fetchPostsByStoreId),
-    TypedMiddleware<AppState, FetchRewardsByStoreIdRequest>(fetchRewardsByStoreId),
+    TypedMiddleware<AppState, FetchStores>(fetchStores),
+    TypedMiddleware<AppState, FetchTopStores>(fetchTopStores),
+    TypedMiddleware<AppState, FetchStoreById>(fetchStoreById),
+    TypedMiddleware<AppState, FetchPostsByStoreId>(fetchPostsByStoreId),
+    TypedMiddleware<AppState, FetchRewardsByStoreId>(fetchRewardsByStoreId),
   ];
 }
 

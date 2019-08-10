@@ -118,8 +118,8 @@ class _Props {
     return _Props(
       isLoggedIn: me != null,
       myId: me != null ? me.id : 0,
-      favoriteComment: (comment) => store.dispatch(FavoriteCommentRequest(comment)),
-      unfavoriteComment: (comment) => store.dispatch(UnfavoriteCommentRequest(comment)),
+      favoriteComment: (comment) => store.dispatch(FavoriteComment(comment)),
+      unfavoriteComment: (comment) => store.dispatch(UnfavoriteComment(comment)),
     );
   }
 }

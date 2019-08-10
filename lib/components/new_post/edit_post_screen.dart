@@ -494,7 +494,7 @@ class _Props {
 
   static fromStore(Store<AppState> store) {
     return _Props(
-      fetchPostsByStoreId: (storeId) => store.dispatch(FetchPostsByStoreIdRequest(storeId)),
+      fetchPostsByStoreId: (storeId) => store.dispatch(FetchPostsByStoreId(storeId)),
     );
   }
 }

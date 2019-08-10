@@ -18,7 +18,7 @@ class FavoritesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
         onInit: (Store<AppState> store) {
-          store.dispatch(FetchFavoritesRequest(updateStore: true));
+          store.dispatch(FetchFavorites(updateStore: true));
         },
         converter: (Store<AppState> store) => _Props.fromStore(store),
         builder: (BuildContext context, _Props props) => _Presenter(
@@ -138,10 +138,10 @@ class _Props {
       stores: stores != null && favoriteStores != null
           ? stores.entries.where((s) => favoriteStores.contains(s.value.id)).map((e) => e.value).toList()
           : null,
-      favoriteReward: (rewardId) => store.dispatch(FavoriteRewardRequest(rewardId)),
-      unfavoriteReward: (rewardId) => store.dispatch(UnfavoriteRewardRequest(rewardId)),
-      favoriteStore: (storeId) => store.dispatch(FavoriteStoreRequest(storeId)),
-      unfavoriteStore: (storeId) => store.dispatch(UnfavoriteStoreRequest(storeId)),
+      favoriteReward: (rewardId) => store.dispatch(FavoriteReward(rewardId)),
+      unfavoriteReward: (rewardId) => store.dispatch(UnfavoriteReward(rewardId)),
+      favoriteStore: (storeId) => store.dispatch(FavoriteStore(storeId)),
+      unfavoriteStore: (storeId) => store.dispatch(UnfavoriteStore(storeId)),
       isLoggedIn: store.state.me.user != null,
     );
   }

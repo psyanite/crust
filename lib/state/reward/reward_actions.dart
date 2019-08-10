@@ -1,6 +1,6 @@
 import 'package:crust/models/reward.dart';
 
-class FetchRewardsRequest {}
+class FetchRewards {}
 
 class FetchRewardsSuccess {
   final List<Reward> rewards;
@@ -14,7 +14,7 @@ class FetchRewardSuccess {
   FetchRewardSuccess(this.reward);
 }
 
-class FetchTopRewardsRequest {}
+class FetchTopRewards {}
 
 class FetchTopRewardsSuccess {
   final List<Reward> rewards;
