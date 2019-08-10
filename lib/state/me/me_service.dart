@@ -245,4 +245,30 @@ class MeService {
     var json = response['setProfilePicture'];
     return pictureUrl == json['profile_picture'];
   }
+
+  static Future<bool> setDisplayName({userId, name}) async {
+    String query = """
+      mutation {
+        setPreferredName(userId: $userId, name: "$name") {
+          preferred_name
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['setPreferredName'];
+    return name == json['preferred_name'];
+  }
+
+  static Future<bool> setUsername({userId, name}) async {
+    String query = """
+      mutation {
+        setUsername(userId: $userId, name: "$name") {
+          username
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['setUsername'];
+    return name == json['username'];
+  }
 }

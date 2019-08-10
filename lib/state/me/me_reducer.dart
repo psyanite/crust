@@ -19,6 +19,8 @@ Reducer<MeState> meReducer = combineReducers([
   new TypedReducer<MeState, SetMyTaglineSuccess>(setMyTagline),
   new TypedReducer<MeState, DeleteMyTaglineSuccess>(deleteMyTagline),
   new TypedReducer<MeState, SetMyProfilePicture>(setMyProfilePicture),
+  new TypedReducer<MeState, SetMyDisplayName>(setMyDisplayName),
+  new TypedReducer<MeState, SetMyUsername>(setMyUsername),
 ]);
 
 MeState loginSuccess(MeState state, LoginSuccess action) {
@@ -89,4 +91,12 @@ MeState deleteMyTagline(MeState state, DeleteMyTaglineSuccess action) {
 
 MeState setMyProfilePicture(MeState state, SetMyProfilePicture action) {
   return state.copyWith(user: state.user.copyWith(profilePicture: action.picture));
+}
+
+MeState setMyDisplayName(MeState state, SetMyDisplayName action) {
+  return state.copyWith(user: state.user.copyWith(displayName: action.name));
+}
+
+MeState setMyUsername(MeState state, SetMyUsername action) {
+  return state.copyWith(user: state.user.copyWith(username: action.name));
 }

@@ -43,7 +43,6 @@
 </div>
 
 ## To Do
-* Set tagline
 * Implement follow functionality
 * Display followers on profile screen
 * Display followers on store screen
@@ -53,8 +52,10 @@
 
 * Enable firebase dynamic urls in iOS
 * Add link previews to dynamic links
+* Enable login via iOS
 
 ## Done
+* Add update profile features
 * Show store posted posts on store page
 * Add RewardSwiper to StoreScreen
 * Show store-exclusive rewards

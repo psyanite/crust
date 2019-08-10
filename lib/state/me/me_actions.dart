@@ -149,3 +149,15 @@ class SetMyProfilePicture {
 
   SetMyProfilePicture(this.picture);
 }
+
+class SetMyDisplayName {
+  final String name;
+
+  SetMyDisplayName(this.name);
+}
+
+class SetMyUsername {
+  final String name;
+
+  SetMyUsername(this.name);
+}

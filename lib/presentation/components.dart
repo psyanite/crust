@@ -60,6 +60,7 @@ class WhiteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: Colors.white,
       child: InkWell(
         splashColor: Burnt.primaryLight,
         onTap: onPressed,

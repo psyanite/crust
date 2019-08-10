@@ -24,7 +24,6 @@ class SetPictureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-      onInit: (Store<AppState> store) => store.dispatch(FetchMyPosts(store.state.me.user.id)),
       converter: _Props.fromStore,
       builder: (context, props) {
         return _Presenter(setProfilePicture: props.setProfilePicture, myId: props.myId);

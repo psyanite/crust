@@ -1,0 +1,38 @@
+import 'package:flutter/material.dart';
+
+class TermsScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    var child = Column(children: <Widget>[
+      Container(height: 20.0),
+      _text('Terms of Service'),
+      _text(
+          'This page (together with the documents referred to on it) tells you the terms upon which you may use this website (myunidays.com) (“Site”), whether as a guest or a registered user. Please read these terms of use (“Terms”) carefully before you start to use our Site. By using our Site, you indicate that you accept these Terms and that you agree to abide by them. If you do not agree to these Terms, please refrain from using the Site.'),
+      _text('Our Concerns'),
+      _text(
+          'Access to our Site is permitted on a temporary basis, and we reserve the right to withdraw or amend the service we provide on our Site without notice (see below). We will not be liable if for any reason our Site is unavailable at any time or for any period.\nFrom time to time, we may restrict access to some parts of our Site, or our entire site, to users who have registered with us.\nIf you choose, or you are provided with, a user identification code, password or any other piece of information as part of our security procedures, you must treat such information as confidential, and you must not disclose it to any third party. We have the right to disable any user identification code or password, whether chosen by you or allocated by us, at any time, if in our opinion you have failed to comply with any of the provisions of these Terms.\nYou are responsible for making all arrangements necessary for you to have access to our Site. You are also responsible for ensuring that all persons who access our Site through your Internet connection are aware of these terms, and that they comply with them.\nBy obtaining a promotional code or accessing an offer or discount through our Site, you acknowledge that such offer or discount is subject to third party terms and conditions and it is your responsibility to review such terms and conditions before entering into any transaction with that third party.\nThe UNiDAYS service is not intended for individuals under the age of 16 years old. If you are under 16 years of age, you are not permitted to use the UNiDAYS service. By using the service, you confirm that you are at least 16 years of age. If you are 16 to 17 years of age, you may only sign up to the UNiDAYS service with the consent of a parent or legal guardian. By using the UNiDAYS service you confirm that you have such consent and that you shall abide by and comply with these Terms. If you are 18 years of age or over you confirm that you are fully able and competent to enter into the terms, conditions, obligations, confirmations, representations, and warranties set forth in these Terms, and to abide by and comply with these Terms.'),
+      _text('Intellectual property rights'),
+      _text(
+          'We are the owner of all intellectual property rights in our Site. With the exception of information that has been gathered from other websites and product and company advertisements, we also own the intellectual property rights in the materials published on the Site. These works are protected by copyright laws and treaties around the world. All such rights are reserved.\nYou may print off one copy, and may download extracts, of any page(s) from our Site for your personal reference and you may draw the attention of others to material posted on our Site, unless as directed.\nYou must not modify the paper or digital copies of any materials you have printed off or downloaded in any way, and you must not use any illustrations, photographs, video or audio sequences or any graphics separately from any accompanying text.\nOur status (and that of any identified contributors) as the authors of material on our Site must always be acknowledged.\nYou must not use any part of the materials on our Site for commercial purposes without first obtaining a licence from us to do so.\nIf you print off, copy or download any part of our Site in breach of these Terms, your right to use our Site will cease immediately and you must, at our option, return or destroy any copies of the materials you have made.'),
+    ]);
+    return Scaffold(
+      body: CustomScrollView(slivers: <Widget>[
+        SliverSafeArea(
+          sliver: SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: child,
+            ),
+          ),
+        ),
+      ]),
+    );
+  }
+
+  Widget _text(String text) {
+    return Container(
+      padding: EdgeInsets.only(bottom: 16.0),
+      child: Text(text),
+    );
+  }
+}

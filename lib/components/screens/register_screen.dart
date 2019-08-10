@@ -5,6 +5,7 @@ import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
 import 'package:crust/state/me/me_service.dart';
+import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -25,7 +26,6 @@ class RegisterScreen extends StatelessWidget {
 class _Presenter extends StatefulWidget {
   final Function addUser;
   final User user;
-  final String allowedChars = '0123456789abcdefghijklmnopqrstuvwxyz._';
 
   _Presenter({Key key, this.addUser, this.user}) : super(key: key);
 
@@ -72,17 +72,9 @@ class _PresenterState extends State<_Presenter> {
 
   _press(context) async {
     FocusScope.of(context).requestFocus(new FocusNode());
-    if (_username == null || _username.isEmpty) {
-      snack(context, 'Oops! usernames can\'t be blank');
-      return;
-    }
-    if (_username.length > 24) {
-      snack(context, 'Sorry, usernames have to be shorter than 24 characters');
-      return;
-    }
-    var allows = widget.allowedChars.split('');
-    if (!_username.split('').every((char) => allows.contains(char))) {
-      snack(context, 'Sorry, usernames can only have lowercase letters, numbers, underscores, and periods');
+    var error = GeneralUtils.validateUsername(_username);
+    if (error != null) {
+      snack(context, error);
       return;
     }
     var userId = await MeService.getUserIdByUsername(_username);

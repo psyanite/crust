@@ -2,61 +2,65 @@ import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
+import 'package:crust/state/me/me_service.dart';
+import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-class SetTaglineScreen extends StatelessWidget {
+class SetDisplayNameScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
       converter: _Props.fromStore,
       builder: (context, props) {
-        return _Presenter(tagline: props.tagline, setTagline: props.setTagline, deleteTagline: props.deleteTagline);
+        return _Presenter(myId: props.myId, displayName: props.displayName, setDisplayName: props.setDisplayName);
       },
     );
   }
 }
 
 class _Presenter extends StatefulWidget {
-  final String tagline;
-  final Function setTagline;
-  final Function deleteTagline;
+  final int myId;
+  final String displayName;
+  final Function setDisplayName;
 
-  _Presenter({Key key, this.tagline, this.setTagline, this.deleteTagline}) : super(key: key);
+  _Presenter({Key key, this.myId, this.displayName, this.setDisplayName}) : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState();
 }
 
 class _PresenterState extends State<_Presenter> {
-  TextEditingController _taglineCtrl = TextEditingController();
+  TextEditingController _nameCtrl = TextEditingController();
 
   @override
   initState() {
     super.initState();
-    if (widget.tagline != null) _taglineCtrl = TextEditingController.fromValue(TextEditingValue(text: widget.tagline));
+    if (widget.displayName != null) _nameCtrl = TextEditingController.fromValue(TextEditingValue(text: widget.displayName));
   }
 
   @override
   dispose() {
-    _taglineCtrl.dispose();
+    _nameCtrl.dispose();
     super.dispose();
   }
 
-  void _submit(BuildContext context) {
-    var tagline = _taglineCtrl.text;
-    if (tagline.isNotEmpty && tagline.length > 64) {
-      snack(context, 'Oops! Tagline has to be less than 64 characters long');
+  void _submit(BuildContext context) async {
+    var name = _nameCtrl.text;
+    var error = GeneralUtils.validateDisplayName(name);
+    if (error != null) {
+      snack(context, error);
       return;
     }
-    if (tagline.isEmpty) {
-      widget.deleteTagline();
+    var result = await MeService.setDisplayName(userId: widget.myId, name: name);
+    if (result == true) {
+      widget.setDisplayName(name);
+      Navigator.pop(context);
     } else {
-      widget.setTagline(tagline);
+      snack(context, 'Oops! Something went wrong, please try again');
     }
-    Navigator.pop(context);
   }
 
   @override
@@ -80,7 +84,7 @@ class _PresenterState extends State<_Presenter> {
                 Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
               ],
             ),
-            Text('SET TAGLINE', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0))
+            Text('SET DISPLAY NAME', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0))
           ]),
         ),
       ),
@@ -98,9 +102,8 @@ class _PresenterState extends State<_Presenter> {
             padding: EdgeInsets.only(bottom: 30.0),
             child: TextField(
               autofocus: true,
-              controller: _taglineCtrl,
+              controller: _nameCtrl,
               decoration: InputDecoration(
-                hintText: 'Add your tagline here',
                 hintStyle: TextStyle(color: Burnt.hintTextColor),
                 enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.lightGrey)),
                 focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.primaryLight, width: 1.0)),
@@ -159,17 +162,17 @@ class _PresenterState extends State<_Presenter> {
 }
 
 class _Props {
-  final String tagline;
-  final Function setTagline;
-  final Function deleteTagline;
+  final int myId;
+  final String displayName;
+  final Function setDisplayName;
 
-  _Props({this.tagline, this.setTagline, this.deleteTagline});
+  _Props({this.myId, this.displayName, this.setDisplayName});
 
   static fromStore(Store<AppState> store) {
     return _Props(
-      tagline: store.state.me.user?.tagline,
-      setTagline: (tagline) => store.dispatch(SetMyTagline(tagline)),
-      deleteTagline: () => store.dispatch(DeleteMyTagline()),
+      myId: store.state.me.user?.id,
+      displayName: store.state.me.user?.displayName,
+      setDisplayName: (name) => store.dispatch(SetMyDisplayName(name)),
     );
   }
 }

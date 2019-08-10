@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:crust/components/screens/privacy_screen.dart';
+import 'package:crust/components/screens/terms_screen.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:device_info/device_info.dart';
@@ -54,11 +56,11 @@ class AboutScreen extends StatelessWidget {
         ),
         ListTile(
           title: Text('Terms of Use', style: TextStyle(fontSize: 18.0)),
-          onTap: () {},
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => TermsScreen())),
         ),
         ListTile(
           title: Text('Privacy Policy', style: TextStyle(fontSize: 18.0)),
-          onTap: () {},
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => PrivacyScreen())),
         ),
       ]),
     );

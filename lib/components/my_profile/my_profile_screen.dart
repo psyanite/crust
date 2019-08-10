@@ -1,7 +1,10 @@
 import 'dart:async';
 
+import 'package:crust/components/my_profile/set_display_name_screen.dart';
 import 'package:crust/components/my_profile/set_picture_screen.dart';
 import 'package:crust/components/my_profile/set_tagline_screen.dart';
+import 'package:crust/components/my_profile/set_username_screen.dart';
+import 'package:crust/components/my_profile/update_profile_screen.dart';
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/screens/about_screen.dart';
 import 'package:crust/main.dart';
@@ -196,17 +199,10 @@ class _Presenter extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: Text('Set profile picture', style: TextStyle(fontSize: 18.0)),
+            title: Text('Update Profile', style: TextStyle(fontSize: 18.0)),
             onTap: () {
               Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (_) => SetPictureScreen()));
-            },
-          ),
-          ListTile(
-            title: Text('Set profile tagline', style: TextStyle(fontSize: 18.0)),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.push(context, MaterialPageRoute(builder: (_) => SetTaglineScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (_) => UpdateProfileScreen()));
             },
           ),
           ListTile(
