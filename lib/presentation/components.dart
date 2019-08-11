@@ -117,7 +117,7 @@ class BottomButton extends StatelessWidget {
   }
 }
 
-class SolidButton extends StatelessWidget {
+class BurntButton extends StatelessWidget {
   final IconData icon;
   final double iconSize;
   final String text;
@@ -125,7 +125,7 @@ class SolidButton extends StatelessWidget {
   final double padding;
   final double fontSize;
 
-  SolidButton({Key key, this.icon, this.iconSize, this.text, this.onPressed, this.padding, this.fontSize}) : super(key: key);
+  BurntButton({Key key, this.icon, this.iconSize, this.text, this.onPressed, this.padding, this.fontSize}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -156,22 +156,55 @@ class SolidButton extends StatelessWidget {
   }
 }
 
-class HollowButton extends StatelessWidget {
+class SolidButton extends StatelessWidget {
   final Function onTap;
   final List<Widget> children;
-  final double padding;
+  final EdgeInsets padding;
+  final Color color;
+  final Color splashColor;
 
-  HollowButton({Key key, this.onTap, this.children, this.padding}) : super(key: key);
+  SolidButton({Key key, this.onTap, this.children, this.padding, this.color, this.splashColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      splashColor: Burnt.splashOrange,
+      splashColor: splashColor ?? Colors.transparent,
+      highlightColor: Colors.transparent,
+      onTap: onTap,
+      child: Container(
+        color: color ?? Colors.transparent,
+        padding: padding ?? EdgeInsets.symmetric(vertical: 10.0),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: children,
+        ),
+      ),
+    );
+  }
+}
+
+class HollowButton extends StatelessWidget {
+  final Function onTap;
+  final List<Widget> children;
+  final double padding;
+  final Color borderColor;
+  final Color splashColor;
+
+  HollowButton({Key key, this.onTap, this.children, this.padding, this.borderColor, this.splashColor}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      splashColor: splashColor ?? Burnt.splashOrange,
       highlightColor: Colors.transparent,
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-            border: Border.all(color: Color(0xFFFFD173), width: 1.0, style: BorderStyle.solid), borderRadius: BorderRadius.circular(2.0)),
+          border: Border.all(color: borderColor ?? Color(0xFFFFD173), width: 1.0, style: BorderStyle.solid),
+          borderRadius: BorderRadius.circular(2.0),
+        ),
         padding: EdgeInsets.symmetric(vertical: padding ?? 10.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,

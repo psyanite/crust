@@ -27,7 +27,7 @@ class FollowService {
 
   Future<int> followUser({ userId, followerId }) async {
     String query = """
-      query {
+      mutation {
         addUserFollower(userId: $userId, followerId: $followerId) {
           user_id
         }
@@ -40,7 +40,7 @@ class FollowService {
 
   Future<int> unfollowUser({ userId, followerId }) async {
     String query = """
-      query {
+      mutation {
         deleteUserFollower(userId: $userId, followerId: $followerId) {
           user_id
         }
@@ -53,7 +53,7 @@ class FollowService {
 
   Future<int> followStore({ storeId, followerId }) async {
     String query = """
-      query {
+      mutation {
         addStoreFollower(storeId: $storeId, followerId: $followerId) {
           store_id
         }
@@ -66,14 +66,14 @@ class FollowService {
 
   Future<int> unfollowStore({ storeId, followerId }) async {
     String query = """
-      query {
-        deleteUserFollower(storeId: $storeId, followerId: $followerId) {
+      mutation {
+        deleteStoreFollower(storeId: $storeId, followerId: $followerId) {
           store_id
         }
       }
     """;
     final response = await Toaster.get(query);
-    var json = response['deleteUserFollower'];
+    var json = response['deleteStoreFollower'];
     return json['store_id'];
   }
 }

@@ -61,39 +61,37 @@ class _Presenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) => FavoriteButton(
-            padding: padding,
-            size: size,
-            isFavorited: favoriteStores.contains(store.id),
-            onFavorite: () {
-              if (isLoggedIn) {
-                favoriteStore(store.id);
-                snack(context, 'Added to favourites');
-              } else {
-                snack(context, 'Login now to favourite store');
-              }
-            },
-            onUnfavorite: () {
-              if (confirmUnfavorite == true) {
-                showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Confirm(
-                          title: 'Remove Store',
-                          description: 'This store will be removed from favorites',
-                          action: 'Remove',
-                          onTap: () {
-                            unfavoriteStore(store.id);
-                            Navigator.of(context, rootNavigator: true).pop(true);
-                          });
+    return FavoriteButton(
+      padding: padding,
+      size: size,
+      isFavorited: favoriteStores.contains(store.id),
+      onFavorite: () {
+        if (isLoggedIn) {
+          favoriteStore(store.id);
+          snack(context, 'Added to favourites');
+        } else {
+          snack(context, 'Login now to favourite stores');
+        }
+      },
+      onUnfavorite: () {
+        if (confirmUnfavorite == true) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Confirm(
+                    title: 'Remove Store',
+                    description: 'This store will be removed from favorites',
+                    action: 'Remove',
+                    onTap: () {
+                      unfavoriteStore(store.id);
+                      Navigator.of(context, rootNavigator: true).pop(true);
                     });
-              } else {
-                unfavoriteStore(store.id);
-                snack(context, 'Removed from favourites');
-              }
-            },
-          ),
+              });
+        } else {
+          unfavoriteStore(store.id);
+          snack(context, 'Removed from favourites');
+        }
+      },
     );
   }
 }

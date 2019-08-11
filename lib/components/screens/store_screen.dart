@@ -5,6 +5,7 @@ import 'package:crust/components/new_post/review_form.dart';
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/rewards/reward_swiper.dart';
 import 'package:crust/components/stores/favorite_store_button.dart';
+import 'package:crust/components/stores/follow_store_button.dart';
 import 'package:crust/models/post.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/store.dart' as MyStore;
@@ -82,7 +83,21 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _appBar() {
-    return SliverToBoxAdapter(child: Container(child: Column(children: <Widget>[_bannerImage(), _metaInfo(), _writeReviewButton()])));
+    return SliverToBoxAdapter(
+      child: Container(
+        child: Column(children: <Widget>[
+          _bannerImage(),
+          _metaInfo(),
+          _buttons(),
+          Container(
+            margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 40.0),
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: Burnt.separator))
+            ),
+          )
+        ]),
+      ),
+    );
   }
 
   Widget _bannerImage() {
@@ -126,7 +141,7 @@ class _Presenter extends StatelessWidget {
 
   Widget _metaInfo() {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 20.0),
+      padding: EdgeInsets.only(top: 30.0, bottom: 40.0, left: 16.0, right: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -141,7 +156,7 @@ class _Presenter extends StatelessWidget {
             ],
           ),
           Text(store.cuisines.join(', '), style: TextStyle(color: Burnt.primary)),
-          Container(height: 25.0),
+          Container(height: 35.0),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -195,24 +210,52 @@ class _Presenter extends StatelessWidget {
     );
   }
 
-  Widget _writeReviewButton() {
+  Widget _buttons() {
     return Builder(builder: (context) {
-      return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        child: HollowButton(
-          onTap: () {
-            if (isLoggedIn == false) {
-              snack(context, 'Login now to write a review');
-            } else {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => ReviewForm(store: store)));
-            }
-          },
+      return Container(
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-            Text('Write a review', style: TextStyle(fontSize: 18.0, color: Burnt.primaryTextColor)),
+            Container(width: 16.0),
+            _followButton(context),
+            Container(width: 10.0),
+            _writeReviewButton(context),
+            Container(width: 16.0),
           ],
         ),
       );
     });
+  }
+
+  Widget _followButton(BuildContext context) {
+    return Expanded(
+      child: FollowStoreButton(
+        storeId: store.id,
+        storeName: store.name,
+        followView: BurntButton(padding: 10.5, text: 'Follow', fontSize: 18.0),
+        followedView: SolidButton(
+          color: Color(0x10604B41),
+          children: <Widget>[Text('Following', style: TextStyle(fontSize: 18.0, color: Burnt.lightTextColor))],
+        ),
+      ),
+    );
+  }
+
+  Widget _writeReviewButton(BuildContext context) {
+    return Expanded(
+      child: HollowButton(
+        onTap: () {
+          if (isLoggedIn == false) {
+            snack(context, 'Login now to write a review');
+          } else {
+            Navigator.push(context, MaterialPageRoute(builder: (_) => ReviewForm(store: store)));
+          }
+        },
+        children: <Widget>[
+          Text('Write a review', style: TextStyle(fontSize: 18.0, color: Burnt.primaryTextColor)),
+        ],
+      ),
+    );
   }
 
   Widget _ratingCount(int count, Score score) {
@@ -302,11 +345,23 @@ class _Presenter extends StatelessWidget {
 
   Widget _rewards(BuildContext context) {
     return SliverToBoxAdapter(
-      child: RewardSwiper(
-        rewards: rewards,
-        header: Padding(
-          padding: EdgeInsets.only(top: 50.0, bottom: 15.0),
-          child: Text('REWARDS', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0, color: Burnt.hintTextColor)),
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            RewardSwiper(
+              rewards: rewards,
+              header: Padding(
+                padding: EdgeInsets.only(top: 50.0, bottom: 15.0),
+                child: Text('REWARDS', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0, color: Burnt.hintTextColor)),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 20.0),
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: Burnt.separator))
+              ),
+            )
+          ],
         ),
       ),
     );

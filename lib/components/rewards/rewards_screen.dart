@@ -93,7 +93,7 @@ class RewardsScreenState extends State<RewardsScreen> {
     return SliverToBoxAdapter(
       child: Container(
         padding: EdgeInsets.only(top: 10.0, bottom: 15.0, left: 16.0, right: 16.0),
-        child: SolidButton(
+        child: BurntButton(
           icon: CrustCons.heart,
           iconSize: 25.0,
           text: 'View My Favourites',

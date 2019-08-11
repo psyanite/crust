@@ -107,7 +107,7 @@ class PlatformAdaptiveContainer extends StatelessWidget {
       child: child,
       margin: margin,
       decoration: Theme.of(context).platform == TargetPlatform.iOS
-          ? new BoxDecoration(border: new Border(top: new BorderSide(color: Colors.grey[200])))
+          ? new BoxDecoration(border: new Border(top: BorderSide(color: Colors.grey[200])))
           : null,
     );
   }

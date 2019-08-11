@@ -62,7 +62,7 @@ class _PresenterState extends State<_Presenter> {
                   style: TextStyle(fontSize: 18.0, color: Burnt.textBodyColor),
                 ),
               ),
-              SolidButton(text: "Next", onPressed: () => _press(context))
+              BurntButton(text: "Next", onPressed: () => _press(context))
             ],
           ),
         );

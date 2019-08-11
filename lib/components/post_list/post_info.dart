@@ -3,7 +3,7 @@ import 'package:crust/components/carousel.dart';
 import 'package:crust/components/post_list/carousel_wrapper.dart';
 import 'package:crust/components/post_list/comment_screen.dart';
 import 'package:crust/components/post_list/post_list.dart';
-import 'package:crust/components/screens/profile_screen.dart';
+import 'package:crust/components/profile/profile_screen.dart';
 import 'package:crust/components/screens/store_screen.dart';
 import 'package:crust/models/post.dart';
 import 'package:crust/presentation/components.dart';

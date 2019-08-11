@@ -39,9 +39,11 @@ Middleware<AppState> _followUser(FollowService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     var user = store.state.me.user;
     if (user != null) {
-      service.followUser(userId: action.userId, followerId: user.id).then((userId) {
-        store.dispatch(FollowUserSuccess(userId));
-      }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+      store.dispatch(FollowUserSuccess(action.userId));
+      service.followUser(userId: action.userId, followerId: user.id).catchError((e) {
+        store.dispatch(UnfollowUserSuccess(action.userId));
+        store.dispatch(RequestFailure(e.toString()));
+      });
     }
     next(action);
   };
@@ -51,9 +53,11 @@ Middleware<AppState> _followStore(FollowService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     var user = store.state.me.user;
     if (user != null) {
-      service.followStore(storeId: action.storeId, followerId: user.id).then((storeId) {
-        store.dispatch(FollowStoreSuccess(storeId));
-      }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+      store.dispatch(FollowStoreSuccess(action.storeId));
+      service.followStore(storeId: action.storeId, followerId: user.id).catchError((e) {
+        store.dispatch(UnfollowStoreSuccess(action.storeId));
+        store.dispatch(RequestFailure(e.toString()));
+      });
     }
     next(action);
   };
@@ -63,9 +67,11 @@ Middleware<AppState> _unfollowUser(FollowService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     var user = store.state.me.user;
     if (user != null) {
-      service.unfollowUser(userId: action.userId, followerId: user.id).then((userId) {
-        store.dispatch(UnfollowUserSuccess(userId));
-      }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+      store.dispatch(UnfollowUserSuccess(action.userId));
+      service.unfollowUser(userId: action.userId, followerId: user.id).catchError((e) {
+        store.dispatch(FollowUserSuccess(action.userId));
+        store.dispatch(RequestFailure(e.toString()));
+      });
     }
     next(action);
   };
@@ -75,9 +81,11 @@ Middleware<AppState> _unfollowStore(FollowService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     var user = store.state.me.user;
     if (user != null) {
-      service.unfollowStore(storeId: action.storeId, followerId: user.id).then((storeId) {
-        store.dispatch(UnfollowStoreSuccess(storeId));
-      }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+      store.dispatch(UnfollowStoreSuccess(action.storeId));
+      service.unfollowStore(storeId: action.storeId, followerId: user.id).catchError((e) {
+        store.dispatch(FollowStoreSuccess(action.storeId));
+        store.dispatch(RequestFailure(e.toString()));
+      });
     }
     next(action);
   };

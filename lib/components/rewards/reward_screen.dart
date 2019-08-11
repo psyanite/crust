@@ -317,7 +317,7 @@ class _RedeemButtonState extends State<_RedeemButton> {
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: Builder(builder: (context) {
-        return SolidButton(
+        return BurntButton(
           onPressed: () => _onPressed(context),
           text: 'Redeem Now',
         );

@@ -43,47 +43,53 @@ class _Presenter extends StatelessWidget {
   final Function unfavoriteReward;
   final bool isLoggedIn;
 
-  _Presenter({Key key, this.reward, this.size, this.padding, this.confirmUnfavorite = false, this.favoriteRewards, this.favoriteReward, this.unfavoriteReward, this.isLoggedIn})
+  _Presenter(
+      {Key key,
+      this.reward,
+      this.size,
+      this.padding,
+      this.confirmUnfavorite = false,
+      this.favoriteRewards,
+      this.favoriteReward,
+      this.unfavoriteReward,
+      this.isLoggedIn})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Builder(
-      builder: (context) => FavoriteButton(
-            padding: padding,
-            size: size,
-            isFavorited: favoriteRewards.contains(reward.id),
-            onFavorite: () {
-              if (reward.isExpired() == true) {
-                snack(context, 'Expired rewards cannot be favorited');
-              } else if (isLoggedIn) {
-                favoriteReward(reward.id);
-                snack(context, 'Added to favourites');
-              } else {
-                snack(context, 'Login now to favourite reward');
-              }
-            },
-            onUnfavorite: () {
-              if (confirmUnfavorite == true) {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return Confirm(
-                      title: 'Remove Reward',
-                      description: 'This reward will be removed from favorites',
-                      action: 'Remove',
-                      onTap: () {
-                        unfavoriteReward(reward.id);
-                        Navigator.of(context, rootNavigator: true).pop(true);
-                      });
-                  }
-                );
-              } else {
-                unfavoriteReward(reward.id);
-                snack(context, 'Removed from favourites');
-              }
-            },
-          ),
+    return FavoriteButton(
+      padding: padding,
+      size: size,
+      isFavorited: favoriteRewards.contains(reward.id),
+      onFavorite: () {
+        if (reward.isExpired() == true) {
+          snack(context, 'Expired rewards cannot be favorited');
+        } else if (isLoggedIn) {
+          favoriteReward(reward.id);
+          snack(context, 'Added to favourites');
+        } else {
+          snack(context, 'Login now to favourite rewards');
+        }
+      },
+      onUnfavorite: () {
+        if (confirmUnfavorite == true) {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return Confirm(
+                    title: 'Remove Reward',
+                    description: 'This reward will be removed from favorites',
+                    action: 'Remove',
+                    onTap: () {
+                      unfavoriteReward(reward.id);
+                      Navigator.of(context, rootNavigator: true).pop(true);
+                    });
+              });
+        } else {
+          unfavoriteReward(reward.id);
+          snack(context, 'Removed from favourites');
+        }
+      },
     );
   }
 }
