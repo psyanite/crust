@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:crust/components/my_profile/my_profile_screen.dart';
 import 'package:crust/components/new_post/photo_selector.dart';
 import 'package:crust/main.dart';
 import 'package:crust/presentation/components.dart';

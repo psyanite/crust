@@ -9,6 +9,8 @@ import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
+import 'package:crust/state/me/favorite/favorite_actions.dart';
+import 'package:crust/state/me/follow/follow_actions.dart';
 import 'package:crust/state/me/me_actions.dart';
 import 'package:crust/state/reward/reward_actions.dart';
 import 'package:crust/state/store/store_actions.dart';
@@ -26,10 +28,13 @@ class HomeScreen extends StatelessWidget {
       onInit: (Store<AppState> store) {
         store.dispatch(FetchStores());
         store.dispatch(FetchTopStores());
-        store.dispatch(FetchFavorites());
-        if (store.state.me.user != null) store.dispatch(FetchMyPosts(store.state.me.user.id));
         store.dispatch(FetchRewards());
         store.dispatch(FetchTopRewards());
+        if (store.state.me.user != null) {
+          store.dispatch(FetchFavorites());
+          store.dispatch(FetchFollows());
+          store.dispatch(FetchMyPosts(store.state.me.user.id));
+        }
       },
       converter: (Store<AppState> store) => _Props.fromStore(store),
       builder: (BuildContext context, _Props props) {
@@ -55,7 +60,13 @@ class _Presenter extends StatelessWidget {
     FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
     FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
     return Scaffold(
-        body: CustomScrollView(slivers: <Widget>[_appBar(), _topStores(context), _topRewards(context), StoresGrid(stores: stores)]));
+      body: CustomScrollView(slivers: <Widget>[
+        _appBar(),
+        _topStores(context),
+        _topRewards(context),
+        StoresGrid(stores: stores),
+      ]),
+    );
   }
 
   Widget _appBar() {

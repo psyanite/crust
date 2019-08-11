@@ -7,7 +7,7 @@ import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
-import 'package:crust/state/me/me_actions.dart';
+import 'package:crust/state/me/favorite/favorite_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -129,8 +129,8 @@ class _Props {
   static fromStore(Store<AppState> store) {
     var stores = store.state.store.stores;
     var rewards = store.state.reward.rewards;
-    var favoriteRewards = store.state.me.favoriteRewards?.take(5);
-    var favoriteStores = store.state.me.favoriteStores?.take(5);
+    var favoriteRewards = store.state.favorite.rewards?.take(5);
+    var favoriteStores = store.state.favorite.stores?.take(5);
     return _Props(
       rewards: rewards != null && favoriteRewards != null
           ? rewards.entries.where((r) => favoriteRewards.contains(r.value.id)).map((e) => e.value).toList()

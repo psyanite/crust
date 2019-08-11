@@ -1,19 +1,4 @@
-import 'dart:convert';
-
-import 'package:crust/components/screens/register_screen.dart';
-import 'package:crust/main.dart';
-import 'package:crust/models/user.dart';
-import 'package:crust/presentation/components.dart';
-import 'package:crust/presentation/theme.dart';
-import 'package:crust/state/app/app_state.dart';
-import 'package:crust/state/me/me_actions.dart';
-import 'package:crust/state/me/me_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
-import 'package:redux/redux.dart';
 
 class PrivacyScreen extends StatelessWidget {
   @override

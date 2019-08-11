@@ -1,9 +1,6 @@
 import 'dart:async';
 
-import 'package:crust/components/my_profile/set_display_name_screen.dart';
 import 'package:crust/components/my_profile/set_picture_screen.dart';
-import 'package:crust/components/my_profile/set_tagline_screen.dart';
-import 'package:crust/components/my_profile/set_username_screen.dart';
 import 'package:crust/components/my_profile/update_profile_screen.dart';
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/screens/about_screen.dart';

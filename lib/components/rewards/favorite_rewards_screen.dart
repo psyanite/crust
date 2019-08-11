@@ -4,7 +4,7 @@ import 'package:crust/models/reward.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
-import 'package:crust/state/me/me_actions.dart';
+import 'package:crust/state/me/favorite/favorite_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -19,7 +19,7 @@ class FavoriteRewardsScreen extends StatelessWidget {
           store.dispatch(FetchFavorites(updateStore: true));
         },
         converter: (Store<AppState> store) => _Props.fromStore(store),
-        builder: (context, props) => _Presenter(myId: props.myId, favoriteRewards: props.favoriteRewards));
+        builder: (context, props) => _Presenter(myId: props.myId, favoriteRewards: props.rewards));
   }
 }
 
@@ -101,7 +101,7 @@ class _Props {
   static fromStore(Store<AppState> store) {
     var me = store.state.me.user;
     var rewards = store.state.reward.rewards;
-    var favoriteRewards = store.state.me.favoriteRewards;
+    var favoriteRewards = store.state.favorite.rewards;
     return _Props(
       myId: me != null ? me.id : 0,
       favoriteRewards: rewards != null && favoriteRewards != null

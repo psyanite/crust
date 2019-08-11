@@ -43,6 +43,8 @@
 </div>
 
 ## To Do
+* Add follow button on store
+* Add follow button on profile
 * Implement follow functionality
 * Display followers on profile screen
 * Display followers on store screen
@@ -53,6 +55,9 @@
 * Enable firebase dynamic urls in iOS
 * Add link previews to dynamic links
 * Enable login via iOS
+
+* Run nightly task to update caches
+* Send email of results
 
 ## Done
 * Add update profile features

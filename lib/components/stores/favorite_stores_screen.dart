@@ -3,7 +3,7 @@ import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
-import 'package:crust/state/me/me_actions.dart';
+import 'package:crust/state/me/favorite/favorite_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -17,7 +17,7 @@ class FavoriteStoresScreen extends StatelessWidget {
           store.dispatch(FetchFavorites(updateStore: true));
         },
         converter: (Store<AppState> store) => _Props.fromStore(store),
-        builder: (context, props) => _Presenter(favoriteStores: props.favoriteStores));
+        builder: (context, props) => _Presenter(favoriteStores: props.stores));
   }
 }
 
@@ -77,7 +77,7 @@ class _Props {
 
   static fromStore(Store<AppState> store) {
     var stores = store.state.store.stores;
-    var favoriteStores = store.state.me.favoriteStores;
+    var favoriteStores = store.state.favorite.stores;
     return _Props(
       favoriteStores: stores != null && favoriteStores != null
           ? stores.entries.where((r) => favoriteStores.contains(r.value.id)).map((e) => e.value).toList()

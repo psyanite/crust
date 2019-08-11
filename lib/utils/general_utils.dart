@@ -1,6 +1,3 @@
-import 'package:timeago/timeago.dart' as timeago;
-import 'package:intl/intl.dart';
-
 class GeneralUtils {
   static String validateUsername(String name) {
     if (name == null || name.isEmpty) {

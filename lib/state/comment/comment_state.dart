@@ -60,7 +60,7 @@ class CommentState {
   @override
   String toString() {
     return '''{
-        comments,
+        comments: ${comments != null ? '${comments.length} comments' : null},
       }''';
   }
 

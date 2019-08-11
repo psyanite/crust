@@ -13,36 +13,26 @@ final SearchLocationItem defaultLocation = SearchLocationItem(name: 'Sydney', de
 @immutable
 class MeState {
   final User user;
-  final Set<int> favoriteRewards;
-  final Set<int> favoriteStores;
-  final Set<int> favoritePosts;
   final List<SearchHistoryItem> searchHistory;
   final SearchLocationItem location;
 
-  MeState({this.user, this.favoriteRewards, this.favoriteStores, this.favoritePosts, searchHistory, location})
-  : this.searchHistory = searchHistory ?? defaultSearchHistory, this.location = location ?? defaultLocation;
+  MeState({this.user, searchHistory, location})
+      : this.searchHistory = searchHistory ?? defaultSearchHistory,
+        this.location = location ?? defaultLocation;
 
   MeState.initialState()
       : user = null,
-        favoriteRewards = null,
-        favoriteStores = null,
-        favoritePosts = null,
         searchHistory = defaultSearchHistory,
         location = defaultLocation;
 
-  MeState copyWith(
-      {User user,
-      Set<int> favoriteRewards,
-      Set<int> favoriteStores,
-      Set<int> favoritePosts,
-      UserReward userReward,
-      List<SearchHistoryItem> searchHistory,
-      SearchLocationItem location}) {
+  MeState copyWith({
+    User user,
+    UserReward userReward,
+    List<SearchHistoryItem> searchHistory,
+    SearchLocationItem location,
+  }) {
     return MeState(
       user: user ?? this.user,
-      favoriteRewards: favoriteRewards ?? this.favoriteRewards,
-      favoriteStores: favoriteStores ?? this.favoriteStores,
-      favoritePosts: favoritePosts ?? this.favoritePosts,
       searchHistory: searchHistory ?? this.searchHistory,
       location: location ?? this.location,
     );
@@ -71,9 +61,6 @@ class MeState {
   String toString() {
     return '''{
         user: $user,
-        favoriteRewards: ${favoriteRewards != null ? '${favoriteRewards.length} rewards' : null},
-        favoriteStores: ${favoriteStores != null ? '${favoriteStores.length} stores' : null},
-        favoritePosts: ${favoritePosts != null ? '${favoritePosts.length} posts' : null},
         searchHistory: ${searchHistory != null ? '${searchHistory.length} items' : null},
         location: $location,
       }''';

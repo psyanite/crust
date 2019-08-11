@@ -3,7 +3,7 @@ import 'package:crust/components/favorite_button.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/state/app/app_state.dart';
-import 'package:crust/state/me/me_actions.dart';
+import 'package:crust/state/me/favorite/favorite_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -103,7 +103,7 @@ class _Props {
 
   static fromStore(Store<AppState> store) {
     return _Props(
-      favoriteRewards: store.state.me.favoriteRewards ?? Set<int>(),
+      favoriteRewards: store.state.favorite.rewards,
       favoriteReward: (rewardId) => store.dispatch(FavoriteReward(rewardId)),
       unfavoriteReward: (rewardId) => store.dispatch(UnfavoriteReward(rewardId)),
       isLoggedIn: store.state.me.user != null,

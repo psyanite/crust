@@ -1,6 +1,6 @@
 import 'package:crust/presentation/components.dart';
 import 'package:crust/state/app/app_state.dart';
-import 'package:crust/state/me/me_actions.dart';
+import 'package:crust/state/me/favorite/favorite_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
@@ -105,7 +105,7 @@ class _Props {
   });
 
   static fromStore(Store<AppState> store, int postId) {
-    var favoritePosts = store.state.me.favoritePosts ?? Set<int>();
+    var favoritePosts = store.state.favorite.posts;
     return _Props(
       isFavorited: favoritePosts.contains(postId),
       favoritePost: (postId) => store.dispatch(FavoritePost(postId)),

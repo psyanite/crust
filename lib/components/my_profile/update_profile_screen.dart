@@ -1,18 +1,11 @@
-import 'dart:io';
-
 import 'package:crust/components/my_profile/set_display_name_screen.dart';
 import 'package:crust/components/my_profile/set_picture_screen.dart';
 import 'package:crust/components/my_profile/set_tagline_screen.dart';
 import 'package:crust/components/my_profile/set_username_screen.dart';
-import 'package:crust/components/screens/privacy_screen.dart';
-import 'package:crust/components/screens/terms_screen.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
-import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class UpdateProfileScreen extends StatelessWidget {
   UpdateProfileScreen({Key key}) : super(key: key);
