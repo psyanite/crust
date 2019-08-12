@@ -1,4 +1,6 @@
 class GeneralUtils {
+  static final shareBaseUrl = 'https://burntoast.page.link/?link=https://burntoast.com';
+
   static String validateUsername(String name) {
     if (name == null || name.isEmpty) {
       return 'Oops! Usernames can\'t be blank';
@@ -25,5 +27,29 @@ class GeneralUtils {
       return 'Sorry, display names can only have letters';
     }
     return null;
+  }
+
+  static String buildStoreUrl(int id) {
+    return '$shareBaseUrl/stores/?id=$id';
+  }
+
+  static String buildProfileUrl(int id) {
+    return '$shareBaseUrl/profiles/?id=$id';
+  }
+
+  static String buildRewardUrl(String code) {
+    return '$shareBaseUrl/rewards/?code=$code';
+  }
+
+  static String buildStoreQrCode(int id) {
+    return ':stores:$id';
+  }
+
+  static String buildProfileQrCode(int id) {
+    return ':profiles:$id';
+  }
+
+  static String buildRewardQrCode(String code) {
+    return ':rewards:$code';
   }
 }

@@ -52,6 +52,8 @@
 
 * Implement pagination
 
+* Implement store posts
+
 * Enable firebase dynamic urls in iOS
 * Add link previews to dynamic links
 * Enable login via iOS

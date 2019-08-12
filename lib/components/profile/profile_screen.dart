@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/screens/loading_screen.dart';
+import 'package:crust/components/screens/oops_screen.dart';
 import 'package:crust/models/user.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
@@ -26,7 +27,7 @@ class ProfileScreen extends StatelessWidget {
         }
       },
       converter: (Store<AppState> store) => _Props.fromStore(store, userId),
-      builder: (context, props) => _Presenter(user: props.user, refreshPage: props.refreshPage),
+      builder: (context, props) => _Presenter(user: props.user, refreshPage: props.refreshPage, error: props.error),
     );
   }
 }
@@ -34,8 +35,9 @@ class ProfileScreen extends StatelessWidget {
 class _Presenter extends StatefulWidget {
   final User user;
   final Function refreshPage;
+  final bool error;
 
-  _Presenter({Key key, this.user, this.refreshPage}) : super(key: key);
+  _Presenter({Key key, this.user, this.refreshPage, this.error}) : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState();
@@ -44,6 +46,7 @@ class _Presenter extends StatefulWidget {
 class _PresenterState extends State<_Presenter> {
   @override
   Widget build(BuildContext context) {
+    if (widget.error == true) return OopsScreen();
     var user = widget.user;
     if (user == null) return LoadingScreen();
     return Scaffold(
@@ -55,7 +58,7 @@ class _PresenterState extends State<_Presenter> {
             noPostsView: Text('Looks like ${user.firstName} hasn\'t written any reviews yet.'),
             posts: user.posts,
             postListType: PostListType.forProfile,
-          )
+          ),
         ]),
       ),
     );
@@ -136,12 +139,13 @@ class _PresenterState extends State<_Presenter> {
 class _Props {
   final User user;
   final Function refreshPage;
+  final bool error;
 
-  _Props({this.user, this.refreshPage});
+  _Props({this.user, this.refreshPage, this.error = false});
 
   static fromStore(Store<AppState> store, int userId) {
-    if (store.state.user.users == null) {
-      return _Props(user: null, refreshPage: () {});
+    if (store.state.user.users == null || store.state.me.user?.id == userId) {
+      return _Props(user: null, refreshPage: () {}, error: true);
     }
     return _Props(user: store.state.user.users[userId], refreshPage: () => store.dispatch(FetchUserByUserId(userId)));
   }

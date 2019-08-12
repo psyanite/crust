@@ -3,25 +3,25 @@ import 'package:crust/services/toaster.dart';
 class FollowService {
   const FollowService();
 
-  Future<List<int>> fetchFollowedUsers(userId) async {
+  Future<List<int>> fetchFollowedUserIds(userId) async {
     String query = """
       query {
-        followedUsers(userId: $userId)
+        followedUserIds(userId: $userId)
       }
     """;
     final response = await Toaster.get(query);
-    var json = response['followedUsers'];
+    var json = response['followedUserIds'];
     return List<int>.from(json);
   }
 
-  Future<List<int>> fetchFollowedStores(userId) async {
+  Future<List<int>> fetchFollowedStoreIds(userId) async {
     String query = """
       query {
-        followedStores(userId: $userId)
+        followedStoreIds(userId: $userId)
       }
     """;
     final response = await Toaster.get(query);
-    var json = response['followedStores'];
+    var json = response['followedStoreIds'];
     return List<int>.from(json);
   }
 

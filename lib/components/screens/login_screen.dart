@@ -118,29 +118,31 @@ class _Presenter extends StatelessWidget {
 
   _loginWithDataProfile(context) async {
     var user = User(
-        firstName: "Neila",
-        lastName: "Nyan",
-        displayName: "Neila Nyan",
-        email: "psyneia@gmail.com",
-        profilePicture: "meow",
-        socialType: SocialType.facebook,
-        socialId: "1905457732907903",
-        token:
-            "EAAdWJ8R7ISsBAOZCfBqwJQmxbNV6cpgZCp8DBjTuufciDUqIvzJxLq5ZBaecbPyKUq5SRgJrpWWKJY5fQd72GfV0cVuTDk84cAZBlSb00pZBTBQULk2ybauUsqeL3sa9NBMM3GuBrqX5KcZCFo8ovZC0xuiZCFGo9ZAH5gSRTuKugrIkw0q8p1e53RHZBbFqzFUQ3o9cZCjSgNtCQZDZD");
+      firstName: "Neila",
+      lastName: "Nyan",
+      displayName: "Neila Nyan",
+      email: "psyneia@gmail.com",
+      profilePicture: "meow",
+      socialType: SocialType.facebook,
+      socialId: "1905457732907903",
+      token:
+          "EAAdWJ8R7ISsBAOZCfBqwJQmxbNV6cpgZCp8DBjTuufciDUqIvzJxLq5ZBaecbPyKUq5SRgJrpWWKJY5fQd72GfV0cVuTDk84cAZBlSb00pZBTBQULk2ybauUsqeL3sa9NBMM3GuBrqX5KcZCFo8ovZC0xuiZCFGo9ZAH5gSRTuKugrIkw0q8p1e53RHZBbFqzFUQ3o9cZCjSgNtCQZDZD",
+    );
     await _login(user, context);
   }
 
   _loginWithEmptyProfile(context) async {
     var user = User(
-        firstName: "Sophia",
-        lastName: "King",
-        displayName: "Sophia",
-        email: "sophia_king@gmail.com",
-        profilePicture: "meow",
-        socialType: SocialType.google,
-        socialId: "sophia123",
-        token:
-            "EAAdWJ8R7ISsBAOZCfBqwJQmxbNV6cpgZCp8DBjTuufciDUqIvzJxLq5ZBaecbPyKUq5SRgJrpWWKJY5fQd72GfV0cVuTDk84cAZBlSb00pZBTBQULk2ybauUsqeL3sa9NBMM3GuBrqX5KcZCFo8ovZC0xuiZCFGo9ZAH5gSRTuKugrIkw0q8p1e53RHZBbFqzFUQ3o9cZCjSgNtCQZDZD");
+      firstName: "Sophia",
+      lastName: "King",
+      displayName: "Sophia",
+      email: "sophia_king@gmail.com",
+      profilePicture: "meow",
+      socialType: SocialType.google,
+      socialId: "sophia123",
+      token:
+          "EAAdWJ8R7ISsBAOZCfBqwJQmxbNV6cpgZCp8DBjTuufciDUqIvzJxLq5ZBaecbPyKUq5SRgJrpWWKJY5fQd72GfV0cVuTDk84cAZBlSb00pZBTBQULk2ybauUsqeL3sa9NBMM3GuBrqX5KcZCFo8ovZC0xuiZCFGo9ZAH5gSRTuKugrIkw0q8p1e53RHZBbFqzFUQ3o9cZCjSgNtCQZDZD",
+    );
     await _login(user, context);
   }
 

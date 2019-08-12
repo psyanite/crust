@@ -1,6 +1,6 @@
 import 'package:barcode_scan/barcode_scan.dart';
-import 'package:crust/components/rewards/reward_screen.dart';
 import 'package:crust/components/profile/profile_screen.dart';
+import 'package:crust/components/rewards/reward_screen.dart';
 import 'package:crust/components/screens/store_screen.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/state/reward/reward_service.dart';
@@ -13,10 +13,17 @@ class ScanQrScreen extends StatefulWidget {
   State<StatefulWidget> createState() => ScanQrScreenState();
 }
 
-// https://burntoast.page.link/?link=https://burntoast.com/stores/?id=1
-// https://burntoast.page.link/?link=https://burntoast.com/profiles/?id=1
-// https://burntoast.page.link/?link=https://burntoast.com/rewards/?code=4pPfr
-// https://burntoast.page.link/?link=https://burntoast.com/rewards/?code=BKKWL
+/// Example URLs:
+/// https://burntoast.page.link/?link=https://burntoast.com/stores/?id=1
+/// https://burntoast.page.link/?link=https://burntoast.com/profiles/?id=1
+/// https://burntoast.page.link/?link=https://burntoast.com/rewards/?code=4pPfr
+/// https://burntoast.page.link/?link=https://burntoast.com/rewards/?code=BKKWL
+///
+/// Example secret codes:
+/// :stores:1
+/// :profiles:1
+/// :rewards:4pPfr
+/// :rewards:BKKWL
 class ScanQrScreenState extends State<ScanQrScreen> {
   String error;
 
@@ -30,13 +37,11 @@ class ScanQrScreenState extends State<ScanQrScreen> {
     var scanResult = await _scan();
     if (scanResult == null) return;
 
-    var link = _parseScanResult(scanResult);
-    if (link == null) return;
-
-    var validateHost = _validateHost(link);
-    if (validateHost == false) return;
-
-    _parseLink(link);
+    if (scanResult.startsWith(':')) {
+      _parseSecretString(scanResult);
+    } else {
+      _parseLink(scanResult);
+    }
   }
 
   _scan() async {
@@ -45,57 +50,83 @@ class ScanQrScreenState extends State<ScanQrScreen> {
       if (result != null) {
         return result;
       } else {
-        this.setState(() => error = 'Oops, an error has occurred');
+        _setError('4013');
       }
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
-        this.setState(() => error = 'Sorry, looks like camera access is disabled.');
+        _setError('4012');
       } else {
-        this.setState(() => error = 'Sorry, an unknown error has occurred.');
+        _setError('4011');
       }
     } on FormatException {
       // Back button is pressed
       Navigator.pop(context);
     } catch (e) {
-      this.setState(() => error = 'Sorry, an unknown error has occurred.');
+      _setError('4010');
     }
     return null;
   }
 
-  _parseScanResult(scanResult) {
-    try {
-      var uri = Uri.parse(scanResult);
-      return Uri.parse(uri.queryParameters['link']);
-    } on FormatException {
-      this.setState(() => error = 'Sorry, an unknown error has occurred.');
-    } on Exception {
-      this.setState(() => error = 'Sorry, an unknown error has occurred.');
+  /// Only accepts a string in the following format ":type:identifier".
+  /// Type should be plural.
+  /// Examples:
+  /// :stores:1
+  /// :profiles:1
+  /// :rewards:code
+  _parseSecretString(String scanResult) async {
+    var parts = scanResult.split(':');
+    if (parts.length != 3) {
+      _setError('4009');
+      return;
     }
-    return null;
+
+    var identifier = parts[2];
+    var id = int.tryParse(identifier);
+    switch (parts[1]) {
+      case 'stores':
+        if (id == null) {
+          _setError('4014');
+          return;
+        }
+        _redirect(StoreScreen(storeId: id));
+        break;
+      case 'profiles':
+        if (id == null) {
+          _setError('4015');
+          return;
+        }
+        _redirect(ProfileScreen(userId: id));
+        break;
+      case 'rewards':
+        var reward = await RewardService.fetchRewardByCode(identifier);
+        if (reward == null) {
+          _setError('4016');
+        }
+        _redirect(RewardScreen(reward: reward, rewardId: reward.id));
+        break;
+    }
+
+    _setError('4017');
   }
 
-  _validateHost(Uri link) {
-    var host = link.host;
-    if (host != 'burntoast.com') {
-      this.setState(() => error = 'Sorry, we couldn\'t recognise this QR code.');
-      return false;
-    }
-    return true;
-  }
+  _parseLink(String scanResult) async {
+    var link = _parseScanResult(scanResult);
+    if (link == null) return;
 
-  _parseLink(Uri link) async {
+    var validateHost = _validateHost(link);
+    if (validateHost == false) return;
+
     var path = link.path;
     var params = link.queryParameters;
     var idParam = params['id'];
     var id = idParam != null ? int.parse(idParam) : null;
-    
+
     if (path == '/stores/') {
       if (id != null) {
         _redirect(StoreScreen(storeId: id));
       } else {
-        this.setState(() => error = '/stores id param is invalid');
+        _setError('4009');
       }
-
     } else if (path == '/rewards/') {
       var code = params['code'];
       if (code != null) {
@@ -103,22 +134,41 @@ class ScanQrScreenState extends State<ScanQrScreen> {
         if (reward != null) {
           _redirect(RewardScreen(reward: reward, rewardId: reward.id));
         } else {
-          this.setState(() => error = 'Sorry, it looks like this reward has expired.');
+          _setError('4008');
         }
       } else {
-        this.setState(() => error = '/rewards code param is invalid');
+        _setError('4007');
       }
-
     } else if (path == '/profiles/') {
       if (id != null) {
         _redirect(ProfileScreen(userId: id));
       } else {
-        this.setState(() => error = '/profiles id param is invalid');
+        _setError('4006');
       }
-
     } else {
-      this.setState(() => error = 'Sorry, we couldn\'t recognise this QR code.');
+      _setError('4005');
     }
+  }
+
+  _parseScanResult(String scanResult) {
+    try {
+      var uri = Uri.parse(scanResult);
+      return Uri.parse(uri.queryParameters['link']);
+    } on FormatException {
+      _setError('4002');
+    } on Exception {
+      _setError('4003');
+    }
+    return null;
+  }
+
+  _validateHost(Uri link) {
+    var host = link.host;
+    if (host != 'burntoast.com') {
+      _setError('4001');
+      return false;
+    }
+    return true;
   }
 
   _redirect(Widget screen) {
@@ -126,29 +176,34 @@ class ScanQrScreenState extends State<ScanQrScreen> {
     Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
   }
 
+  _setError(String code) {
+    this.setState(() => error = 'Sorry, we couldn\'t recognise this QR code, error $code occurred.');
+  }
+
   @override
   Widget build(BuildContext context) {
     if (error == null) return Scaffold(body: LoadingCenter());
-    return Scaffold(body: Center(
-      child:
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-        Text(error),
-        Container(height: 20.0),
-        SmallButton(
-          onPressed: () {
-            this.setState(() => error = null);
-            _load();
-          },
-          padding: EdgeInsets.only(left: 12.0, right: 12.0, top: 10.0, bottom: 10.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text('Try Again', style: TextStyle(fontSize: 16.0, color: Colors.white))
-            ]))
-        ],
-      )
-    ));
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(error),
+            Container(height: 20.0),
+            SmallButton(
+              onPressed: () {
+                this.setState(() => error = null);
+                _load();
+              },
+              padding: EdgeInsets.only(left: 12.0, right: 12.0, top: 10.0, bottom: 10.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[Text('Try Again', style: TextStyle(fontSize: 16.0, color: Colors.white))],
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }

@@ -24,10 +24,10 @@ Middleware<AppState> _fetchFollows(FollowService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     var user = store.state.me.user;
     if (user != null) {
-      service.fetchFollowedUsers(user.id).then((stores) {
+      service.fetchFollowedUserIds(user.id).then((stores) {
         store.dispatch(FetchFollowedUsersSuccess(stores));
       }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
-      service.fetchFollowedStores(user.id).then((stores) {
+      service.fetchFollowedStoreIds(user.id).then((stores) {
         store.dispatch(FetchFollowedStoresSuccess(stores));
       }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     }

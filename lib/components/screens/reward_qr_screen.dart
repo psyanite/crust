@@ -19,9 +19,7 @@ class RewardQrScreen extends StatelessWidget {
   }
 
   Widget _appBar() {
-    return AppBar(
-      leading: BackArrow(),
-      backgroundColor: Colors.transparent, elevation: 0.0);
+    return AppBar(leading: BackArrow(), backgroundColor: Colors.transparent, elevation: 0.0);
   }
 
   Widget _body() {
@@ -31,22 +29,22 @@ class RewardQrScreen extends StatelessWidget {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-        QrImage(
-          data: userReward.uniqueCode,
-          size: 200.0,
-          foregroundColor: Burnt.textBodyColor,
-          version: 1,
-        ),
-        Text(userReward.uniqueCode, style: TextStyle(fontSize: 30.0, fontWeight: Burnt.fontBold)),
-        Padding(
-          padding: EdgeInsets.only(top: 5.0),
-          child: Text('Simply show this code to the staff.'),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 5.0, bottom: 100.0),
-          child: Text('Enjoy!'),
-        )
-      ]));
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          QrImage(
+            data: userReward.uniqueCode,
+            size: 200.0,
+            foregroundColor: Burnt.textBodyColor,
+            version: 1,
+          ),
+          Text(userReward.uniqueCode, style: TextStyle(fontSize: 30.0, fontWeight: Burnt.fontBold)),
+          Container(height: 5.0),
+          Text('Simply show this code to the staff.'),
+          Container(height: 5.0),
+          Text('Enjoy!'),
+          Container(height: 100.0),
+        ],
+      ),
+    );
   }
 }

@@ -27,15 +27,18 @@ class CommentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
-        onInit: (Store<AppState> store) {
-          store.dispatch(FetchComments(post.id));
-        },
-        converter: (Store<AppState> store) => _Props.fromStore(store, post.id),
-        builder: (BuildContext context, _Props props) => _Presenter(
-              postId: post.id,
-              comments: props.comments,
-              myId: props.myId,
-            ));
+      onInit: (Store<AppState> store) {
+        store.dispatch(FetchComments(post.id));
+      },
+      converter: (Store<AppState> store) => _Props.fromStore(store, post.id),
+      builder: (BuildContext context, _Props props) {
+        return _Presenter(
+          postId: post.id,
+          comments: props.comments,
+          myId: props.myId,
+        );
+      },
+    );
   }
 }
 
@@ -155,53 +158,54 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _replyToField() {
     var text = _replyTo != null ? 'Reply to ${_replyTo.displayName} @${_replyTo.username}' : 'Reply to post';
-    return Builder(builder: (context) => Container(
-      height: 25.0,
-      child: Row(
-        children: <Widget>[
-          Text(text, style: TextStyle(color: _flashReplyTo ? Burnt.blue : Burnt.hintTextColor, fontSize: 13.0)),
-          _replyTo != null
-              ? InkWell(
-                  onTap: () => _setCommentToPost(context),
-                  child: Container(
-                      child: Padding(
-                    padding: EdgeInsets.only(left: 3.0, right: 3.0, bottom: 1.0, top: 3.0),
-                    child: Icon(CupertinoIcons.clear_thick_circled, size: 20.0, color: Burnt.lightGrey),
-                  )),
-                )
-              : Container()
-        ],
-      ),
-    ),
+    return Builder(
+      builder: (context) => Container(
+            height: 25.0,
+            child: Row(
+              children: <Widget>[
+                Text(text, style: TextStyle(color: _flashReplyTo ? Burnt.blue : Burnt.hintTextColor, fontSize: 13.0)),
+                _replyTo != null
+                    ? InkWell(
+                        onTap: () => _setCommentToPost(context),
+                        child: Container(
+                            child: Padding(
+                          padding: EdgeInsets.only(left: 3.0, right: 3.0, bottom: 1.0, top: 3.0),
+                          child: Icon(CupertinoIcons.clear_thick_circled, size: 20.0, color: Burnt.lightGrey),
+                        )),
+                      )
+                    : Container()
+              ],
+            ),
+          ),
     );
   }
 
   Widget _composer() {
     return Builder(
       builder: (context) => Card(
-        color: Color(0xFFFDFDFD),
-        elevation: 24.0,
-        margin: EdgeInsets.all(0.0),
-        child: Container(
-          padding: EdgeInsets.only(left: 20.0),
-          decoration: BoxDecoration(border: Border.all(color: Colors.transparent)),
-          child: Row(
-            children: <Widget>[
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    _replyToField(),
-                    _bodyTextField(context),
-                    Container(height: 10.0),
-                  ],
-                ),
+            color: Color(0xFFFDFDFD),
+            elevation: 24.0,
+            margin: EdgeInsets.all(0.0),
+            child: Container(
+              padding: EdgeInsets.only(left: 20.0),
+              decoration: BoxDecoration(border: Border.all(color: Colors.transparent)),
+              child: Row(
+                children: <Widget>[
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        _replyToField(),
+                        _bodyTextField(context),
+                        Container(height: 10.0),
+                      ],
+                    ),
+                  ),
+                  _submitButton(),
+                ],
               ),
-              _submitButton(),
-            ],
+            ),
           ),
-        ),
-      ),
     );
   }
 
@@ -239,11 +243,11 @@ class _PresenterState extends State<_Presenter> {
       );
     }
     return InkWell(
-      highlightColor: Colors.transparent,
-      child: Container(
-        padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 16.0, right: 20.0),
-        child: Text("Submit", style: TextStyle(color: _enableSubmit ? Burnt.primary : Burnt.lightBlue))),
-      onTap: () => _handleSubmit(context, _bodyCtrl.text));
+        highlightColor: Colors.transparent,
+        child: Container(
+            padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 16.0, right: 20.0),
+            child: Text("Submit", style: TextStyle(color: _enableSubmit ? Burnt.primary : Burnt.lightBlue))),
+        onTap: () => _handleSubmit(context, _bodyCtrl.text));
   }
 
   _onBodyChange(String text) {
@@ -359,7 +363,6 @@ class _CommentCardState extends State<_CommentCard> with TickerProviderStateMixi
     }
     super.didUpdateWidget(old);
   }
-
 
   @override
   initState() {

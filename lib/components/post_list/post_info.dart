@@ -26,9 +26,10 @@ class PostInfo extends StatelessWidget {
       _content(),
     ];
     return Container(
-        padding: EdgeInsets.only(top: 30.0, bottom: 10.0),
-        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))),
-        child: Column(children: children));
+      padding: EdgeInsets.only(top: 30.0, bottom: 10.0),
+      decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))),
+      child: Column(children: children),
+    );
   }
 
   Widget _name() {
@@ -36,7 +37,7 @@ class PostInfo extends StatelessWidget {
       return Text(post.store.name, style: Burnt.titleStyle);
     } else {
       if (post.postedBy == null) {
-        return Text('Burn\'s Cafe ⭐', style: Burnt.titleStyle);
+        return Text('⭐', style: Burnt.titleStyle);
       } else {
         return Row(children: <Widget>[
           Text(post.postedBy.displayName, style: Burnt.titleStyle),
@@ -52,15 +53,19 @@ class PostInfo extends StatelessWidget {
       children: <Widget>[
         if (post.postedBy != null)
           Container(
-              width: 50.0,
-              height: 50.0,
-              decoration:
-                  BoxDecoration(color: Burnt.imgPlaceholderColor, image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image)))),
+            width: 50.0,
+            height: 50.0,
+            decoration: BoxDecoration(
+              color: Burnt.imgPlaceholderColor,
+              image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image)),
+            ),
+          ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: post.postedBy != null ? 10.0 : 0.0),
           child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[_name(), Text(TimeUtil.format(post.postedAt), style: TextStyle(color: Burnt.hintTextColor))]),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[_name(), Text(TimeUtil.format(post.postedAt), style: TextStyle(color: Burnt.hintTextColor))],
+          ),
         ),
       ],
     );

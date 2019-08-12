@@ -146,7 +146,7 @@ class User {
 
   @override
   String toString() {
-    return '{ id: $id, socialType: $socialType, socialId: $socialId, displayName: $displayName, email: $email }';
+    return '{ id: $id, socialType: $socialType, socialId: $socialId, displayName: $displayName, username: $username, email: $email }';
   }
 }
 

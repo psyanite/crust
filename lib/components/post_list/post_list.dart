@@ -32,10 +32,7 @@ class PostList extends StatelessWidget {
 
   Widget _noPostsNotice() {
     return SliverToBoxAdapter(
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 16.0),
-        child: Center(child: noPostsView))
-    );
+        child: Container(padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 16.0), child: Center(child: noPostsView)));
   }
 }
 
@@ -67,16 +64,18 @@ class _PostListState extends State<_PostList> {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
-        sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-                (builder, i) => PostCard(
-                      post: posts[i],
-                      postListType: postListType,
-                      removeFromList: removeFromList,
-                      index: i,
-                    ),
-                childCount: posts.length)));
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      sliver: SliverList(
+        delegate: SliverChildBuilderDelegate((builder, i) {
+          return PostCard(
+            post: posts[i],
+            postListType: postListType,
+            removeFromList: removeFromList,
+            index: i,
+          );
+        }, childCount: posts.length),
+      ),
+    );
   }
 
   removeFromList(int index) {
@@ -117,42 +116,44 @@ class PostCard extends StatelessWidget {
   }
 
   Widget _commentButton() {
-    return Builder(
-      builder: (context) => InkWell(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            child: Padding(
-              padding: EdgeInsets.only(left: 10.0, right: 5.0),
-              child: Row(children: <Widget>[
-                Icon(CrustCons.post_comment, color: Burnt.iconGrey, size: 28.0),
-                Container(width: 3.0),
-                if (post.commentCount > 0) Text(post.commentCount.toString(), style: TextStyle(color: Burnt.lightTextColor, fontSize: 15.0)),
-              ]),
-            ),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CommentScreen(post: post))),
-          ),
-    );
+    return Builder(builder: (context) {
+      return InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: Padding(
+          padding: EdgeInsets.only(left: 10.0, right: 5.0),
+          child: Row(children: <Widget>[
+            Icon(CrustCons.post_comment, color: Burnt.iconGrey, size: 28.0),
+            Container(width: 3.0),
+            if (post.commentCount > 0) Text(post.commentCount.toString(), style: TextStyle(color: Burnt.lightTextColor, fontSize: 15.0)),
+          ]),
+        ),
+        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => CommentScreen(post: post))),
+      );
+    });
   }
 
   Widget _secretIcon() {
-    return Builder(
-      builder: (context) => InkWell(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            child: Padding(
-              padding: EdgeInsets.only(left: 3.0, right: 5.0),
-              child: Icon(CrustCons.padlock, color: Burnt.iconGrey, size: 28.0),
-            ),
-            onTap: () {
-              var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
-              showDialog(
-                  context: context,
-                  builder: (context) => BurntDialog(
-                      options: options,
-                      description: 'This post is secret, only you can see it. You can make it public by editing the post.'));
+    return Builder(builder: (context) {
+      return InkWell(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+        child: Padding(
+          padding: EdgeInsets.only(left: 3.0, right: 5.0),
+          child: Icon(CrustCons.padlock, color: Burnt.iconGrey, size: 28.0),
+        ),
+        onTap: () {
+          var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
+          showDialog(
+            context: context,
+            builder: (context) {
+              return BurntDialog(
+                  options: options, description: 'This post is secret, only you can see it. You can make it public by editing the post.');
             },
-          ),
-    );
+          );
+        },
+      );
+    });
   }
 }
 

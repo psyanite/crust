@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:crust/components/my_profile/find_user_screen.dart';
+import 'package:crust/components/my_profile/my_qr_screen.dart';
 import 'package:crust/components/my_profile/set_picture_screen.dart';
 import 'package:crust/components/my_profile/update_profile_screen.dart';
 import 'package:crust/components/post_list/post_list.dart';
@@ -194,6 +196,20 @@ class _Presenter extends StatelessWidget {
                 Text("@${user.username}")
               ],
             ),
+          ),
+          ListTile(
+            title: Text('Find User', style: TextStyle(fontSize: 18.0)),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (_) => FindUserScreen(myId: user.id)));
+            },
+          ),
+          ListTile(
+            title: Text('My QR Code', style: TextStyle(fontSize: 18.0)),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (_) => MyQrScreen(userId: user.id)));
+            },
           ),
           ListTile(
             title: Text('Update Profile', style: TextStyle(fontSize: 18.0)),
