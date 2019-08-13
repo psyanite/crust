@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:crust/components/my_profile/my_profile_screen.dart';
 import 'package:crust/components/post_list/post_list.dart';
+import 'package:crust/components/profile/follow_user_button.dart';
 import 'package:crust/components/screens/loading_screen.dart';
 import 'package:crust/components/screens/oops_screen.dart';
 import 'package:crust/models/user.dart';
@@ -10,6 +12,7 @@ import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/user/user_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
@@ -27,7 +30,7 @@ class ProfileScreen extends StatelessWidget {
         }
       },
       converter: (Store<AppState> store) => _Props.fromStore(store, userId),
-      builder: (context, props) => _Presenter(user: props.user, refreshPage: props.refreshPage, error: props.error),
+      builder: (context, props) => _Presenter(user: props.user, refreshPage: props.refreshPage, myProfile: props.myProfile),
     );
   }
 }
@@ -35,9 +38,9 @@ class ProfileScreen extends StatelessWidget {
 class _Presenter extends StatefulWidget {
   final User user;
   final Function refreshPage;
-  final bool error;
+  final bool myProfile;
 
-  _Presenter({Key key, this.user, this.refreshPage, this.error}) : super(key: key);
+  _Presenter({Key key, this.user, this.refreshPage, this.myProfile}) : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState();
@@ -45,8 +48,20 @@ class _Presenter extends StatefulWidget {
 
 class _PresenterState extends State<_Presenter> {
   @override
+  initState() {
+    super.initState();
+    if (widget.myProfile == true) _redirect();
+  }
+
+  _redirect() async {
+    return Timer(Duration(microseconds: 1), () {
+      Navigator.pop(context);
+      Navigator.push(context, MaterialPageRoute(builder: (_) => MyProfileScreen()));
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (widget.error == true) return OopsScreen();
     var user = widget.user;
     if (user == null) return LoadingScreen();
     return Scaffold(
@@ -102,13 +117,24 @@ class _PresenterState extends State<_Presenter> {
                 left: 50.0,
                 top: 100.0,
                 child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     _profilePicture(user.profilePicture),
                     Padding(
                       padding: EdgeInsets.only(left: 8.0, top: 12.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[Text(user.displayName, style: Burnt.titleStyle), Text("@${user.username}")],
+                        children: <Widget>[
+                          Container(height: 45.0),
+                          Text(user.displayName, style: Burnt.titleStyle),
+                          Text("@${user.username}"),
+                          if (user.tagline == null) Padding(
+                            padding: EdgeInsets.only(top: 10.0),
+                            child: _followButton(),
+                          ),
+                          Container(height: 10.0),
+                        ],
                       ),
                     )
                   ],
@@ -117,9 +143,43 @@ class _PresenterState extends State<_Presenter> {
             ],
           ),
         ),
-        if (user.tagline != null) Padding(padding: EdgeInsets.only(top: 13.0, right: 16.0, left: 16.0), child: Text(user.tagline)),
+        if (user.tagline != null) _tagline(),
+        Container(
+          margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 20.0),
+          decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))),
+        )
       ]),
     );
+  }
+
+  Widget _tagline() {
+    return Padding(
+      padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 10.0),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+        Expanded(
+          child: Container(
+            padding: EdgeInsets.only(top: 6.0, bottom: 6.0, right: 10.0),
+            child: Text(widget.user.tagline),
+          ),
+        ),
+        _followButton(),
+      ]),
+    );
+  }
+
+  Widget _followButton() {
+    return Builder(builder: (context) {
+      return FollowUserButton(
+        userId: widget.user.id,
+        displayName: widget.user.displayName,
+        followView: Container(width: 80.0, child: BurntButton(padding: 6.0, text: 'Follow', fontSize: 18.0)),
+        followedView: SolidButton(
+          padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 10.0),
+          color: Color(0x10604B41),
+          children: <Widget>[Text('Following', style: TextStyle(fontSize: 18.0, color: Burnt.lightTextColor))],
+        ),
+      );
+    });
   }
 
   Widget _profilePicture(String picture) {
@@ -139,13 +199,15 @@ class _PresenterState extends State<_Presenter> {
 class _Props {
   final User user;
   final Function refreshPage;
-  final bool error;
+  final bool myProfile;
 
-  _Props({this.user, this.refreshPage, this.error = false});
+  _Props({this.user, this.refreshPage, this.myProfile = false});
 
   static fromStore(Store<AppState> store, int userId) {
-    if (store.state.user.users == null || store.state.me.user?.id == userId) {
-      return _Props(user: null, refreshPage: () {}, error: true);
+    var me = store.state.me.user;
+    var myProfile = me != null && me?.id == userId;
+    if (store.state.user.users == null || myProfile) {
+      return _Props(user: null, refreshPage: () {}, myProfile: myProfile);
     }
     return _Props(user: store.state.user.users[userId], refreshPage: () => store.dispatch(FetchUserByUserId(userId)));
   }

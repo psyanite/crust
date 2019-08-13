@@ -7,22 +7,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-class FollowStoreButton extends StatelessWidget {
-  final int storeId;
-  final String storeName;
+class FollowUserButton extends StatelessWidget {
+  final int userId;
+  final String displayName;
   final Widget followView;
   final Widget followedView;
 
-  FollowStoreButton({Key key, this.storeId, this.storeName, this.followView, this.followedView}) : super(key: key);
+  FollowUserButton({Key key, this.userId, this.displayName, this.followView, this.followedView}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-      converter: (Store<AppState> store) => _Props.fromStore(store, storeId),
+      converter: (Store<AppState> store) => _Props.fromStore(store, userId),
       builder: (context, props) {
         return _Presenter(
-          storeId: storeId,
-          storeName: storeName,
+          userId: userId,
+          displayName: displayName,
           followView: followView,
           followedView: followedView,
           isFollowed: props.isFollowed,
@@ -36,8 +36,8 @@ class FollowStoreButton extends StatelessWidget {
 }
 
 class _Presenter extends StatelessWidget {
-  final int storeId;
-  final String storeName;
+  final int userId;
+  final String displayName;
   final Widget followView;
   final Widget followedView;
   final bool isFollowed;
@@ -47,8 +47,8 @@ class _Presenter extends StatelessWidget {
 
   _Presenter(
       {Key key,
-      this.storeId,
-      this.storeName,
+      this.userId,
+      this.displayName,
       this.followView,
       this.followedView,
       this.isFollowed,
@@ -62,13 +62,13 @@ class _Presenter extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return Confirm(
-          title: 'Unfollow Store',
-          description: 'Would you like to unfollow this store?',
+          title: 'Unfollow User',
+          description: 'Would you like to unfollow this user?',
           action: 'Unfollow',
           onTap: () {
             unfollow();
             Navigator.of(context, rootNavigator: true).pop(true);
-            snack(context, 'Unfollowed $storeName');
+            snack(context, 'Unfollowed $displayName');
           },
         );
       },
@@ -77,11 +77,11 @@ class _Presenter extends StatelessWidget {
 
   onFollow(BuildContext context) async {
     if (isLoggedIn == false) {
-      snack(context, 'Login now to follow stores');
+      snack(context, 'Login now to follow users');
       return;
     }
     follow();
-    snack(context, 'Now following $storeName');
+    snack(context, 'Now following $displayName');
   }
 
   @override
@@ -106,11 +106,11 @@ class _Props {
     this.isLoggedIn,
   });
 
-  static fromStore(Store<AppState> store, int storeId) {
+  static fromStore(Store<AppState> store, int userId) {
     return _Props(
-      isFollowed: store.state.follow.stores.contains(storeId),
-      follow: () => store.dispatch(FollowStore(storeId)),
-      unfollow: () => store.dispatch(UnfollowStore(storeId)),
+      isFollowed: store.state.follow.users.contains(userId),
+      follow: () => store.dispatch(FollowUser(userId)),
+      unfollow: () => store.dispatch(UnfollowUser(userId)),
       isLoggedIn: store.state.me.user != null,
     );
   }

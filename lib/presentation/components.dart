@@ -172,7 +172,10 @@ class SolidButton extends StatelessWidget {
       highlightColor: Colors.transparent,
       onTap: onTap,
       child: Container(
-        color: color ?? Colors.transparent,
+        decoration: BoxDecoration(
+          color: color ?? Colors.transparent,
+          borderRadius: BorderRadius.circular(2.0),
+        ),
         padding: padding ?? EdgeInsets.symmetric(vertical: 10.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,

@@ -43,11 +43,10 @@
 </div>
 
 ## To Do
-* Add follow button on store
-* Add follow button on profile
-* Implement follow functionality
-* Display followers on profile screen
-* Display followers on store screen
+* Update tagline to be multiline
+* Display followers on profile screen???
+* Display followers on store screen???
+
 * Implement home feed
 
 * Implement pagination
@@ -62,6 +61,9 @@
 * Send email of results
 
 ## Done
+* Implement follow functionality
+* Add follow button on profile
+* Add follow button on store
 * Add update profile features
 * Show store posted posts on store page
 * Add RewardSwiper to StoreScreen
