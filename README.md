@@ -43,10 +43,9 @@
 </div>
 
 ## To Do
-* Display followers on profile screen???
-* Display followers on store screen???
-
 * Implement home feed
+* Fetch followed users posts
+* Fetch followed stores posts
 
 * Implement pagination
 

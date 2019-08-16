@@ -4,7 +4,6 @@ import 'package:crust/components/my_profile/my_profile_screen.dart';
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/profile/follow_user_button.dart';
 import 'package:crust/components/screens/loading_screen.dart';
-import 'package:crust/components/screens/oops_screen.dart';
 import 'package:crust/models/user.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
@@ -90,7 +89,7 @@ class _PresenterState extends State<_Presenter> {
         Container(
           child: Stack(
             children: <Widget>[
-              Container(height: 250.0),
+              Container(height: 200.0),
               Stack(children: <Widget>[
                 Container(
                   height: 150.0,
@@ -113,33 +112,28 @@ class _PresenterState extends State<_Presenter> {
                   ),
                 ),
               ]),
-              Positioned(
-                left: 50.0,
-                top: 100.0,
+              Container(
+                margin: EdgeInsets.only(top: 70.0),
                 child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    _profilePicture(user.profilePicture),
-                    Padding(
-                      padding: EdgeInsets.only(left: 8.0, top: 12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Container(height: 45.0),
-                          Text(user.displayName, style: Burnt.titleStyle),
-                          Text("@${user.username}"),
-                          if (user.tagline == null) Padding(
-                            padding: EdgeInsets.only(top: 10.0),
-                            child: _followButton(),
-                          ),
-                          Container(height: 10.0),
-                        ],
-                      ),
-                    )
-                  ],
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[_profilePicture(user.profilePicture)],
                 ),
               )
+            ],
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            children: <Widget>[
+              Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                Text(user.displayName, style: Burnt.titleStyle),
+                Container(width: 4.0),
+                Text("@${user.username}"),
+              ]),
+              Container(height: 10.0),
+              _followButton(),
             ],
           ),
         ),
@@ -154,16 +148,8 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _tagline() {
     return Padding(
-      padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 10.0),
-      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
-        Expanded(
-          child: Container(
-            padding: EdgeInsets.only(top: 6.0, bottom: 6.0, right: 10.0),
-            child: Text(widget.user.tagline),
-          ),
-        ),
-        _followButton(),
-      ]),
+      padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 15.0),
+      child: Text(widget.user.tagline),
     );
   }
 

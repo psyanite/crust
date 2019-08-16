@@ -66,44 +66,40 @@ class _Presenter extends StatelessWidget {
       child: Column(children: <Widget>[
         Container(
           child: Stack(children: <Widget>[
-            Container(height: 250.0),
+            Container(height: 200.0),
             Stack(children: <Widget>[
-              _profilePicture(),
+              Container(
+                height: 150.0,
+                decoration: BoxDecoration(
+                  color: Burnt.separator,
+                  image: DecorationImage(image: NetworkImage(user.profilePicture), fit: BoxFit.cover),
+                ),
+              ),
               _menuButton(),
             ]),
-            Positioned(
-              left: 50.0,
-              top: 100.0,
-              child: Row(children: <Widget>[
-                Container(
-                  width: 150.0,
-                  height: 150.0,
-                  decoration: BoxDecoration(
-                    color: Burnt.separator,
-                    borderRadius: BorderRadius.circular(150.0),
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 4.0,
-                    ),
-                    image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(user.profilePicture),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 8.0, top: 12.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(user.displayName, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
-                      Text("@${user.username}"),
-                    ],
-                  ),
-                )
-              ]),
+
+          Container(
+            margin: EdgeInsets.only(top: 70.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[_profilePicture(user.profilePicture)],
             ),
+          )
           ]),
+        ),
+
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            children: <Widget>[
+              Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+                Text(user.displayName, style: Burnt.titleStyle),
+                Container(width: 4.0),
+                Text("@${user.username}"),
+              ]),
+            ],
+          ),
         ),
         if (user.tagline != null) _tagline(),
         if (user.profilePicture == defaultProfilePic) _setProfilePictureButton()
@@ -111,13 +107,23 @@ class _Presenter extends StatelessWidget {
     );
   }
 
+  Widget _profilePicture(String picture) {
+    return Container(
+      width: 150.0,
+      height: 150.0,
+      decoration: BoxDecoration(
+        color: Burnt.separator,
+        borderRadius: BorderRadius.circular(150.0),
+        border: Border.all(color: Colors.white, width: 4.0),
+        image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(picture)),
+      ),
+    );
+  }
+
   Widget _tagline() {
     return Padding(
-      padding: EdgeInsets.only(top: 13.0, right: 16.0, left: 16.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[Text(user.tagline)],
-      ),
+      padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 15.0),
+      child: Text(user.tagline),
     );
   }
 
@@ -139,18 +145,6 @@ class _Presenter extends StatelessWidget {
         ),
       );
     });
-  }
-
-  Widget _profilePicture() {
-    return Container(
-      height: 150.0,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: NetworkImage(user.profilePicture),
-          fit: BoxFit.cover,
-        ),
-      ),
-    );
   }
 
   Widget _menuButton() {

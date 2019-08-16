@@ -5,6 +5,8 @@ class Store {
   final String name;
   final String phoneNumber;
   final String coverImage;
+  final int followerCount;
+  final int reviewCount;
   final Address address;
   final String location;
   final String suburb;
@@ -20,6 +22,8 @@ class Store {
     this.name,
     this.phoneNumber,
     this.coverImage,
+    this.followerCount,
+    this.reviewCount,
     this.address,
     this.location,
     this.suburb,
@@ -33,18 +37,19 @@ class Store {
 
   Store copyWith({List<Post> posts, String name, List<int> rewards}) {
     return Store(
-        id: this.id,
-        name: name ?? this.name,
-        phoneNumber: this.phoneNumber,
-        coverImage: this.coverImage,
-        address: this.address,
-        suburb: this.suburb,
-        cuisines: this.cuisines,
-        posts: posts ?? this.posts,
-        rewards: rewards ?? this.rewards,
-        heartCount: this.heartCount,
-        okayCount: this.okayCount,
-        burntCount: this.burntCount);
+      id: this.id,
+      name: name ?? this.name,
+      phoneNumber: this.phoneNumber,
+      coverImage: this.coverImage,
+      address: this.address,
+      suburb: this.suburb,
+      cuisines: this.cuisines,
+      posts: posts ?? this.posts,
+      rewards: rewards ?? this.rewards,
+      heartCount: this.heartCount,
+      okayCount: this.okayCount,
+      burntCount: this.burntCount,
+    );
   }
 
   Map<String, dynamic> toPersist() {
@@ -57,7 +62,7 @@ class Store {
       'cuisines': this.cuisines,
       'heartCount': this.heartCount,
       'okayCount': this.okayCount,
-      'burntCount': this.burntCount
+      'burntCount': this.burntCount,
     };
   }
 
@@ -82,6 +87,8 @@ class Store {
       name: json['name'],
       phoneNumber: json['phone_number'],
       coverImage: json['cover_image'],
+      followerCount: json['follower_count'],
+      reviewCount: json['review_count'],
       address: json['address'] != null ? Address.fromToaster(json['address']) : null,
       location: json['location'] != null ? json['location']['name'] : null,
       suburb: json['suburb'] != null ? json['suburb']['name'] : null,
@@ -97,6 +104,8 @@ class Store {
     name,
     phone_number,
     cover_image,
+    follower_count,
+    review_count,
     address {
       address_first_line,
       address_second_line,
