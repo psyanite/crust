@@ -252,20 +252,16 @@ class _PresenterState extends State<_Presenter> {
       width: 300.0,
       padding: EdgeInsets.only(bottom: 30.0),
       child: TextField(
-        onChanged: (text) {
-          setState(() {
-            reviewBody = text;
-          });
-        },
-        keyboardType: TextInputType.multiline,
         maxLines: null,
+        textAlign: TextAlign.center,
+        keyboardType: TextInputType.multiline,
+        onChanged: (text) => setState(() => reviewBody = text),
         decoration: InputDecoration(
           hintText: 'Add your thoughts here',
           hintStyle: TextStyle(color: Burnt.hintTextColor),
           enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.lightGrey)),
           focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.primaryLight, width: 1.0)),
         ),
-        textAlign: TextAlign.center,
       ),
     );
   }

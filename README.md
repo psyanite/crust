@@ -43,7 +43,6 @@
 </div>
 
 ## To Do
-* Update tagline to be multiline
 * Display followers on profile screen???
 * Display followers on store screen???
 
@@ -53,6 +52,8 @@
 
 * Implement store posts
 
+* Add submit missing store feature
+
 * Enable firebase dynamic urls in iOS
 * Add link previews to dynamic links
 * Enable login via iOS
@@ -61,6 +62,7 @@
 * Send email of results
 
 ## Done
+* Update tagline to be multiline
 * Implement follow functionality
 * Add follow button on profile
 * Add follow button on store

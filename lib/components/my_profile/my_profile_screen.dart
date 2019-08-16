@@ -34,7 +34,8 @@ class _Presenter extends StatelessWidget {
   final User user;
   final Function refreshPage;
   final Function logout;
-  final String defaultProfilePic = 'https://firebasestorage.googleapis.com/v0/b/burntoast-fix.appspot.com/o/users%2Fprofile-pictures%2F1565423370052-9201.jpg?alt=media&token=1a80c164-4ca6-4174-bd46-c8c265c17ae9';
+  final String defaultProfilePic =
+      'https://firebasestorage.googleapis.com/v0/b/burntoast-fix.appspot.com/o/users%2Fprofile-pictures%2F1565423370052-9201.jpg?alt=media&token=1a80c164-4ca6-4174-bd46-c8c265c17ae9';
 
   _Presenter({Key key, this.user, this.refreshPage, this.logout}) : super(key: key);
 
@@ -104,9 +105,19 @@ class _Presenter extends StatelessWidget {
             ),
           ]),
         ),
-        if (user.tagline != null) Padding(padding: EdgeInsets.only(top: 13.0, right: 16.0, left: 16.0), child: Text(user.tagline)),
+        if (user.tagline != null) _tagline(),
         if (user.profilePicture == defaultProfilePic) _setProfilePictureButton()
       ]),
+    );
+  }
+
+  Widget _tagline() {
+    return Padding(
+      padding: EdgeInsets.only(top: 13.0, right: 16.0, left: 16.0),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        children: <Widget>[Text(user.tagline)],
+      ),
     );
   }
 

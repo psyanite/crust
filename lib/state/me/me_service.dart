@@ -34,7 +34,8 @@ class MeService {
             profile {
               profile_picture,
               preferred_name,
-              username
+              username,
+              tagline
             }
           }
         }
@@ -47,6 +48,7 @@ class MeService {
       profilePicture: json['user_account']['profile']['profile_picture'],
       displayName: json['user_account']['profile']['preferred_name'],
       username: json['user_account']['profile']['username'],
+      tagline: json['user_account']['profile']['tagline'],
     );
   }
 
@@ -92,7 +94,7 @@ class MeService {
   Future<String> setTagline({userId, tagline}) async {
     String query = """
       mutation {
-        setTagline(userId: $userId, tagline: "$tagline") {
+        setTagline(userId: $userId, tagline: \"\"\"$tagline\"\"\") {
           tagline
         }
       }

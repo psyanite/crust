@@ -31,7 +31,7 @@ class User {
     this.posts,
   });
 
-  User copyWith({int id, String username, String profilePicture, String displayName, List<Post> posts}) {
+  User copyWith({int id, String username, String profilePicture, String displayName, List<Post> posts, String tagline}) {
     return User(
       id: id ?? this.id,
       username: username ?? this.username,
@@ -40,7 +40,7 @@ class User {
       displayName: displayName ?? this.displayName,
       email: email,
       profilePicture: profilePicture ?? this.profilePicture,
-      tagline: tagline,
+      tagline: tagline ?? this.tagline,
       socialType: socialType,
       socialId: socialId,
       token: token,

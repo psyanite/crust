@@ -98,6 +98,8 @@ class _PresenterState extends State<_Presenter> {
             padding: EdgeInsets.only(bottom: 30.0),
             child: TextField(
               autofocus: true,
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
               controller: _taglineCtrl,
               decoration: InputDecoration(
                 hintText: 'Add your tagline here',
@@ -105,7 +107,6 @@ class _PresenterState extends State<_Presenter> {
                 enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.lightGrey)),
                 focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Burnt.primaryLight, width: 1.0)),
               ),
-              textAlign: TextAlign.center,
             ),
           ),
           _buttons(),
