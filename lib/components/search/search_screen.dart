@@ -280,7 +280,10 @@ class _PresenterState extends State<_Presenter> {
             if (snapshot.hasError) {
               return SliverCenter(child: Text('Oops! Something went wrong, please try again'));
             } else if (snapshot.data.length == 0) {
-              return SliverCenter(child: Text("Oops! We couldn't find anything, maybe try something different?"));
+              return SliverCenter(child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text("Oops! We couldn't find anything, maybe try something different?"),
+              ));
             }
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, i) {

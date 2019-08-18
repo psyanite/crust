@@ -13,11 +13,12 @@ class FavoriteStoresScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-        onInit: (Store<AppState> store) {
-          store.dispatch(FetchFavorites(updateStore: true));
-        },
-        converter: (Store<AppState> store) => _Props.fromStore(store),
-        builder: (context, props) => _Presenter(favoriteStores: props.stores));
+      onInit: (Store<AppState> store) {
+        store.dispatch(FetchFavorites(updateStore: true));
+      },
+      converter: (Store<AppState> store) => _Props.fromStore(store),
+      builder: (context, props) => _Presenter(favoriteStores: props.favoriteStores),
+    );
   }
 }
 

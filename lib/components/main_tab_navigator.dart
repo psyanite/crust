@@ -20,23 +20,25 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
   Queue<int> _history;
   bool _lastActionWasGo;
   int _currentIndex = 0;
-  Map<TabType, Tab> _tabs = {
-    TabType.home: Tab(widget: HomeScreen(), icon: CrustCons.bread_heart),
-    TabType.rewards: Tab(widget: RewardsScreen(), icon: CrustCons.present),
-    TabType.newPost: Tab(widget: SelectStoreScreen(), icon: CrustCons.new_post),
-    TabType.favorites: Tab(widget: FavoritesScreen(), icon: CrustCons.heart),
-    TabType.myProfile: Tab(widget: MyProfileTab(), icon: CrustCons.person)
-  };
+  Map<TabType, Tab> _tabs;
 
   @override
   initState() {
     super.initState();
     _history = Queue<int>();
     _history.addLast(0);
+    _tabs = {
+      TabType.home: Tab(widget: HomeScreen(changeTab: _jumpToPage), icon: CrustCons.bread_heart),
+      TabType.rewards: Tab(widget: RewardsScreen(), icon: CrustCons.present),
+      TabType.newPost: Tab(widget: SelectStoreScreen(), icon: CrustCons.new_post),
+      TabType.favorites: Tab(widget: FavoritesScreen(), icon: CrustCons.heart),
+      TabType.myProfile: Tab(widget: MyProfileTab(), icon: CrustCons.person)
+    };
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_tabs == null) return Container();
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -50,7 +52,7 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
             activeColor: Burnt.primary,
             inactiveColor: Burnt.lightGrey,
             currentIndex: _currentIndex,
-            onTap: _onTap,
+            onTap: _jumpToPage,
             items: _tabs.values.map((t) => BottomNavigationBarItem(icon: Icon(t.icon))).toList(),
           ),
         ),
@@ -78,7 +80,7 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
     setState(() => _currentIndex = index);
   }
 
-  _onTap(int index) {
+  _jumpToPage(int index) {
     var history = Queue<int>.from(_history);
     history.addLast(index);
     setState(() {

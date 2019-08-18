@@ -1,5 +1,3 @@
-
-
 class FavoriteReward {
   final int rewardId;
 

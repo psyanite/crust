@@ -43,10 +43,6 @@
 </div>
 
 ## To Do
-* Implement home feed
-* Fetch followed users posts
-* Fetch followed stores posts
-
 * Implement pagination
 
 * Implement store posts

@@ -1,5 +1,6 @@
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/comment/comment_middleware.dart';
+import 'package:crust/state/feed/feed_middleware.dart';
 import 'package:crust/state/me/favorite/favorite_middleware.dart';
 import 'package:crust/state/me/follow/follow_middleware.dart';
 import 'package:crust/state/me/me_middleware.dart';
@@ -13,6 +14,7 @@ List<Middleware<AppState>> createAppMiddleware() {
     ..addAll(createMeMiddleware())
     ..addAll(createFavoriteMiddleware())
     ..addAll(createFollowMiddleware())
+    ..addAll(createFeedMiddleware())
     ..addAll(createStoreMiddleware())
     ..addAll(createUserMiddleware())
     ..addAll(createRewardMiddleware())

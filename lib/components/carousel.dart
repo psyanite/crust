@@ -7,12 +7,14 @@ import 'package:flutter/material.dart';
 class Carousel extends StatefulWidget {
   final List<Widget> images;
   final Widget left;
+  final Widget callToAction;
   final bool centreDots;
 
   Carousel({
     Key key,
     this.images,
     this.left,
+    this.callToAction,
     this.centreDots = false,
   }) : assert(images != null),
         super(key: key);
@@ -40,6 +42,7 @@ class _CarouselState extends State<Carousel> {
           height: MediaQuery.of(context).size.width - 30.0,
           child: _gallery(),
         ),
+        if (widget.callToAction != null) widget.callToAction,
         Container(height: 10.0),
         Container(
           padding: EdgeInsets.only(top: 6.0, bottom: 10.0),

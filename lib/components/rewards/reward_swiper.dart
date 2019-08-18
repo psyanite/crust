@@ -17,7 +17,7 @@ class RewardSwiper extends StatelessWidget {
       children: <Widget>[
         header,
         Container(
-          height: 450.0,
+          height: 440.0,
           child: Swiper(
             loop: false,
             containerHeight: 200.0,
@@ -69,13 +69,13 @@ class RewardSwiper extends StatelessWidget {
               ],
             ),
             Container(height: 20.0),
-            Text(reward.name, style: Burnt.titleStyle.copyWith(fontSize: 22.0)),
+            Text(reward.name, overflow: TextOverflow.ellipsis, style: Burnt.titleStyle.copyWith(fontSize: 22.0)),
             Container(height: 2.0),
-            Text(reward.storeNameText(), style: TextStyle(fontSize: 16.0)),
+            Text(reward.storeNameText(), overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16.0)),
             Container(height: 2.0),
-            Text(reward.locationText(), style: TextStyle(fontSize: 16.0)),
+            Text(reward.locationText(), overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16.0)),
             Container(height: 3.0),
-            Text(reward.bannerText(), style: TextStyle(color: Burnt.hintTextColor, fontSize: 16.0)),
+            Text(reward.bannerText(), overflow: TextOverflow.ellipsis, style: TextStyle(color: Burnt.hintTextColor, fontSize: 16.0)),
             Container(height: 20.0),
           ],
         ),

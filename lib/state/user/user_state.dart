@@ -18,7 +18,7 @@ class UserState {
   @override
   String toString() {
     return '''{
-        users: ${users != null ? '${users.length} users' : null},
+        users: ${users != null ? users.length : null},
       }''';
   }
 }

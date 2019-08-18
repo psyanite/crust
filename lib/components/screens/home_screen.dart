@@ -1,14 +1,17 @@
+import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/rewards/reward_swiper.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
 import 'package:crust/components/screens/store_screen.dart';
 import 'package:crust/components/search/search_screen.dart';
 import 'package:crust/components/stores/favorite_store_button.dart';
-import 'package:crust/components/stores/stores_grid.dart';
+import 'package:crust/models/post.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/store.dart' as MyStore;
+import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
+import 'package:crust/state/feed/feed_actions.dart';
 import 'package:crust/state/me/favorite/favorite_actions.dart';
 import 'package:crust/state/me/follow/follow_actions.dart';
 import 'package:crust/state/me/me_actions.dart';
@@ -22,24 +25,32 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:redux/redux.dart';
 
 class HomeScreen extends StatelessWidget {
+  final Function changeTab;
+
+  HomeScreen({Key key, this.changeTab}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
       onInit: (Store<AppState> store) {
-        store.dispatch(FetchStores());
         store.dispatch(FetchTopStores());
-        store.dispatch(FetchRewards());
         store.dispatch(FetchTopRewards());
         if (store.state.me.user != null) {
+          store.dispatch(FetchFeed(store.state.me.user.id));
           store.dispatch(FetchFavorites());
           store.dispatch(FetchFollows());
           store.dispatch(FetchMyPosts(store.state.me.user.id));
+        } else {
+          store.dispatch(FetchDefaultFeed());
         }
+        store.dispatch(FetchRewards());
+        store.dispatch(FetchStores());
       },
       converter: (Store<AppState> store) => _Props.fromStore(store),
       builder: (BuildContext context, _Props props) {
         return _Presenter(
-          stores: props.stores,
+          changeTab: changeTab,
+          posts: props.posts,
           topStores: props.topStores,
           topRewards: props.topRewards,
         );
@@ -49,11 +60,12 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _Presenter extends StatelessWidget {
-  final List<MyStore.Store> stores;
+  final Function changeTab;
+  final List<Post> posts;
   final List<MyStore.Store> topStores;
   final List<Reward> topRewards;
 
-  _Presenter({Key key, this.stores, this.topStores, this.topRewards}) : super(key: key);
+  _Presenter({Key key, this.changeTab, this.posts, this.topStores, this.topRewards}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +76,24 @@ class _Presenter extends StatelessWidget {
         _appBar(),
         _topStores(context),
         _topRewards(context),
-        StoresGrid(stores: stores),
+        _separator(),
+        PostList(
+          noPostsView: CircularProgressIndicator(),
+          posts: posts,
+          postListType: PostListType.forStore,
+        ),
       ]),
+    );
+  }
+
+  Widget _separator() {
+    return SliverToBoxAdapter(
+      child: Container(
+        margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 20.0),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: Burnt.separator))
+        ),
+      ),
     );
   }
 
@@ -106,7 +134,7 @@ class _Presenter extends StatelessWidget {
           Text('WHAT\'S HOT 🔥', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0, color: Burnt.hintTextColor)),
           Container(height: 15.0),
           Container(
-            height: 450.0,
+            height: 420.0,
             child: Swiper(
               loop: false,
               containerHeight: 200.0,
@@ -130,6 +158,13 @@ class _Presenter extends StatelessWidget {
               scale: 0.9,
             ),
           ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: HollowButton(padding: 8.0, onTap: () {}, children: <Widget>[
+              Text('More Places to Eat and Drink', style: TextStyle(fontSize: 18.0, color: Burnt.primaryTextColor)),
+            ]),
+          ),
+          Container(height: 50.0),
         ],
       ),
     );
@@ -162,40 +197,12 @@ class _Presenter extends StatelessWidget {
               padding: EdgeInsets.only(top: 16.0, bottom: 20.0, left: 16.0, right: 16.0),
               child: Column(
                 children: <Widget>[
-                  Text(store.name, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
-                  Text(store.location ?? store.suburb, style: TextStyle(fontSize: 16.0)),
-                  Text(store.cuisines.join(', '), style: TextStyle(fontSize: 16.0)),
+                  Text(store.name, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
+                  Text(store.location ?? store.suburb, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16.0)),
+                  Text(store.cuisines.join(', '), overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16.0)),
                 ],
               ),
             ),
-//        Container(
-//          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
-//          height: 100.0,
-//          child: Row(
-//            mainAxisSize: MainAxisSize.max,
-//            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//            crossAxisAlignment: CrossAxisAlignment.center,
-//            children: <Widget>[
-//              Column(
-//                crossAxisAlignment: CrossAxisAlignment.start,
-//                children: <Widget>[
-//                  Text(store.name, style: TextStyle(fontSize: 24.0, fontWeight: Burnt.fontBold)),
-//                  Text(store.location ?? store.suburb, style: TextStyle(fontSize: 18.0)),
-//                  Text(store.cuisines.join(', '), style: TextStyle(fontSize: 18.0)),
-//                ],
-//              ),
-//              Row(
-//                mainAxisSize: MainAxisSize.min,
-//                crossAxisAlignment: CrossAxisAlignment.center,
-//                children: <Widget>[
-//                  Text(store.heartCount.toString(), style: TextStyle(fontSize: 18.0)),
-//                  Container(width: 5.0),
-//                  Container(height: 32.0, child: ScoreIcon(score: Score.good, size: 30.0)),
-//                ],
-//              )
-//            ],
-//          ),
-//        ),
           ],
         ),
       );
@@ -204,12 +211,23 @@ class _Presenter extends StatelessWidget {
 
   Widget _topRewards(BuildContext context) {
     return SliverToBoxAdapter(
-      child: RewardSwiper(
-        rewards: topRewards,
-        header: Padding(
-          padding: EdgeInsets.only(top: 20.0, bottom: 15.0),
-          child: Text('TOP PICKS 👍', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0, color: Burnt.hintTextColor)),
-        ),
+      child: Column(
+        children: <Widget>[
+          RewardSwiper(
+            rewards: topRewards,
+            header: Padding(
+              padding: EdgeInsets.only(top: 20.0, bottom: 15.0),
+              child: Text('TOP PICKS 👍', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0, color: Burnt.hintTextColor)),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: HollowButton(padding: 8.0, onTap: () => changeTab(1), children: <Widget>[
+              Text('Browse More Rewards', style: TextStyle(fontSize: 18.0, color: Burnt.primaryTextColor)),
+            ]),
+          ),
+          Container(height: 50.0),
+        ],
       ),
     );
   }
@@ -234,19 +252,19 @@ class _Presenter extends StatelessWidget {
 }
 
 class _Props {
-  final List<MyStore.Store> stores;
+  final List<Post> posts;
   final List<MyStore.Store> topStores;
   final List<Reward> topRewards;
 
   _Props({
-    this.stores,
+    this.posts,
     this.topStores,
     this.topRewards,
   });
 
   static fromStore(Store<AppState> store) {
     return _Props(
-      stores: store.state.store.stores.values.toList(),
+      posts: store.state.feed.posts.toList(),
       topStores: store.state.store.topStores.values.toList(),
       topRewards: store.state.reward.topRewards.values.toList(),
     );

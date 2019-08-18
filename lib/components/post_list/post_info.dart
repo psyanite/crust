@@ -37,7 +37,7 @@ class PostInfo extends StatelessWidget {
       return Text(post.store.name, style: Burnt.titleStyle);
     } else {
       if (post.postedBy == null) {
-        return Text('⭐', style: Burnt.titleStyle);
+        return Text('${post.store.name} ⭐', style: Burnt.titleStyle);
       } else {
         return Row(children: <Widget>[
           Text(post.postedBy.displayName, style: Burnt.titleStyle),
@@ -98,19 +98,21 @@ class PostInfo extends StatelessWidget {
   }
 
   Widget _content() {
-    var renderReview = post.type == PostType.review && post.postReview.body != null;
+    var showReview = post.type == PostType.review && post.postReview.body != null;
+    var showCarousel = post.postPhotos.isNotEmpty;
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          if (renderReview) _reviewBody(),
-          post.postPhotos.isNotEmpty ? CarouselWrapper(postId: post.id, child: _carousel()) : _textEnd()
+          if (showReview) _reviewBody(),
+          if (showCarousel) _carousel(),
+          if (!showCarousel) _textPostFooter(),
         ],
       ),
     );
   }
 
-  Widget _textEnd() {
+  Widget _textPostFooter() {
     return Padding(
       padding: EdgeInsets.only(bottom: 10.0),
       child: Row(
@@ -125,39 +127,50 @@ class PostInfo extends StatelessWidget {
     if (post.postPhotos.length == 1) {
       return _singlePhoto();
     }
-    final List<Widget> widgets = post.postPhotos
-        .map<Widget>((photo) => CachedNetworkImage(
-              imageUrl: photo.url,
-              fit: BoxFit.cover,
-              fadeInDuration: Duration(milliseconds: 100),
-            ))
-        .toList(growable: false);
-    return Carousel(
+    final List<Widget> widgets = post.postPhotos.map<Widget>((photo) {
+      return CachedNetworkImage(
+        imageUrl: photo.url,
+        fit: BoxFit.cover,
+        fadeInDuration: Duration(milliseconds: 100),
+      );
+    }).toList();
+
+    return CarouselWrapper(
+      postId: post.id,
+      child: Carousel(
         images: widgets,
         left: Row(
           children: buttons,
-        ));
+        ),
+      ),
+    );
   }
 
   Widget _singlePhoto() {
-    return Builder(
-        builder: (context) => Column(
-              children: <Widget>[
-                Container(
-                    margin: EdgeInsets.only(top: 5.0, bottom: 10.0),
-                    height: MediaQuery.of(context).size.width - 30.0,
-                    decoration: BoxDecoration(
-                        color: Burnt.imgPlaceholderColor,
-                        image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(post.postPhotos[0].url)))),
-                Padding(
-                  padding: EdgeInsets.only(top: 6.0, bottom: 10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: buttons,
-                  ),
-                )
-              ],
-            ));
+    return Builder(builder: (context) {
+      return Column(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(top: 5.0, bottom: 10.0),
+            height: MediaQuery.of(context).size.width - 30.0,
+            decoration: BoxDecoration(
+              color: Burnt.imgPlaceholderColor,
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage(post.postPhotos[0].url),
+              ),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 6.0, bottom: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: buttons,
+            ),
+          )
+        ],
+      );
+    });
   }
 }

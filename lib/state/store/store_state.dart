@@ -43,8 +43,8 @@ class StoreState {
   @override
   String toString() {
     return '''{
-        stores: ${stores.length} stores,
-        topStores: ${topStores.length} stores,
+        stores: ${stores.length},
+        topStores: ${topStores.length},
       }''';
   }
 }

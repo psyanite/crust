@@ -51,8 +51,8 @@ class RewardState {
   @override
   String toString() {
     return '''{
-        rewards: ${rewards.length} rewards,
-        topRewards: ${topRewards.length} rewards,
+        rewards: ${rewards.length},
+        topRewards: ${topRewards.length},
       }''';
   }
 }

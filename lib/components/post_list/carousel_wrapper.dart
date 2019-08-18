@@ -15,21 +15,46 @@ class CarouselWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-        converter: (Store<AppState> store) => _Props.fromStore(store),
-        builder: (context, props) => _Presenter(
-            onFavorite: () {
-              if (props.isLoggedIn) {
-                props.favoriteComment(postId);
-              } else {
-                snack(context, 'Login now to favourite posts');
-              }
-            },
-            onUnfavorite: () {
-              props.unfavoriteComment(postId);
-            },
-            isFavorited: props.favoritePosts.contains(postId),
-            child: child,
-            isLoggedIn: props.isLoggedIn));
+      converter: (Store<AppState> store) => _Props.fromStore(store),
+      builder: (context, props) {
+        return _Presenter(
+          onFavorite: () {
+            if (props.isLoggedIn) {
+              props.favoriteComment(postId);
+            } else {
+              snack(context, 'Login now to favourite posts');
+            }
+          },
+          onUnfavorite: () {
+            props.unfavoriteComment(postId);
+          },
+          isFavorited: props.favoritePosts.contains(postId),
+          child: child,
+          isLoggedIn: props.isLoggedIn,
+        );
+      },
+    );
+  }
+}
+
+class _Presenter extends StatelessWidget {
+  final Function onFavorite;
+  final Function onUnfavorite;
+  final bool isFavorited;
+  final Widget child;
+  final bool isLoggedIn;
+
+  _Presenter({Key key, this.onFavorite, this.onUnfavorite, this.isFavorited, this.child, this.isLoggedIn}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (!isLoggedIn) return child;
+    return GestureDetector(
+      onDoubleTap: () {
+        isFavorited ? onUnfavorite() : onFavorite();
+      },
+      child: child,
+    );
   }
 }
 
@@ -53,25 +78,5 @@ class _Props {
       unfavoritePost: (postId) => store.dispatch(UnfavoritePost(postId)),
       isLoggedIn: store.state.me.user != null,
     );
-  }
-}
-
-class _Presenter extends StatelessWidget {
-  final Function onFavorite;
-  final Function onUnfavorite;
-  final bool isFavorited;
-  final Widget child;
-  final bool isLoggedIn;
-
-  _Presenter({Key key, this.onFavorite, this.onUnfavorite, this.isFavorited, this.child, this.isLoggedIn}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    if (!isLoggedIn) return child;
-    return GestureDetector(
-        onDoubleTap: () {
-          isFavorited ? onUnfavorite() : onFavorite();
-        },
-        child: child);
   }
 }

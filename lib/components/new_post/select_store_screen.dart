@@ -14,16 +14,16 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 class SelectStoreScreen extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
-        converter: (Store<AppState> store) => _Props.fromStore(store),
-        builder: (BuildContext context, _Props props) => _Presenter(
-              isLoggedIn: props.isLoggedIn,
-              searchHistory: props.searchHistory,
-              addSearchHistoryItem: props.addSearchHistoryItem,
-        ));
+      converter: (Store<AppState> store) => _Props.fromStore(store),
+      builder: (BuildContext context, _Props props) => _Presenter(
+            isLoggedIn: props.isLoggedIn,
+            searchHistory: props.searchHistory,
+            addSearchHistoryItem: props.addSearchHistoryItem,
+          ),
+    );
   }
 }
 
@@ -94,10 +94,12 @@ class _PresenterState extends State<_Presenter> {
         decoration: InputDecoration(
           hintText: 'Search for a restaurant, cafe, or eatery to review',
           prefixIcon: Icon(CrustCons.search, color: Burnt.lightGrey, size: 18.0),
-          suffixIcon: IconButton(icon: Icon(Icons.clear), onPressed: () {
-            _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
-            this.setState(() => _query = '');
-          }),
+          suffixIcon: IconButton(
+              icon: Icon(Icons.clear),
+              onPressed: () {
+                _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
+                this.setState(() => _query = '');
+              }),
           border: InputBorder.none,
         ),
       ),
@@ -106,7 +108,8 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _suggestions() {
     var filtered = [...widget.searchHistory].where((i) => i.store != null);
-    var children = filtered.map<Widget>((i) => _SuggestCard(storeId: i.store.id, addSearchHistoryItem: widget.addSearchHistoryItem)).toList();
+    var children =
+        filtered.map<Widget>((i) => _SuggestCard(storeId: i.store.id, addSearchHistoryItem: widget.addSearchHistoryItem)).toList();
     return SliverToBoxAdapter(child: Column(children: children));
   }
 
@@ -126,7 +129,8 @@ class _PresenterState extends State<_Presenter> {
             }
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, i) {
-                return Builder(builder: (context) => _ResultCard(store: snapshot.data[i], addSearchHistoryItem: widget.addSearchHistoryItem));
+                return Builder(
+                    builder: (context) => _ResultCard(store: snapshot.data[i], addSearchHistoryItem: widget.addSearchHistoryItem));
               }, childCount: snapshot.data.length),
             );
           default:
@@ -146,12 +150,11 @@ class _SuggestCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-      onInit: (Store<AppState> store) {
-        if (store.state.store.stores == null) store.dispatch(FetchStoreById(storeId));
-      },
-      converter: (Store<AppState> store) => store.state.store.stores[storeId],
-      builder: (context, store) => _ResultCard(store: store, addSearchHistoryItem: addSearchHistoryItem)
-    );
+        onInit: (Store<AppState> store) {
+          if (store.state.store.stores == null) store.dispatch(FetchStoreById(storeId));
+        },
+        converter: (Store<AppState> store) => store.state.store.stores[storeId],
+        builder: (context, store) => _ResultCard(store: store, addSearchHistoryItem: addSearchHistoryItem));
   }
 }
 
@@ -163,47 +166,47 @@ class _ResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => InkWell(
-    onTap: () {
-      addSearchHistoryItem(store);
-      Navigator.push(context, MaterialPageRoute(builder: (_) => ReviewForm(store: store)));
-    },
-    child: Padding(
-      padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
-      child: Container(
-        child: IntrinsicHeight(
-          child: Row(
-            children: <Widget>[
-              _listItemPromoImage(store),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                      Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
-                      Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
-                    ],
+      onTap: () {
+        addSearchHistoryItem(store);
+        Navigator.push(context, MaterialPageRoute(builder: (_) => ReviewForm(store: store)));
+      },
+      child: Padding(
+        padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
+        child: Container(
+          child: IntrinsicHeight(
+            child: Row(
+              children: <Widget>[
+                _listItemPromoImage(store),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
+                        Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
+                        Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    ));
+      ));
 
   Widget _listItemPromoImage(MyStore.Store store) {
     return Container(
-      width: 120.0,
-      height: 100.0,
-      decoration: BoxDecoration(
-        color: Burnt.imgPlaceholderColor,
-        image: DecorationImage(
-          image: NetworkImage(store.coverImage),
-          fit: BoxFit.cover,
-        ),
-      ));
+        width: 120.0,
+        height: 100.0,
+        decoration: BoxDecoration(
+          color: Burnt.imgPlaceholderColor,
+          image: DecorationImage(
+            image: NetworkImage(store.coverImage),
+            fit: BoxFit.cover,
+          ),
+        ));
   }
 }
 
@@ -220,12 +223,11 @@ class _Props {
 
   static fromStore(Store<AppState> store) {
     return _Props(
-      isLoggedIn: store.state.me.user != null,
-      searchHistory: store.state.me.searchHistory,
-      addSearchHistoryItem: (myStore) {
-        var item = SearchHistoryItem(type: SearchHistoryItemType.store, store: myStore);
-        store.dispatch(AddSearchHistoryItem(item));
-      }
-    );
+        isLoggedIn: store.state.me.user != null,
+        searchHistory: store.state.me.searchHistory,
+        addSearchHistoryItem: (myStore) {
+          var item = SearchHistoryItem(type: SearchHistoryItemType.store, store: myStore);
+          store.dispatch(AddSearchHistoryItem(item));
+        });
   }
 }

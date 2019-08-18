@@ -1,5 +1,6 @@
 import 'package:crust/state/comment/comment_state.dart';
 import 'package:crust/state/error/error_state.dart';
+import 'package:crust/state/feed/feed_state.dart';
 import 'package:crust/state/me/favorite/favorite_state.dart';
 import 'package:crust/state/me/follow/follow_state.dart';
 import 'package:crust/state/me/me_state.dart';
@@ -11,6 +12,7 @@ import 'package:meta/meta.dart';
 @immutable
 class AppState {
   final MeState me;
+  final FeedState feed;
   final FavoriteState favorite;
   final FollowState follow;
   final StoreState store;
@@ -19,8 +21,9 @@ class AppState {
   final CommentState comment;
   final ErrorState error;
 
-  AppState({MeState me, FavoriteState favorite, FollowState follow, StoreState store, UserState user, RewardState reward, CommentState comment, ErrorState error})
+  AppState({MeState me, FeedState feed, FavoriteState favorite, FollowState follow, StoreState store, UserState user, RewardState reward, CommentState comment, ErrorState error})
       : me = me ?? MeState.initialState(),
+        feed = feed ?? FeedState.initialState(),
         favorite = favorite ?? FavoriteState.initialState(),
         follow = follow ?? FollowState.initialState(),
         store = store ?? StoreState.initialState(),
@@ -53,6 +56,7 @@ class AppState {
   String toString() {
     return '''{
       me: $me,
+      feed: $feed,
       favorite: $me,
       follow: $follow,
       store: $store,

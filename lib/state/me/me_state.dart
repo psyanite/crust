@@ -61,7 +61,7 @@ class MeState {
   String toString() {
     return '''{
         user: $user,
-        searchHistory: ${searchHistory != null ? '${searchHistory.length} items' : null},
+        searchHistory: ${searchHistory != null ? searchHistory.length : null},
         location: $location,
       }''';
   }
