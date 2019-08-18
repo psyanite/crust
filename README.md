@@ -14,11 +14,6 @@
 * Visit your friends' profiles
 * Read reviews on others' experiences
 
-## Next Release Preview
-* Pagination/Forever-scroll
-* Ability to search for keywords in suburbs such as "Cafes in CBD"
-* Create a new post
-
 ## Implementation
 * Implements Presenter-Props model
 * Transforms GraphQL requests into Dart models stored in Redux using Thunk
@@ -43,6 +38,8 @@
 </div>
 
 ## To Do
+* Curate some lists for better exploring stores experience
+
 * Implement pagination
 
 * Implement store posts
@@ -120,3 +117,8 @@
 * Compress images before upload
 * Upload photos to firebase
 * Cache network images on post lists
+
+## How to Release
+1. Run `flutter build apk`
+1. Copy apk file from build dir into docs
+

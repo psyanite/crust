@@ -65,7 +65,7 @@ class _PresenterState extends State<_Presenter> {
                 Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
               ],
             ),
-            Text('REDEEMED REWARDS', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
+            Text('REDEEMED REWARDS', style: Burnt.appBarTitleStyle),
             if (redeemed != null && redeemed.isNotEmpty) Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,

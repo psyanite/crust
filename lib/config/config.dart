@@ -4,7 +4,7 @@ enum Flavor {
 }
 
 class Config {
-  static Flavor appFlavor;
+  static Flavor appFlavor = Flavor.DEVELOPMENT;
 
   static String get toasterHost {
     switch (appFlavor) {

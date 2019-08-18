@@ -80,7 +80,7 @@ class _PresenterState extends State<_Presenter> {
                 Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
               ],
             ),
-            Text('SET TAGLINE', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0))
+            Text('SET TAGLINE', style: Burnt.appBarTitleStyle)
           ]),
         ),
       ),

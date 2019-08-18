@@ -66,7 +66,7 @@ class _PresenterState extends State<_Presenter> {
                 Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
               ],
             ),
-            Text(widget.title.toUpperCase(), style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0))
+            Text(widget.title.toUpperCase(), style: Burnt.appBarTitleStyle)
           ],
         ),
       )),

@@ -36,7 +36,7 @@ class AboutScreen extends StatelessWidget {
                   Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
                 ],
               ),
-              Text('ABOUT', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0))
+              Text('ABOUT', style: Burnt.appBarTitleStyle)
             ],
           ),
         )),

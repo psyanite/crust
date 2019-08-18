@@ -84,7 +84,7 @@ class _PresenterState extends State<_Presenter> {
                 Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
               ],
             ),
-            Text('SET USERNAME', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0))
+            Text('SET USERNAME', style: Burnt.appBarTitleStyle)
           ]),
         ),
       ),

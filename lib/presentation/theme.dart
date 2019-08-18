@@ -28,6 +28,6 @@ class Burnt {
   static const fontExtraBold = FontWeight.w800;
   static var display4 = TextStyle(fontSize: 28.0);
   static var bodyStyle = TextStyle(color: textBodyColor, fontSize: 14.0, fontFamily: Burnt.fontBase, fontWeight: Burnt.fontLight);
-  static var appBarTitleStyle = TextStyle(color: Burnt.primary, fontSize: 16.0, fontFamily: Burnt.fontBase, fontWeight: Burnt.fontLight, letterSpacing: 3.0);
+  static var appBarTitleStyle = TextStyle(color: Burnt.primary, fontSize: 22.0, fontFamily: Burnt.fontBase, fontWeight: Burnt.fontLight, letterSpacing: 3.0);
   static var titleStyle = TextStyle(fontSize: 20.0, fontWeight: Burnt.fontBold);
 }

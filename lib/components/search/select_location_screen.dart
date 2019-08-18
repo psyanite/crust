@@ -62,7 +62,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
                 ),
               ],
             ),
-            Text('CHANGE LOCATION', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0))
+            Text('CHANGE LOCATION', style: Burnt.appBarTitleStyle)
           ],
         ),
       )),

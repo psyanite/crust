@@ -31,7 +31,7 @@ class UpdateProfileScreen extends StatelessWidget {
                   Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
                 ],
               ),
-              Text('UPDATE PROFILE', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0))
+              Text('UPDATE PROFILE', style: Burnt.appBarTitleStyle)
             ],
           ),
         )),

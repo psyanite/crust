@@ -9,48 +9,53 @@ class StoresGrid extends StatelessWidget {
   final List<MyStore.Store> stores;
   final bool confirmUnfavorite;
 
-  StoresGrid({Key key, this.stores, this.confirmUnfavorite}) : super(key: key);
+  StoresGrid({Key key, this.stores, this.confirmUnfavorite = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (stores.isEmpty) return _skelly();
     stores.sort((a, b) => a.id.compareTo(b.id));
     return SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1.2,
-          crossAxisSpacing: 5.0,
-          mainAxisSpacing: 5.0,
-        ),
-        delegate: SliverChildBuilderDelegate((builder, i) => _storeCard(stores[i]), childCount: stores.length));
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 1.2,
+        crossAxisSpacing: 5.0,
+        mainAxisSpacing: 5.0,
+      ),
+      delegate: SliverChildBuilderDelegate((builder, i) => _storeCard(stores[i]), childCount: stores.length),
+    );
   }
 
   Widget _skelly() {
     return SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 1.2,
-          crossAxisSpacing: 5.0,
-          mainAxisSpacing: 5.0,
-        ),
-        delegate: SliverChildBuilderDelegate(
-            (builder, i) => Shimmer.fromColors(
-                baseColor: Color(0xFFF0F0F0),
-                highlightColor: Color(0xFFF7F7F7),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
-                  Container(
-                    width: 100.0,
-                    height: 100.0,
-                    color: Colors.white,
-                  ),
-                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                    Container(height: 8.0),
-                    Container(height: 8.0, width: 150.0, color: Colors.white),
-                    Container(height: 8.0),
-                    Container(height: 8.0, width: 100.0, color: Colors.white),
-                  ])
-                ])),
-            childCount: 20));
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: 1.2,
+        crossAxisSpacing: 5.0,
+        mainAxisSpacing: 5.0,
+      ),
+      delegate: SliverChildBuilderDelegate(
+          (builder, i) {
+          return Shimmer.fromColors(
+            baseColor: Color(0xFFF0F0F0),
+            highlightColor: Color(0xFFF7F7F7),
+            child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
+              Container(
+                width: 100.0,
+                height: 100.0,
+                color: Colors.white,
+              ),
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                Container(height: 8.0),
+                Container(height: 8.0, width: 150.0, color: Colors.white),
+                Container(height: 8.0),
+                Container(height: 8.0, width: 100.0, color: Colors.white),
+              ])
+            ]),
+          );
+        },
+        childCount: 20),
+    );
   }
 
   Widget _storeCard(MyStore.Store store) {
@@ -64,11 +69,11 @@ class StoresGrid extends StatelessWidget {
             );
           },
           child: Container(
-              child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
-            Stack(
-              alignment: AlignmentDirectional.topEnd,
-              children: <Widget>[
-                Container(
+            child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: <Widget>[
+              Stack(
+                alignment: AlignmentDirectional.topEnd,
+                children: <Widget>[
+                  Container(
                     height: 100.0,
                     decoration: BoxDecoration(
                       color: Burnt.imgPlaceholderColor,
@@ -77,17 +82,17 @@ class StoresGrid extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     )),
-                FavoriteStoreButton(store: store, padding: EdgeInsets.all(7.0), confirmUnfavorite: confirmUnfavorite),
-              ],
-            ),
-            Padding(
+                  FavoriteStoreButton(store: store, padding: EdgeInsets.all(7.0), confirmUnfavorite: confirmUnfavorite),
+                ],
+              ),
+              Padding(
                 padding: EdgeInsets.only(left: 8.0, top: 5.0),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                   Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
                   Text(store.location ?? store.suburb, style: TextStyle(fontSize: 14.0)),
                   Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
                 ]))
-          ])),
+            ])),
         );
       },
     );

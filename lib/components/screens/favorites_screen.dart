@@ -17,19 +17,22 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
-        onInit: (Store<AppState> store) {
-          store.dispatch(FetchFavorites(updateStore: true));
-        },
-        converter: (Store<AppState> store) => _Props.fromStore(store),
-        builder: (BuildContext context, _Props props) => _Presenter(
-              rewards: props.rewards,
-              stores: props.stores,
-              favoriteReward: props.favoriteReward,
-              unfavoriteReward: props.unfavoriteReward,
-              favoriteStore: props.favoriteStore,
-              unfavoriteStore: props.unfavoriteStore,
-              isLoggedIn: props.isLoggedIn,
-            ));
+      onInit: (Store<AppState> store) {
+        store.dispatch(FetchFavorites(updateStore: true));
+      },
+      converter: (Store<AppState> store) => _Props.fromStore(store),
+      builder: (BuildContext context, _Props props) {
+        return _Presenter(
+          rewards: props.rewards,
+          stores: props.stores,
+          favoriteReward: props.favoriteReward,
+          unfavoriteReward: props.unfavoriteReward,
+          favoriteStore: props.favoriteStore,
+          unfavoriteStore: props.unfavoriteStore,
+          isLoggedIn: props.isLoggedIn,
+        );
+      },
+    );
   }
 }
 
@@ -71,7 +74,7 @@ class _Presenter extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                Text('FAVOURITES', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
+                Text('FAVOURITES', style: Burnt.appBarTitleStyle),
                 Container(height: 50, width: 50),
               ],
             ),

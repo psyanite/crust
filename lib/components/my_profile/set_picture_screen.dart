@@ -78,7 +78,7 @@ class _PresenterState extends State<_Presenter> {
                 Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
               ],
             ),
-            Text('SET PROFILE PICTURE', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0))
+            Text('SET PROFILE PICTURE', style: Burnt.appBarTitleStyle)
           ],
         ),
       )),

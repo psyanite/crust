@@ -96,7 +96,7 @@ class _PresenterState extends State<_Presenter> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text('WRITE A REVIEW', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
+              Text('WRITE A REVIEW', style: Burnt.appBarTitleStyle),
               Container(height: 50, width: 50),
             ],
           ),

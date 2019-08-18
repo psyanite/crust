@@ -31,15 +31,23 @@ class StoresSideScroller extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(title, style: TextStyle(fontSize: 23.0, fontWeight: Burnt.fontBold)),
-              if (children.isNotEmpty) InkWell(
+              if (children.isNotEmpty)
+                InkWell(
                   child: Text('See All', style: TextStyle(fontSize: 14.0, fontWeight: Burnt.fontBold, color: Burnt.primary)),
-                  onTap: seeAll)
+                  onTap: seeAll,
+                )
             ],
           ),
         ),
         if (children.isNotEmpty)
           Container(
-              margin: EdgeInsets.only(left: 16.0), height: 180.0, child: ListView(scrollDirection: Axis.horizontal, children: children)),
+            margin: EdgeInsets.only(left: 16.0),
+            height: 180.0,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: children,
+            ),
+          ),
         if (children.isEmpty) Container(margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 25.0), child: Text(emptyMessage)),
       ],
     );

@@ -56,17 +56,18 @@ class Main extends StatelessWidget {
     return StoreProvider<AppState>(
       store: store,
       child: MaterialApp(
-          title: 'Burntoast',
-          color: Color(0xFFF2993E),
-          theme: getTheme(context),
-          initialRoute: MainRoutes.splash,
-          routes: <String, WidgetBuilder>{
-            MainRoutes.splash: (context) => SplashScreen(),
-            MainRoutes.root: (context) => MainTabNavigator(),
-          },
-          localizationsDelegates: [
-            CustomLocalizationDelegate(),
-          ]),
+        title: 'Burntoast',
+        color: Color(0xFFF2993E),
+        theme: getTheme(context),
+        initialRoute: MainRoutes.splash,
+        routes: <String, WidgetBuilder>{
+          MainRoutes.splash: (context) => SplashScreen(),
+          MainRoutes.root: (context) => MainTabNavigator(),
+        },
+        localizationsDelegates: [
+          CustomLocalizationDelegate(),
+        ],
+      ),
     );
   }
 }

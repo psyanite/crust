@@ -2,6 +2,7 @@ import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/rewards/reward_swiper.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
 import 'package:crust/components/screens/store_screen.dart';
+import 'package:crust/components/screens/browse_stores_screen.dart';
 import 'package:crust/components/search/search_screen.dart';
 import 'package:crust/components/stores/favorite_store_button.dart';
 import 'package:crust/models/post.dart';
@@ -11,12 +12,6 @@ import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
-import 'package:crust/state/feed/feed_actions.dart';
-import 'package:crust/state/me/favorite/favorite_actions.dart';
-import 'package:crust/state/me/follow/follow_actions.dart';
-import 'package:crust/state/me/me_actions.dart';
-import 'package:crust/state/reward/reward_actions.dart';
-import 'package:crust/state/store/store_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -32,20 +27,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
-      onInit: (Store<AppState> store) {
-        store.dispatch(FetchTopStores());
-        store.dispatch(FetchTopRewards());
-        if (store.state.me.user != null) {
-          store.dispatch(FetchFeed(store.state.me.user.id));
-          store.dispatch(FetchFavorites());
-          store.dispatch(FetchFollows());
-          store.dispatch(FetchMyPosts(store.state.me.user.id));
-        } else {
-          store.dispatch(FetchDefaultFeed());
-        }
-        store.dispatch(FetchRewards());
-        store.dispatch(FetchStores());
-      },
       converter: (Store<AppState> store) => _Props.fromStore(store),
       builder: (BuildContext context, _Props props) {
         return _Presenter(
@@ -90,9 +71,7 @@ class _Presenter extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Container(
         margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 20.0),
-        decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: Burnt.separator))
-        ),
+        decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))),
       ),
     );
   }
@@ -131,7 +110,7 @@ class _Presenter extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Container(height: 20.0),
-          Text('WHAT\'S HOT 🔥', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0, color: Burnt.hintTextColor)),
+          Text('WHAT\'S HOT 🔥', style: Burnt.appBarTitleStyle.copyWith(color: Burnt.hintTextColor)),
           Container(height: 15.0),
           Container(
             height: 420.0,
@@ -160,9 +139,13 @@ class _Presenter extends StatelessWidget {
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: HollowButton(padding: 8.0, onTap: () {}, children: <Widget>[
-              Text('More Places to Eat and Drink', style: TextStyle(fontSize: 18.0, color: Burnt.primaryTextColor)),
-            ]),
+            child: HollowButton(
+              padding: 8.0,
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => BrowseStoresScreen())),
+              children: <Widget>[
+                Text('More Places to Eat and Drink', style: TextStyle(fontSize: 18.0, color: Burnt.primaryTextColor)),
+              ],
+            ),
           ),
           Container(height: 50.0),
         ],
@@ -217,7 +200,7 @@ class _Presenter extends StatelessWidget {
             rewards: topRewards,
             header: Padding(
               padding: EdgeInsets.only(top: 20.0, bottom: 15.0),
-              child: Text('TOP PICKS 👍', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0, color: Burnt.hintTextColor)),
+              child: Text('TOP PICKS 👍', style: Burnt.appBarTitleStyle.copyWith(color: Burnt.hintTextColor)),
             ),
           ),
           Padding(

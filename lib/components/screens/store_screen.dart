@@ -352,7 +352,7 @@ class _Presenter extends StatelessWidget {
               rewards: rewards,
               header: Padding(
                 padding: EdgeInsets.only(top: 50.0, bottom: 15.0),
-                child: Text('REWARDS', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0, color: Burnt.hintTextColor)),
+                child: Text('REWARDS', style: Burnt.appBarTitleStyle.copyWith(color: Burnt.hintTextColor)),
               ),
             ),
             Container(

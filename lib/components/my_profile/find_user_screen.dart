@@ -75,7 +75,7 @@ class _FindUserScreenState extends State<FindUserScreen> {
                 Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
               ],
             ),
-            Text('FIND USER', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0))
+            Text('FIND USER', style: Burnt.appBarTitleStyle)
           ]),
         ),
       ),

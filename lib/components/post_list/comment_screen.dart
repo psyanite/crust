@@ -125,7 +125,7 @@ class _PresenterState extends State<_Presenter> {
                 ),
               ],
             ),
-            Text('COMMENTS', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
+            Text('COMMENTS', style: Burnt.appBarTitleStyle),
           ],
         ),
       )),

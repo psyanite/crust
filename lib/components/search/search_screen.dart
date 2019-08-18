@@ -78,49 +78,53 @@ class _PresenterState extends State<_Presenter> {
   Widget _appBar() {
     return SliverSafeArea(
       sliver: SliverToBoxAdapter(
-          child: Container(
-        padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 35.0, bottom: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Container(width: 50.0, height: 60.0),
-                Positioned(
-                  left: -12.0,
-                  child: BackArrow(color: Burnt.lightGrey)
-                ),
-              ],
-            ),
-            Text('SEARCH', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0))
-          ],
+        child: Container(
+          padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 35.0, bottom: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Stack(
+                children: <Widget>[
+                  Container(width: 50.0, height: 60.0),
+                  Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
+                ],
+              ),
+              Text('SEARCH', style: Burnt.appBarTitleStyle)
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 
   Widget _locationBar() {
     return SliverToBoxAdapter(
-        child: InkWell(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => SelectLocationScreen(current: _location, selectLocation: selectLocation)));
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(width: 14.0),
-              Icon(CrustCons.location_bold, color: Burnt.lightGrey, size: 22.0),
-              Container(width: 12.0),
-              Text("${_location.name}, ${_location.description}", style: TextStyle(fontSize: 18.0)),
-            ],
-          ),
-        ],
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => SelectLocationScreen(current: _location, selectLocation: selectLocation),
+            ),
+          );
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Container(width: 14.0),
+                Icon(CrustCons.location_bold, color: Burnt.lightGrey, size: 22.0),
+                Container(width: 12.0),
+                Text("${_location.name}, ${_location.description}", style: TextStyle(fontSize: 18.0)),
+              ],
+            ),
+          ],
+        ),
       ),
-    ));
+    );
   }
 
   Widget _searchBar() {
@@ -134,7 +138,7 @@ class _PresenterState extends State<_Presenter> {
         style: TextStyle(fontSize: 18.0),
         autofocus: true,
         decoration: InputDecoration(
-          hintText: 'Search for a restaurant, cafe, or eatery to review',
+          hintText: 'Search for a restaurant, cafe, or eatery',
           prefixIcon: Icon(CrustCons.search, color: Burnt.lightGrey, size: 18.0),
           suffixIcon: IconButton(
               icon: Icon(Icons.clear),
@@ -280,7 +284,8 @@ class _PresenterState extends State<_Presenter> {
             if (snapshot.hasError) {
               return SliverCenter(child: Text('Oops! Something went wrong, please try again'));
             } else if (snapshot.data.length == 0) {
-              return SliverCenter(child: Padding(
+              return SliverCenter(
+                  child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.0),
                 child: Text("Oops! We couldn't find anything, maybe try something different?"),
               ));

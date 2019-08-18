@@ -57,7 +57,7 @@ class _PresenterState extends State<_Presenter> {
                 Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
               ],
             ),
-            Text('MY FAVOURITES', style: Burnt.appBarTitleStyle.copyWith(fontSize: 22.0)),
+            Text('MY FAVOURITES', style: Burnt.appBarTitleStyle),
             if (widget.favoriteRewards != null && widget.favoriteRewards.isNotEmpty)
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
