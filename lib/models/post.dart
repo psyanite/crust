@@ -70,15 +70,12 @@ class Post {
       name,
       cover_image,
       location {
-        id,
         name,
       },
       suburb {
-        id,
         name,
       },
       cuisines {
-        id,
         name,
       },
     },

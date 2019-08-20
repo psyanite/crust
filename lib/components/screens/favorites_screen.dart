@@ -64,24 +64,25 @@ class _Presenter extends StatelessWidget {
   Widget _appBar() {
     return SliverSafeArea(
       sliver: SliverToBoxAdapter(
-          child: Container(
-        padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 20.0, bottom: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text('FAVOURITES', style: Burnt.appBarTitleStyle),
-                Container(height: 50, width: 50),
-              ],
-            ),
-            Text('All your favourited stores and rewards')
-          ],
+        child: Container(
+          padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 20.0, bottom: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('FAVOURITES', style: Burnt.appBarTitleStyle),
+                  Container(height: 50, width: 50),
+                ],
+              ),
+              Text('All your favourited stores and rewards')
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 

@@ -98,7 +98,7 @@ class RewardLocationsScreen extends StatelessWidget {
     return InkWell(
       splashColor: Burnt.splashOrange,
       highlightColor: Colors.transparent,
-      onTap: () => launch(store.address.googleUrl),
+      onTap: () => launch(store.getDirectionUrl()),
       child: Icon(CrustCons.location_bold, size: 35.0, color: Burnt.iconOrange),
     );
   }

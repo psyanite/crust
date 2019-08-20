@@ -266,7 +266,7 @@ class CenterTextSliver extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 50.0),
         child: Center(
-          child: Text(text, textAlign: TextAlign.center),
+          child: Text(text, style: TextStyle(fontSize: 17.0), textAlign: TextAlign.center),
         ),
       ),
     );

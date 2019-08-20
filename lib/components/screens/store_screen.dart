@@ -181,7 +181,7 @@ class _Presenter extends StatelessWidget {
                     InkWell(
                       splashColor: Burnt.splashOrange,
                       highlightColor: Colors.transparent,
-                      onTap: () => launch(store.address.googleUrl),
+                      onTap: () => launch(store.getDirectionUrl()),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
@@ -298,7 +298,7 @@ class _Presenter extends StatelessWidget {
   Widget _menuButton() {
     var options = <DialogOption>[
       DialogOption(icon: CrustCons.call_bold, display: 'Call 0${store.phoneNumber}', onTap: () => launch('tel:0${store.phoneNumber}')),
-      DialogOption(icon: CrustCons.location_bold, display: 'Get Directions', onTap: () => launch(store.address.googleUrl)),
+      DialogOption(icon: CrustCons.location_bold, display: 'Get Directions', onTap: () => launch(store.getDirectionUrl())),
     ];
     var showBottomSheet = (context) {
       showModalBottomSheet(

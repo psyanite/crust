@@ -3,6 +3,7 @@ import 'package:crust/components/rewards/redeemed_rewards_screen.dart';
 import 'package:crust/components/rewards/reward_cards.dart';
 import 'package:crust/components/rewards/view_mode_icon.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
+import 'package:crust/components/search/search_screen.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
@@ -47,13 +48,22 @@ class RewardsScreenState extends State<RewardsScreen> {
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[Text('REWARDS', style: Burnt.appBarTitleStyle), _qrIcon()],
+                children: <Widget>[Text('REWARDS', style: Burnt.appBarTitleStyle), Row(children: <Widget>[_searchIcon(), _qrIcon()],)],
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _searchIcon() {
+    return Builder(builder: (context) {
+      return IconButton(
+        icon: Icon(CrustCons.search, color: Burnt.lightGrey, size: 21.0),
+        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SearchScreen())),
+      );
+    });
   }
 
   Widget _qrIcon() {
@@ -150,7 +160,7 @@ class _Props {
   });
 
   static fromStore(Store<AppState> store) {
-    var rewards = store.state.reward.rewards.values.toList();
+    var rewards = store.state.reward.topRewards.values.toList();
     return _Props(
       rewards: rewards.where((r) => r.isExpired() == false && r.isHidden() == false).toList(),
       isLoggedIn: store.state.me.user != null,

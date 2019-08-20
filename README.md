@@ -38,22 +38,22 @@
 </div>
 
 ## To Do
-* Curate some lists for better exploring stores experience
-
+* Search rewards
 * Implement pagination
 
 * Implement store posts
-
 * Add submit missing store feature
-
 * Enable firebase dynamic urls in iOS
 * Add link previews to dynamic links
 * Enable login via iOS
-
 * Run nightly task to update caches
 * Send email of results
 
 ## Done
+* Browse rewards
+* Add bearer token to server environment
+* Directions
+* Curate some lists for better exploring stores experience
 * Update tagline to be multiline
 * Implement follow functionality
 * Add follow button on profile
@@ -119,6 +119,8 @@
 * Cache network images on post lists
 
 ## How to Release
+1. Open `config.dart`
+1. Update `appFlavor` to `Flavor.RELEASE`
 1. Run `flutter build apk`
 1. Copy apk file from build dir into docs
-
+1. If upgrading version number update two places in `README.md`

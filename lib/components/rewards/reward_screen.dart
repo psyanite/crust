@@ -226,7 +226,7 @@ class _Presenter extends StatelessWidget {
               Container(height: 3.0),
               Text(group.stores.map((s) => s.location ?? s.suburb).join(", ")),
               Container(height: 10.0),
-              Text('See more information', style: TextStyle(color: Burnt.primaryTextColor)),
+              Text('More Information', style: TextStyle(color: Burnt.primaryTextColor)),
             ],
           ),
         ),
@@ -244,7 +244,7 @@ class _Presenter extends StatelessWidget {
           showDialog(context: context, builder: (context) => TermsDialog(options: options, terms: reward.termsAndConditions));
         },
         child: Text(
-          'See terms and conditions',
+          'Terms & Conditions',
           style: TextStyle(color: Burnt.primaryTextColor),
         ),
       );

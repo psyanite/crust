@@ -13,14 +13,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchRewardsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
       converter: (Store<AppState> store) => _Props.fromStore(store),
       builder: (BuildContext context, _Props props) {
         return _Presenter(
-          searchHistory: props.searchHistory,
           location: props.location,
           addSearchHistoryItem: props.addSearchHistoryItem,
           setMyLocation: props.setMyLocation,
@@ -37,7 +36,7 @@ class _Presenter extends StatefulWidget {
   final Function setMyLocation;
 
   _Presenter({Key key, this.searchHistory, this.location, this.addSearchHistoryItem, this.setMyLocation})
-      : super(key: key);
+    : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState();
@@ -143,14 +142,14 @@ class _PresenterState extends State<_Presenter> {
           hintText: 'Search for a restaurant, cafe, or eatery',
           prefixIcon: Icon(CrustCons.search, color: Burnt.lightGrey, size: 18.0),
           suffixIcon: IconButton(
-              icon: Icon(Icons.clear),
-              onPressed: () {
-                _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
-                this.setState(() {
-                  _submit = false;
-                  _query = '';
-                });
-              }),
+            icon: Icon(Icons.clear),
+            onPressed: () {
+              _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
+              this.setState(() {
+                _submit = false;
+                _query = '';
+              });
+            }),
           border: InputBorder.none,
         ),
       ),
@@ -160,11 +159,11 @@ class _PresenterState extends State<_Presenter> {
   Widget _suggestions() {
     var suggests = [...widget.searchHistory];
     var filtered = _query.isEmpty
-        ? suggests
-        : suggests.where((i) {
-            return (i.cuisineName == null || i.cuisineName.toLowerCase().contains(_query.toLowerCase())) &&
-                (i.store == null || i.store.name.toLowerCase().contains(_query.toLowerCase()));
-          });
+      ? suggests
+      : suggests.where((i) {
+      return (i.cuisineName == null || i.cuisineName.toLowerCase().contains(_query.toLowerCase())) &&
+        (i.store == null || i.store.name.toLowerCase().contains(_query.toLowerCase()));
+    });
     var children = filtered.map<Widget>((i) {
       switch (i.type) {
         case SearchHistoryItemType.cuisine:
@@ -182,93 +181,93 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _cuisineSuggest(SearchHistoryItem item) {
     return Builder(
-        builder: (context) => InkWell(
-            splashColor: Burnt.lightGrey,
-            onTap: () {
-              widget.addSearchHistoryItem(item);
-              _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: item.cuisineName));
-              this.setState(() {
-                _submit = true;
-                _query = item.cuisineName;
-              });
-            },
-            child: Padding(
-              padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
-              child: Container(
-                color: Colors.transparent,
-                child: IntrinsicHeight(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      Container(
-                          height: 40.0,
-                          width: 40.0,
-                          margin: EdgeInsets.only(top: 5.0, right: 5.0, bottom: 5.0, left: 4.0),
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(30.0), color: Color(0xFFFFEFD1)),
-                          child: Icon(CrustCons.bread_heart, color: Color(0xFFFFD58B), size: 30.0)),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: 16.0, left: 10.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[Text(item.cuisineName, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold))],
-                          ),
-                        ),
+      builder: (context) => InkWell(
+        splashColor: Burnt.lightGrey,
+        onTap: () {
+          widget.addSearchHistoryItem(item);
+          _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: item.cuisineName));
+          this.setState(() {
+            _submit = true;
+            _query = item.cuisineName;
+          });
+        },
+        child: Padding(
+          padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
+          child: Container(
+            color: Colors.transparent,
+            child: IntrinsicHeight(
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  Container(
+                    height: 40.0,
+                    width: 40.0,
+                    margin: EdgeInsets.only(top: 5.0, right: 5.0, bottom: 5.0, left: 4.0),
+                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(30.0), color: Color(0xFFFFEFD1)),
+                    child: Icon(CrustCons.bread_heart, color: Color(0xFFFFD58B), size: 30.0)),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: 16.0, left: 10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[Text(item.cuisineName, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold))],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            )));
+            ),
+          ),
+        )));
   }
 
   Widget _storeSuggest(SearchHistoryItem item) {
     var store = item.store;
     return Builder(
-        builder: (context) => InkWell(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id)));
-              widget.addSearchHistoryItem(item);
-            },
-            child: Padding(
-              padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
-              child: Container(
-                child: IntrinsicHeight(
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      _storeImage(store),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                              Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
-                              Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
-                            ],
-                          ),
-                        ),
+      builder: (context) => InkWell(
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id)));
+          widget.addSearchHistoryItem(item);
+        },
+        child: Padding(
+          padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
+          child: Container(
+            child: IntrinsicHeight(
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  _storeImage(store),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
+                          Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
+                          Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
-            )));
+            ),
+          ),
+        )));
   }
 
   Widget _storeImage(MyStore.Store store) {
     return Container(
-        width: 50.0,
-        height: 50.0,
-        decoration: BoxDecoration(
-          color: Burnt.imgPlaceholderColor,
-          image: DecorationImage(
-            image: NetworkImage(store.coverImage),
-            fit: BoxFit.cover,
-          ),
-        ));
+      width: 50.0,
+      height: 50.0,
+      decoration: BoxDecoration(
+        color: Burnt.imgPlaceholderColor,
+        image: DecorationImage(
+          image: NetworkImage(store.coverImage),
+          fit: BoxFit.cover,
+        ),
+      ));
   }
 
   Widget _searchResults(BuildContext context) {
@@ -287,10 +286,10 @@ class _PresenterState extends State<_Presenter> {
               return SliverCenter(child: Text('Oops! Something went wrong, please try again'));
             } else if (snapshot.data.length == 0) {
               return SliverCenter(
-                  child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text("Oops! We couldn't find anything, maybe try something different?"),
-              ));
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Text("Oops! We couldn't find anything, maybe try something different?"),
+                ));
             }
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, i) {
@@ -307,44 +306,44 @@ class _PresenterState extends State<_Presenter> {
   Widget _storeCard(MyStore.Store store) {
     return Builder(
       builder: (context) => InkWell(
-          onTap: () {
-            widget.addSearchHistoryItem(SearchHistoryItem(type: SearchHistoryItemType.store, store: store));
-            Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id)));
-          },
-          child: Padding(
-            padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
-            child: Container(
-              child: IntrinsicHeight(
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                        width: 120.0,
-                        height: 100.0,
-                        decoration: BoxDecoration(
-                          color: Burnt.imgPlaceholderColor,
-                          image: DecorationImage(
-                            image: NetworkImage(store.coverImage),
-                            fit: BoxFit.cover,
-                          ),
-                        )),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                            Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
-                            Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
-                          ],
-                        ),
+        onTap: () {
+          widget.addSearchHistoryItem(SearchHistoryItem(type: SearchHistoryItemType.store, store: store));
+          Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id)));
+        },
+        child: Padding(
+          padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
+          child: Container(
+            child: IntrinsicHeight(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: 120.0,
+                    height: 100.0,
+                    decoration: BoxDecoration(
+                      color: Burnt.imgPlaceholderColor,
+                      image: DecorationImage(
+                        image: NetworkImage(store.coverImage),
+                        fit: BoxFit.cover,
+                      ),
+                    )),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
+                          Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
+                          Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          )),
+          ),
+        )),
     );
   }
 }
@@ -359,9 +358,9 @@ class _Props {
 
   static fromStore(Store<AppState> store) {
     return _Props(
-        searchHistory: store.state.me.searchHistory,
-        location: store.state.me.location,
-        addSearchHistoryItem: (item) => store.dispatch(AddSearchHistoryItem(item)),
-        setMyLocation: (location) => store.dispatch(SetMyLocation(location)));
+      searchHistory: store.state.me.searchHistory,
+      location: store.state.me.location,
+      addSearchHistoryItem: (item) => store.dispatch(AddSearchHistoryItem(item)),
+      setMyLocation: (location) => store.dispatch(SetMyLocation(location)));
   }
 }

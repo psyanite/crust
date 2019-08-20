@@ -10,6 +10,7 @@ class Store {
   final Address address;
   final String location;
   final String suburb;
+  final String city;
   final List<String> cuisines;
   final List<Post> posts;
   final List<int> rewards;
@@ -27,6 +28,7 @@ class Store {
     this.address,
     this.location,
     this.suburb,
+    this.city,
     this.cuisines,
     this.posts,
     this.rewards,
@@ -42,7 +44,9 @@ class Store {
       phoneNumber: this.phoneNumber,
       coverImage: this.coverImage,
       address: this.address,
+      location: this.location,
       suburb: this.suburb,
+      city: this.city,
       cuisines: this.cuisines,
       posts: posts ?? this.posts,
       rewards: rewards ?? this.rewards,
@@ -59,6 +63,7 @@ class Store {
       'coverImage': this.coverImage,
       'location': this.location,
       'suburb': this.suburb,
+      'city': this.city,
       'cuisines': this.cuisines,
       'heartCount': this.heartCount,
       'okayCount': this.okayCount,
@@ -73,6 +78,7 @@ class Store {
       coverImage: json['coverImage'],
       location: json['location'],
       suburb: json['suburb'],
+      city: json['city'],
       cuisines: List<String>.from(json['cuisines']),
       heartCount: json['heartCount'],
       okayCount: json['okayCount'],
@@ -92,6 +98,7 @@ class Store {
       address: json['address'] != null ? Address.fromToaster(json['address']) : null,
       location: json['location'] != null ? json['location']['name'] : null,
       suburb: json['suburb'] != null ? json['suburb']['name'] : null,
+      city: json['city'] != null ? json['city']['name'] : null,
       heartCount: json['ratings'] != null ? json['ratings']['heart_ratings'] : null,
       okayCount: json['ratings'] != null ? json['ratings']['okay_ratings'] : null,
       burntCount: json['ratings'] != null ? json['ratings']['burnt_ratings'] : null,
@@ -111,14 +118,14 @@ class Store {
       address_second_line,
       address_street_number,
       address_street_name,
-      google_url,
     },
     location {
-      id,
       name,
     },
     suburb {
-      id,
+      name,
+    },
+    city {
       name,
     },
     cuisines {
@@ -131,6 +138,20 @@ class Store {
       burnt_ratings
     }
   """;
+
+  String getDirectionUrl() {
+    var query = [
+      name,
+      if (address.firstLine != null) address.firstLine,
+      if (address.secondLine != null) address.secondLine,
+      if (address.streetNumber != null) address.streetNumber,
+      if (address.streetName != null) address.streetName,
+      if (location != null)  location,
+      if (suburb != null) suburb,
+      if (city != null) city,
+    ].join(' ');
+    return 'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(query)}';
+  }
 
   @override
   String toString() {
@@ -167,9 +188,8 @@ class Address {
   final String secondLine;
   final String streetNumber;
   final String streetName;
-  final String googleUrl;
 
-  Address({this.firstLine, this.secondLine, this.streetNumber, this.streetName, this.googleUrl});
+  Address({this.firstLine, this.secondLine, this.streetNumber, this.streetName});
 
   factory Address.fromToaster(Map<String, dynamic> json) {
     if (json == null) return null;
@@ -178,7 +198,6 @@ class Address {
       secondLine: json['address_second_line'],
       streetNumber: json['address_street_number'],
       streetName: json['address_street_name'],
-      googleUrl: json['google_url'],
     );
   }
 }
