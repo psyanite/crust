@@ -1,4 +1,3 @@
-import 'package:crust/models/post.dart';
 import 'package:crust/models/store.dart';
 
 class FetchStoreById {
@@ -13,8 +12,6 @@ class FetchStoreSuccess {
   FetchStoreSuccess(this.store);
 }
 
-class FetchStores {}
-
 class FetchStoresSuccess {
   final List<Store> stores;
 
@@ -27,19 +24,6 @@ class FetchTopStoresSuccess {
   final List<Store> stores;
 
   FetchTopStoresSuccess(this.stores);
-}
-
-class FetchPostsByStoreId {
-  final int storeId;
-
-  FetchPostsByStoreId(this.storeId);
-}
-
-class FetchPostsByStoreIdSuccess {
-  final int storeId;
-  final List<Post> posts;
-
-  FetchPostsByStoreIdSuccess(this.storeId, this.posts);
 }
 
 class FetchRewardsByStoreId {

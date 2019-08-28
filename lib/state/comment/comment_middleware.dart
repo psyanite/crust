@@ -26,7 +26,7 @@ Middleware<AppState> _fetchComments(CommentService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     service.commentsByPostId(action.postId).then((comments) {
       store.dispatch(FetchCommentsSuccess(action.postId, comments));
-    }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    }).catchError((e) => store.dispatch(RequestFailure("fetchComments ${e.toString()}")));
 
     next(action);
   };
@@ -41,7 +41,7 @@ Middleware<AppState> _favoriteComment(CommentService service) {
       } else {
         store.dispatch(RequestFailure("Failed to favorite comment: ${action.comment.id}"));
       }
-    }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    }).catchError((e) => store.dispatch(RequestFailure("favoriteComments ${e.toString()}")));
     next(action);
   };
 }
@@ -55,7 +55,7 @@ Middleware<AppState> _unfavoriteComment(CommentService service) {
       } else {
         store.dispatch(RequestFailure("Failed to unfavorite comment: ${action.comment.id}"));
       }
-    }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    }).catchError((e) => store.dispatch(RequestFailure("unfavoriteComments ${e.toString()}")));
     next(action);
   };
 }
@@ -69,7 +69,7 @@ Middleware<AppState> _favoriteReply(CommentService service) {
       } else {
         store.dispatch(RequestFailure("Failed to favorite reply: ${action.reply.id}"));
       }
-    }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    }).catchError((e) => store.dispatch(RequestFailure("favoriteReply ${e.toString()}")));
     next(action);
   };
 }

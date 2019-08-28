@@ -1,6 +1,17 @@
 import 'package:crust/models/reward.dart';
 
-class FetchRewards {}
+class FetchRewardsNearMe {
+  final int limit;
+  final int offset;
+
+  FetchRewardsNearMe(this.limit, this.offset);
+}
+
+class FetchRewardsNearMeSuccess {
+  final List<int> rewardIds;
+
+  FetchRewardsNearMeSuccess(this.rewardIds);
+}
 
 class FetchRewardsSuccess {
   final List<Reward> rewards;

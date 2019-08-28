@@ -1,4 +1,6 @@
-class GeneralUtils {
+import 'dart:collection';
+
+class Utils {
   static final shareBaseUrl = 'https://burntoast.page.link/?link=https://burntoast.com';
 
   static String validateUsername(String name) {
@@ -51,5 +53,10 @@ class GeneralUtils {
 
   static String buildRewardQrCode(String code) {
     return ':rewards:$code';
+  }
+
+  static List<dynamic> subset(Iterable<int> ids, LinkedHashMap<int, dynamic> map) {
+    return ids == null || map == null ? null
+      : map.entries.where((r) => ids.contains(r.value.id)).map((e) => e.value).toList();
   }
 }

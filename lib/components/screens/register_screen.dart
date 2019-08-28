@@ -72,7 +72,7 @@ class _PresenterState extends State<_Presenter> {
 
   _press(context) async {
     FocusScope.of(context).requestFocus(new FocusNode());
-    var error = GeneralUtils.validateUsername(_username);
+    var error = Utils.validateUsername(_username);
     if (error != null) {
       snack(context, error);
       return;

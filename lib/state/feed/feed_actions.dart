@@ -1,15 +1,9 @@
 import 'package:crust/models/post.dart';
 
-class FetchDefaultFeed {}
-
-class FetchFeed {
-  final int userId;
-
-  FetchFeed(this.userId);
-}
+class FetchFeed {}
 
 class FetchFeedSuccess {
-  final Set<Post> posts;
+  final List<Post> posts;
 
   FetchFeedSuccess(this.posts);
 }

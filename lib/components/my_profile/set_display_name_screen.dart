@@ -49,7 +49,7 @@ class _PresenterState extends State<_Presenter> {
 
   void _submit(BuildContext context) async {
     var name = _nameCtrl.text;
-    var error = GeneralUtils.validateDisplayName(name);
+    var error = Utils.validateDisplayName(name);
     if (error != null) {
       snack(context, error);
       return;

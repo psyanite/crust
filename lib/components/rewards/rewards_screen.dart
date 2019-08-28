@@ -1,6 +1,7 @@
 import 'package:crust/components/rewards/favorite_rewards_screen.dart';
 import 'package:crust/components/rewards/redeemed_rewards_screen.dart';
 import 'package:crust/components/rewards/reward_cards.dart';
+import 'package:crust/components/rewards/reward_swiper.dart';
 import 'package:crust/components/rewards/view_mode_icon.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
 import 'package:crust/components/search/search_screen.dart';
@@ -9,32 +10,109 @@ import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
+import 'package:crust/state/reward/reward_actions.dart';
+import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-class RewardsScreen extends StatefulWidget {
-  @override
-  RewardsScreenState createState() => RewardsScreenState();
-}
-
-class RewardsScreenState extends State<RewardsScreen> {
-  String currentLayout = 'card';
-
+class RewardsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
       converter: (Store<AppState> store) => _Props.fromStore(store),
       builder: (BuildContext context, _Props props) {
-        return CustomScrollView(slivers: <Widget>[
-          _appBar(),
-          _seeRedeemedButton(context, props.isLoggedIn),
-          _myRewardsButton(context, props.isLoggedIn),
-          _rewardsListTitle(),
-          _rewardsList(props)
-        ]);
+        return _Presenter(
+          isLoggedIn: props.isLoggedIn,
+          refresh: props.refresh,
+          topRewards: props.topRewards,
+          nearMe: props.nearMe,
+          fetchRewards: props.fetchRewards,
+        );
       },
+    );
+  }
+}
+
+class _Presenter extends StatefulWidget {
+  final bool isLoggedIn;
+  final Function refresh;
+  final List<Reward> topRewards;
+  final List<Reward> nearMe;
+  final Function fetchRewards;
+
+  _Presenter({Key key, this.isLoggedIn, this.refresh, this.topRewards, this.nearMe, this.fetchRewards}) : super(key: key);
+
+  @override
+  _PresenterState createState() => _PresenterState();
+}
+
+class _PresenterState extends State<_Presenter> {
+  String currentLayout = 'card';
+  ScrollController _scrollie;
+  List<Reward> nearMe;
+  bool loading = false;
+  int limit = 7;
+  int offset = 7;
+
+  @override
+  initState() {
+    super.initState();
+    _scrollie = ScrollController()
+      ..addListener(() {
+        if (loading == false && limit > 0 && _scrollie.position.extentAfter < 500) _getMoreRewards();
+      });
+  }
+
+  @override
+  void didUpdateWidget(_Presenter old) {
+    if (loading == true) {
+      if (old.nearMe.length == widget.nearMe.length) {
+        limit = 0;
+      } else if (old.nearMe.length < widget.nearMe.length) {
+        nearMe = widget.nearMe;
+        offset = offset + limit;
+      }
+      loading = false;
+    }
+    super.didUpdateWidget(old);
+  }
+
+  @override
+  dispose() {
+    _scrollie.dispose();
+    super.dispose();
+  }
+
+  _getMoreRewards() async {
+    if (limit > 0) {
+      this.setState(() => loading = true);
+      widget.fetchRewards(limit, offset);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: RefreshIndicator(
+        onRefresh: () async {
+          widget.refresh();
+          await Future.delayed(Duration(seconds: 1));
+        },
+        child: CustomScrollView(
+          slivers: <Widget>[
+            _appBar(),
+            _seeRedeemedButton(context),
+            _myRewardsButton(context),
+            _topRewards(context),
+            _rewardsListTitle(),
+            _rewardsList()
+          ],
+          controller: _scrollie,
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        ),
+      ),
     );
   }
 
@@ -48,7 +126,12 @@ class RewardsScreenState extends State<RewardsScreen> {
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[Text('REWARDS', style: Burnt.appBarTitleStyle), Row(children: <Widget>[_searchIcon(), _qrIcon()],)],
+                children: <Widget>[
+                  Text('REWARDS', style: Burnt.appBarTitleStyle),
+                  Row(
+                    children: <Widget>[_searchIcon(), _qrIcon()],
+                  )
+                ],
               ),
             ],
           ),
@@ -77,9 +160,9 @@ class RewardsScreenState extends State<RewardsScreen> {
     });
   }
 
-  Widget _seeRedeemedButton(BuildContext context, bool isLoggedIn) {
+  Widget _seeRedeemedButton(BuildContext context) {
     var onTap = () {
-      if (!isLoggedIn) {
+      if (!widget.isLoggedIn) {
         snack(context, 'Login now to redeem rewards!');
       } else {
         Navigator.push(context, MaterialPageRoute(builder: (_) => RedeemedRewardsScreen()));
@@ -97,7 +180,7 @@ class RewardsScreenState extends State<RewardsScreen> {
     );
   }
 
-  Widget _myRewardsButton(BuildContext context, bool isLoggedIn) {
+  Widget _myRewardsButton(BuildContext context) {
     return SliverToBoxAdapter(
       child: Container(
         padding: EdgeInsets.only(top: 10.0, bottom: 15.0, left: 16.0, right: 16.0),
@@ -108,13 +191,30 @@ class RewardsScreenState extends State<RewardsScreen> {
           padding: 10.0,
           fontSize: 20.0,
           onPressed: () {
-            if (!isLoggedIn) {
+            if (!widget.isLoggedIn) {
               snack(context, 'Login now to favourite rewards!');
             } else {
               Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteRewardsScreen()));
             }
           },
         ),
+      ),
+    );
+  }
+
+  Widget _topRewards(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Column(
+        children: <Widget>[
+          RewardSwiper(
+            rewards: widget.topRewards,
+            header: Padding(
+              padding: EdgeInsets.only(top: 40.0, bottom: 15.0),
+              child: Text('TOP PICKS 👍', style: Burnt.appBarTitleStyle.copyWith(color: Burnt.hintTextColor)),
+            ),
+          ),
+          Container(height: 20.0),
+        ],
       ),
     );
   }
@@ -144,26 +244,38 @@ class RewardsScreenState extends State<RewardsScreen> {
     );
   }
 
-  Widget _rewardsList(_Props props) {
-    if (props.rewards.isEmpty) return LoadingSliver();
-    return RewardCards(rewards: props.rewards, layout: currentLayout);
+  Widget _rewardsList() {
+    var rewards = widget.nearMe;
+    if (rewards.isEmpty) return LoadingSliver();
+    return RewardCards(rewards: rewards, layout: currentLayout);
   }
 }
 
 class _Props {
-  final List<Reward> rewards;
   final bool isLoggedIn;
+  final Function refresh;
+  final List<Reward> topRewards;
+  final List<Reward> nearMe;
+  final Function fetchRewards;
 
   _Props({
-    this.rewards,
     this.isLoggedIn,
+    this.refresh,
+    this.topRewards,
+    this.nearMe,
+    this.fetchRewards,
   });
 
   static fromStore(Store<AppState> store) {
-    var rewards = store.state.reward.topRewards.values.toList();
     return _Props(
-      rewards: rewards.where((r) => r.isExpired() == false && r.isHidden() == false).toList(),
       isLoggedIn: store.state.me.user != null,
+      refresh: () {
+        store.dispatch(FetchRewardsNearMe(7, 0));
+        store.dispatch(FetchTopRewards());
+      },
+      topRewards: store.state.reward.topRewards.values.toList(),
+      nearMe: List<Reward>.from(Utils.subset(store.state.reward.nearMe, store.state.reward.rewards)),
+      fetchRewards: (limit, offset) => store.dispatch(FetchRewardsNearMe(limit, offset)),
     );
   }
 }

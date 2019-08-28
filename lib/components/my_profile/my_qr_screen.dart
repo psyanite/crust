@@ -13,7 +13,7 @@ class MyQrScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var children = <Widget>[
       QrImage(
-        data: GeneralUtils.buildProfileQrCode(userId),
+        data: Utils.buildProfileQrCode(userId),
         size: 300.0,
         foregroundColor: Colors.white,
         version: 2,

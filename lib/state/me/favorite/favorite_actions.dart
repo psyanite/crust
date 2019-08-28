@@ -70,11 +70,7 @@ class UnfavoritePostSuccess {
   UnfavoritePostSuccess(this.postId);
 }
 
-class FetchFavorites {
-  final bool updateStore;
-
-  FetchFavorites({this.updateStore: false});
-}
+class FetchFavorites {}
 
 class FetchFavoritesSuccess {
   final Set<int> favoriteRewards;

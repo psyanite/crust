@@ -7,45 +7,23 @@ import 'package:crust/models/post.dart';
 import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
-import 'package:crust/state/app/app_state.dart';
-import 'package:crust/state/store/store_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:multi_image_picker/asset.dart';
-import 'package:redux/redux.dart';
 
 import 'current_photos.dart';
 
-class EditPostScreen extends StatelessWidget {
+class EditPostScreen extends StatefulWidget {
   final Post post;
 
   EditPostScreen({Key key, this.post}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return StoreConnector<AppState, _Props>(
-        converter: (Store<AppState> store) => _Props.fromStore(store),
-        builder: (BuildContext context, _Props props) => _Presenter(
-              post: post,
-              fetchPostsByStoreId: props.fetchPostsByStoreId,
-            ));
-  }
+  _PresenterState createState() => _PresenterState(currentPost: post);
 }
 
-class _Presenter extends StatefulWidget {
-  final Post post;
-  final Function fetchPostsByStoreId;
-
-  _Presenter({Key key, this.post, this.fetchPostsByStoreId}) : super(key: key);
-
-  @override
-  _PresenterState createState() => _PresenterState(currentPost: post, fetchPostsByStoreId: fetchPostsByStoreId);
-}
-
-class _PresenterState extends State<_Presenter> {
+class _PresenterState extends State<EditPostScreen> {
   final Post currentPost;
-  final Function fetchPostsByStoreId;
   MyStore.Store store;
   Post post;
   Score overallScore;
@@ -61,7 +39,7 @@ class _PresenterState extends State<_Presenter> {
   bool showUploadOverlay = false;
   TextEditingController bodyCtrl = TextEditingController();
 
-  _PresenterState({this.currentPost, this.fetchPostsByStoreId});
+  _PresenterState({this.currentPost});
 
   @override
   initState() {
@@ -105,7 +83,7 @@ class _PresenterState extends State<_Presenter> {
           ),
         ),
         if (showUploadOverlay)
-          UploadOverlay(post: post, fetchPostsByStoreId: fetchPostsByStoreId, images: images, deletePhotosQueue: deletePhotosQueue),
+          UploadOverlay(post: post, images: images, deletePhotosQueue: deletePhotosQueue),
       ],
     );
   }
@@ -482,19 +460,5 @@ class _PresenterState extends State<_Presenter> {
         imageData = imageData;
       });
     });
-  }
-}
-
-class _Props {
-  final Function fetchPostsByStoreId;
-
-  _Props({
-    this.fetchPostsByStoreId,
-  });
-
-  static fromStore(Store<AppState> store) {
-    return _Props(
-      fetchPostsByStoreId: (storeId) => store.dispatch(FetchPostsByStoreId(storeId)),
-    );
   }
 }

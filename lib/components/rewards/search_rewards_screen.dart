@@ -30,12 +30,11 @@ class SearchRewardsScreen extends StatelessWidget {
 }
 
 class _Presenter extends StatefulWidget {
-  final List<SearchHistoryItem> searchHistory;
   final SearchLocationItem location;
   final Function addSearchHistoryItem;
   final Function setMyLocation;
 
-  _Presenter({Key key, this.searchHistory, this.location, this.addSearchHistoryItem, this.setMyLocation})
+  _Presenter({Key key, this.location, this.addSearchHistoryItem, this.setMyLocation})
     : super(key: key);
 
   @override
@@ -66,7 +65,7 @@ class _PresenterState extends State<_Presenter> {
       _appBar(),
       _locationBar(),
       _searchBar(),
-      _submit ? _searchResults(context) : _suggestions(),
+      if (_submit) _searchResults(context),
     ];
     return Scaffold(body: CustomScrollView(slivers: slivers));
   }
@@ -156,120 +155,6 @@ class _PresenterState extends State<_Presenter> {
     );
   }
 
-  Widget _suggestions() {
-    var suggests = [...widget.searchHistory];
-    var filtered = _query.isEmpty
-      ? suggests
-      : suggests.where((i) {
-      return (i.cuisineName == null || i.cuisineName.toLowerCase().contains(_query.toLowerCase())) &&
-        (i.store == null || i.store.name.toLowerCase().contains(_query.toLowerCase()));
-    });
-    var children = filtered.map<Widget>((i) {
-      switch (i.type) {
-        case SearchHistoryItemType.cuisine:
-          return _cuisineSuggest(i);
-          break;
-        case SearchHistoryItemType.store:
-          return _storeSuggest(i);
-          break;
-        default:
-          return Container();
-      }
-    }).toList();
-    return SliverToBoxAdapter(child: Column(children: children));
-  }
-
-  Widget _cuisineSuggest(SearchHistoryItem item) {
-    return Builder(
-      builder: (context) => InkWell(
-        splashColor: Burnt.lightGrey,
-        onTap: () {
-          widget.addSearchHistoryItem(item);
-          _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: item.cuisineName));
-          this.setState(() {
-            _submit = true;
-            _query = item.cuisineName;
-          });
-        },
-        child: Padding(
-          padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
-          child: Container(
-            color: Colors.transparent,
-            child: IntrinsicHeight(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Container(
-                    height: 40.0,
-                    width: 40.0,
-                    margin: EdgeInsets.only(top: 5.0, right: 5.0, bottom: 5.0, left: 4.0),
-                    decoration: BoxDecoration(borderRadius: BorderRadius.circular(30.0), color: Color(0xFFFFEFD1)),
-                    child: Icon(CrustCons.bread_heart, color: Color(0xFFFFD58B), size: 30.0)),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 16.0, left: 10.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[Text(item.cuisineName, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold))],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        )));
-  }
-
-  Widget _storeSuggest(SearchHistoryItem item) {
-    var store = item.store;
-    return Builder(
-      builder: (context) => InkWell(
-        onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id)));
-          widget.addSearchHistoryItem(item);
-        },
-        child: Padding(
-          padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
-          child: Container(
-            child: IntrinsicHeight(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  _storeImage(store),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                          Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
-                          Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        )));
-  }
-
-  Widget _storeImage(MyStore.Store store) {
-    return Container(
-      width: 50.0,
-      height: 50.0,
-      decoration: BoxDecoration(
-        color: Burnt.imgPlaceholderColor,
-        image: DecorationImage(
-          image: NetworkImage(store.coverImage),
-          fit: BoxFit.cover,
-        ),
-      ));
-  }
-
   Widget _searchResults(BuildContext context) {
     if (_query.isEmpty) {
       return SliverCenter(child: Container());
@@ -280,7 +165,7 @@ class _PresenterState extends State<_Presenter> {
         switch (snapshot.connectionState) {
           case ConnectionState.active:
           case ConnectionState.waiting:
-            return LoadingSliver();
+            return LoadingSliverCenter();
           case ConnectionState.done:
             if (snapshot.hasError) {
               return SliverCenter(child: Text('Oops! Something went wrong, please try again'));

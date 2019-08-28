@@ -16,82 +16,45 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-class PostList extends StatelessWidget {
+class PostListList extends StatelessWidget {
   final Widget noPostsView;
-  final List<Post> posts;
   final PostListType postListType;
+  final List<Post> posts;
+  final Function removeFromList;
 
-  PostList({Key key, this.noPostsView, this.posts, this.postListType}) : super(key: key);
+  PostListList({Key key, this.noPostsView, this.postListType, this.posts, this.removeFromList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (posts == null) return LoadingSliver();
-    if (posts.isEmpty) return _noPostsNotice();
-    return _PostList(posts: posts, postListType: postListType);
-  }
-
-  Widget _noPostsNotice() {
-    return SliverToBoxAdapter(
-        child: Container(padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 16.0), child: Center(child: noPostsView)));
-  }
-}
-
-class _PostList extends StatefulWidget {
-  final List<Post> posts;
-  final PostListType postListType;
-
-  _PostList({Key key, this.posts, this.postListType}) : super(key: key);
-
-  @override
-  _PostListState createState() => _PostListState(posts: posts, postListType: postListType);
-}
-
-class _PostListState extends State<_PostList> {
-  final Widget noPostsView;
-  final PostListType postListType;
-  List<Post> posts;
-
-  _PostListState({this.noPostsView, this.posts, this.postListType});
-
-  @override
-  didUpdateWidget(_PostList old) {
-    if (old.posts != widget.posts) {
-      super.didUpdateWidget(old);
-      this.setState(() => posts = widget.posts);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
+    if (posts == null) return LoadingSliverCenter();
+    if (posts.isEmpty) return _noPosts();
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: 16.0),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate((builder, i) {
-          return PostCard(
+          return _PostCard(
             post: posts[i],
             postListType: postListType,
-            removeFromList: removeFromList,
-            index: i,
+            removeFromList: () => removeFromList(i),
           );
         }, childCount: posts.length),
       ),
     );
   }
 
-  removeFromList(int index) {
-    this.setState(() {
-      posts = List.from(posts)..removeAt(index);
-    });
+  Widget _noPosts() {
+    return SliverToBoxAdapter(
+      child: Container(padding: EdgeInsets.symmetric(vertical: 40.0, horizontal: 16.0), child: Center(child: noPostsView)),
+    );
   }
 }
 
-class PostCard extends StatelessWidget {
+class _PostCard extends StatelessWidget {
   final Post post;
   final PostListType postListType;
-  final int index;
   final Function removeFromList;
 
-  PostCard({Key key, this.post, this.postListType, this.index, this.removeFromList}) : super(key: key);
+  _PostCard({Key key, this.post, this.postListType, this.removeFromList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +67,7 @@ class PostCard extends StatelessWidget {
       _commentButton(),
     ];
     if (post.hidden == true) stuff.add(_secretIcon());
-    stuff.add(_MoreButton(post: post, removeFromList: removeFromList, index: index));
+    stuff.add(_MoreButton(post: post, removeFromList: removeFromList));
     return stuff;
   }
 
@@ -160,9 +123,8 @@ class PostCard extends StatelessWidget {
 class _MoreButton extends StatelessWidget {
   final Post post;
   final Function removeFromList;
-  final int index;
 
-  _MoreButton({Key key, this.post, this.removeFromList, this.index}) : super(key: key);
+  _MoreButton({Key key, this.post, this.removeFromList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -170,7 +132,7 @@ class _MoreButton extends StatelessWidget {
       return store.state.me.user;
     }, builder: (context, me) {
       if (me == null || post.postedBy == null || me.id != post.postedBy.id) return Container();
-      return _MoreButtonPresenter(removeFromList: removeFromList, index: index, post: post, me: me);
+      return _MoreButtonPresenter(removeFromList: removeFromList, post: post, me: me);
     });
   }
 }
@@ -178,10 +140,9 @@ class _MoreButton extends StatelessWidget {
 class _MoreButtonPresenter extends StatelessWidget {
   final Post post;
   final Function removeFromList;
-  final int index;
   final User me;
 
-  _MoreButtonPresenter({Key key, this.post, this.removeFromList, this.index, this.me}) : super(key: key);
+  _MoreButtonPresenter({Key key, this.post, this.removeFromList, this.me}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -226,7 +187,7 @@ class _MoreButtonPresenter extends StatelessWidget {
         action: 'Delete',
         onTap: () async {
           await PostService.deletePost(post.id, me.id);
-          removeFromList(index);
+          removeFromList();
           Navigator.of(context, rootNavigator: true).pop(true);
           closeMoreDialog();
         });

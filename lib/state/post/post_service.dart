@@ -80,10 +80,10 @@ class PostService {
     return Post.fromToaster(json);
   }
 
-  Future<List<Post>> fetchPostsByUserId(int userId) async {
+  static Future<List<Post>> fetchPostsByUserId({int userId, int limit, int offset}) async {
     String query = """
       query {
-        postsByUserId(userId: $userId, showHiddenPosts: false) {
+        postsByUserId(userId: $userId, limit: $limit, offset: $offset, showHiddenPosts: false) {
           ${Post.attributes}
         }
       }
@@ -93,10 +93,10 @@ class PostService {
     return (json as List).map((p) => Post.fromToaster(p)).toList();
   }
 
-  Future<List<Post>> fetchMyPosts(int userId) async {
+  static Future<List<Post>> fetchMyPosts({int userId, int limit, int offset}) async {
     String query = """
       query {
-        postsByUserId(userId: $userId, showHiddenPosts: true) {
+        postsByUserId(userId: $userId, limit: $limit, offset: $offset, showHiddenPosts: true) {
           ${Post.attributes}
         }
       }

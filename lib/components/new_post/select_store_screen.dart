@@ -120,7 +120,7 @@ class _PresenterState extends State<_Presenter> {
         switch (snapshot.connectionState) {
           case ConnectionState.active:
           case ConnectionState.waiting:
-            return LoadingSliver();
+            return LoadingSliverCenter();
           case ConnectionState.done:
             if (snapshot.hasError) {
               return SliverCenter(child: Text('Oops! Something went wrong, please try again'));

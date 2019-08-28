@@ -6,19 +6,6 @@ import 'package:crust/services/toaster.dart';
 class StoreService {
   const StoreService();
 
-  Future<List<Store>> fetchStores() async {
-    String query = """
-      query {
-        allStores {
-          ${Store.attributes}
-        }
-      }
-    """;
-    final response = await Toaster.get(query);
-    var json = response['allStores'];
-    return (json as List).map((s) => Store.fromToaster(s)).toList();
-  }
-
   Future<List<Store>> fetchTopStores() async {
     String query = """
       query {
@@ -45,10 +32,10 @@ class StoreService {
     return Store.fromToaster(json);
   }
 
-  Future<List<Post>> fetchPostsByStoreId(int storeId) async {
+  static Future<List<Post>> fetchPostsByStoreId({int storeId, int limit, int offset}) async {
     String query = """
       query {
-        postsByStoreId(storeId: $storeId) {
+        postsByStoreId(storeId: $storeId, limit: $limit, offset: $offset) {
           ${Post.attributes}
         }
       }

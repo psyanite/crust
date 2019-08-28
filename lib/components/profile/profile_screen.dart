@@ -1,13 +1,15 @@
 import 'dart:async';
 
 import 'package:crust/components/my_profile/my_profile_screen.dart';
-import 'package:crust/components/post_list/post_list.dart';
+import 'package:crust/components/post_list/post_list_list.dart';
 import 'package:crust/components/profile/follow_user_button.dart';
 import 'package:crust/components/screens/loading_screen.dart';
+import 'package:crust/models/post.dart';
 import 'package:crust/models/user.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
+import 'package:crust/state/post/post_service.dart';
 import 'package:crust/state/user/user_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,27 +31,43 @@ class ProfileScreen extends StatelessWidget {
         }
       },
       converter: (Store<AppState> store) => _Props.fromStore(store, userId),
-      builder: (context, props) => _Presenter(user: props.user, refreshPage: props.refreshPage, myProfile: props.myProfile),
+      builder: (context, props) => _Presenter(user: props.me, myProfile: props.myProfile),
     );
   }
 }
 
 class _Presenter extends StatefulWidget {
   final User user;
-  final Function refreshPage;
   final bool myProfile;
 
-  _Presenter({Key key, this.user, this.refreshPage, this.myProfile}) : super(key: key);
+  _Presenter({Key key, this.user, this.myProfile}) : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState();
 }
 
 class _PresenterState extends State<_Presenter> {
+  ScrollController _scrollie;
+  List<Post> posts;
+  bool loading = false;
+  int limit = 7;
+  int offset = 0;
+
   @override
   initState() {
     super.initState();
     if (widget.myProfile == true) _redirect();
+    _scrollie = ScrollController()
+      ..addListener(() {
+        if (loading == false && limit > 0 && _scrollie.position.extentAfter < 500) _getMorePosts();
+      });
+    _load();
+  }
+
+  @override
+  dispose() {
+    _scrollie.dispose();
+    super.dispose();
   }
 
   _redirect() async {
@@ -59,27 +77,53 @@ class _PresenterState extends State<_Presenter> {
     });
   }
 
+  _load() async {
+    var fresh = await _getPosts();
+    this.setState(() => posts = fresh);
+  }
+
+  removeFromList(int index) {
+    this.setState(() => posts = List<Post>.from(posts)..removeAt(index));
+  }
+
+  Future<List<Post>> _getPosts() async {
+    return PostService.fetchPostsByUserId(userId: widget.user.id, limit: limit, offset: offset);
+  }
+
+  _getMorePosts() async {
+    this.setState(() => loading = true);
+    var fresh = await _getPosts();
+    if (fresh.isEmpty) {
+      this.setState(() {
+        limit = 0;
+        loading = false;
+      });
+      return;
+    }
+    var update = List<Post>.from(posts)..addAll(fresh);
+    this.setState(() {
+      offset = offset + limit;
+      posts = update;
+      loading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var user = widget.user;
     if (user == null) return LoadingScreen();
     return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: _refresh,
-        child: CustomScrollView(slivers: <Widget>[
-          _appBar(),
-          PostList(
-            noPostsView: Text('Looks like ${user.firstName} hasn\'t written any reviews yet.'),
-            posts: user.posts,
-            postListType: PostListType.forProfile,
-          ),
-        ]),
-      ),
+      body: CustomScrollView(slivers: <Widget>[
+        _appBar(),
+        PostListList(
+          noPostsView: Text('Looks like ${user.firstName} hasn\'t written any reviews yet.'),
+          postListType: PostListType.forProfile,
+          posts: posts,
+          removeFromList: removeFromList,
+        ),
+        if (loading == true) LoadingSliver(),
+      ]),
     );
-  }
-
-  Future<void> _refresh() async {
-    await widget.refreshPage();
   }
 
   Widget _appBar() {
@@ -184,17 +228,16 @@ class _PresenterState extends State<_Presenter> {
 
 class _Props {
   final User user;
-  final Function refreshPage;
   final bool myProfile;
 
-  _Props({this.user, this.refreshPage, this.myProfile = false});
+  _Props({this.user, this.myProfile = false});
 
   static fromStore(Store<AppState> store, int userId) {
     var me = store.state.me.user;
     var myProfile = me != null && me?.id == userId;
     if (store.state.user.users == null || myProfile) {
-      return _Props(user: null, refreshPage: () {}, myProfile: myProfile);
+      return _Props(user: null, myProfile: myProfile);
     }
-    return _Props(user: store.state.user.users[userId], refreshPage: () => store.dispatch(FetchUserByUserId(userId)));
+    return _Props(user: store.state.user.users[userId]);
   }
 }

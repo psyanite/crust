@@ -16,7 +16,7 @@ class FavoriteRewardsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
       onInit: (Store<AppState> store) {
-        store.dispatch(FetchFavorites(updateStore: true));
+        store.dispatch(FetchFavorites());
       },
       converter: (Store<AppState> store) => _Props.fromStore(store),
       builder: (context, props) => _Presenter(myId: props.myId, favoriteRewards: props.favoriteRewards),
@@ -39,8 +39,12 @@ class _PresenterState extends State<_Presenter> {
 
   @override
   Widget build(BuildContext context) {
-    var slivers = <Widget>[_appBar(), _content()];
-    return Scaffold(body: CustomScrollView(slivers: slivers));
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[_appBar(), _content()],
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+      ),
+    );
   }
 
   Widget _appBar() {
@@ -57,7 +61,7 @@ class _PresenterState extends State<_Presenter> {
                 Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
               ],
             ),
-            Text('MY FAVOURITES', style: Burnt.appBarTitleStyle),
+            Text('FAVOURITE REWARDS', style: Burnt.appBarTitleStyle),
             if (widget.favoriteRewards != null && widget.favoriteRewards.isNotEmpty)
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -83,7 +87,7 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _content() {
-    if (widget.favoriteRewards == null) return LoadingSliver();
+    if (widget.favoriteRewards == null) return LoadingSliverCenter();
     if (widget.favoriteRewards.isEmpty) return _noRewards();
     return RewardCards(rewards: widget.favoriteRewards, layout: currentLayout, confirmUnfavorite: true);
   }

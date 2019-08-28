@@ -46,7 +46,10 @@ class _BrowseStoresScreenState extends State<BrowseStoresScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(slivers: <Widget>[_appBar(), _searchBar(context), _content()]),
+      body: CustomScrollView(
+        slivers: <Widget>[_appBar(), _searchBar(context), _content()],
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+      ),
     );
   }
 

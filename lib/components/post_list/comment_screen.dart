@@ -137,7 +137,7 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _content() {
-    if (comments == null) return LoadingSliver();
+    if (comments == null) return LoadingSliverCenter();
     if (comments.isEmpty) return _noComments();
     var array = comments.values.toList();
     return SliverList(

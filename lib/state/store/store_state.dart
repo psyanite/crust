@@ -22,29 +22,35 @@ class StoreState {
   }
 
   StoreState addStore(Store store) {
-    var clone = LinkedHashMap<int, Store>.from(this.stores);
+    var clone = cloneStores();
     clone[store.id] = store;
     return copyWith(stores: clone);
   }
 
   StoreState addStores(List<Store> stores) {
-    var clone = LinkedHashMap<int, Store>.from(this.stores);
-    clone.addEntries(stores.map((s) => MapEntry<int, Store>(s.id, s)));
-    return copyWith(stores: clone);
+    return copyWith(stores: cloneStores()..addEntries(stores.map((s) => MapEntry<int, Store>(s.id, s))));
+  }
+
+  StoreState setTopStores(List<Store> stores) {
+    stores.shuffle();
+    return copyWith(topStores: LinkedHashMap<int, Store>.fromEntries(stores.map((s) => MapEntry<int, Store>(s.id, s))));
   }
 
   StoreState addTopStores(List<Store> stores) {
     stores.shuffle();
-    var clone = LinkedHashMap<int, Store>.from(this.topStores);
-    clone.addEntries(stores.map((s) => MapEntry<int, Store>(s.id, s)));
-    return copyWith(topStores: clone);
+    return copyWith(topStores: cloneTopStores()..addEntries(stores.map((s) => MapEntry<int, Store>(s.id, s))));
+  }
+
+  LinkedHashMap<int, Store> cloneStores() {
+    return LinkedHashMap<int, Store>.from(this.stores);
+  }
+
+  LinkedHashMap<int, Store> cloneTopStores() {
+    return LinkedHashMap<int, Store>.from(this.topStores);
   }
 
   @override
   String toString() {
-    return '''{
-        stores: ${stores.length},
-        topStores: ${topStores.length},
-      }''';
+    return '''{ stores: ${stores.length}, topStores: ${topStores.length} }''';
   }
 }

@@ -90,7 +90,7 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _content() {
-    if (redeemed == null) return LoadingSliver();
+    if (redeemed == null) return LoadingSliverCenter();
     if (redeemed.isEmpty) return _noRewards();
     return RewardCards(rewards: redeemed, layout: currentLayout);
   }

@@ -59,9 +59,7 @@ class CommentState {
 
   @override
   String toString() {
-    return '''{
-        comments: ${comments.length},
-      }''';
+    return '''{ comments: ${comments.length} }''';
   }
 
 }

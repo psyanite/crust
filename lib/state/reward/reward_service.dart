@@ -65,10 +65,10 @@ class RewardService {
     return Reward.fromToaster(json);
   }
 
-  Future<List<Reward>> fetchRewards() async {
+  Future<List<Reward>> fetchRewards({int limit, int offset}) async {
     String query = """
       query {
-        allRewards {
+        allRewards(limit: $limit, offset: $offset) {
           ${Reward.attributes}
         }
       }

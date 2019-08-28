@@ -28,7 +28,7 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
     _history = Queue<int>();
     _history.addLast(0);
     _tabs = {
-      TabType.home: Tab(widget: HomeScreen(changeTab: _jumpToPage), icon: CrustCons.bread_heart),
+      TabType.home: Tab(widget: HomeScreen(), icon: CrustCons.bread_heart),
       TabType.rewards: Tab(widget: RewardsScreen(), icon: CrustCons.present),
       TabType.newPost: Tab(widget: SelectStoreScreen(), icon: CrustCons.new_post),
       TabType.favorites: Tab(widget: FavoritesScreen(), icon: CrustCons.heart),

@@ -1,8 +1,6 @@
-import 'dart:async';
-
 import 'package:crust/components/dialog.dart';
 import 'package:crust/components/new_post/review_form.dart';
-import 'package:crust/components/post_list/post_list.dart';
+import 'package:crust/components/post_list/post_list_list.dart';
 import 'package:crust/components/rewards/reward_swiper.dart';
 import 'package:crust/components/stores/favorite_store_button.dart';
 import 'package:crust/components/stores/follow_store_button.dart';
@@ -14,6 +12,7 @@ import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/store/store_actions.dart';
+import 'package:crust/state/store/store_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -34,7 +33,6 @@ class StoreScreen extends StatelessWidget {
         if (stores == null || stores[storeId] == null) {
           store.dispatch(FetchStoreById(storeId));
         }
-        store.dispatch(FetchPostsByStoreId(storeId));
         store.dispatch(FetchRewardsByStoreId(storeId));
       },
       converter: (Store<AppState> store) => _Props.fromStore(store, storeId),
@@ -42,7 +40,6 @@ class StoreScreen extends StatelessWidget {
         return _Presenter(
           store: props.store,
           isLoggedIn: props.isLoggedIn,
-          fetchPostsByStoreId: props.fetchPostsByStoreId,
           rewards: props.rewards,
         );
       },
@@ -50,36 +47,88 @@ class StoreScreen extends StatelessWidget {
   }
 }
 
-class _Presenter extends StatelessWidget {
+class _Presenter extends StatefulWidget {
   final MyStore.Store store;
   final bool isLoggedIn;
-  final Function fetchPostsByStoreId;
   final List<Reward> rewards;
 
-  _Presenter({Key key, this.store, this.isLoggedIn, this.fetchPostsByStoreId, this.rewards}) : super(key: key);
+  _Presenter({Key key, this.store, this.isLoggedIn, this.rewards}) : super(key: key);
+
+  @override
+  _PresenterState createState() => _PresenterState();
+}
+
+class _PresenterState extends State<_Presenter> {
+  ScrollController _scrollie;
+  List<Post> posts;
+  bool loading = false;
+  int limit = 7;
+  int offset = 0;
+
+  @override
+  initState() {
+    super.initState();
+    _scrollie = ScrollController()
+      ..addListener(() {
+        if (loading == false && limit > 0 && _scrollie.position.extentAfter < 500) _getMorePosts();
+      });
+    _load();
+  }
+
+  @override
+  dispose() {
+    _scrollie.dispose();
+    super.dispose();
+  }
+
+  _load() async {
+    var fresh = await _getPosts();
+    this.setState(() => posts = fresh);
+  }
+
+  removeFromList(int index) {
+    this.setState(() => posts = List<Post>.from(posts)..removeAt(index));
+  }
+
+  Future<List<Post>> _getPosts() async {
+    return StoreService.fetchPostsByStoreId(storeId: widget.store.id, limit: limit, offset: offset);
+  }
+
+  _getMorePosts() async {
+    this.setState(() => loading = true);
+    var fresh = await _getPosts();
+    if (fresh.isEmpty) {
+      this.setState(() {
+        limit = 0;
+        loading = false;
+      });
+      return;
+    }
+    var update = List<Post>.from(posts)..addAll(fresh);
+    this.setState(() {
+      offset = offset + limit;
+      posts = update;
+      loading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RefreshIndicator(
-        onRefresh: _onRefresh,
-        child: CustomScrollView(
-          slivers: <Widget>[
-            _appBar(),
-            if (rewards.isNotEmpty) _rewards(context),
-            PostList(
-              noPostsView: Text('Looks like ${store.name} doesn\'t have any reviews yet.'),
-              posts: store.posts,
-              postListType: PostListType.forStore,
-            )
-          ],
-        ),
+      body: CustomScrollView(
+        slivers: <Widget>[
+          _appBar(),
+          if (widget.rewards.isNotEmpty) _rewards(context),
+          PostListList(
+            noPostsView: Text('Looks like ${widget.store.name} doesn\'t have any reviews yet.'),
+            postListType: PostListType.forStore,
+            posts: posts,
+            removeFromList: removeFromList,
+          ),
+          if (loading == true) LoadingSliver(),
+        ],
       ),
     );
-  }
-
-  Future<void> _onRefresh() async {
-    await fetchPostsByStoreId();
   }
 
   Widget _appBar() {
@@ -91,9 +140,7 @@ class _Presenter extends StatelessWidget {
           _buttons(),
           Container(
             margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 40.0),
-            decoration: BoxDecoration(
-              border: Border(bottom: BorderSide(color: Burnt.separator))
-            ),
+            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))),
           )
         ]),
       ),
@@ -109,7 +156,7 @@ class _Presenter extends StatelessWidget {
           decoration: BoxDecoration(
             color: Burnt.imgPlaceholderColor,
             image: DecorationImage(
-              image: NetworkImage(store.coverImage),
+              image: NetworkImage(widget.store.coverImage),
               fit: BoxFit.cover,
             ),
           ),
@@ -140,6 +187,7 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _metaInfo() {
+    var store = widget.store;
     return Padding(
       padding: EdgeInsets.only(top: 30.0, bottom: 40.0, left: 16.0, right: 16.0),
       child: Column(
@@ -228,6 +276,7 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _followButton(BuildContext context) {
+    var store = widget.store;
     return Expanded(
       child: FollowStoreButton(
         storeId: store.id,
@@ -245,10 +294,10 @@ class _Presenter extends StatelessWidget {
     return Expanded(
       child: HollowButton(
         onTap: () {
-          if (isLoggedIn == false) {
+          if (widget.isLoggedIn == false) {
             snack(context, 'Login now to write a review');
           } else {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => ReviewForm(store: store)));
+            Navigator.push(context, MaterialPageRoute(builder: (_) => ReviewForm(store: widget.store)));
           }
         },
         children: <Widget>[
@@ -274,6 +323,7 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _addressLong() {
+    var store = widget.store;
     var address = store.address;
     var first = '';
     if (address.firstLine != null) first += address.firstLine;
@@ -296,6 +346,7 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _menuButton() {
+    var store = widget.store;
     var options = <DialogOption>[
       DialogOption(icon: CrustCons.call_bold, display: 'Call 0${store.phoneNumber}', onTap: () => launch('tel:0${store.phoneNumber}')),
       DialogOption(icon: CrustCons.location_bold, display: 'Get Directions', onTap: () => launch(store.getDirectionUrl())),
@@ -349,7 +400,7 @@ class _Presenter extends StatelessWidget {
         child: Column(
           children: <Widget>[
             RewardSwiper(
-              rewards: rewards,
+              rewards: widget.rewards,
               header: Padding(
                 padding: EdgeInsets.only(top: 50.0, bottom: 15.0),
                 child: Text('REWARDS', style: Burnt.appBarTitleStyle.copyWith(color: Burnt.hintTextColor)),
@@ -357,9 +408,7 @@ class _Presenter extends StatelessWidget {
             ),
             Container(
               margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 20.0),
-              decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: Burnt.separator))
-              ),
+              decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))),
             )
           ],
         ),
@@ -371,17 +420,15 @@ class _Presenter extends StatelessWidget {
 class _Props {
   final MyStore.Store store;
   final bool isLoggedIn;
-  final Function fetchPostsByStoreId;
   final List<Reward> rewards;
 
-  _Props({this.store, this.isLoggedIn, this.fetchPostsByStoreId, this.rewards});
+  _Props({this.store, this.isLoggedIn, this.rewards});
 
   static fromStore(Store<AppState> store, int storeId) {
     var s = store.state.store.stores[storeId];
     return _Props(
       store: s,
       isLoggedIn: store.state.me.user != null,
-      fetchPostsByStoreId: () => store.dispatch(FetchPostsByStoreId(storeId)),
       rewards: (s.rewards ?? List<int>()).map((r) => store.state.reward.rewards[r]).toList(),
     );
   }

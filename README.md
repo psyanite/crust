@@ -38,8 +38,9 @@
 </div>
 
 ## To Do
+* Change Header on home screen feed posts
+* Handle reward feed
 * Search rewards
-* Implement pagination
 
 * Implement store posts
 * Add submit missing store feature
@@ -50,6 +51,8 @@
 * Send email of results
 
 ## Done
+* Implement pagination
+* Implement pull to refresh
 * Browse rewards
 * Add bearer token to server environment
 * Directions

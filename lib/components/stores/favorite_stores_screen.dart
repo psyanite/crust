@@ -14,7 +14,7 @@ class FavoriteStoresScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
       onInit: (Store<AppState> store) {
-        store.dispatch(FetchFavorites(updateStore: true));
+        store.dispatch(FetchFavorites());
       },
       converter: (Store<AppState> store) => _Props.fromStore(store),
       builder: (context, props) => _Presenter(favoriteStores: props.favoriteStores),
@@ -34,8 +34,12 @@ class _Presenter extends StatefulWidget {
 class _PresenterState extends State<_Presenter> {
   @override
   Widget build(BuildContext context) {
-    var slivers = <Widget>[_appBar(), StoresGrid(stores: widget.favoriteStores, confirmUnfavorite: true)];
-    return Scaffold(body: CustomScrollView(slivers: slivers));
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: <Widget>[_appBar(), StoresGrid(stores: widget.favoriteStores, confirmUnfavorite: true)],
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+      ),
+    );
   }
 
   Widget _appBar() {
@@ -52,7 +56,7 @@ class _PresenterState extends State<_Presenter> {
                 Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
               ],
             ),
-            Text('MY FAVOURITES', style: Burnt.appBarTitleStyle),
+            Text('FAVOURITE STORES', style: Burnt.appBarTitleStyle),
             Padding(
               padding: EdgeInsets.only(top: 15.0),
               child: Row(

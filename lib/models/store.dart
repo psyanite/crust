@@ -1,4 +1,4 @@
-import 'package:crust/models/post.dart';
+
 
 class Store {
   final int id;
@@ -12,7 +12,6 @@ class Store {
   final String suburb;
   final String city;
   final List<String> cuisines;
-  final List<Post> posts;
   final List<int> rewards;
   final int heartCount;
   final int okayCount;
@@ -30,14 +29,13 @@ class Store {
     this.suburb,
     this.city,
     this.cuisines,
-    this.posts,
     this.rewards,
     this.heartCount,
     this.okayCount,
     this.burntCount,
   });
 
-  Store copyWith({List<Post> posts, String name, List<int> rewards}) {
+  Store copyWith({String name, List<int> rewards}) {
     return Store(
       id: this.id,
       name: name ?? this.name,
@@ -48,7 +46,6 @@ class Store {
       suburb: this.suburb,
       city: this.city,
       cuisines: this.cuisines,
-      posts: posts ?? this.posts,
       rewards: rewards ?? this.rewards,
       heartCount: this.heartCount,
       okayCount: this.okayCount,

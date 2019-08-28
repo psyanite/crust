@@ -14,11 +14,7 @@ class LoginSuccess {
   LoginSuccess(this.user);
 }
 
-class FetchMyPosts {
-  final int userId;
-
-  FetchMyPosts(this.userId);
-}
+class FetchMyPosts {}
 
 class FetchMyPostsSuccess {
   final List<Post> posts;

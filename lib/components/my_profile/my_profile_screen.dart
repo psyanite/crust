@@ -4,14 +4,16 @@ import 'package:crust/components/my_profile/find_user_screen.dart';
 import 'package:crust/components/my_profile/my_qr_screen.dart';
 import 'package:crust/components/my_profile/set_picture_screen.dart';
 import 'package:crust/components/my_profile/update_profile_screen.dart';
-import 'package:crust/components/post_list/post_list.dart';
+import 'package:crust/components/post_list/post_list_list.dart';
 import 'package:crust/components/screens/about_screen.dart';
 import 'package:crust/main.dart';
+import 'package:crust/models/post.dart';
 import 'package:crust/models/user.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
+import 'package:crust/state/post/post_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -21,47 +23,99 @@ class MyProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-      onInit: (Store<AppState> store) => store.dispatch(FetchMyPosts(store.state.me.user.id)),
       converter: _Props.fromStore,
       builder: (context, props) {
-        return _Presenter(user: props.user, refreshPage: props.refreshPage, logout: props.logout);
+        return _Presenter(me: props.me, logout: props.logout);
       },
     );
   }
 }
 
-class _Presenter extends StatelessWidget {
-  final User user;
-  final Function refreshPage;
+class _Presenter extends StatefulWidget {
+  final User me;
   final Function logout;
+
+  _Presenter({Key key, this.me, this.logout}) : super(key: key);
+
+  @override
+  _PresenterState createState() => _PresenterState();
+}
+
+class _PresenterState extends State<_Presenter> {
   final String defaultProfilePic =
       'https://firebasestorage.googleapis.com/v0/b/burntoast-fix.appspot.com/o/users%2Fprofile-pictures%2F1565423370052-9201.jpg?alt=media&token=1a80c164-4ca6-4174-bd46-c8c265c17ae9';
+  ScrollController _scrollie;
+  List<Post> posts;
+  bool loading = false;
+  int limit = 7;
+  int offset = 0;
 
-  _Presenter({Key key, this.user, this.refreshPage, this.logout}) : super(key: key);
+  @override
+  initState() {
+    super.initState();
+    _scrollie = ScrollController()
+      ..addListener(() {
+        if (loading == false && limit > 0 && _scrollie.position.extentAfter < 500) _getMorePosts();
+      });
+    _load();
+  }
+
+  @override
+  dispose() {
+    _scrollie.dispose();
+    super.dispose();
+  }
+
+  _load() async {
+    var fresh = await _getPosts();
+    this.setState(() => posts = fresh);
+  }
+
+  removeFromList(int index) {
+    this.setState(() => posts = List<Post>.from(posts)..removeAt(index));
+  }
+
+  Future<List<Post>> _getPosts() async {
+    return PostService.fetchMyPosts(userId: widget.me.id, limit: limit, offset: offset);
+  }
+
+  _getMorePosts() async {
+    this.setState(() => loading = true);
+    var fresh = await _getPosts();
+    if (fresh.isEmpty) {
+      this.setState(() {
+        limit = 0;
+        loading = false;
+      });
+      return;
+    }
+    var update = List<Post>.from(posts)..addAll(fresh);
+    this.setState(() {
+      offset = offset + limit;
+      posts = update;
+      loading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: _drawer(context),
-      body: RefreshIndicator(
-        onRefresh: _refresh,
-        child: CustomScrollView(slivers: <Widget>[
-          _appBar(),
-          PostList(
-            noPostsView: Text('Start reviewing now and your reviews will show up here!'),
-            posts: user.posts,
-            postListType: PostListType.forProfile,
-          )
-        ]),
-      ),
+      body: CustomScrollView(slivers: <Widget>[
+        _appBar(),
+        PostListList(
+          noPostsView: Text('Start reviewing now and your reviews will show up here!'),
+          postListType: PostListType.forProfile,
+          posts: posts,
+          removeFromList: removeFromList,
+        ),
+        if (loading == true) LoadingSliver(),
+      ], controller: _scrollie),
     );
   }
 
-  Future<void> _refresh() async {
-    await refreshPage();
-  }
-
   Widget _appBar() {
+    var user = widget.me;
     return SliverToBoxAdapter(
       child: Column(children: <Widget>[
         Container(
@@ -77,18 +131,16 @@ class _Presenter extends StatelessWidget {
               ),
               _menuButton(),
             ]),
-
-          Container(
-            margin: EdgeInsets.only(top: 70.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[_profilePicture(user.profilePicture)],
-            ),
-          )
+            Container(
+              margin: EdgeInsets.only(top: 70.0),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[_profilePicture(user.profilePicture)],
+              ),
+            )
           ]),
         ),
-
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
@@ -123,7 +175,7 @@ class _Presenter extends StatelessWidget {
   Widget _tagline() {
     return Padding(
       padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 15.0),
-      child: Text(user.tagline),
+      child: Text(widget.me.tagline),
     );
   }
 
@@ -171,6 +223,7 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _drawer(BuildContext context) {
+    var user = widget.me;
     return Drawer(
       child: Center(
         child: ListView(padding: EdgeInsets.zero, children: <Widget>[
@@ -233,7 +286,7 @@ class _Presenter extends StatelessWidget {
           ListTile(
             title: Text('Log out', style: TextStyle(fontSize: 18.0)),
             onTap: () {
-              logout();
+              widget.logout();
               Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
             },
           ),
@@ -244,16 +297,14 @@ class _Presenter extends StatelessWidget {
 }
 
 class _Props {
-  final User user;
-  final Function refreshPage;
+  final User me;
   final Function logout;
 
-  _Props({this.user, this.refreshPage, this.logout});
+  _Props({this.me, this.logout});
 
   static fromStore(Store<AppState> store) {
     return _Props(
-      user: store.state.me.user,
-      refreshPage: () => store.dispatch(FetchMyPosts(store.state.me.user.id)),
+      me: store.state.me.user,
       logout: () => store.dispatch(Logout()),
     );
   }

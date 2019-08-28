@@ -44,15 +44,12 @@ class _SplashScreenState extends State<SplashScreen> {
         store.dispatch(FetchTopStores());
         store.dispatch(FetchTopRewards());
         if (store.state.me.user != null) {
-          store.dispatch(FetchFeed(store.state.me.user.id));
           store.dispatch(FetchFavorites());
           store.dispatch(FetchFollows());
-          store.dispatch(FetchMyPosts(store.state.me.user.id));
-        } else {
-          store.dispatch(FetchDefaultFeed());
         }
-        store.dispatch(FetchRewards());
-        store.dispatch(FetchStores());
+        store.dispatch(FetchFeed());
+        store.dispatch(FetchMyPosts());
+        store.dispatch(FetchRewardsNearMe(7, 0));
         store.dispatch(FetchFavorites());
       },
       converter: (Store<AppState> store) => 1,

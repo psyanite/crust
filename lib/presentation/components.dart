@@ -25,18 +25,17 @@ class SmallButton extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final Gradient gradient;
 
-  SmallButton(
-      {Key key,
-      this.child,
-      this.onPressed,
-      this.padding,
-      this.gradient = const LinearGradient(
-        begin: Alignment.bottomLeft,
-        end: Alignment.topRight,
-        stops: [0, 0.6, 1.0],
-        colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-      )})
-      : super(key: key);
+  SmallButton({Key key,
+    this.child,
+    this.onPressed,
+    this.padding,
+    this.gradient = const LinearGradient(
+      begin: Alignment.bottomLeft,
+      end: Alignment.topRight,
+      stops: [0, 0.6, 1.0],
+      colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
+    )})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -97,13 +96,13 @@ class BottomButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(2.0)),
-            gradient: LinearGradient(
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
-              stops: [0, 0.6, 1.0],
-              colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-            )),
+          borderRadius: BorderRadius.all(Radius.circular(2.0)),
+          gradient: LinearGradient(
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+            stops: [0, 0.6, 1.0],
+            colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
+          )),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -134,13 +133,13 @@ class BurntButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: padding ?? 20.0),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(2.0)),
-            gradient: LinearGradient(
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
-              stops: [0, 0.6, 1.0],
-              colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-            )),
+          borderRadius: BorderRadius.all(Radius.circular(2.0)),
+          gradient: LinearGradient(
+            begin: Alignment.bottomLeft,
+            end: Alignment.topRight,
+            stops: [0, 0.6, 1.0],
+            colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
+          )),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -246,12 +245,19 @@ class SliverCenter extends StatelessWidget {
   }
 }
 
-class LoadingSliver extends StatelessWidget {
+class LoadingSliverCenter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverCenter(
       child: CircularProgressIndicator(),
     );
+  }
+}
+
+class LoadingSliver extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(child: Container(height: 200, child: Center(child: CircularProgressIndicator())));
   }
 }
 

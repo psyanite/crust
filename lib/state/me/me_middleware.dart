@@ -7,13 +7,11 @@ import 'package:redux/redux.dart';
 
 List<Middleware<AppState>> createMeMiddleware([MeService meService = const MeService(), PostService postService = const PostService()]) {
   final addUser = _addUser(meService);
-  final fetchMyPosts = _fetchMyPosts(postService);
   final setTagline = _setTagline(meService);
   final deleteTagline = _deleteTagline(meService);
 
   return [
     TypedMiddleware<AppState, AddUser>(addUser),
-    TypedMiddleware<AppState, FetchMyPosts>(fetchMyPosts),
     TypedMiddleware<AppState, SetMyTagline>(setTagline),
     TypedMiddleware<AppState, DeleteMyTagline>(deleteTagline),
   ];
@@ -21,20 +19,9 @@ List<Middleware<AppState>> createMeMiddleware([MeService meService = const MeSer
 
 Middleware<AppState> _addUser(MeService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
-    service.addUser(action.user).then((userId) {
-      store.dispatch(LoginSuccess(action.user.copyWith(id: userId)));
+    service.addUser(action.me).then((userId) {
+      store.dispatch(LoginSuccess(action.me.copyWith(id: userId)));
     }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
-    next(action);
-  };
-}
-
-Middleware<AppState> _fetchMyPosts(PostService service) {
-  return (Store<AppState> store, action, NextDispatcher next) {
-    service.fetchMyPosts(action.userId).then(
-      (posts) {
-        store.dispatch(FetchMyPostsSuccess(posts));
-      },
-    ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     next(action);
   };
 }

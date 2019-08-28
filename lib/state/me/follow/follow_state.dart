@@ -24,9 +24,6 @@ class FollowState {
 
   @override
   String toString() {
-    return '''{
-        stores: ${stores != null ? stores.length : null},
-        users: ${users != null ? users.length : null},
-      }''';
+    return '''{ stores: ${stores != null ? stores.length : null}, users: ${users != null ? users.length : null} }''';
   }
 }

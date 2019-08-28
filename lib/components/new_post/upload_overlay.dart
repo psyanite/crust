@@ -16,28 +16,26 @@ import 'package:tuple/tuple.dart';
 
 class UploadOverlay extends StatefulWidget {
   final Post post;
-  final Function fetchPostsByStoreId;
   final List<Asset> images;
   final List<PostPhoto> deletePhotosQueue;
 
-  UploadOverlay({Key key, this.post, this.fetchPostsByStoreId, this.images, deletePhotosQueue})
+  UploadOverlay({Key key, this.post, this.images, deletePhotosQueue})
       : deletePhotosQueue = deletePhotosQueue ?? List<PostPhoto>(),
         super(key: key);
 
   @override
   UploadOverlayState createState() =>
-      UploadOverlayState(post: post, fetchPostsByStoreId: fetchPostsByStoreId, images: images, deletePhotosQueue: deletePhotosQueue);
+      UploadOverlayState(post: post, images: images, deletePhotosQueue: deletePhotosQueue);
 }
 
 class UploadOverlayState extends State<UploadOverlay> {
   final Post post;
-  final Function fetchPostsByStoreId;
   final List<Asset> images;
   final List<PostPhoto> deletePhotosQueue;
   String loadingText;
   String error;
 
-  UploadOverlayState({this.post, this.fetchPostsByStoreId, this.images, this.deletePhotosQueue});
+  UploadOverlayState({this.post, this.images, this.deletePhotosQueue});
 
   @override
   initState() {
@@ -88,7 +86,6 @@ class UploadOverlayState extends State<UploadOverlay> {
       });
       return false;
     }
-    fetchPostsByStoreId(post.store.id);
     deletePhotosQueue.forEach((p) => PostService.deletePhoto(p.id));
     Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
     if (post.hidden) {

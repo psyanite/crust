@@ -8,30 +8,15 @@ import 'package:redux/redux.dart';
 List<Middleware<AppState>> createStoreMiddleware([
   StoreService service = const StoreService(),
 ]) {
-  final fetchStores = _fetchStores(service);
   final fetchTopStores = _fetchTopStores(service);
   final fetchStoreById = _fetchStoreById(service);
-  final fetchPostsByStoreId = _fetchPostsByStoreId(service);
   final fetchRewardsByStoreId = _fetchRewardsByStoreId(service);
 
   return [
-    TypedMiddleware<AppState, FetchStores>(fetchStores),
     TypedMiddleware<AppState, FetchTopStores>(fetchTopStores),
     TypedMiddleware<AppState, FetchStoreById>(fetchStoreById),
-    TypedMiddleware<AppState, FetchPostsByStoreId>(fetchPostsByStoreId),
     TypedMiddleware<AppState, FetchRewardsByStoreId>(fetchRewardsByStoreId),
   ];
-}
-
-Middleware<AppState> _fetchStores(StoreService service) {
-  return (Store<AppState> store, action, NextDispatcher next) {
-    service.fetchStores().then(
-      (stores) {
-        store.dispatch(FetchStoresSuccess(stores));
-      },
-    ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
-    next(action);
-  };
 }
 
 Middleware<AppState> _fetchTopStores(StoreService service) {
@@ -51,17 +36,6 @@ Middleware<AppState> _fetchStoreById(StoreService service) {
     service.fetchStoreById(action.storeId).then(
       (s) {
         store.dispatch(FetchStoreSuccess(s));
-      },
-    ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
-    next(action);
-  };
-}
-
-Middleware<AppState> _fetchPostsByStoreId(StoreService service) {
-  return (Store<AppState> store, action, NextDispatcher next) {
-    service.fetchPostsByStoreId(action.storeId).then(
-      (posts) {
-        store.dispatch(FetchPostsByStoreIdSuccess(action.storeId, posts));
       },
     ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
     next(action);

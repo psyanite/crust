@@ -8,6 +8,7 @@ import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/favorite/favorite_actions.dart';
+import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -18,7 +19,7 @@ class FavoritesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
       onInit: (Store<AppState> store) {
-        store.dispatch(FetchFavorites(updateStore: true));
+        store.dispatch(FetchFavorites());
       },
       converter: (Store<AppState> store) => _Props.fromStore(store),
       builder: (BuildContext context, _Props props) {
@@ -58,7 +59,10 @@ class _Presenter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: <Widget>[_appBar(), _content(context)]);
+    return CustomScrollView(
+      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+      slivers: <Widget>[_appBar(), _content(context)],
+    );
   }
 
   Widget _appBar() {
@@ -88,7 +92,7 @@ class _Presenter extends StatelessWidget {
 
   Widget _content(BuildContext context) {
     if (!isLoggedIn) return CenterTextSliver(text: 'Login now to see your favorites!');
-    if (rewards == null && stores == null) return LoadingSliver();
+    if (rewards == null && stores == null) return LoadingSliverCenter();
     return SliverList(
       delegate: SliverChildListDelegate(<Widget>[
         StoresSideScroller(
@@ -136,12 +140,8 @@ class _Props {
     var favoriteRewards = store.state.favorite.rewards?.take(5);
     var favoriteStores = store.state.favorite.stores?.take(5);
     return _Props(
-      rewards: rewards != null && favoriteRewards != null
-          ? rewards.entries.where((r) => favoriteRewards.contains(r.value.id)).map((e) => e.value).toList()
-          : null,
-      stores: stores != null && favoriteStores != null
-          ? stores.entries.where((s) => favoriteStores.contains(s.value.id)).map((e) => e.value).toList()
-          : null,
+      rewards: List<Reward>.from(Utils.subset(favoriteRewards, rewards)),
+      stores: List<MyStore.Store>.from(Utils.subset(favoriteStores, stores)),
       favoriteReward: (rewardId) => store.dispatch(FavoriteReward(rewardId)),
       unfavoriteReward: (rewardId) => store.dispatch(UnfavoriteReward(rewardId)),
       favoriteStore: (storeId) => store.dispatch(FavoriteStore(storeId)),

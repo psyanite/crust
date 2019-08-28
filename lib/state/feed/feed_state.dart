@@ -4,16 +4,14 @@ import 'package:meta/meta.dart';
 
 @immutable
 class FeedState {
-  final Set<Post> posts;
+  final List<Post> posts;
 
   FeedState({this.posts});
 
   FeedState.initialState()
-    : posts = Set<Post>();
+    : posts = List<Post>();
 
-  FeedState copyWith({
-    Set<Post> posts,
-  }) {
+  FeedState copyWith({List<Post> posts}) {
     return FeedState(
       posts: posts ?? this.posts,
     );
@@ -21,8 +19,6 @@ class FeedState {
 
   @override
   String toString() {
-    return '''{
-        posts: ${posts != null ? posts.length : null},
-      }''';
+    return '''{ posts: ${posts != null ? posts.length : null} }''';
   }
 }

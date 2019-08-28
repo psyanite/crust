@@ -17,14 +17,14 @@ class RewardSwiper extends StatelessWidget {
       children: <Widget>[
         header,
         Container(
-          height: 440.0,
+          height: 290.0,
           child: Swiper(
             loop: false,
-            containerHeight: 200.0,
+            containerHeight: 220.0,
             itemBuilder: (BuildContext context, int i) {
               return Stack(
                 children: <Widget>[
-                  Container(height: 310),
+                  Container(height: 220.0),
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -56,7 +56,7 @@ class RewardSwiper extends StatelessWidget {
               alignment: AlignmentDirectional.topEnd,
               children: <Widget>[
                 Container(
-                  height: 300.0,
+                  height: 150.0,
                   decoration: BoxDecoration(
                     color: Burnt.imgPlaceholderColor,
                     image: DecorationImage(

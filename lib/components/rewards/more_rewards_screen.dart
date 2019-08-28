@@ -97,7 +97,7 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _rewardsList() {
-    if (widget.rewards == null) return LoadingSliver();
+    if (widget.rewards == null) return LoadingSliverCenter();
     return RewardCards(rewards: widget.rewards, layout: currentLayout);
   }
 }

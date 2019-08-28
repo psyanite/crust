@@ -9,7 +9,6 @@ import 'package:crust/models/user.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
-import 'package:crust/state/store/store_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -30,7 +29,6 @@ class ReviewForm extends StatelessWidget {
           isLoggedIn: props.isLoggedIn,
           me: props.me,
           store: store,
-          fetchPostsByStoreId: props.fetchPostsByStoreId,
         );
       },
     );
@@ -41,12 +39,11 @@ class _Presenter extends StatefulWidget {
   final bool isLoggedIn;
   final MyStore.Store store;
   final User me;
-  final Function fetchPostsByStoreId;
 
-  _Presenter({Key key, this.isLoggedIn, this.store, this.me, this.fetchPostsByStoreId}) : super(key: key);
+  _Presenter({Key key, this.isLoggedIn, this.store, this.me}) : super(key: key);
 
   @override
-  _PresenterState createState() => _PresenterState(store: store, me: me, fetchPostsByStoreId: fetchPostsByStoreId);
+  _PresenterState createState() => _PresenterState(store: store, me: me);
 }
 
 class _PresenterState extends State<_Presenter> {
@@ -80,7 +77,7 @@ class _PresenterState extends State<_Presenter> {
             ],
           ),
         ),
-        if (showOverlay) UploadOverlay(post: post, fetchPostsByStoreId: fetchPostsByStoreId, images: images)
+        if (showOverlay) UploadOverlay(post: post, images: images)
       ],
     );
   }
@@ -475,19 +472,15 @@ class _PresenterState extends State<_Presenter> {
 class _Props {
   final bool isLoggedIn;
   final User me;
-  final Function fetchPostsByStoreId;
-
   _Props({
     this.isLoggedIn,
     this.me,
-    this.fetchPostsByStoreId,
   });
 
   static fromStore(Store<AppState> store) {
     return _Props(
       isLoggedIn: store.state.me.user != null,
       me: store.state.me.user,
-      fetchPostsByStoreId: (storeId) => store.dispatch(FetchPostsByStoreId(storeId)),
     );
   }
 }
