@@ -1,5 +1,4 @@
 import 'package:crust/components/rewards/reward_cards.dart';
-import 'package:crust/components/rewards/view_mode_icon.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
@@ -62,24 +61,7 @@ class _PresenterState extends State<_Presenter> {
               ],
             ),
             Text('FAVOURITE REWARDS', style: Burnt.appBarTitleStyle),
-            if (widget.favoriteRewards != null && widget.favoriteRewards.isNotEmpty)
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text('All your favourited rewards'),
-                  ViewModeIcon(toggleLayout: () {
-                    setState(() {
-                      if (currentLayout == 'card') {
-                        currentLayout = 'list';
-                      } else {
-                        currentLayout = 'card';
-                      }
-                    });
-                  })
-                ],
-              ),
+            if (widget.favoriteRewards != null && widget.favoriteRewards.isNotEmpty) Text('All your favourited rewards'),
           ],
         ),
       )),
@@ -89,7 +71,7 @@ class _PresenterState extends State<_Presenter> {
   Widget _content() {
     if (widget.favoriteRewards == null) return LoadingSliverCenter();
     if (widget.favoriteRewards.isEmpty) return _noRewards();
-    return RewardCards(rewards: widget.favoriteRewards, layout: currentLayout, confirmUnfavorite: true);
+    return RewardCards(rewards: widget.favoriteRewards, confirmUnfavorite: true);
   }
 
   Widget _noRewards() {

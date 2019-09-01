@@ -14,7 +14,10 @@ class StoresScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(slivers: <Widget>[_appBar(), StoresGrid(stores: stores)]),
+      body: CustomScrollView(
+        slivers: <Widget>[_appBar(), StoresGrid(stores: stores)],
+        physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+      ),
     );
   }
 

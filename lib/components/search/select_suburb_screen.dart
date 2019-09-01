@@ -1,31 +1,33 @@
 import 'package:async/async.dart';
-import 'package:crust/models/search.dart';
+import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
+import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/search/search_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:redux/redux.dart';
 
-class SelectLocationScreen extends StatefulWidget {
-  final SearchLocationItem current;
+class SelectSuburbScreen extends StatefulWidget {
   final Function selectLocation;
 
-  SelectLocationScreen({Key key, this.current, this.selectLocation}) : super(key: key);
+  SelectSuburbScreen({Key key, this.selectLocation}) : super(key: key);
 
   @override
-  SelectLocationScreenState createState() => SelectLocationScreenState();
+  SelectSuburbScreenState createState() => SelectSuburbScreenState();
 }
 
-class SelectLocationScreenState extends State<SelectLocationScreen> {
-  final AsyncMemoizer<List<SearchLocationItem>> _memo = AsyncMemoizer();
+class SelectSuburbScreenState extends State<SelectSuburbScreen> {
+  final AsyncMemoizer<List<MyStore.Suburb>> _memo = AsyncMemoizer();
   String _query = '';
   TextEditingController _queryCtrl;
 
   @override
   initState() {
     super.initState();
-    _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: widget.current.name));
   }
 
   @override
@@ -36,12 +38,18 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var slivers = <Widget>[
-      _appBar(),
-      _searchBar(),
-      _searchResults(context),
-    ];
-    return Scaffold(body: CustomScrollView(slivers: slivers));
+    return StoreConnector<AppState, dynamic>(
+      converter: (Store<AppState> store) => store.state.me.suburb,
+      builder: (context, suburb) {
+        var slivers = <Widget>[
+          _appBar(),
+          _searchBar(),
+          if (suburb != null) _calculatedItem(suburb),
+          _searchResults(context),
+        ];
+        return Scaffold(body: CustomScrollView(slivers: slivers));
+      },
+    );
   }
 
   Widget _appBar() {
@@ -95,9 +103,31 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
     );
   }
 
-  Future<List<SearchLocationItem>> _search() {
+  Widget _calculatedItem(MyStore.Suburb s) {
+    return SliverToBoxAdapter(
+      child: InkWell(
+        onTap: () {
+          widget.selectLocation(Address(locality: s.name));
+          Navigator.pop(context);
+        },
+        child: Container(
+          padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(s.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
+              Text('${s.city}, ${s.district}', style: TextStyle(fontSize: 18.0)),
+              Container(height: 10.0)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<List<MyStore.Suburb>> _search() {
     return _memo.runOnce(() async {
-      return await SearchService.searchLocations(_query.isEmpty ? 's' : _query);
+      return await SearchService.findSuburbsBySearch(_query.isEmpty ? 's' : _query);
     });
   }
 
@@ -117,7 +147,7 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
             }
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, i) {
-                return Builder(builder: (context) => _ResultCard(location: snapshot.data[i], selectLocation: widget.selectLocation));
+                return Builder(builder: (context) => _ResultCard(suburb: snapshot.data[i], select: widget.selectLocation));
               }, childCount: snapshot.data.length),
             );
           default:
@@ -129,29 +159,27 @@ class SelectLocationScreenState extends State<SelectLocationScreen> {
 }
 
 class _ResultCard extends StatelessWidget {
-  final SearchLocationItem location;
-  final Function selectLocation;
+  final MyStore.Suburb suburb;
+  final Function select;
 
-  const _ResultCard({Key key, this.location, this.selectLocation}) : super(key: key);
+  const _ResultCard({Key key, this.suburb, this.select}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        selectLocation(location);
+        select(Address(locality: suburb.name));
         Navigator.pop(context);
       },
-      child: Padding(
+      child: Container(
         padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(location.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-              Text(location.description, style: TextStyle(fontSize: 18.0)),
-              Container(height: 10.0)
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(suburb.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
+            Text('${suburb.city}, ${suburb.district}', style: TextStyle(fontSize: 18.0)),
+            Container(height: 10.0)
+          ],
         ),
       ),
     );

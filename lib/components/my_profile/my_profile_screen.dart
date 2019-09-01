@@ -5,6 +5,7 @@ import 'package:crust/components/my_profile/my_qr_screen.dart';
 import 'package:crust/components/my_profile/set_picture_screen.dart';
 import 'package:crust/components/my_profile/update_profile_screen.dart';
 import 'package:crust/components/post_list/post_list_list.dart';
+import 'package:crust/components/rewards/redeemed_rewards_screen.dart';
 import 'package:crust/components/screens/about_screen.dart';
 import 'package:crust/main.dart';
 import 'package:crust/models/post.dart';
@@ -274,6 +275,13 @@ class _PresenterState extends State<_Presenter> {
             onTap: () {
               Navigator.pop(context);
               Navigator.push(context, MaterialPageRoute(builder: (_) => UpdateProfileScreen()));
+            },
+          ),
+          ListTile(
+            title: Text('Redeemed Rewards', style: TextStyle(fontSize: 18.0)),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push(context, MaterialPageRoute(builder: (_) => RedeemedRewardsScreen()));
             },
           ),
           ListTile(

@@ -70,5 +70,12 @@
     <string>Example usage description</string>
     <key>NSCameraUsageDescription</key>
     <string>Example usage description</string>
+
+    <!-- Geolocator -->
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Allow access to location in the background.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Allow access to location when open and in the background.</string>
+
 </dict>
 </plist>

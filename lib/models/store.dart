@@ -171,12 +171,67 @@ class Cuisine {
 class Suburb {
   final int id;
   final String name;
+  final int postcode;
+  final String city;
+  final String district;
+  final double lat;
+  final double lng;
 
-  Suburb({this.id, this.name});
+
+  Suburb({this.id, this.name, this.postcode, this.city, this.district, this.lat, this.lng});
+
+  static const attributes = """
+    id,
+    name,
+    postcode,
+    city {
+      name,
+      district {
+        name,
+      },
+    },
+    coords {
+      coordinates
+    }
+  """;
 
   factory Suburb.fromToaster(Map<String, dynamic> json) {
     if (json == null) return null;
-    return Suburb(id: json['id'], name: json['name']);
+    var city = json['city'];
+    var coords = json['coords'];
+    return Suburb(
+      id: json['id'],
+      name: json['name'],
+      postcode: json['postcode'],
+      city: city != null ? city['name'] : null,
+      district: city != null && city['district'] != null ? city['district']['name'] : null,
+      lat: coords != null ? coords['coordinates'][0] : null,
+      lng: coords != null ? coords['coordinates'][1] : null,
+    );
+  }
+
+  factory Suburb.rehydrate(Map<String, dynamic> json) {
+    return Suburb(
+      id: json['id'],
+      name: json['name'],
+      postcode: json['postcode'],
+      city: json['city'],
+      district: json['district'],
+      lat: json['lat'],
+      lng: json['lng']
+    );
+  }
+
+  Map<String, dynamic> toPersist() {
+    return <String, dynamic>{
+      'id': this.id,
+      'name': this.name,
+      'postcode': this.postcode,
+      'city': this.city,
+      'district': this.district,
+      'lat': this.lat,
+      'lng': this.lng,
+    };
   }
 }
 

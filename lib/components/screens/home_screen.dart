@@ -1,7 +1,7 @@
 import 'package:crust/components/post_list/post_list_list.dart';
-import 'package:crust/components/screens/browse_stores_screen.dart';
+import 'package:crust/components/stores/browse_stores_screen.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
-import 'package:crust/components/screens/store_screen.dart';
+import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/components/search/search_screen.dart';
 import 'package:crust/components/stores/favorite_store_button.dart';
 import 'package:crust/models/post.dart';
@@ -152,7 +152,7 @@ class _PresenterState extends State<_Presenter> {
       sliver: SliverToBoxAdapter(
         child: Container(
           height: 100.0,
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          padding: EdgeInsets.only(left: 16.0, right: 6.0),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.center,

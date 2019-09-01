@@ -1,5 +1,6 @@
 import 'package:crust/models/post.dart';
 import 'package:crust/models/search.dart';
+import 'package:crust/models/store.dart';
 import 'package:crust/models/user.dart';
 
 class AddUser {
@@ -70,4 +71,10 @@ class SetMyUsername {
   final String name;
 
   SetMyUsername(this.name);
+}
+
+class SetMySuburb {
+  final Suburb suburb;
+
+  SetMySuburb(this.suburb);
 }

@@ -1,5 +1,6 @@
-import 'package:crust/components/screens/store_screen.dart';
+import 'package:async/async.dart';
 import 'package:crust/components/search/select_location_screen.dart';
+import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/models/search.dart';
 import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
@@ -36,14 +37,14 @@ class _Presenter extends StatefulWidget {
   final Function addSearchHistoryItem;
   final Function setMyLocation;
 
-  _Presenter({Key key, this.searchHistory, this.location, this.addSearchHistoryItem, this.setMyLocation})
-      : super(key: key);
+  _Presenter({Key key, this.searchHistory, this.location, this.addSearchHistoryItem, this.setMyLocation}) : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState();
 }
 
 class _PresenterState extends State<_Presenter> {
+  final AsyncMemoizer<List<MyStore.Store>> _memo = AsyncMemoizer();
   String _query = '';
   SearchLocationItem _location;
   bool _submit = false;
@@ -134,7 +135,7 @@ class _PresenterState extends State<_Presenter> {
       child: TextField(
         controller: _queryCtrl,
         onChanged: (text) {
-          if (text.trim() != _query.trim()) setState(() => _query = text);
+          if (text.trim() != _query) setState(() => _query = text.trim());
         },
         onSubmitted: (text) => this.setState(() => _submit = true),
         style: TextStyle(fontSize: 18.0),
@@ -143,14 +144,15 @@ class _PresenterState extends State<_Presenter> {
           hintText: 'Search for a restaurant, cafe, or eatery',
           prefixIcon: Icon(CrustCons.search, color: Burnt.lightGrey, size: 18.0),
           suffixIcon: IconButton(
-              icon: Icon(Icons.clear),
-              onPressed: () {
-                _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
-                this.setState(() {
-                  _submit = false;
-                  _query = '';
-                });
-              }),
+            icon: Icon(Icons.clear),
+            onPressed: () {
+              _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
+              this.setState(() {
+                _submit = false;
+                _query = '';
+              });
+            },
+          ),
           border: InputBorder.none,
         ),
       ),
@@ -271,13 +273,19 @@ class _PresenterState extends State<_Presenter> {
         ));
   }
 
+  Future<List<MyStore.Store>> _search() {
+    return _memo.runOnce(() async {
+      return await SearchService.searchStores(_query.isEmpty ? 's' : _query);
+    });
+  }
+
   Widget _searchResults(BuildContext context) {
     if (_query.isEmpty) {
       return SliverCenter(child: Container());
     }
-    return FutureBuilder<List<MyStore.Store>>(
-      future: SearchService.searchStores(_query.trim()),
-      builder: (context, AsyncSnapshot<List<MyStore.Store>> snapshot) {
+    return FutureBuilder(
+      future: _search(),
+      builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.active:
           case ConnectionState.waiting:

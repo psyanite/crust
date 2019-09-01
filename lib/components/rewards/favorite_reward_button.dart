@@ -20,16 +20,20 @@ class FavoriteRewardButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-        converter: (Store<AppState> store) => _Props.fromStore(store),
-        builder: (context, props) => _Presenter(
-            reward: reward,
-            size: size,
-            padding: padding,
-            confirmUnfavorite: confirmUnfavorite,
-            favoriteRewards: props.favoriteRewards,
-            favoriteReward: props.favoriteReward,
-            unfavoriteReward: props.unfavoriteReward,
-            isLoggedIn: props.isLoggedIn));
+      converter: (Store<AppState> store) => _Props.fromStore(store),
+      builder: (context, props) {
+        return _Presenter(
+          reward: reward,
+          size: size,
+          padding: padding,
+          confirmUnfavorite: confirmUnfavorite,
+          favoriteRewards: props.favoriteRewards,
+          favoriteReward: props.favoriteReward,
+          unfavoriteReward: props.unfavoriteReward,
+          isLoggedIn: props.isLoggedIn,
+        );
+      },
+    );
   }
 }
 
@@ -74,17 +78,19 @@ class _Presenter extends StatelessWidget {
       onUnfavorite: () {
         if (confirmUnfavorite == true) {
           showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return Confirm(
-                    title: 'Remove Reward',
-                    description: 'This reward will be removed from favorites',
-                    action: 'Remove',
-                    onTap: () {
-                      unfavoriteReward(reward.id);
-                      Navigator.of(context, rootNavigator: true).pop(true);
-                    });
-              });
+            context: context,
+            builder: (BuildContext context) {
+              return Confirm(
+                title: 'Remove Reward',
+                description: 'This reward will be removed from favorites',
+                action: 'Remove',
+                onTap: () {
+                  unfavoriteReward(reward.id);
+                  Navigator.of(context, rootNavigator: true).pop(true);
+                },
+              );
+            },
+          );
         } else {
           unfavoriteReward(reward.id);
           snack(context, 'Removed from favourites');

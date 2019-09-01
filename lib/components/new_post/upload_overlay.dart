@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:crust/components/my_profile/my_profile_screen.dart';
-import 'package:crust/components/screens/store_screen.dart';
+import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/main.dart';
 import 'package:crust/models/post.dart';
 import 'package:crust/state/post/post_service.dart';

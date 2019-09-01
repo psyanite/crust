@@ -1,5 +1,4 @@
 import 'package:crust/components/rewards/reward_cards.dart';
-import 'package:crust/components/rewards/view_mode_icon.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
@@ -66,23 +65,7 @@ class _PresenterState extends State<_Presenter> {
               ],
             ),
             Text('REDEEMED REWARDS', style: Burnt.appBarTitleStyle),
-            if (redeemed != null && redeemed.isNotEmpty) Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text('All the rewards you\'ve redeemed in the past'),
-                ViewModeIcon(toggleLayout: () {
-                  setState(() {
-                    if (currentLayout == 'card') {
-                      currentLayout = 'list';
-                    } else {
-                      currentLayout = 'card';
-                    }
-                  });
-                })
-              ],
-            )
+            if (redeemed != null && redeemed.isNotEmpty) Text('All the rewards you\'ve redeemed in the past')
           ],
         ),
       )),
@@ -92,7 +75,7 @@ class _PresenterState extends State<_Presenter> {
   Widget _content() {
     if (redeemed == null) return LoadingSliverCenter();
     if (redeemed.isEmpty) return _noRewards();
-    return RewardCards(rewards: redeemed, layout: currentLayout);
+    return RewardCards(rewards: redeemed);
   }
 
   Widget _noRewards() {

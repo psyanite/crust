@@ -26,7 +26,7 @@
 * Implements Sliver components for greater flexibility
 * Switch between list items and cards viewing available rewards
 * Persists session data into local device using `redux-persist` and `flutter-storage`
-
+d
 <div align="center">
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/splash.jpg" width="250px"/>
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/home.jpg" width="250px"/>
@@ -38,6 +38,13 @@
 </div>
 
 ## To Do
+* Create new column in store table
+* Populate store table with point data
+* Update the store mutation endpoint to save point data correctly
+* Create stores within x km query
+* Create UI for Stores within 10 minute walking distance (700 meters)
+* Create UI for Rewards within x kms
+
 * Change Header on home screen feed posts
 * Handle reward feed
 * Search rewards

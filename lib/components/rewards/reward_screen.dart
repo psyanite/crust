@@ -1,8 +1,8 @@
 import 'package:crust/components/dialog.dart';
 import 'package:crust/components/rewards/favorite_reward_button.dart';
 import 'package:crust/components/rewards/reward_locations_screen.dart';
-import 'package:crust/components/screens/reward_qr_screen.dart';
-import 'package:crust/components/screens/store_screen.dart';
+import 'package:crust/components/rewards/reward_qr_screen.dart';
+import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/user_reward.dart';
 import 'package:crust/presentation/components.dart';

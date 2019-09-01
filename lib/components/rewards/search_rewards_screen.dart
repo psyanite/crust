@@ -1,4 +1,4 @@
-import 'package:crust/components/screens/store_screen.dart';
+import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/components/search/select_location_screen.dart';
 import 'package:crust/models/search.dart';
 import 'package:crust/models/store.dart' as MyStore;
