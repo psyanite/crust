@@ -38,6 +38,7 @@ class StoreScreen extends StatelessWidget {
       converter: (Store<AppState> store) => _Props.fromStore(store, storeId),
       builder: (context, props) {
         return _Presenter(
+          storeId: storeId,
           store: props.store,
           isLoggedIn: props.isLoggedIn,
           rewards: props.rewards,
@@ -48,11 +49,12 @@ class StoreScreen extends StatelessWidget {
 }
 
 class _Presenter extends StatefulWidget {
+  final int storeId;
   final MyStore.Store store;
   final bool isLoggedIn;
   final List<Reward> rewards;
 
-  _Presenter({Key key, this.store, this.isLoggedIn, this.rewards}) : super(key: key);
+  _Presenter({Key key, this.storeId, this.store, this.isLoggedIn, this.rewards}) : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState();
@@ -91,7 +93,7 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Future<List<Post>> _getPosts() async {
-    return StoreService.fetchPostsByStoreId(storeId: widget.store.id, limit: limit, offset: offset);
+    return StoreService.fetchPostsByStoreId(storeId: widget.storeId, limit: limit, offset: offset);
   }
 
   _getMorePosts() async {
@@ -114,6 +116,7 @@ class _PresenterState extends State<_Presenter> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.store == null) return Scaffold(body: LoadingCenter());
     return Scaffold(
       body: CustomScrollView(
         slivers: <Widget>[
@@ -325,11 +328,14 @@ class _PresenterState extends State<_Presenter> {
   Widget _addressLong() {
     var store = widget.store;
     var address = store.address;
+    if (address == null) return Container();
     var first = '';
     if (address.firstLine != null) first += address.firstLine;
     if (address.secondLine != null) first += ', ${address.secondLine}';
     var second = '';
-    second += '${address.streetNumber} ${address.streetName}, ';
+    if (address.streetNumber != null) second += '${address.streetNumber} ';
+    if (address.streetName != null) second += address.streetName;
+    if (second.isNotEmpty) second += ', ';
     second += store.location ?? store.suburb;
     return Flexible(
       child: Container(
@@ -425,11 +431,10 @@ class _Props {
   _Props({this.store, this.isLoggedIn, this.rewards});
 
   static fromStore(Store<AppState> store, int storeId) {
-    var s = store.state.store.stores[storeId];
     return _Props(
-      store: s,
+      store: store.state.store.stores[storeId],
       isLoggedIn: store.state.me.user != null,
-      rewards: (s.rewards ?? List<int>()).map((r) => store.state.reward.rewards[r]).toList(),
+      rewards: (store.state.store.rewards[storeId] ?? List<int>()).map((r) => store.state.reward.rewards[r]).toList(),
     );
   }
 }

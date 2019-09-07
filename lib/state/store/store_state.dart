@@ -7,17 +7,20 @@ import 'package:meta/meta.dart';
 class StoreState {
   final LinkedHashMap<int, Store> stores;
   final LinkedHashMap<int, Store> topStores;
+  final LinkedHashMap<int, List<int>> rewards;
 
-  StoreState({this.stores, this.topStores});
+  StoreState({this.stores, this.topStores, this.rewards});
 
   StoreState.initialState()
-    : stores = LinkedHashMap<int, Store>(),
-      topStores = LinkedHashMap<int, Store>();
+      : stores = LinkedHashMap<int, Store>(),
+        topStores = LinkedHashMap<int, Store>(),
+        rewards = LinkedHashMap<int, List<int>>();
 
-  StoreState copyWith({LinkedHashMap<int, Store> stores, LinkedHashMap<int, Store> topStores}) {
+  StoreState copyWith({LinkedHashMap<int, Store> stores, LinkedHashMap<int, Store> topStores, LinkedHashMap<int, List<int>> rewards}) {
     return StoreState(
       stores: stores ?? this.stores,
       topStores: topStores ?? this.topStores,
+      rewards: rewards ?? this.rewards,
     );
   }
 
@@ -41,12 +44,21 @@ class StoreState {
     return copyWith(topStores: cloneTopStores()..addEntries(stores.map((s) => MapEntry<int, Store>(s.id, s))));
   }
 
+  StoreState addStoreRewards(int storeId, List<int> rewards) {
+    rewards.shuffle();
+    return copyWith(rewards: cloneStoreRewards()..addEntries([MapEntry<int, List<int>>(storeId, rewards)]));
+  }
+
   LinkedHashMap<int, Store> cloneStores() {
     return LinkedHashMap<int, Store>.from(this.stores);
   }
 
   LinkedHashMap<int, Store> cloneTopStores() {
     return LinkedHashMap<int, Store>.from(this.topStores);
+  }
+
+  LinkedHashMap<int, List<int>> cloneStoreRewards() {
+    return LinkedHashMap<int, List<int>>.from(this.rewards);
   }
 
   @override

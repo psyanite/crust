@@ -27,7 +27,6 @@ class RewardsScreen extends StatelessWidget {
         return _Presenter(
           isLoggedIn: props.isLoggedIn,
           refresh: props.refresh,
-          topRewards: props.topRewards,
           nearMe: props.nearMe,
           fetchRewards: props.fetchRewards,
           mySuburb: props.mySuburb,
@@ -41,14 +40,12 @@ class RewardsScreen extends StatelessWidget {
 class _Presenter extends StatefulWidget {
   final bool isLoggedIn;
   final Function refresh;
-  final List<Reward> topRewards;
   final List<Reward> nearMe;
   final Function fetchRewards;
   final MyStore.Suburb mySuburb;
   final Function setMySuburb;
 
-  _Presenter({Key key, this.isLoggedIn, this.refresh, this.topRewards, this.nearMe, this.fetchRewards, this.mySuburb, this.setMySuburb})
-      : super(key: key);
+  _Presenter({Key key, this.isLoggedIn, this.refresh, this.nearMe, this.fetchRewards, this.mySuburb, this.setMySuburb}) : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState();
@@ -59,8 +56,12 @@ class _PresenterState extends State<_Presenter> {
   List<Reward> _nearMe;
   bool _loading = false;
   bool _loadingLocation = false;
-  int _limit = 7;
-  int _offset = 7;
+
+//  int _limit = 7;
+  int _limit = 3;
+
+//  int _offset = 7;
+  int _offset = 3;
 
   @override
   initState() {
@@ -74,15 +75,21 @@ class _PresenterState extends State<_Presenter> {
 
   @override
   void didUpdateWidget(_Presenter old) {
-    if (_loading == true) {
-      if (old.nearMe.length == widget.nearMe.length) {
-        _limit = 0;
-      } else if (old.nearMe.length < widget.nearMe.length) {
-        _nearMe = widget.nearMe;
-        _offset = _offset + _limit;
-      }
+    if (old.nearMe.length < widget.nearMe.length) {
+      _nearMe = widget.nearMe;
+      _offset = _offset + _limit;
       _loading = false;
     }
+
+//    if (_loading == true) {
+//      if (old.nearMe.length == widget.nearMe.length) {
+//        _limit = 0;
+//      } else if (old.nearMe.length < widget.nearMe.length) {
+//        _nearMe = widget.nearMe;
+//        _offset = _offset + _limit;
+//      }
+//      _loading = false;
+//    }
     super.didUpdateWidget(old);
   }
 
@@ -203,7 +210,9 @@ class _PresenterState extends State<_Presenter> {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
             child: _loadingLocation == true
-                ? Container(width: 100.0, child: Center(child: Container(width: 20.0, height: 20.0, child: CircularProgressIndicator(strokeWidth: 3.0))))
+                ? Container(
+                    width: 100.0,
+                    child: Center(child: Container(width: 20.0, height: 20.0, child: CircularProgressIndicator(strokeWidth: 3.0))))
                 : Text("Use My Location", style: TextStyle(color: Burnt.primaryTextColor)),
           ),
         ),
@@ -246,7 +255,6 @@ class _PresenterState extends State<_Presenter> {
 class _Props {
   final bool isLoggedIn;
   final Function refresh;
-  final List<Reward> topRewards;
   final List<Reward> nearMe;
   final Function fetchRewards;
   final MyStore.Suburb mySuburb;
@@ -255,7 +263,6 @@ class _Props {
   _Props({
     this.isLoggedIn,
     this.refresh,
-    this.topRewards,
     this.nearMe,
     this.fetchRewards,
     this.mySuburb,
@@ -264,15 +271,15 @@ class _Props {
 
   static fromStore(Store<AppState> store) {
     return _Props(
-        isLoggedIn: store.state.me.user != null,
-        refresh: () {
-          store.dispatch(FetchRewardsNearMe(7, 0));
-          store.dispatch(FetchTopRewards());
-        },
-        topRewards: store.state.reward.topRewards.values.toList(),
-        nearMe: List<Reward>.from(Utils.subset(store.state.reward.nearMe, store.state.reward.rewards)),
-        fetchRewards: (limit, offset) => store.dispatch(FetchRewardsNearMe(limit, offset)),
-        mySuburb: store.state.me.suburb,
-        setMySuburb: (suburb) => store.dispatch(SetMySuburb(suburb)));
+      isLoggedIn: store.state.me.user != null,
+      refresh: () {
+//          store.dispatch(FetchRewardsNearMe(7, 0));
+        store.dispatch(FetchRewardsNearMe(3, 0));
+      },
+      nearMe: List<Reward>.from(Utils.subset(store.state.reward.nearMe, store.state.reward.rewards)),
+      fetchRewards: (limit, offset) => store.dispatch(FetchRewardsNearMe(limit, offset)),
+      mySuburb: store.state.me.suburb,
+      setMySuburb: (suburb) => store.dispatch(SetMySuburb(suburb)),
+    );
   }
 }

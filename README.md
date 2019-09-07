@@ -47,7 +47,7 @@ d
 
 * Change Header on home screen feed posts
 * Handle reward feed
-* Search rewards
+* Search rewards 
 
 * Implement store posts
 * Add submit missing store feature

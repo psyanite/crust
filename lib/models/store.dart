@@ -12,7 +12,6 @@ class Store {
   final String suburb;
   final String city;
   final List<String> cuisines;
-  final List<int> rewards;
   final int heartCount;
   final int okayCount;
   final int burntCount;
@@ -29,7 +28,6 @@ class Store {
     this.suburb,
     this.city,
     this.cuisines,
-    this.rewards,
     this.heartCount,
     this.okayCount,
     this.burntCount,
@@ -46,7 +44,6 @@ class Store {
       suburb: this.suburb,
       city: this.city,
       cuisines: this.cuisines,
-      rewards: rewards ?? this.rewards,
       heartCount: this.heartCount,
       okayCount: this.okayCount,
       burntCount: this.burntCount,

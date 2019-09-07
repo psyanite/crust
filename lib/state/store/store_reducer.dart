@@ -18,7 +18,7 @@ StoreState fetchStoresSuccess(StoreState state, FetchStoresSuccess action) {
 }
 
 StoreState fetchRewardsByStoreIdSuccess(StoreState state, FetchRewardsByStoreIdSuccess action) {
-  return state.addStore(state.stores[action.storeId].copyWith(rewards: action.rewards));
+  return state.addStoreRewards(action.storeId, action.rewards);
 }
 
 StoreState fetchTopStoresSuccess(StoreState state, FetchTopStoresSuccess action) {
