@@ -56,7 +56,6 @@ class Utils {
   }
 
   static List<dynamic> subset(Iterable<int> ids, LinkedHashMap<int, dynamic> map) {
-    return ids == null || map == null ? null
-      : map.entries.where((r) => ids.contains(r.value.id)).map((e) => e.value).toList();
+    return ids == null || map == null ? null : ids.map((i) => map[i]).toList();
   }
 }

@@ -18,10 +18,14 @@ List<Middleware<AppState>> createRewardMiddleware([
 
 Middleware<AppState> _fetchNearMe(RewardService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
-    service.fetchRewards(limit: action.limit, offset: action.offset).then(
+    service.fetchRewards(lat: action.lat, lng: action.lng, limit: action.limit, offset: action.offset).then(
       (rewards) {
-        store.dispatch(FetchRewardsSuccess(rewards));
-        store.dispatch(FetchRewardsNearMeSuccess(rewards.where((r) => r.isExpired() == false).map((r) => r.id).toList()));
+        if (rewards.isEmpty) {
+          store.dispatch(SetNearMeAll(true));
+        } else {
+          store.dispatch(FetchRewardsSuccess(rewards));
+          store.dispatch(FetchRewardsNearMeSuccess(rewards.where((r) => r.isExpired() == false).map((r) => r.id).toList()));
+        }
       },
     ).catchError((e) => store.dispatch(RequestFailure("fetchNearMe ${e.toString()}")));
     next(action);

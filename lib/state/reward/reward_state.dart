@@ -7,20 +7,23 @@ import 'package:meta/meta.dart';
 class RewardState {
   final LinkedHashMap<int, Reward> rewards;
   final LinkedHashMap<int, Reward> topRewards;
-  final Set<int> nearMe;
+  final List<int> nearMe;
+  final bool nearMeAll;
 
-  RewardState({this.rewards, this.topRewards, this.nearMe});
+  RewardState({this.rewards, this.topRewards, this.nearMe, this.nearMeAll});
 
   RewardState.initialState()
     : rewards = LinkedHashMap<int, Reward>(),
       topRewards = LinkedHashMap<int, Reward>(),
-      nearMe = Set<int>();
+      nearMe = List<int>(),
+      nearMeAll = false;
 
-  RewardState copyWith({LinkedHashMap<int, Reward> rewards, LinkedHashMap<int, Reward> topRewards, Set<int> nearMe}) {
+  RewardState copyWith({LinkedHashMap<int, Reward> rewards, LinkedHashMap<int, Reward> topRewards, List<int> nearMe, bool nearMeAll}) {
     return RewardState(
       rewards: rewards ?? this.rewards,
       topRewards: topRewards ?? this.topRewards,
       nearMe: nearMe ?? this.nearMe,
+      nearMeAll: nearMeAll ?? this.nearMeAll,
     );
   }
 
@@ -45,7 +48,6 @@ class RewardState {
   }
 
   RewardState addNearMe(List<int> rewardIds) {
-    rewardIds.shuffle();
     return copyWith(nearMe: cloneNearMe()..addAll(rewardIds));
   }
 
@@ -57,12 +59,12 @@ class RewardState {
     return LinkedHashMap<int, Reward>.from(this.topRewards);
   }
 
-  Set<int> cloneNearMe() {
-    return Set<int>.from(this.nearMe);
+  List<int> cloneNearMe() {
+    return List<int>.from(this.nearMe);
   }
 
   @override
   String toString() {
-    return '''{ rewards: ${rewards.length}, topRewards: ${topRewards.length}, nearMe: ${nearMe.length} }''';
+    return '''{ rewards: ${rewards.length}, topRewards: ${topRewards.length}, nearMe: ${nearMe.join(",")} }''';
   }
 }

@@ -8,7 +8,6 @@ import 'package:crust/state/search/search_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:redux/redux.dart';
 
 class SelectSuburbScreen extends StatefulWidget {
@@ -107,7 +106,7 @@ class SelectSuburbScreenState extends State<SelectSuburbScreen> {
     return SliverToBoxAdapter(
       child: InkWell(
         onTap: () {
-          widget.selectLocation(Address(locality: s.name));
+          widget.selectLocation(s);
           Navigator.pop(context);
         },
         child: Container(
@@ -168,7 +167,7 @@ class _ResultCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        select(Address(locality: suburb.name));
+        select(suburb);
         Navigator.pop(context);
       },
       child: Container(

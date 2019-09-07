@@ -147,6 +147,22 @@ class Store {
     return 'https://www.google.com/maps/search/?api=1&query=${Uri.encodeComponent(query)}';
   }
 
+  String getFirstLine() {
+    var first = '';
+    if (address.firstLine != null) first += address.firstLine;
+    if (address.secondLine != null) first += ', ${address.secondLine}';
+    return first;
+  }
+
+  String getSecondLine() {
+    var second = '';
+    if (address.streetNumber != null) second += '${address.streetNumber} ';
+    if (address.streetName != null) second += address.streetName;
+    if (second.isNotEmpty) second += ', ';
+    second += location ?? suburb;
+    return second;
+  }
+
   @override
   String toString() {
     return '{ id: $id, name: $name }';
@@ -173,7 +189,6 @@ class Suburb {
   final String district;
   final double lat;
   final double lng;
-
 
   Suburb({this.id, this.name, this.postcode, this.city, this.district, this.lat, this.lng});
 
@@ -229,6 +244,18 @@ class Suburb {
       'lat': this.lat,
       'lng': this.lng,
     };
+  }
+
+  Suburb copyWith({double lat, double lng}) {
+    return Suburb(
+      id: this.id,
+      name: this.name,
+      postcode: this.postcode,
+      city: this.city,
+      district: this.district,
+      lat: lat ?? this.lat,
+      lng: lng ?? this.lng
+    );
   }
 }
 

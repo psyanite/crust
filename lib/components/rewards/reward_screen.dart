@@ -195,16 +195,27 @@ class _Presenter extends StatelessWidget {
             children: <Widget>[
               Text(store.name, style: TextStyle(fontSize: 20.0)),
               Container(height: 3.0),
-              if (store.address.firstLine != null) Text(store.address.firstLine),
-              if (store.address.secondLine != null) Text(store.address.secondLine),
-              Text("${store.address.streetNumber} ${store.address.streetName}"),
-              if (store.location != null) Text(store.location),
-              if (store.suburb != null) Text(store.suburb),
+              _address(),
             ],
           ),
         ),
       );
     });
+  }
+
+  Widget _address() {
+    var store = reward.store;
+    var address = store.address;
+    if (address == null) return Container();
+    var first = store.getFirstLine();
+    var second = store.getSecondLine();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        if (first.isNotEmpty) Text(first),
+        if (second.isNotEmpty) Text(second),
+      ],
+    );
   }
 
   Widget _storeGroupDetails() {

@@ -327,16 +327,8 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _addressLong() {
     var store = widget.store;
-    var address = store.address;
-    if (address == null) return Container();
-    var first = '';
-    if (address.firstLine != null) first += address.firstLine;
-    if (address.secondLine != null) first += ', ${address.secondLine}';
-    var second = '';
-    if (address.streetNumber != null) second += '${address.streetNumber} ';
-    if (address.streetName != null) second += address.streetName;
-    if (second.isNotEmpty) second += ', ';
-    second += store.location ?? store.suburb;
+    var first = store.getFirstLine();
+    var second = store.getSecondLine();
     return Flexible(
       child: Container(
         padding: EdgeInsets.only(right: 8.0),

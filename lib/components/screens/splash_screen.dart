@@ -74,10 +74,7 @@ class _SplashScreenState extends State<SplashScreen> {
         }
         store.dispatch(FetchFeed());
         store.dispatch(FetchMyPosts());
-//        store.dispatch(FetchRewardsNearMe(7, 0));
-        store.dispatch(FetchRewardsNearMe(3, 0));
         store.dispatch(FetchFavorites());
-
         _getSuburb((s) => store.dispatch(SetMySuburb(s)));
       },
       converter: (Store<AppState> store) => 1,

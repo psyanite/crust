@@ -26,11 +26,12 @@ class RewardsScreen extends StatelessWidget {
       builder: (BuildContext context, _Props props) {
         return _Presenter(
           isLoggedIn: props.isLoggedIn,
-          refresh: props.refresh,
-          nearMe: props.nearMe,
-          fetchRewards: props.fetchRewards,
           mySuburb: props.mySuburb,
+          nearMe: props.nearMe,
+          nearMeAll: props.nearMeAll,
+          fetchRewards: props.fetchRewards,
           setMySuburb: props.setMySuburb,
+          clearRewards: props.clearRewards,
         );
       },
     );
@@ -39,57 +40,55 @@ class RewardsScreen extends StatelessWidget {
 
 class _Presenter extends StatefulWidget {
   final bool isLoggedIn;
-  final Function refresh;
-  final List<Reward> nearMe;
-  final Function fetchRewards;
   final MyStore.Suburb mySuburb;
+  final List<Reward> nearMe;
+  final bool nearMeAll;
+  final Function fetchRewards;
   final Function setMySuburb;
+  final Function clearRewards;
 
-  _Presenter({Key key, this.isLoggedIn, this.refresh, this.nearMe, this.fetchRewards, this.mySuburb, this.setMySuburb}) : super(key: key);
+  _Presenter({Key key, this.isLoggedIn, this.nearMe, this.nearMeAll, this.fetchRewards, this.mySuburb, this.setMySuburb, this.clearRewards})
+      : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState();
 }
 
 class _PresenterState extends State<_Presenter> {
+  final MyStore.Suburb defaultSuburb =
+      MyStore.Suburb(id: 1, name: 'Sydney CBD', postcode: 2000, city: 'Sydney', district: 'NSW', lat: -33.794883, lng: 151.268071);
   ScrollController _scrollie;
   List<Reward> _nearMe;
   bool _loading = false;
   bool _loadingLocation = false;
-
-//  int _limit = 7;
   int _limit = 3;
-
-//  int _offset = 7;
-  int _offset = 3;
+  int _offset = 0;
 
   @override
   initState() {
     super.initState();
     _scrollie = ScrollController()
       ..addListener(() {
-        if (_loading == false && _limit > 0 && _scrollie.position.extentAfter < 500) _getMoreRewards();
+        if (widget.nearMe.isNotEmpty && _loading == false && _limit > 0 && _scrollie.position.extentAfter < 200) _getMoreRewards();
       });
     _nearMe = widget.nearMe;
+    if (_nearMe.isEmpty) widget.fetchRewards(_limit, _offset, widget.mySuburb ?? defaultSuburb);
   }
 
   @override
   void didUpdateWidget(_Presenter old) {
-    if (old.nearMe.length < widget.nearMe.length) {
+    if (old.nearMe.length != widget.nearMe.length) {
       _nearMe = widget.nearMe;
       _offset = _offset + _limit;
       _loading = false;
     }
-
-//    if (_loading == true) {
-//      if (old.nearMe.length == widget.nearMe.length) {
-//        _limit = 0;
-//      } else if (old.nearMe.length < widget.nearMe.length) {
-//        _nearMe = widget.nearMe;
-//        _offset = _offset + _limit;
-//      }
-//      _loading = false;
-//    }
+    if (widget.nearMeAll == true) {
+      _limit = 0;
+      _loading = false;
+    }
+    if (old.mySuburb != widget.mySuburb) {
+      _refresh(widget.mySuburb);
+    }
     super.didUpdateWidget(old);
   }
 
@@ -99,10 +98,20 @@ class _PresenterState extends State<_Presenter> {
     super.dispose();
   }
 
-  _getMoreRewards() async {
+  _refresh(MyStore.Suburb s) {
+    this.setState(() => {
+          _limit = 3,
+          _offset = 0,
+          _loading = false,
+        });
+    widget.clearRewards();
+    widget.fetchRewards(_limit, _offset, s ?? defaultSuburb);
+  }
+
+  _getMoreRewards() {
     if (_limit > 0) {
       this.setState(() => _loading = true);
-      widget.fetchRewards(_limit, _offset);
+      widget.fetchRewards(_limit, _offset, widget.mySuburb ?? defaultSuburb);
     }
   }
 
@@ -111,11 +120,11 @@ class _PresenterState extends State<_Presenter> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          widget.refresh();
+          _refresh(widget.mySuburb);
           await Future.delayed(Duration(seconds: 1));
         },
         child: CustomScrollView(
-          slivers: <Widget>[_appBar(), _locationBar(context), _rewardsList()],
+          slivers: <Widget>[_appBar(), _locationBar(context), _rewardsList(), if (_loading == true) LoadingSliver()],
           controller: _scrollie,
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         ),
@@ -132,7 +141,7 @@ class _PresenterState extends State<_Presenter> {
   Widget _suburbInfo(context, suburb) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => SelectSuburbScreen(selectLocation: () {})));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => SelectSuburbScreen(selectLocation: widget.setMySuburb)));
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,12 +208,10 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _defaultSuburbInfo(context) {
-    var suburb =
-        MyStore.Suburb(id: 1, name: 'Sydney CBD', postcode: 2000, city: 'Sydney', district: 'NSW', lat: -33.794883, lng: 151.268071);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        _suburbInfo(context, suburb),
+        _suburbInfo(context, defaultSuburb),
         InkWell(
           onTap: () => _getLocation(context),
           child: Container(
@@ -233,13 +240,13 @@ class _PresenterState extends State<_Presenter> {
       var a = addresses[0];
       var result = await SearchService.findSuburbByName(a.locality);
       if (result != null) {
-        widget.setMySuburb(result);
+        widget.setMySuburb(result.copyWith(lat: p.latitude, lng: p.longitude));
         this.setState(() => _loadingLocation = false);
         return;
       }
       var results = await SearchService.findSuburbsByQuery(a.locality, a.postalCode);
       if (results.isNotEmpty) {
-        widget.setMySuburb(results[0]);
+        widget.setMySuburb(results[0].copyWith(lat: p.latitude, lng: p.longitude));
         this.setState(() => _loadingLocation = false);
         return;
       }
@@ -247,39 +254,39 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _rewardsList() {
-    if (_nearMe.isEmpty) return LoadingSliver();
+    if (_nearMe.isEmpty) return LoadingSliverCenter();
     return RewardCards(rewards: _nearMe);
   }
 }
 
 class _Props {
   final bool isLoggedIn;
-  final Function refresh;
-  final List<Reward> nearMe;
-  final Function fetchRewards;
   final MyStore.Suburb mySuburb;
+  final List<Reward> nearMe;
+  final bool nearMeAll;
+  final Function fetchRewards;
   final Function setMySuburb;
+  final Function clearRewards;
 
   _Props({
     this.isLoggedIn,
-    this.refresh,
-    this.nearMe,
-    this.fetchRewards,
     this.mySuburb,
+    this.nearMe,
+    this.nearMeAll,
+    this.fetchRewards,
     this.setMySuburb,
+    this.clearRewards,
   });
 
   static fromStore(Store<AppState> store) {
     return _Props(
       isLoggedIn: store.state.me.user != null,
-      refresh: () {
-//          store.dispatch(FetchRewardsNearMe(7, 0));
-        store.dispatch(FetchRewardsNearMe(3, 0));
-      },
-      nearMe: List<Reward>.from(Utils.subset(store.state.reward.nearMe, store.state.reward.rewards)),
-      fetchRewards: (limit, offset) => store.dispatch(FetchRewardsNearMe(limit, offset)),
       mySuburb: store.state.me.suburb,
+      nearMe: List<Reward>.from(Utils.subset(store.state.reward.nearMe, store.state.reward.rewards)),
+      nearMeAll: store.state.reward.nearMeAll,
+      fetchRewards: (limit, offset, MyStore.Suburb s) => store.dispatch(FetchRewardsNearMe(s.lat, s.lng, limit, offset)),
       setMySuburb: (suburb) => store.dispatch(SetMySuburb(suburb)),
+      clearRewards: () => store.dispatch(ClearNearMe()),
     );
   }
 }

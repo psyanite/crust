@@ -65,16 +65,16 @@ class RewardService {
     return Reward.fromToaster(json);
   }
 
-  Future<List<Reward>> fetchRewards({int limit, int offset}) async {
+  Future<List<Reward>> fetchRewards({int limit, int offset, double lat, double lng}) async {
     String query = """
       query {
-        allRewards(limit: $limit, offset: $offset) {
+        rewardsByCoords(lat: $lat, lng: $lng, limit: $limit, offset: $offset) {
           ${Reward.attributes}
         }
       }
     """;
     final response = await Toaster.get(query);
-    var json = response['allRewards'];
+    var json = response['rewardsByCoords'];
     return (json as List).map((r) => Reward.fromToaster(r)).toList();
   }
 

@@ -1,10 +1,15 @@
 import 'package:crust/models/reward.dart';
 
 class FetchRewardsNearMe {
+  final double lat;
+  final double lng;
   final int limit;
   final int offset;
 
-  FetchRewardsNearMe(this.limit, this.offset);
+  FetchRewardsNearMe(this.lat, this.lng, this.limit, this.offset);
+
+  @override
+  String toString() => '$lat $lng, limit: $limit, offset: $offset';
 }
 
 class FetchRewardsNearMeSuccess {
@@ -32,3 +37,11 @@ class FetchTopRewardsSuccess {
 
   FetchTopRewardsSuccess(this.rewards);
 }
+
+class SetNearMeAll {
+  final bool nearMeAll;
+
+  SetNearMeAll(this.nearMeAll);
+}
+
+class ClearNearMe {}
