@@ -83,7 +83,7 @@ Middleware<AppState> _unfavoriteReply(CommentService service) {
       } else {
         store.dispatch(RequestFailure("Failed to unfavorite reply: ${action.reply.id}"));
       }
-    }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    }).catchError((e) => store.dispatch(RequestFailure("unfavoriteReply ${e.toString()}")));
     next(action);
   };
 }

@@ -26,7 +26,7 @@ Middleware<AppState> _fetchTopStores(StoreService service) {
         store.dispatch(FetchTopStoresSuccess(stores));
         store.dispatch(FetchStoresSuccess(stores));
       },
-    ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    ).catchError((e) => store.dispatch(RequestFailure("fetchTopStores ${e.toString()}")));
     next(action);
   };
 }
@@ -37,7 +37,7 @@ Middleware<AppState> _fetchStoreById(StoreService service) {
       (s) {
         store.dispatch(FetchStoreSuccess(s));
       },
-    ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    ).catchError((e) => store.dispatch(RequestFailure("fetchStoreById ${e.toString()}")));
     next(action);
   };
 }
@@ -51,7 +51,7 @@ Middleware<AppState> _fetchRewardsByStoreId(StoreService service) {
           store.dispatch(FetchRewardsByStoreIdSuccess(action.storeId, rewards.map((r) => r.id).toList()));
         }
       },
-    ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    ).catchError((e) => store.dispatch(RequestFailure("fetchRewardsByStoreId ${e.toString()}")));
     next(action);
   };
 }

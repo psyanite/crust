@@ -23,7 +23,7 @@ Middleware<AppState> _fetchNearMe(RewardService service) {
         store.dispatch(FetchRewardsSuccess(rewards));
         store.dispatch(FetchRewardsNearMeSuccess(rewards.where((r) => r.isExpired() == false).map((r) => r.id).toList()));
       },
-    ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    ).catchError((e) => store.dispatch(RequestFailure("fetchNearMe ${e.toString()}")));
     next(action);
   };
 }
@@ -35,7 +35,7 @@ Middleware<AppState> _fetchTopRewards(RewardService service) {
         store.dispatch(FetchTopRewardsSuccess(rewards));
         store.dispatch(FetchRewardsSuccess(rewards));
       },
-    ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    ).catchError((e) => store.dispatch(RequestFailure("fetchTopRewards ${e.toString()}")));
     next(action);
   };
 }

@@ -20,7 +20,7 @@ Middleware<AppState> _fetchUserByUserId(UserService service) {
       (user) {
         store.dispatch(FetchUserByUserIdSuccess(user));
       },
-    ).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    ).catchError((e) => store.dispatch(RequestFailure("fetchUserByUserId ${e.toString()}")));
 
     next(action);
   };

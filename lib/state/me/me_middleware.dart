@@ -21,7 +21,7 @@ Middleware<AppState> _addUser(MeService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     service.addUser(action.me).then((userId) {
       store.dispatch(LoginSuccess(action.me.copyWith(id: userId)));
-    }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    }).catchError((e) => store.dispatch(RequestFailure("addUser ${e.toString()}")));
     next(action);
   };
 }
@@ -30,7 +30,7 @@ Middleware<AppState> _setTagline(MeService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     service.setTagline(userId: store.state.me.user.id, tagline: action.tagline).then((tagline) {
       store.dispatch(SetMyTaglineSuccess(tagline));
-    }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    }).catchError((e) => store.dispatch(RequestFailure("setTagline ${e.toString()}")));
     next(action);
   };
 }
@@ -43,7 +43,7 @@ Middleware<AppState> _deleteTagline(MeService service) {
       } else {
         store.dispatch(RequestFailure('Delete tagline request result was false'));
       }
-    }).catchError((e) => store.dispatch(RequestFailure(e.toString())));
+    }).catchError((e) => store.dispatch(RequestFailure("deleteTagline ${e.toString()}")));
     next(action);
   };
 }
