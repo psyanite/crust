@@ -75,7 +75,7 @@ class SearchService {
   static Future<List<Suburb>> findSuburbsBySearch(String queryStr) async {
     String query = """
       query {
-        suburbsBySearch(query: "$queryStr") {
+        suburbsBySearch(query: "$queryStr", limit: 3) {
           ${Suburb.attributes}
         }
       }

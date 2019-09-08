@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:geocoder/geocoder.dart' as Geo;
 
 class Utils {
   static final shareBaseUrl = 'https://burntoast.page.link/?link=https://burntoast.com';

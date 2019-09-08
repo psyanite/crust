@@ -2,6 +2,7 @@ import 'package:crust/models/post.dart';
 import 'package:crust/models/search.dart';
 import 'package:crust/models/store.dart';
 import 'package:crust/models/user.dart';
+import 'package:geocoder/geocoder.dart' as Geo;
 
 class AddUser {
   final User user;
@@ -73,8 +74,8 @@ class SetMyUsername {
   SetMyUsername(this.name);
 }
 
-class SetMySuburb {
-  final Suburb suburb;
+class SetMyAddress {
+  final Geo.Address address;
 
-  SetMySuburb(this.suburb);
+  SetMyAddress(this.address);
 }

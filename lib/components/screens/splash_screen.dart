@@ -38,27 +38,27 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
-  _getSuburb(Function setSuburb) async {
-    return Timer(Duration(seconds: 1), () async {
-      var enabled = await Geolocator().isLocationServiceEnabled();
-      if (enabled == false) return;
-      var p = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high).timeout(Duration(seconds: 5));
-      var addresses = await Geocoder.local.findAddressesFromCoordinates(Coordinates(p.latitude, p.longitude)).timeout(Duration(seconds: 5));
-      if (addresses.isNotEmpty) {
-        var a = addresses[0];
-        var result = await SearchService.findSuburbByName(a.locality);
-        if (result != null) {
-          setSuburb(result);
-          return;
-        }
-        var results = await SearchService.findSuburbsByQuery(a.locality, a.postalCode);
-        if (results.isNotEmpty) {
-          setSuburb(results[0]);
-          return;
-        }
-      }
-    });
-  }
+//  _getSuburb(Function setSuburb) async {
+//    return Timer(Duration(seconds: 1), () async {
+//      var enabled = await Geolocator().isLocationServiceEnabled();
+//      if (enabled == false) return;
+//      var p = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high).timeout(Duration(seconds: 5));
+//      var addresses = await Geocoder.local.findAddressesFromCoordinates(Coordinates(p.latitude, p.longitude)).timeout(Duration(seconds: 5));
+//      if (addresses.isNotEmpty) {
+//        var a = addresses[0];
+//        var result = await SearchService.findSuburbByName(a.locality);
+//        if (result != null) {
+//          setSuburb(result);
+//          return;
+//        }
+//        var results = await SearchService.findSuburbsByQuery(a.locality, a.postalCode);
+//        if (results.isNotEmpty) {
+//          setSuburb(results[0]);
+//          return;
+//        }
+//      }
+//    });
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,7 @@ class _SplashScreenState extends State<SplashScreen> {
         store.dispatch(FetchFeed());
         store.dispatch(FetchMyPosts());
         store.dispatch(FetchFavorites());
-        _getSuburb((s) => store.dispatch(SetMySuburb(s)));
+//        _getSuburb((s) => store.dispatch(SetMySuburb(s)));
       },
       converter: (Store<AppState> store) => 1,
       builder: (BuildContext context, int props) {

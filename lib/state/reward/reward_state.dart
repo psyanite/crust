@@ -65,6 +65,6 @@ class RewardState {
 
   @override
   String toString() {
-    return '''{ rewards: ${rewards.length}, topRewards: ${topRewards.length}, nearMe: ${nearMe.join(",")} }''';
+    return '''{ rewards: ${rewards.length}, topRewards: ${topRewards.length}, nearMe: ${nearMe.join(',')} }''';
   }
 }

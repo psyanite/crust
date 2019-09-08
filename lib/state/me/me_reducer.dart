@@ -14,7 +14,7 @@ Reducer<MeState> meReducer = combineReducers([
   new TypedReducer<MeState, SetMyProfilePicture>(setMyProfilePicture),
   new TypedReducer<MeState, SetMyDisplayName>(setMyDisplayName),
   new TypedReducer<MeState, SetMyUsername>(setMyUsername),
-  new TypedReducer<MeState, SetMySuburb>(setSuburb),
+  new TypedReducer<MeState, SetMyAddress>(setMyAddress),
 ]);
 
 MeState loginSuccess(MeState state, LoginSuccess action) {
@@ -66,6 +66,6 @@ MeState setMyUsername(MeState state, SetMyUsername action) {
   return state.copyWith(user: state.user.copyWith(username: action.name));
 }
 
-MeState setSuburb(MeState state, SetMySuburb action) {
-  return state.copyWith(suburb: action.suburb);
+MeState setMyAddress(MeState state, SetMyAddress action) {
+  return state.copyWith(address: action.address);
 }

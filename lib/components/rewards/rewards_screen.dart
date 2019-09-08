@@ -1,21 +1,20 @@
 import 'package:crust/components/rewards/reward_cards.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
-import 'package:crust/components/search/select_suburb_screen.dart';
+import 'package:crust/components/search/select_address_screen.dart';
+import 'package:crust/components/search/use_my_location.dart';
 import 'package:crust/models/reward.dart';
-import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
 import 'package:crust/state/reward/reward_actions.dart';
-import 'package:crust/state/search/search_service.dart';
 import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:geocoder/geocoder.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:geocoder/geocoder.dart' as Geo;
 import 'package:redux/redux.dart';
 
 class RewardsScreen extends StatelessWidget {
@@ -25,8 +24,7 @@ class RewardsScreen extends StatelessWidget {
       converter: (Store<AppState> store) => _Props.fromStore(store),
       builder: (BuildContext context, _Props props) {
         return _Presenter(
-          isLoggedIn: props.isLoggedIn,
-          mySuburb: props.mySuburb,
+          myAddress: props.myAddress,
           nearMe: props.nearMe,
           nearMeAll: props.nearMeAll,
           fetchRewards: props.fetchRewards,
@@ -39,15 +37,15 @@ class RewardsScreen extends StatelessWidget {
 }
 
 class _Presenter extends StatefulWidget {
-  final bool isLoggedIn;
-  final MyStore.Suburb mySuburb;
+  final Geo.Address myAddress;
   final List<Reward> nearMe;
   final bool nearMeAll;
   final Function fetchRewards;
   final Function setMySuburb;
   final Function clearRewards;
 
-  _Presenter({Key key, this.isLoggedIn, this.nearMe, this.nearMeAll, this.fetchRewards, this.mySuburb, this.setMySuburb, this.clearRewards})
+  _Presenter(
+      {Key key, this.nearMe, this.nearMeAll, this.fetchRewards, this.myAddress, this.setMySuburb, this.clearRewards})
       : super(key: key);
 
   @override
@@ -55,12 +53,11 @@ class _Presenter extends StatefulWidget {
 }
 
 class _PresenterState extends State<_Presenter> {
-  final MyStore.Suburb defaultSuburb =
-      MyStore.Suburb(id: 1, name: 'Sydney CBD', postcode: 2000, city: 'Sydney', district: 'NSW', lat: -33.794883, lng: 151.268071);
+  final Geo.Address defaultAddress =
+      Geo.Address(coordinates: Coordinates(-33.794883, 151.268071), addressLine: 'Sydney CBD', locality: 'Sydney', postalCode: '2000');
   ScrollController _scrollie;
   List<Reward> _nearMe;
   bool _loading = false;
-  bool _loadingLocation = false;
   int _limit = 3;
   int _offset = 0;
 
@@ -72,7 +69,7 @@ class _PresenterState extends State<_Presenter> {
         if (widget.nearMe.isNotEmpty && _loading == false && _limit > 0 && _scrollie.position.extentAfter < 200) _getMoreRewards();
       });
     _nearMe = widget.nearMe;
-    if (_nearMe.isEmpty) widget.fetchRewards(_limit, _offset, widget.mySuburb ?? defaultSuburb);
+    if (_nearMe.isEmpty) widget.fetchRewards(_limit, _offset, widget.myAddress ?? defaultAddress);
   }
 
   @override
@@ -86,8 +83,8 @@ class _PresenterState extends State<_Presenter> {
       _limit = 0;
       _loading = false;
     }
-    if (old.mySuburb != widget.mySuburb) {
-      _refresh(widget.mySuburb);
+    if (old.myAddress != widget.myAddress) {
+      _refresh(widget.myAddress);
     }
     super.didUpdateWidget(old);
   }
@@ -98,20 +95,20 @@ class _PresenterState extends State<_Presenter> {
     super.dispose();
   }
 
-  _refresh(MyStore.Suburb s) {
+  _refresh(Geo.Address a) {
     this.setState(() => {
           _limit = 3,
           _offset = 0,
           _loading = false,
         });
     widget.clearRewards();
-    widget.fetchRewards(_limit, _offset, s ?? defaultSuburb);
+    widget.fetchRewards(_limit, _offset, a ?? defaultAddress);
   }
 
   _getMoreRewards() {
     if (_limit > 0) {
       this.setState(() => _loading = true);
-      widget.fetchRewards(_limit, _offset, widget.mySuburb ?? defaultSuburb);
+      widget.fetchRewards(_limit, _offset, widget.myAddress ?? defaultAddress);
     }
   }
 
@@ -120,7 +117,7 @@ class _PresenterState extends State<_Presenter> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          _refresh(widget.mySuburb);
+          _refresh(widget.myAddress);
           await Future.delayed(Duration(seconds: 1));
         },
         child: CustomScrollView(
@@ -134,14 +131,14 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _locationBar(context) {
     return SliverToBoxAdapter(
-      child: widget.mySuburb != null ? _suburbInfo(context, widget.mySuburb) : _defaultSuburbInfo(context),
+      child: widget.myAddress != null ? _suburbInfo(context, widget.myAddress) : _defaultAddressInfo(context),
     );
   }
 
-  Widget _suburbInfo(context, suburb) {
+  Widget _suburbInfo(context, Geo.Address address) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => SelectSuburbScreen(selectLocation: widget.setMySuburb)));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => SelectAddressScreen()));
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,8 +154,8 @@ class _PresenterState extends State<_Presenter> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Text(suburb.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                  Text('${suburb.city}, ${suburb.district}', style: TextStyle(fontSize: 18.0)),
+                  Text(address.addressLine.split(',')[0] ?? '', style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
+                  Text(address.locality ?? '', style: TextStyle(fontSize: 18.0)),
                   Container(height: 10.0)
                 ],
               ),
@@ -207,50 +204,14 @@ class _PresenterState extends State<_Presenter> {
     });
   }
 
-  Widget _defaultSuburbInfo(context) {
+  Widget _defaultAddressInfo(context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        _suburbInfo(context, defaultSuburb),
-        InkWell(
-          onTap: () => _getLocation(context),
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-            child: _loadingLocation == true
-                ? Container(
-                    width: 100.0,
-                    child: Center(child: Container(width: 20.0, height: 20.0, child: CircularProgressIndicator(strokeWidth: 3.0))))
-                : Text("Use My Location", style: TextStyle(color: Burnt.primaryTextColor)),
-          ),
-        ),
+        _suburbInfo(context, defaultAddress),
+        UseMyLocation(),
       ],
     );
-  }
-
-  _getLocation(context) async {
-    var enabled = await Geolocator().isLocationServiceEnabled();
-    if (enabled == false) {
-      snack(context, 'Oops! Looks like your device location is not turned on');
-      return;
-    }
-    this.setState(() => _loadingLocation = true);
-    var p = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high).timeout(Duration(seconds: 10));
-    var addresses = await Geocoder.local.findAddressesFromCoordinates(Coordinates(p.latitude, p.longitude)).timeout(Duration(seconds: 10));
-    if (addresses.isNotEmpty) {
-      var a = addresses[0];
-      var result = await SearchService.findSuburbByName(a.locality);
-      if (result != null) {
-        widget.setMySuburb(result.copyWith(lat: p.latitude, lng: p.longitude));
-        this.setState(() => _loadingLocation = false);
-        return;
-      }
-      var results = await SearchService.findSuburbsByQuery(a.locality, a.postalCode);
-      if (results.isNotEmpty) {
-        widget.setMySuburb(results[0].copyWith(lat: p.latitude, lng: p.longitude));
-        this.setState(() => _loadingLocation = false);
-        return;
-      }
-    }
   }
 
   Widget _rewardsList() {
@@ -260,8 +221,7 @@ class _PresenterState extends State<_Presenter> {
 }
 
 class _Props {
-  final bool isLoggedIn;
-  final MyStore.Suburb mySuburb;
+  final Geo.Address myAddress;
   final List<Reward> nearMe;
   final bool nearMeAll;
   final Function fetchRewards;
@@ -269,8 +229,7 @@ class _Props {
   final Function clearRewards;
 
   _Props({
-    this.isLoggedIn,
-    this.mySuburb,
+    this.myAddress,
     this.nearMe,
     this.nearMeAll,
     this.fetchRewards,
@@ -280,12 +239,12 @@ class _Props {
 
   static fromStore(Store<AppState> store) {
     return _Props(
-      isLoggedIn: store.state.me.user != null,
-      mySuburb: store.state.me.suburb,
+      myAddress: store.state.me.address,
       nearMe: List<Reward>.from(Utils.subset(store.state.reward.nearMe, store.state.reward.rewards)),
       nearMeAll: store.state.reward.nearMeAll,
-      fetchRewards: (limit, offset, MyStore.Suburb s) => store.dispatch(FetchRewardsNearMe(s.lat, s.lng, limit, offset)),
-      setMySuburb: (suburb) => store.dispatch(SetMySuburb(suburb)),
+      fetchRewards: (limit, offset, Address a) =>
+          store.dispatch(FetchRewardsNearMe(a.coordinates.latitude, a.coordinates.longitude, limit, offset)),
+      setMySuburb: (address) => store.dispatch(SetMyAddress(address)),
       clearRewards: () => store.dispatch(ClearNearMe()),
     );
   }
