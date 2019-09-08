@@ -1,7 +1,5 @@
 import 'package:crust/components/rewards/reward_cards.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
-import 'package:crust/components/search/select_address_screen.dart';
-import 'package:crust/components/search/use_my_location.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
@@ -44,8 +42,7 @@ class _Presenter extends StatefulWidget {
   final Function setMySuburb;
   final Function clearRewards;
 
-  _Presenter(
-      {Key key, this.nearMe, this.nearMeAll, this.fetchRewards, this.myAddress, this.setMySuburb, this.clearRewards})
+  _Presenter({Key key, this.nearMe, this.nearMeAll, this.fetchRewards, this.myAddress, this.setMySuburb, this.clearRewards})
       : super(key: key);
 
   @override
@@ -53,8 +50,6 @@ class _Presenter extends StatefulWidget {
 }
 
 class _PresenterState extends State<_Presenter> {
-  final Geo.Address defaultAddress =
-      Geo.Address(coordinates: Coordinates(-33.794883, 151.268071), addressLine: 'Sydney CBD', locality: 'Sydney', postalCode: '2000');
   ScrollController _scrollie;
   List<Reward> _nearMe;
   bool _loading = false;
@@ -69,7 +64,7 @@ class _PresenterState extends State<_Presenter> {
         if (widget.nearMe.isNotEmpty && _loading == false && _limit > 0 && _scrollie.position.extentAfter < 200) _getMoreRewards();
       });
     _nearMe = widget.nearMe;
-    if (_nearMe.isEmpty) widget.fetchRewards(_limit, _offset, widget.myAddress ?? defaultAddress);
+    if (_nearMe.isEmpty) widget.fetchRewards(_limit, _offset, widget.myAddress);
   }
 
   @override
@@ -84,7 +79,7 @@ class _PresenterState extends State<_Presenter> {
       _loading = false;
     }
     if (old.myAddress != widget.myAddress) {
-      _refresh(widget.myAddress);
+      _refresh();
     }
     super.didUpdateWidget(old);
   }
@@ -95,20 +90,20 @@ class _PresenterState extends State<_Presenter> {
     super.dispose();
   }
 
-  _refresh(Geo.Address a) {
+  _refresh() {
     this.setState(() => {
           _limit = 3,
           _offset = 0,
           _loading = false,
         });
     widget.clearRewards();
-    widget.fetchRewards(_limit, _offset, a ?? defaultAddress);
+    widget.fetchRewards(_limit, _offset, widget.myAddress);
   }
 
   _getMoreRewards() {
     if (_limit > 0) {
       this.setState(() => _loading = true);
-      widget.fetchRewards(_limit, _offset, widget.myAddress ?? defaultAddress);
+      widget.fetchRewards(_limit, _offset, widget.myAddress);
     }
   }
 
@@ -117,54 +112,16 @@ class _PresenterState extends State<_Presenter> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: () async {
-          _refresh(widget.myAddress);
+          _refresh();
           await Future.delayed(Duration(seconds: 1));
         },
         child: CustomScrollView(
-          slivers: <Widget>[_appBar(), _locationBar(context), _rewardsList(), if (_loading == true) LoadingSliver()],
+          slivers: <Widget>[_appBar(),
+            LocationBar(),
+            _rewardsList(), if (_loading == true) LoadingSliver()],
           controller: _scrollie,
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         ),
-      ),
-    );
-  }
-
-  Widget _locationBar(context) {
-    return SliverToBoxAdapter(
-      child: widget.myAddress != null ? _suburbInfo(context, widget.myAddress) : _defaultAddressInfo(context),
-    );
-  }
-
-  Widget _suburbInfo(context, Geo.Address address) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => SelectAddressScreen()));
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(height: 10.0),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Container(width: 14.0),
-              Container(margin: EdgeInsets.only(top: 10.0), child: Icon(CrustCons.location_bold, color: Burnt.lightGrey, size: 22.0)),
-              Container(width: 12.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(address.addressLine.split(',')[0] ?? '', style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                  Text(address.locality ?? '', style: TextStyle(fontSize: 18.0)),
-                  Container(height: 10.0)
-                ],
-              ),
-              Container(
-                  margin: EdgeInsets.only(left: 5.0, top: 10.0), child: Icon(Icons.keyboard_arrow_down, color: Burnt.primary, size: 30.0))
-            ],
-          ),
-          Container(height: 10.0),
-        ],
       ),
     );
   }
@@ -204,16 +161,6 @@ class _PresenterState extends State<_Presenter> {
     });
   }
 
-  Widget _defaultAddressInfo(context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        _suburbInfo(context, defaultAddress),
-        UseMyLocation(),
-      ],
-    );
-  }
-
   Widget _rewardsList() {
     if (_nearMe.isEmpty) return LoadingSliverCenter();
     return RewardCards(rewards: _nearMe);
@@ -239,7 +186,7 @@ class _Props {
 
   static fromStore(Store<AppState> store) {
     return _Props(
-      myAddress: store.state.me.address,
+      myAddress: store.state.me.address ?? Utils.defaultAddress,
       nearMe: List<Reward>.from(Utils.subset(store.state.reward.nearMe, store.state.reward.rewards)),
       nearMeAll: store.state.reward.nearMeAll,
       fetchRewards: (limit, offset, Address a) =>

@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:crust/components/search/search_screen.dart';
+import 'package:crust/components/stores/search_stores_screen.dart';
 import 'package:crust/components/stores/stores_screen.dart';
 import 'package:crust/components/stores/stores_side_scroller.dart';
 import 'package:crust/models/store.dart' as MyStore;

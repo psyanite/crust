@@ -115,7 +115,7 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _searchResults(BuildContext context) {
     return FutureBuilder<List<MyStore.Store>>(
-      future: SearchService.searchStores(_query),
+      future: SearchService.searchStoreByName(_query),
       builder: (context, AsyncSnapshot<List<MyStore.Store>> snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.active:

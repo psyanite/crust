@@ -1,6 +1,5 @@
 import 'package:crust/models/post.dart';
 import 'package:crust/models/search.dart';
-import 'package:crust/models/store.dart';
 import 'package:crust/models/user.dart';
 import 'package:geocoder/geocoder.dart' as Geo;
 
@@ -32,12 +31,6 @@ class AddSearchHistoryItem {
   final SearchHistoryItem item;
 
   AddSearchHistoryItem(this.item);
-}
-
-class SetMyLocation {
-  final SearchLocationItem location;
-
-  SetMyLocation(this.location);
 }
 
 class SetMyTagline {

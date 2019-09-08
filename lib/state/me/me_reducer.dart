@@ -8,7 +8,6 @@ Reducer<MeState> meReducer = combineReducers([
   new TypedReducer<MeState, Logout>(logout),
   new TypedReducer<MeState, FetchMyPostsSuccess>(fetchMyPosts),
   new TypedReducer<MeState, AddSearchHistoryItem>(addSearchHistoryItem),
-  new TypedReducer<MeState, SetMyLocation>(setMyLocation),
   new TypedReducer<MeState, SetMyTaglineSuccess>(setMyTagline),
   new TypedReducer<MeState, DeleteMyTaglineSuccess>(deleteMyTagline),
   new TypedReducer<MeState, SetMyProfilePicture>(setMyProfilePicture),
@@ -40,10 +39,6 @@ MeState addSearchHistoryItem(MeState state, AddSearchHistoryItem action) {
   history.insert(0, action.item);
   if (history.length > 15) history = history.sublist(0, 15);
   return state.copyWith(searchHistory: history);
-}
-
-MeState setMyLocation(MeState state, SetMyLocation action) {
-  return state.copyWith(location: action.location);
 }
 
 MeState setMyTagline(MeState state, SetMyTaglineSuccess action) {

@@ -1,5 +1,5 @@
-import 'package:crust/components/search/use_my_location.dart';
-import 'package:crust/models/store.dart' as MyStore;
+import 'package:crust/components/location/use_my_location.dart';
+import 'package:crust/models/search.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
@@ -12,7 +12,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:redux/redux.dart';
 
-class SelectAddressScreen extends StatelessWidget {
+class ChangeLocationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
@@ -54,8 +54,11 @@ class _PresenterState extends State<_Presenter> {
     var slivers = <Widget>[
       _appBar(),
       _searchBar(),
-      widget.myAddress != null ? _calculatedItem(context) : SliverToBoxAdapter(child: UseMyLocation()),
-      _searchSuburb(context),
+      SliverToBoxAdapter(child: MyLocation(onTap: (address) {
+        widget.select(address);
+        Navigator.pop(context);
+      })),
+      _searchLocation(context),
       _searchGeo(context),
     ];
     return Scaffold(body: CustomScrollView(slivers: slivers));
@@ -114,33 +117,10 @@ class _PresenterState extends State<_Presenter> {
     );
   }
 
-  Widget _calculatedItem(BuildContext context) {
-    var a = widget.myAddress;
-    return SliverToBoxAdapter(
-      child: InkWell(
-        onTap: () {
-          widget.select(a);
-          Navigator.pop(context);
-        },
-        child: Container(
-          padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(a.addressLine.split(',')[0] ?? '', style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-              Text(a.locality ?? '', style: TextStyle(fontSize: 18.0)),
-              Container(height: 10.0)
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-  
-  Widget _searchSuburb(BuildContext context) {
+  Widget _searchLocation(BuildContext context) {
     if (_query.isEmpty) return SliverToBoxAdapter();
     return FutureBuilder(
-      future: SearchService.findSuburbsBySearch(_query),
+      future: SearchService.searchLocations(_query, 3),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.active:
@@ -156,14 +136,8 @@ class _PresenterState extends State<_Presenter> {
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, i) {
                 return Builder(builder: (context) {
-                  MyStore.Suburb s = snapshot.data[i];
-                  var address = Address(
-                    coordinates: Coordinates(s.lat, s.lng,),
-                    postalCode: s.postcode.toString(),
-                    addressLine: s.name,
-                    locality: s.city,
-                  );
-                  return _resultCard(address);
+                  SearchLocationItem s = snapshot.data[i];
+                  return _resultCard(s.toGeoAddress());
                 });
               }, childCount: snapshot.data.length),
             );
@@ -177,7 +151,7 @@ class _PresenterState extends State<_Presenter> {
   Widget _searchGeo(BuildContext context) {
     if (_query.isEmpty) return SliverToBoxAdapter();
     return FutureBuilder(
-      future: Geocoder.local.findAddressesFromQuery(_query).timeout(Duration(seconds: 10)),
+      future: Geocoder.local.findAddressesFromQuery(_query).timeout(Duration(seconds: 10), onTimeout: () => []),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.active:

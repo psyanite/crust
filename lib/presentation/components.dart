@@ -1,9 +1,16 @@
+import 'package:crust/components/location/change_location_screen.dart';
+import 'package:crust/components/location/use_my_location.dart';
 import 'package:crust/models/post.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
+import 'package:crust/state/app/app_state.dart';
+import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geocoder/geocoder.dart' as Geo;
+import 'package:redux/redux.dart';
 
 class BackArrow extends StatelessWidget {
   final Color color;
@@ -25,17 +32,18 @@ class SmallButton extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final Gradient gradient;
 
-  SmallButton({Key key,
-    this.child,
-    this.onPressed,
-    this.padding,
-    this.gradient = const LinearGradient(
-      begin: Alignment.bottomLeft,
-      end: Alignment.topRight,
-      stops: [0, 0.6, 1.0],
-      colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-    )})
-    : super(key: key);
+  SmallButton(
+      {Key key,
+      this.child,
+      this.onPressed,
+      this.padding,
+      this.gradient = const LinearGradient(
+        begin: Alignment.bottomLeft,
+        end: Alignment.topRight,
+        stops: [0, 0.6, 1.0],
+        colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
+      )})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -96,13 +104,13 @@ class BottomButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(2.0)),
-          gradient: LinearGradient(
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-            stops: [0, 0.6, 1.0],
-            colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-          )),
+            borderRadius: BorderRadius.all(Radius.circular(2.0)),
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              stops: [0, 0.6, 1.0],
+              colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
+            )),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -133,13 +141,13 @@ class BurntButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: padding ?? 20.0),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(2.0)),
-          gradient: LinearGradient(
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-            stops: [0, 0.6, 1.0],
-            colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-          )),
+            borderRadius: BorderRadius.all(Radius.circular(2.0)),
+            gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              stops: [0, 0.6, 1.0],
+              colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
+            )),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -347,6 +355,48 @@ class HeartIcon extends StatelessWidget {
       assetName,
       width: size,
       height: size,
+    );
+  }
+}
+
+class LocationBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, Geo.Address>(
+        converter: (Store<AppState> store) => store.state.me.address,
+        builder: (context, address) {
+          return SliverToBoxAdapter(
+            child: address != null ? _addressInfo(context, address) : _defaultAddressInfo(context),
+          );
+        });
+  }
+
+  _addressInfo(context, address) {
+    return InkWell(
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ChangeLocationScreen())),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Container(width: 14.0),
+          Icon(CrustCons.location_bold, color: Burnt.lightGrey, size: 22.0),
+          Container(width: 12.0),
+          Text(address.addressLine.split(',')[0] ?? '', style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
+          Container(width: 5),
+          Text(address.locality ?? '', style: TextStyle(fontSize: 18.0)),
+          Container(margin: EdgeInsets.only(top: 6.0), child: Icon(Icons.keyboard_arrow_down, color: Burnt.primary, size: 30.0))
+        ],
+      ),
+    );
+  }
+
+  _defaultAddressInfo(context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        _addressInfo(context, Utils.defaultAddress),
+        UseMyLocation(),
+      ],
     );
   }
 }

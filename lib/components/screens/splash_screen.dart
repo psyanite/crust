@@ -7,13 +7,12 @@ import 'package:crust/state/me/favorite/favorite_actions.dart';
 import 'package:crust/state/me/follow/follow_actions.dart';
 import 'package:crust/state/me/me_actions.dart';
 import 'package:crust/state/reward/reward_actions.dart';
-import 'package:crust/state/search/search_service.dart';
 import 'package:crust/state/store/store_actions.dart';
+import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:redux/redux.dart';
 
@@ -38,27 +37,14 @@ class _SplashScreenState extends State<SplashScreen> {
     });
   }
 
-//  _getSuburb(Function setSuburb) async {
-//    return Timer(Duration(seconds: 1), () async {
-//      var enabled = await Geolocator().isLocationServiceEnabled();
-//      if (enabled == false) return;
-//      var p = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high).timeout(Duration(seconds: 5));
-//      var addresses = await Geocoder.local.findAddressesFromCoordinates(Coordinates(p.latitude, p.longitude)).timeout(Duration(seconds: 5));
-//      if (addresses.isNotEmpty) {
-//        var a = addresses[0];
-//        var result = await SearchService.findSuburbByName(a.locality);
-//        if (result != null) {
-//          setSuburb(result);
-//          return;
-//        }
-//        var results = await SearchService.findSuburbsByQuery(a.locality, a.postalCode);
-//        if (results.isNotEmpty) {
-//          setSuburb(results[0]);
-//          return;
-//        }
-//      }
-//    });
-//  }
+  _getSuburb(Function select) async {
+    return Timer(Duration(seconds: 1), () async {
+      var enabled = await Geolocator().isLocationServiceEnabled();
+      if (enabled == false) return;
+      var address = await Utils.getGeoAddress(5);
+      if (address != null) select(address);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +61,7 @@ class _SplashScreenState extends State<SplashScreen> {
         store.dispatch(FetchFeed());
         store.dispatch(FetchMyPosts());
         store.dispatch(FetchFavorites());
-//        _getSuburb((s) => store.dispatch(SetMySuburb(s)));
+        _getSuburb((s) => store.dispatch(SetMyAddress(s)));
       },
       converter: (Store<AppState> store) => 1,
       builder: (BuildContext context, int props) {

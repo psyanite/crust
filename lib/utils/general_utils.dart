@@ -1,5 +1,8 @@
 import 'dart:collection';
+
 import 'package:geocoder/geocoder.dart' as Geo;
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
 
 class Utils {
   static final shareBaseUrl = 'https://burntoast.page.link/?link=https://burntoast.com';
@@ -58,5 +61,19 @@ class Utils {
 
   static List<dynamic> subset(Iterable<int> ids, LinkedHashMap<int, dynamic> map) {
     return ids == null || map == null ? null : ids.map((i) => map[i]).toList();
+  }
+
+  static Geo.Address defaultAddress =
+      Geo.Address(coordinates: Geo.Coordinates(-33.794883, 151.268071), addressLine: 'Sydney', locality: 'Sydney, NSW', postalCode: '2000');
+
+  static Future<Geo.Address> getGeoAddress(int timeout) async {
+    try {
+      var p = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high).timeout(Duration(seconds: timeout));
+      var coords = Coordinates(p.latitude, p.longitude);
+      var addresses = await Geocoder.local.findAddressesFromCoordinates(coords).timeout(Duration(seconds: timeout));
+      var address = addresses != null && addresses.isNotEmpty ? addresses[0] : null;
+      return address;
+    } catch (e) {}
+    return null;
   }
 }
