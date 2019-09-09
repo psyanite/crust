@@ -58,7 +58,7 @@ class StoreService {
     return (json as List).map((p) => Reward.fromToaster(p)).toList();
   }
 
-  static Future<List<Store>> fetchCurate(String tag) async {
+  Future<List<Store>> fetchCurate(String tag) async {
     String query = """
       query {
         curatedByTag(tag: "$tag") {

@@ -11,11 +11,13 @@ List<Middleware<AppState>> createStoreMiddleware([
   final fetchTopStores = _fetchTopStores(service);
   final fetchStoreById = _fetchStoreById(service);
   final fetchRewardsByStoreId = _fetchRewardsByStoreId(service);
+  final fetchCurate = _fetchCurate(service);
 
   return [
     TypedMiddleware<AppState, FetchTopStores>(fetchTopStores),
     TypedMiddleware<AppState, FetchStoreById>(fetchStoreById),
     TypedMiddleware<AppState, FetchRewardsByStoreId>(fetchRewardsByStoreId),
+    TypedMiddleware<AppState, FetchCurate>(fetchCurate),
   ];
 }
 
@@ -52,6 +54,17 @@ Middleware<AppState> _fetchRewardsByStoreId(StoreService service) {
         }
       },
     ).catchError((e) => store.dispatch(RequestFailure("fetchRewardsByStoreId ${e.toString()}")));
+    next(action);
+  };
+}
+
+Middleware<AppState> _fetchCurate(StoreService service) {
+  return (Store<AppState> store, action, NextDispatcher next) {
+    service.fetchCurate(action.curate.tag).then(
+      (stores) {
+        store.dispatch(FetchCurateSuccess(action.curate.copyWith(stores: stores)));
+      },
+    ).catchError((e) => store.dispatch(RequestFailure("fetchCurate ${e.toString()}")));
     next(action);
   };
 }

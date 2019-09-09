@@ -1,48 +1,17 @@
-import 'dart:collection';
-
 import 'package:crust/components/stores/search_stores_screen.dart';
 import 'package:crust/components/stores/stores_screen.dart';
 import 'package:crust/components/stores/stores_side_scroller.dart';
-import 'package:crust/models/store.dart' as MyStore;
+import 'package:crust/models/curate.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
-import 'package:crust/state/store/store_service.dart';
+import 'package:crust/state/app/app_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 
-class BrowseStoresScreen extends StatefulWidget {
-  @override
-  _BrowseStoresScreenState createState() => _BrowseStoresScreenState();
-}
-
-class _BrowseStoresScreenState extends State<BrowseStoresScreen> {
-  LinkedHashMap<String, Curate> _curates = LinkedHashMap<String, Curate>.from({
-    'coffee': Curate(tag: 'coffee', title: 'Coffee At First Sight'),
-    'fancy': Curate(tag: 'fancy', title: 'Absolutely Stunning'),
-    'cheap': Curate(tag: 'cheap', title: 'Cheap Eats'),
-    'bubble': Curate(tag: 'bubble', title: 'It\'s Bubble O\'clock'),
-    'brunch': Curate(tag: 'brunch', title: 'Brunch Spots'),
-    'sweet': Curate(tag: 'sweet', title: 'Sweet Tooth'),
-  });
-
-  @override
-  initState() {
-    super.initState();
-    _loadCurates();
-  }
-
-  _loadCurates() {
-    _curates.values.forEach((c) => _fetchStores(c));
-  }
-
-  _fetchStores(Curate c) async {
-    var stores = await StoreService.fetchCurate(c.tag);
-    stores.shuffle();
-    var newCurate = c.copyWith(stores: stores);
-    this.setState(() => _curates[newCurate.tag] = newCurate);
-  }
-
+class BrowseStoresScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,35 +66,27 @@ class _BrowseStoresScreenState extends State<BrowseStoresScreen> {
   }
 
   Widget _content() {
-    var children = List<Widget>.from(_curates.values.map((c) {
-      if (c.stores == null) return Container();
-      var seeAll = () => Navigator.push(context, MaterialPageRoute(builder: (_) => StoresScreen(title: c.title, stores: c.stores)));
-      return StoresSideScroller(stores: c.stores, title: c.title, seeAll: seeAll);
-    }));
+    final curateTags = ['coffee', 'fancy', 'cheap', 'bubble', 'brunch', 'sweet'];
     return SliverToBoxAdapter(
-      child: Column(
-        children: children,
-      ),
+      child: Column(children: List<Widget>.from(curateTags.map((c) => _CurateList(tag: c)))),
     );
   }
 }
 
-class Curate {
+class _CurateList extends StatelessWidget {
   final String tag;
-  final String title;
-  final List<MyStore.Store> stores;
 
-  Curate({
-    this.tag,
-    this.title,
-    this.stores,
-  });
+  _CurateList({Key key, this.tag}) : super(key: key);
 
-  Curate copyWith({List<MyStore.Store> stores}) {
-    return Curate(
-      tag: this.tag,
-      title: this.title,
-      stores: stores ?? this.stores,
+  @override
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, dynamic>(
+      converter: (Store<AppState> store) => store.state.store.curates[tag] ?? Curate(tag: tag, title: ''),
+      builder: (context, c) {
+        if (c.stores == null) return Container();
+        var seeAll = () => Navigator.push(context, MaterialPageRoute(builder: (_) => StoresScreen(title: c.title, stores: c.stores)));
+        return StoresSideScroller(stores: c.stores, title: c.title, seeAll: seeAll);
+      },
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/user_reward.dart';
 import 'package:crust/services/toaster.dart';
+import 'package:geocoder/geocoder.dart' as Geo;
 
 class RewardService {
   const RewardService();
@@ -65,7 +66,9 @@ class RewardService {
     return Reward.fromToaster(json);
   }
 
-  Future<List<Reward>> fetchRewards({int limit, int offset, double lat, double lng}) async {
+  static Future<List<Reward>> fetchRewards({int limit, int offset, Geo.Address address}) async {
+    var lat = address.coordinates.latitude;
+    var lng = address.coordinates.longitude;
     String query = """
       query {
         rewardsByCoords(lat: $lat, lng: $lng, limit: $limit, offset: $offset) {

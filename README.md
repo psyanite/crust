@@ -38,16 +38,12 @@ d
 </div>
 
 ## To Do
-* Create new column in store table
-* Populate store table with point data
-* Update the store mutation endpoint to save point data correctly
-* Create stores within x km query
-* Create UI for Stores within 10 minute walking distance (700 meters)
-* Create UI for Rewards within x kms
-
 * Change Header on home screen feed posts
-* Handle reward feed
-* Search rewards 
+
+* Add redeem reward behaviour
+* Add buy 10 get 1 free rewards
+
+* Import stores from Zomato
 
 * Implement store posts
 * Add submit missing store feature
@@ -58,6 +54,15 @@ d
 * Send email of results
 
 ## Done
+* Update the store mutation endpoint to save point data correctly
+* Implement reward feed
+* Refactor store curates
+* Add search rewards functionality
+* Refactor out FetchNearMe action
+* Add coords consideration into rewards
+* Add coords consideration into store search
+* Create new column in store table
+* Populate store table with point data
 * Implement pagination
 * Implement pull to refresh
 * Browse rewards

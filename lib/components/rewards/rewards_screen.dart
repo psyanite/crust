@@ -7,11 +7,11 @@ import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
 import 'package:crust/state/reward/reward_actions.dart';
+import 'package:crust/state/reward/reward_service.dart';
 import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:geocoder/geocoder.dart' as Geo;
 import 'package:redux/redux.dart';
 
@@ -24,10 +24,9 @@ class RewardsScreen extends StatelessWidget {
         return _Presenter(
           myAddress: props.myAddress,
           nearMe: props.nearMe,
-          nearMeAll: props.nearMeAll,
-          fetchRewards: props.fetchRewards,
           setMySuburb: props.setMySuburb,
-          clearRewards: props.clearRewards,
+          addNearMe: props.addNearMe,
+          clearNearMe: props.clearNearMe,
         );
       },
     );
@@ -38,11 +37,11 @@ class _Presenter extends StatefulWidget {
   final Geo.Address myAddress;
   final List<Reward> nearMe;
   final bool nearMeAll;
-  final Function fetchRewards;
   final Function setMySuburb;
-  final Function clearRewards;
+  final Function addNearMe;
+  final Function clearNearMe;
 
-  _Presenter({Key key, this.nearMe, this.nearMeAll, this.fetchRewards, this.myAddress, this.setMySuburb, this.clearRewards})
+  _Presenter({Key key, this.nearMe, this.nearMeAll, this.addNearMe, this.myAddress, this.setMySuburb, this.clearNearMe})
       : super(key: key);
 
   @override
@@ -51,9 +50,8 @@ class _Presenter extends StatefulWidget {
 
 class _PresenterState extends State<_Presenter> {
   ScrollController _scrollie;
-  List<Reward> _nearMe;
   bool _loading = false;
-  int _limit = 3;
+  int _limit = 12;
   int _offset = 0;
 
   @override
@@ -63,19 +61,14 @@ class _PresenterState extends State<_Presenter> {
       ..addListener(() {
         if (widget.nearMe.isNotEmpty && _loading == false && _limit > 0 && _scrollie.position.extentAfter < 200) _getMoreRewards();
       });
-    _nearMe = widget.nearMe;
-    if (_nearMe.isEmpty) widget.fetchRewards(_limit, _offset, widget.myAddress);
+
+//    if (_nearMe.isEmpty) widget.fetchRewards(_limit, _offset, widget.myAddress);
   }
 
   @override
   void didUpdateWidget(_Presenter old) {
-    if (old.nearMe.length != widget.nearMe.length) {
-      _nearMe = widget.nearMe;
+    if (old.nearMe.length < widget.nearMe.length) {
       _offset = _offset + _limit;
-      _loading = false;
-    }
-    if (widget.nearMeAll == true) {
-      _limit = 0;
       _loading = false;
     }
     if (old.myAddress != widget.myAddress) {
@@ -90,21 +83,31 @@ class _PresenterState extends State<_Presenter> {
     super.dispose();
   }
 
-  _refresh() {
-    this.setState(() => {
-          _limit = 3,
-          _offset = 0,
-          _loading = false,
-        });
-    widget.clearRewards();
-    widget.fetchRewards(_limit, _offset, widget.myAddress);
+  _refresh() async {
+    this.setState(() {
+      _limit = 12;
+      _offset = 0;
+    });
+
+    widget.clearNearMe();
+    widget.addNearMe(await _getUpdate());
   }
 
-  _getMoreRewards() {
-    if (_limit > 0) {
-      this.setState(() => _loading = true);
-      widget.fetchRewards(_limit, _offset, widget.myAddress);
+  Future<List<Reward>> _getUpdate() {
+    return RewardService.fetchRewards(limit: _limit, offset: _offset, address: widget.myAddress);
+  }
+
+  _getMoreRewards() async {
+    this.setState(() => _loading = true);
+    var fresh = await _getUpdate();
+    if (fresh.isEmpty) {
+      this.setState(() {
+        _limit = 0;
+        _loading = false;
+      });
+      return;
     }
+    widget.addNearMe(fresh);
   }
 
   @override
@@ -116,9 +119,7 @@ class _PresenterState extends State<_Presenter> {
           await Future.delayed(Duration(seconds: 1));
         },
         child: CustomScrollView(
-          slivers: <Widget>[_appBar(),
-            LocationBar(),
-            _rewardsList(), if (_loading == true) LoadingSliver()],
+          slivers: <Widget>[_appBar(), LocationBar(), _rewardsList(), if (_loading == true) LoadingSliver()],
           controller: _scrollie,
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         ),
@@ -162,37 +163,33 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _rewardsList() {
-    if (_nearMe.isEmpty) return LoadingSliverCenter();
-    return RewardCards(rewards: _nearMe);
+    if (widget.nearMe.isEmpty) return LoadingSliverCenter();
+    return RewardCards(rewards: widget.nearMe);
   }
 }
 
 class _Props {
   final Geo.Address myAddress;
   final List<Reward> nearMe;
-  final bool nearMeAll;
-  final Function fetchRewards;
   final Function setMySuburb;
-  final Function clearRewards;
+  final Function addNearMe;
+  final Function clearNearMe;
 
   _Props({
     this.myAddress,
     this.nearMe,
-    this.nearMeAll,
-    this.fetchRewards,
     this.setMySuburb,
-    this.clearRewards,
+    this.addNearMe,
+    this.clearNearMe,
   });
 
   static fromStore(Store<AppState> store) {
     return _Props(
       myAddress: store.state.me.address ?? Utils.defaultAddress,
       nearMe: List<Reward>.from(Utils.subset(store.state.reward.nearMe, store.state.reward.rewards)),
-      nearMeAll: store.state.reward.nearMeAll,
-      fetchRewards: (limit, offset, Address a) =>
-          store.dispatch(FetchRewardsNearMe(a.coordinates.latitude, a.coordinates.longitude, limit, offset)),
       setMySuburb: (address) => store.dispatch(SetMyAddress(address)),
-      clearRewards: () => store.dispatch(ClearNearMe()),
+      addNearMe: (rewards) => store.dispatch(FetchRewardsNearMeSuccess(rewards)),
+      clearNearMe: () => store.dispatch(ClearNearMe()),
     );
   }
 }

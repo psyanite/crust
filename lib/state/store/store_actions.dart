@@ -1,3 +1,4 @@
+import 'package:crust/models/curate.dart';
 import 'package:crust/models/store.dart';
 
 class FetchStoreById {
@@ -37,4 +38,16 @@ class FetchRewardsByStoreIdSuccess {
   final List<int> rewards;
 
   FetchRewardsByStoreIdSuccess(this.storeId, this.rewards);
+}
+
+class FetchCurate {
+  final Curate curate;
+
+  FetchCurate(this.curate);
+}
+
+class FetchCurateSuccess {
+  final Curate curate;
+
+  FetchCurateSuccess(this.curate);
 }

@@ -48,7 +48,7 @@ class _PresenterState extends State<_Presenter> {
   ScrollController _scrollie;
   List<Post> posts;
   bool loading = false;
-  int limit = 7;
+  int limit = 12;
   int offset = 0;
 
   @override

@@ -8,22 +8,19 @@ class RewardState {
   final LinkedHashMap<int, Reward> rewards;
   final LinkedHashMap<int, Reward> topRewards;
   final List<int> nearMe;
-  final bool nearMeAll;
 
-  RewardState({this.rewards, this.topRewards, this.nearMe, this.nearMeAll});
+  RewardState({this.rewards, this.topRewards, this.nearMe});
 
   RewardState.initialState()
     : rewards = LinkedHashMap<int, Reward>(),
       topRewards = LinkedHashMap<int, Reward>(),
-      nearMe = List<int>(),
-      nearMeAll = false;
+      nearMe = List<int>();
 
-  RewardState copyWith({LinkedHashMap<int, Reward> rewards, LinkedHashMap<int, Reward> topRewards, List<int> nearMe, bool nearMeAll}) {
+  RewardState copyWith({LinkedHashMap<int, Reward> rewards, LinkedHashMap<int, Reward> topRewards, List<int> nearMe}) {
     return RewardState(
       rewards: rewards ?? this.rewards,
       topRewards: topRewards ?? this.topRewards,
       nearMe: nearMe ?? this.nearMe,
-      nearMeAll: nearMeAll ?? this.nearMeAll,
     );
   }
 
@@ -47,8 +44,9 @@ class RewardState {
     return copyWith(rewards: clone);
   }
 
-  RewardState addNearMe(List<int> rewardIds) {
-    return copyWith(nearMe: cloneNearMe()..addAll(rewardIds));
+  RewardState addNearMe(List<Reward> rewards) {
+    var rewardIds = rewards.map((r) => r.id);
+    return addRewards(rewards).copyWith(nearMe: cloneNearMe()..addAll(rewardIds));
   }
 
   LinkedHashMap<int, Reward> cloneRewards() {

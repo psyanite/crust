@@ -53,8 +53,8 @@ class _PresenterState extends State<_Presenter> {
   ScrollController _scrollie;
   List<Post> posts;
   bool loading = false;
-  int limit = 7;
-  int offset = 7;
+  int limit = 12;
+  int offset = 12;
   FeedService feedService = const FeedService();
 
   @override

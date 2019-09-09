@@ -43,7 +43,6 @@ class _Presenter extends StatefulWidget {
 }
 
 class _PresenterState extends State<_Presenter> {
-  final AsyncMemoizer<List<MyStore.Store>> _memo = AsyncMemoizer();
   String _query = '';
   bool _submit = false;
   TextEditingController _queryCtrl = TextEditingController();

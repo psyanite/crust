@@ -7,29 +7,11 @@ import 'package:redux/redux.dart';
 List<Middleware<AppState>> createRewardMiddleware([
   RewardService service = const RewardService(),
 ]) {
-  final fetchNearMe = _fetchNearMe(service);
   final fetchTopRewards = _fetchTopRewards(service);
 
   return [
-    TypedMiddleware<AppState, FetchRewardsNearMe>(fetchNearMe),
     TypedMiddleware<AppState, FetchTopRewards>(fetchTopRewards),
   ];
-}
-
-Middleware<AppState> _fetchNearMe(RewardService service) {
-  return (Store<AppState> store, action, NextDispatcher next) {
-    service.fetchRewards(lat: action.lat, lng: action.lng, limit: action.limit, offset: action.offset).then(
-      (rewards) {
-        if (rewards.isEmpty) {
-          store.dispatch(SetNearMeAll(true));
-        } else {
-          store.dispatch(FetchRewardsSuccess(rewards));
-          store.dispatch(FetchRewardsNearMeSuccess(rewards.where((r) => r.isExpired() == false).map((r) => r.id).toList()));
-        }
-      },
-    ).catchError((e) => store.dispatch(RequestFailure("fetchNearMe ${e.toString()}")));
-    next(action);
-  };
 }
 
 Middleware<AppState> _fetchTopRewards(RewardService service) {
