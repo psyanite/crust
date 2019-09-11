@@ -16,13 +16,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-class PostListList extends StatelessWidget {
+class PostList extends StatelessWidget {
   final Widget noPostsView;
   final PostListType postListType;
   final List<Post> posts;
   final Function removeFromList;
 
-  PostListList({Key key, this.noPostsView, this.postListType, this.posts, this.removeFromList}) : super(key: key);
+  PostList({Key key, this.noPostsView, this.postListType, this.posts, this.removeFromList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crust/components/carousel.dart';
 import 'package:crust/components/post_list/carousel_wrapper.dart';
 import 'package:crust/components/post_list/comment_screen.dart';
-import 'package:crust/components/post_list/post_list_list.dart';
+import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/profile/profile_screen.dart';
 import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/models/post.dart';

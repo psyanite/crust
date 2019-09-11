@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:crust/components/my_profile/my_profile_screen.dart';
-import 'package:crust/components/post_list/post_list_list.dart';
+import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/profile/follow_user_button.dart';
 import 'package:crust/components/screens/loading_screen.dart';
 import 'package:crust/models/post.dart';
@@ -115,7 +115,7 @@ class _PresenterState extends State<_Presenter> {
     return Scaffold(
       body: CustomScrollView(slivers: <Widget>[
         _appBar(),
-        PostListList(
+        PostList(
           noPostsView: Text('Looks like ${user.firstName} hasn\'t written any reviews yet.'),
           postListType: PostListType.forProfile,
           posts: posts,

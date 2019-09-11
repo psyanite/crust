@@ -1,4 +1,4 @@
-import 'package:crust/components/post_list/post_list_list.dart';
+import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/stores/browse_stores_screen.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
 import 'package:crust/components/stores/store_screen.dart';
@@ -126,7 +126,7 @@ class _PresenterState extends State<_Presenter> {
           _appBar(),
           _topStores(context),
           _separator(),
-          PostListList(
+          PostList(
             noPostsView: Container(),
             posts: posts,
             postListType: PostListType.forStore,

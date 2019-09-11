@@ -4,7 +4,7 @@ import 'package:crust/components/my_profile/find_user_screen.dart';
 import 'package:crust/components/my_profile/my_qr_screen.dart';
 import 'package:crust/components/my_profile/set_picture_screen.dart';
 import 'package:crust/components/my_profile/update_profile_screen.dart';
-import 'package:crust/components/post_list/post_list_list.dart';
+import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/rewards/redeemed_rewards_screen.dart';
 import 'package:crust/components/screens/about_screen.dart';
 import 'package:crust/main.dart';
@@ -104,7 +104,7 @@ class _PresenterState extends State<_Presenter> {
       endDrawer: _drawer(context),
       body: CustomScrollView(slivers: <Widget>[
         _appBar(),
-        PostListList(
+        PostList(
           noPostsView: Text('Start reviewing now and your reviews will show up here!'),
           postListType: PostListType.forProfile,
           posts: posts,

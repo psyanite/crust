@@ -1,6 +1,6 @@
 import 'package:crust/components/dialog.dart';
 import 'package:crust/components/new_post/review_form.dart';
-import 'package:crust/components/post_list/post_list_list.dart';
+import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/rewards/reward_swiper.dart';
 import 'package:crust/components/stores/favorite_store_button.dart';
 import 'package:crust/components/stores/follow_store_button.dart';
@@ -122,7 +122,7 @@ class _PresenterState extends State<_Presenter> {
         slivers: <Widget>[
           _appBar(),
           if (widget.rewards.isNotEmpty) _rewards(context),
-          PostListList(
+          PostList(
             noPostsView: Text('Looks like ${widget.store.name} doesn\'t have any reviews yet.'),
             postListType: PostListType.forStore,
             posts: posts,
