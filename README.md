@@ -38,8 +38,6 @@ d
 </div>
 
 ## To Do
-* Change Header on home screen feed posts
-
 * Add redeem reward behaviour
 * Add buy 10 get 1 free rewards
 
@@ -54,6 +52,7 @@ d
 * Send email of results
 
 ## Done
+* Change Header on home screen feed posts
 * Update the store mutation endpoint to save point data correctly
 * Implement reward feed
 * Refactor store curates

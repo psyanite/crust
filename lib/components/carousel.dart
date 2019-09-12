@@ -10,13 +10,8 @@ class Carousel extends StatefulWidget {
   final Widget callToAction;
   final bool centreDots;
 
-  Carousel({
-    Key key,
-    this.images,
-    this.left,
-    this.callToAction,
-    this.centreDots = false,
-  }) : assert(images != null),
+  Carousel({Key key, this.images, this.left, this.callToAction, this.centreDots = false})
+      : assert(images != null),
         super(key: key);
 
   @override
@@ -37,6 +32,7 @@ class _CarouselState extends State<Carousel> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
+        Container(height: 5.0),
         Container(
           color: Burnt.imgPlaceholderColor,
           height: MediaQuery.of(context).size.width - 30.0,

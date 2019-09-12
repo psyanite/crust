@@ -28,64 +28,162 @@ class PostInfo extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(top: 30.0, bottom: 10.0),
       decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))),
-      child: Column(children: children),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: children),
     );
   }
 
-  Widget _name() {
-    if (postListType == PostListType.forProfile) {
-      return Text(post.store.name, style: Burnt.titleStyle);
-    } else {
-      if (post.postedBy == null) {
-        return Text('${post.store.name} ⭐', style: Burnt.titleStyle);
-      } else {
-        return Row(children: <Widget>[
-          Text(post.postedBy.displayName, style: Burnt.titleStyle),
-          Text(" @${post.postedBy.username}", style: TextStyle(color: Burnt.hintTextColor))
-        ]);
-      }
-    }
+  _showReview() {
+    return post.type == PostType.review && post.postReview.body != null;
   }
 
   Widget _header() {
-    var image = postListType == PostListType.forProfile || post.postedBy == null ? post.store.coverImage : post.postedBy.profilePicture;
+    if (post.isOfficialStorePost()) {
+      return _officialHeaderContent();
+    } else if (postListType == PostListType.forProfile) {
+      return _profileHeaderContent();
+    } else if (postListType == PostListType.forStore) {
+      return _storeHeaderContent();
+    } else {
+      return _feedHeaderContent();
+    }
+  }
+
+  Widget _officialHeaderContent() {
     var details = Row(
       children: <Widget>[
-        if (post.postedBy != null)
-          Container(
-            width: 50.0,
-            height: 50.0,
-            decoration: BoxDecoration(
-              color: Burnt.imgPlaceholderColor,
-              image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image)),
-            ),
-          ),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: post.postedBy != null ? 10.0 : 0.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[_name(), Text(TimeUtil.format(post.postedAt), style: TextStyle(color: Burnt.hintTextColor))],
-          ),
+        _teaserImage(post.store.coverImage),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[_name('${post.store.name} ⭐'), _postedAt()],
         ),
       ],
     );
-    if (post.type == PostType.review && post.postedBy != null) {
-      details = Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[details, ScoreIcon(score: post.postReview.overallScore, size: 30.0)],
-      );
-    }
-    var nextScreen = postListType == PostListType.forProfile || post.postedBy == null
-        ? StoreScreen(storeId: post.store.id)
-        : ProfileScreen(userId: post.postedBy.id);
     return Builder(builder: (context) {
       return InkWell(
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => nextScreen)),
-        child: Column(
-          children: <Widget>[Container(padding: EdgeInsets.only(bottom: 20.0), child: details)],
+        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: post.store.id))),
+        child: Padding(padding: EdgeInsets.only(bottom: 20.0), child: details),
+      );
+    });
+  }
+
+  Widget _profileHeaderContent() {
+    var details = Row(
+      children: <Widget>[
+        _teaserImage(post.store.coverImage),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[_name(post.store.name), _postedAt()],
+        ),
+      ],
+    );
+    return Builder(builder: (context) {
+      return InkWell(
+        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: post.store.id))),
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[details, _scoreIcon()],
+          ),
         ),
       );
     });
+  }
+
+  Widget _storeHeaderContent() {
+    var details = Row(
+      children: <Widget>[
+        _teaserImage(post.postedBy.profilePicture),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(children: <Widget>[
+              _name(post.postedBy.displayName),
+              Text(" @${post.postedBy.username}", style: TextStyle(color: Burnt.hintTextColor))
+            ]),
+            _postedAt(),
+          ],
+        ),
+      ],
+    );
+    return Builder(builder: (context) {
+      return InkWell(
+        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileScreen(userId: post.postedBy.id))),
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[details, _scoreIcon()],
+          ),
+        ),
+      );
+    });
+  }
+
+  Widget _feedHeaderContent() {
+    return Builder(builder: (context) {
+      var details = InkWell(
+        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileScreen(userId: post.postedBy.id))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Row(children: <Widget>[
+              _teaserImage(post.postedBy.profilePicture),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(children: <Widget>[
+                    _name(post.postedBy.displayName),
+                    Text(" @${post.postedBy.username}", style: TextStyle(color: Burnt.hintTextColor))
+                  ]),
+                  _postedAt(),
+                ],
+              ),
+            ]),
+            _scoreIcon()
+          ],
+        ),
+      );
+      var storeName = InkWell(
+        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: post.store.id))),
+        child: Padding(
+          padding: EdgeInsets.only(top: 20.0, bottom: 3.0),
+          child: Text(post.store.name, style: TextStyle(fontSize: 19.0, color: Burnt.lightTextColor)),
+        ),
+      );
+      return Column(
+        crossAxisAlignment: _showReview() ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+        children: <Widget>[
+          details,
+          storeName,
+        ],
+      );
+    });
+  }
+
+  Widget _name(text) {
+    return Text(text, style: Burnt.titleStyle);
+  }
+
+  Widget _postedAt() {
+    return Text(TimeUtil.format(post.postedAt), style: TextStyle(color: Burnt.hintTextColor));
+  }
+
+  Widget _scoreIcon() {
+    if (post.type != PostType.review) return Container();
+    return ScoreIcon(score: post.postReview.overallScore, size: 30.0);
+  }
+
+  Widget _teaserImage(image) {
+    return Container(
+      margin: EdgeInsets.only(right: 10.0),
+      width: 50.0,
+      height: 50.0,
+      decoration: BoxDecoration(
+        color: Burnt.imgPlaceholderColor,
+        image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image)),
+      ),
+    );
   }
 
   Widget _reviewBody() {
@@ -98,13 +196,12 @@ class PostInfo extends StatelessWidget {
   }
 
   Widget _content() {
-    var showReview = post.type == PostType.review && post.postReview.body != null;
     var showCarousel = post.postPhotos.isNotEmpty;
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          if (showReview) _reviewBody(),
+          if (_showReview()) _reviewBody(),
           if (showCarousel) _carousel(),
           if (!showCarousel) _textPostFooter(),
         ],
@@ -150,8 +247,8 @@ class PostInfo extends StatelessWidget {
     return Builder(builder: (context) {
       return Column(
         children: <Widget>[
+          Container(height: 5.0),
           Container(
-            margin: EdgeInsets.only(top: 5.0, bottom: 10.0),
             height: MediaQuery.of(context).size.width - 30.0,
             decoration: BoxDecoration(
               color: Burnt.imgPlaceholderColor,
@@ -161,14 +258,9 @@ class PostInfo extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(top: 6.0, bottom: 10.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: buttons,
-            ),
-          )
+          Container(height: 15.0),
+          Row(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: buttons),
+          Container(height: 10.0),
         ],
       );
     });

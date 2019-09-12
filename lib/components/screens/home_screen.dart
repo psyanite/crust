@@ -129,7 +129,7 @@ class _PresenterState extends State<_Presenter> {
           PostList(
             noPostsView: Container(),
             posts: posts,
-            postListType: PostListType.forStore,
+            postListType: PostListType.forFeed,
             removeFromList: removeFromList,
           ),
           if (loading) LoadingSliver(),

@@ -194,4 +194,4 @@ class _MoreButtonPresenter extends StatelessWidget {
   }
 }
 
-enum PostListType { forStore, forProfile }
+enum PostListType { forStore, forProfile, forFeed }

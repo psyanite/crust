@@ -107,6 +107,10 @@ class Post {
   String toString() {
     return '{ id: $id, type: $type, store: ${store.name}, postedBy: ${postedBy.displayName} }';
   }
+
+  bool isOfficialStorePost() {
+    return postedBy == null;
+  }
 }
 
 class PostPhoto {

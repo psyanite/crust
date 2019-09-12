@@ -227,17 +227,17 @@ class _PresenterState extends State<_Presenter> {
 }
 
 class _Props {
-  final User user;
+  final User me;
   final bool myProfile;
 
-  _Props({this.user, this.myProfile = false});
+  _Props({this.me, this.myProfile = false});
 
   static fromStore(Store<AppState> store, int userId) {
     var me = store.state.me.user;
     var myProfile = me != null && me?.id == userId;
     if (store.state.user.users == null || myProfile) {
-      return _Props(user: null, myProfile: myProfile);
+      return _Props(me: null, myProfile: myProfile);
     }
-    return _Props(user: store.state.user.users[userId]);
+    return _Props(me: store.state.user.users[userId]);
   }
 }
