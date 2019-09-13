@@ -5,19 +5,18 @@ import 'package:crust/state/feed/feed_service.dart';
 import 'package:redux/redux.dart';
 
 List<Middleware<AppState>> createFeedMiddleware([FeedService feedService = const FeedService()]) {
-  final fetchFeed = _fetchFeed(feedService);
+  final initFeed = _initFeed(feedService);
 
   return [
-    TypedMiddleware<AppState, FetchFeed>(fetchFeed),
+    TypedMiddleware<AppState, InitFeed>(initFeed),
   ];
 }
 
-Middleware<AppState> _fetchFeed(FeedService service) {
+Middleware<AppState> _initFeed(FeedService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
+    store.dispatch(ClearFeed());
     var me = store.state.me.user;
-
-    var promise = me != null ? service.fetchFeed(userId: me.id, limit: 7, offset: 0) : service.fetchDefaultFeed(limit: 7, offset: 0);
-
+    var promise = me != null ? service.fetchFeed(userId: me.id, limit: 12, offset: 0) : service.fetchDefaultFeed(limit: 12, offset: 0);
     promise.then((posts) {
       store.dispatch(FetchFeedSuccess(posts));
     }).catchError((e) => store.dispatch(RequestFailure("fetchFeed ${e.toString()}")));

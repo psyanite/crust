@@ -109,7 +109,7 @@ class _PresenterState extends State<_Presenter> {
   Widget _suggestions() {
     var filtered = [...widget.searchHistory].where((i) => i.store != null);
     var children =
-        filtered.map<Widget>((i) => _SuggestCard(storeId: i.store.id, addSearchHistoryItem: widget.addSearchHistoryItem)).toList();
+        filtered.map<Widget>((i) => _StoreCard(store: i.store, addSearchHistoryItem: widget.addSearchHistoryItem)).toList();
     return SliverToBoxAdapter(child: Column(children: children));
   }
 
@@ -130,7 +130,7 @@ class _PresenterState extends State<_Presenter> {
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, i) {
                 return Builder(
-                    builder: (context) => _ResultCard(store: snapshot.data[i], addSearchHistoryItem: widget.addSearchHistoryItem));
+                    builder: (context) => _StoreCard(store: snapshot.data[i], addSearchHistoryItem: widget.addSearchHistoryItem));
               }, childCount: snapshot.data.length),
             );
           default:
@@ -141,28 +141,11 @@ class _PresenterState extends State<_Presenter> {
   }
 }
 
-class _SuggestCard extends StatelessWidget {
-  final int storeId;
-  final Function addSearchHistoryItem;
-
-  _SuggestCard({Key key, this.storeId, this.addSearchHistoryItem}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return StoreConnector<AppState, dynamic>(
-        onInit: (Store<AppState> store) {
-          if (store.state.store.stores == null) store.dispatch(FetchStoreById(storeId));
-        },
-        converter: (Store<AppState> store) => store.state.store.stores[storeId],
-        builder: (context, store) => _ResultCard(store: store, addSearchHistoryItem: addSearchHistoryItem));
-  }
-}
-
-class _ResultCard extends StatelessWidget {
+class _StoreCard extends StatelessWidget {
   final MyStore.Store store;
   final Function addSearchHistoryItem;
 
-  const _ResultCard({Key key, this.store, this.addSearchHistoryItem}) : super(key: key);
+  const _StoreCard({Key key, this.store, this.addSearchHistoryItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => InkWell(

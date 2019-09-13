@@ -7,16 +7,16 @@ import 'package:meta/meta.dart';
 class RewardState {
   final LinkedHashMap<int, Reward> rewards;
   final LinkedHashMap<int, Reward> topRewards;
-  final List<int> nearMe;
+  final Set<int> nearMe;
 
   RewardState({this.rewards, this.topRewards, this.nearMe});
 
   RewardState.initialState()
     : rewards = LinkedHashMap<int, Reward>(),
       topRewards = LinkedHashMap<int, Reward>(),
-      nearMe = List<int>();
+      nearMe = Set<int>();
 
-  RewardState copyWith({LinkedHashMap<int, Reward> rewards, LinkedHashMap<int, Reward> topRewards, List<int> nearMe}) {
+  RewardState copyWith({LinkedHashMap<int, Reward> rewards, LinkedHashMap<int, Reward> topRewards, Set<int> nearMe}) {
     return RewardState(
       rewards: rewards ?? this.rewards,
       topRewards: topRewards ?? this.topRewards,
@@ -57,8 +57,8 @@ class RewardState {
     return LinkedHashMap<int, Reward>.from(this.topRewards);
   }
 
-  List<int> cloneNearMe() {
-    return List<int>.from(this.nearMe);
+  Set<int> cloneNearMe() {
+    return Set<int>.from(this.nearMe);
   }
 
   @override

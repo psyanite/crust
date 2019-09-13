@@ -32,10 +32,11 @@ class PostList extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 16.0),
       sliver: SliverList(
         delegate: SliverChildBuilderDelegate((builder, i) {
+          var post = posts[i];
           return _PostCard(
-            post: posts[i],
+            post: post,
             postListType: postListType,
-            removeFromList: () => removeFromList(i),
+            removeFromList: () => removeFromList(i, post.id),
           );
         }, childCount: posts.length),
       ),

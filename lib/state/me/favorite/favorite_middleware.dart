@@ -5,6 +5,8 @@ import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/error/error_actions.dart';
 import 'package:crust/state/me/favorite/favorite_actions.dart';
 import 'package:crust/state/me/favorite/favorite_service.dart';
+import 'package:crust/state/reward/reward_actions.dart';
+import 'package:crust/state/store/store_actions.dart';
 import 'package:redux/redux.dart';
 
 List<Middleware<AppState>> createFavoriteMiddleware([FavoriteService favoriteService = const FavoriteService()]) {
@@ -93,12 +95,14 @@ Middleware<AppState> _fetchFavorites(FavoriteService service) {
     if (user != null) {
       service.fetchFavorites(user.id).then((map) {
         List<Reward> rewards = map['rewards'];
+        if (rewards.isNotEmpty) store.dispatch(FetchRewardsSuccess(rewards));
         List<MyStore.Store> stores = map['stores'];
-        List<Post> posts = map['posts'];
+        if (stores.isNotEmpty) store.dispatch(FetchStoresSuccess(stores));
+        List<int> postIds = map['postIds'];
         store.dispatch(FetchFavoritesSuccess(
-            favoriteRewards: rewards.map((r) => r.id).toSet(),
-            favoriteStores: stores.map((s) => s.id).toSet(),
-            favoritePosts: posts.map((p) => p.id).toSet()));
+          favoriteRewards: rewards.map((r) => r.id).toSet(),
+          favoriteStores: stores.map((s) => s.id).toSet(),
+          favoritePosts: postIds.toSet()));
       }).catchError((e) => store.dispatch(RequestFailure("fetchFavorites ${e.toString()}")));
     }
     next(action);

@@ -27,5 +27,5 @@ RewardState fetchRewardsNearMeSuccess(RewardState state, FetchRewardsNearMeSucce
 }
 
 RewardState clearNearMe(RewardState state, ClearNearMe action) {
-  return state.copyWith(nearMe: List<int>());
+  return state.copyWith(nearMe: Set<int>());
 }

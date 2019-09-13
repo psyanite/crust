@@ -43,20 +43,19 @@ class _Presenter extends StatefulWidget {
 }
 
 class _PresenterState extends State<_Presenter> {
-  final String defaultProfilePic =
+  final String _defaultProfilePic =
       'https://firebasestorage.googleapis.com/v0/b/burntoast-fix.appspot.com/o/users%2Fprofile-pictures%2F1565423370052-9201.jpg?alt=media&token=1a80c164-4ca6-4174-bd46-c8c265c17ae9';
   ScrollController _scrollie;
-  List<Post> posts;
-  bool loading = false;
-  int limit = 12;
-  int offset = 0;
+  List<Post> _posts;
+  bool _loading = false;
+  int _limit = 12;
 
   @override
   initState() {
     super.initState();
     _scrollie = ScrollController()
       ..addListener(() {
-        if (loading == false && limit > 0 && _scrollie.position.extentAfter < 500) _getMorePosts();
+        if (_loading == false && _limit > 0 && _scrollie.position.extentAfter < 500) _getMorePosts();
       });
     _load();
   }
@@ -69,32 +68,32 @@ class _PresenterState extends State<_Presenter> {
 
   _load() async {
     var fresh = await _getPosts();
-    this.setState(() => posts = fresh);
+    this.setState(() => _posts = fresh);
   }
 
-  removeFromList(int index) {
-    this.setState(() => posts = List<Post>.from(posts)..removeAt(index));
+  removeFromList(index, postId) {
+    this.setState(() => _posts = List<Post>.from(_posts)..removeAt(index));
   }
 
   Future<List<Post>> _getPosts() async {
-    return PostService.fetchMyPosts(userId: widget.me.id, limit: limit, offset: offset);
+    var offset = _posts != null ? _posts.length : 0;
+    return PostService.fetchMyPosts(userId: widget.me.id, limit: _limit, offset: offset);
   }
 
   _getMorePosts() async {
-    this.setState(() => loading = true);
+    this.setState(() => _loading = true);
     var fresh = await _getPosts();
     if (fresh.isEmpty) {
       this.setState(() {
-        limit = 0;
-        loading = false;
+        _limit = 0;
+        _loading = false;
       });
       return;
     }
-    var update = List<Post>.from(posts)..addAll(fresh);
+    var update = List<Post>.from(_posts)..addAll(fresh);
     this.setState(() {
-      offset = offset + limit;
-      posts = update;
-      loading = false;
+      _posts = update;
+      _loading = false;
     });
   }
 
@@ -107,10 +106,10 @@ class _PresenterState extends State<_Presenter> {
         PostList(
           noPostsView: Text('Start reviewing now and your reviews will show up here!'),
           postListType: PostListType.forProfile,
-          posts: posts,
+          posts: _posts,
           removeFromList: removeFromList,
         ),
-        if (loading == true) LoadingSliver(),
+        if (_loading == true) LoadingSliver(),
       ], controller: _scrollie),
     );
   }
@@ -155,7 +154,7 @@ class _PresenterState extends State<_Presenter> {
           ),
         ),
         if (user.tagline != null) _tagline(),
-        if (user.profilePicture == defaultProfilePic) _setProfilePictureButton()
+        if (user.profilePicture == _defaultProfilePic) _setProfilePictureButton()
       ]),
     );
   }

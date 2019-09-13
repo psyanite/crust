@@ -48,12 +48,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   fetchRewardsNearMe(Store<AppState> store, myAddress) async {
     var address = myAddress ?? store.state.me.address ?? Utils.defaultAddress;
-    if (address != null) {
-      var rewards = await RewardService.fetchRewards(limit: 7, offset: 0, address: address);
-      if (rewards != null) {
-        store.dispatch(FetchRewardsNearMeSuccess(rewards));
-      }
-    }
+    var rewards = await RewardService.fetchRewards(limit: 3, offset: 0, address: address);
+    if (rewards != null) store.dispatch(FetchRewardsNearMeSuccess(rewards));
   }
 
   @override
@@ -62,7 +58,7 @@ class _SplashScreenState extends State<SplashScreen> {
     FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
     return StoreConnector<AppState, int>(
       onInit: (Store<AppState> store) async {
-        store.dispatch(FetchFeed());
+        store.dispatch(InitFeed());
         store.dispatch(FetchTopStores());
         store.dispatch(FetchTopRewards());
 

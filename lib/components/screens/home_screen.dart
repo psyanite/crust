@@ -1,9 +1,9 @@
 import 'package:crust/components/post_list/post_list.dart';
-import 'package:crust/components/stores/browse_stores_screen.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
-import 'package:crust/components/stores/store_screen.dart';
-import 'package:crust/components/stores/search_stores_screen.dart';
+import 'package:crust/components/stores/browse_stores_screen.dart';
 import 'package:crust/components/stores/favorite_store_button.dart';
+import 'package:crust/components/stores/search_stores_screen.dart';
+import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/models/post.dart';
 import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
@@ -28,9 +28,11 @@ class HomeScreen extends StatelessWidget {
       builder: (BuildContext context, _Props props) {
         return _Presenter(
           myId: props.myId,
-          refresh: props.refresh,
-          posts: props.posts,
+          feed: props.posts,
           topStores: props.topStores,
+          refresh: props.refresh,
+          removePost: props.removePost,
+          addPosts: props.addPosts,
         );
       },
     );
@@ -39,38 +41,37 @@ class HomeScreen extends StatelessWidget {
 
 class _Presenter extends StatefulWidget {
   final int myId;
-  final Function refresh;
-  final List<Post> posts;
+  final List<Post> feed;
   final List<MyStore.Store> topStores;
+  final Function refresh;
+  final Function removePost;
+  final Function addPosts;
 
-  _Presenter({Key key, this.myId, this.refresh, this.posts, this.topStores}) : super(key: key);
+  _Presenter({Key key, this.myId, this.refresh, this.feed, this.topStores, this.removePost, this.addPosts}) : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState();
 }
 
 class _PresenterState extends State<_Presenter> {
-  ScrollController _scrollie;
-  List<Post> posts;
-  bool loading = false;
-  int limit = 12;
-  int offset = 12;
   FeedService feedService = const FeedService();
+  ScrollController _scrollie;
+  bool _loading = false;
+  int _limit = 12;
 
   @override
   initState() {
     super.initState();
     _scrollie = ScrollController()
       ..addListener(() {
-        if (loading == false && limit > 0 && _scrollie.position.extentAfter < 500) _getMorePosts();
+        if (widget.feed.isNotEmpty && _loading == false && _limit > 0 && _scrollie.position.extentAfter < 500) _getMore();
       });
-    this.setState(() => posts = widget.posts);
   }
 
   @override
   void didUpdateWidget(_Presenter old) {
-    if (old.posts != widget.posts) {
-      posts = widget.posts;
+    if (old.feed.length != widget.feed.length) {
+      _loading = false;
     }
     super.didUpdateWidget(old);
   }
@@ -81,39 +82,36 @@ class _PresenterState extends State<_Presenter> {
     super.dispose();
   }
 
-  removeFromList(int index) {
-    this.setState(() => posts = List<Post>.from(posts)..removeAt(index));
+  _refresh() {
+    this.setState(() {
+      _limit = 12;
+      _loading = true;
+    });
+    widget.refresh();
   }
 
-  Future<List<Post>> _getPosts() async {
+  Future<List<Post>> _fetchMore() {
     if (widget.myId != null) {
-      return feedService.fetchFeed(userId: widget.myId, limit: limit, offset: offset);
+      return feedService.fetchFeed(userId: widget.myId, limit: _limit, offset: widget.feed.length);
     } else {
-      return feedService.fetchDefaultFeed(limit: limit, offset: offset);
+      return feedService.fetchDefaultFeed(limit: _limit, offset: widget.feed.length);
     }
   }
 
-  _getMorePosts() async {
-    this.setState(() => loading = true);
-    var fresh = await _getPosts();
+  _getMore() async {
+    this.setState(() => _loading = true);
+    var fresh = await _fetchMore();
     if (fresh.isEmpty) {
       this.setState(() {
-        limit = 0;
-        loading = false;
+        _limit = 0;
+        _loading = false;
       });
       return;
     }
-    this.setState(() {
-      offset = offset + limit;
-      posts = List<Post>.from(posts)..addAll(fresh);
-      loading = false;
-    });
+    widget.addPosts(fresh);
   }
 
-  Future<void> _refresh() async {
-    widget.refresh();
-    await Future.delayed(Duration(seconds: 1));
-  }
+  removeFromList(index, postId) => widget.removePost(postId);
 
   @override
   Widget build(BuildContext context) {
@@ -121,19 +119,27 @@ class _PresenterState extends State<_Presenter> {
     FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
     return Scaffold(
       body: RefreshIndicator(
-        onRefresh: _refresh,
-        child: CustomScrollView(slivers: <Widget>[
-          _appBar(),
-          _topStores(context),
-          _separator(),
-          PostList(
-            noPostsView: Container(),
-            posts: posts,
-            postListType: PostListType.forFeed,
-            removeFromList: removeFromList,
-          ),
-          if (loading) LoadingSliver(),
-        ], controller: _scrollie, physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics())),
+        onRefresh: () async {
+          _refresh();
+          await Future.delayed(Duration(seconds: 1));
+        },
+        child: CustomScrollView(
+          slivers: <Widget>[
+            _appBar(),
+            _topStores(context),
+            _separator(),
+            PostList(
+              noPostsView: Container(),
+              posts: widget.feed,
+              postListType: PostListType.forFeed,
+              removeFromList: (i, postId) => widget.removePost(postId),
+            ),
+            if (_loading) LoadingSliver(),
+          ],
+          key: PageStorageKey('Home'),
+          controller: _scrollie,
+          physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+        ),
       ),
     );
   }
@@ -284,26 +290,32 @@ class _PresenterState extends State<_Presenter> {
 
 class _Props {
   final int myId;
-  final Function refresh;
   final List<Post> posts;
   final List<MyStore.Store> topStores;
+  final Function refresh;
+  final Function removePost;
+  final Function addPosts;
 
   _Props({
     this.myId,
-    this.refresh,
     this.posts,
     this.topStores,
+    this.refresh,
+    this.removePost,
+    this.addPosts,
   });
 
   static fromStore(Store<AppState> store) {
     return _Props(
       myId: store.state.me.user?.id,
+      posts: store.state.feed.posts.values.toList(),
+      topStores: store.state.store.topStores.values.toList(),
       refresh: () {
         store.dispatch(FetchTopStores());
-        store.dispatch(FetchFeed());
+        store.dispatch(InitFeed());
       },
-      posts: store.state.feed.posts.toList(),
-      topStores: store.state.store.topStores.values.toList(),
+      removePost: (postId) => store.dispatch(RemoveFeedPost(postId)),
+      addPosts: (posts) => store.dispatch(FetchFeedSuccess(posts)),
     );
   }
 }

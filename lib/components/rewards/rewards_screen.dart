@@ -52,23 +52,19 @@ class _PresenterState extends State<_Presenter> {
   ScrollController _scrollie;
   bool _loading = false;
   int _limit = 12;
-  int _offset = 0;
 
   @override
   initState() {
     super.initState();
     _scrollie = ScrollController()
       ..addListener(() {
-        if (widget.nearMe.isNotEmpty && _loading == false && _limit > 0 && _scrollie.position.extentAfter < 200) _getMoreRewards();
+        if (widget.nearMe.isNotEmpty && _loading == false && _limit > 0 && _scrollie.position.extentAfter < 500) _getMore();
       });
-
-//    if (_nearMe.isEmpty) widget.fetchRewards(_limit, _offset, widget.myAddress);
   }
 
   @override
   void didUpdateWidget(_Presenter old) {
-    if (old.nearMe.length < widget.nearMe.length) {
-      _offset = _offset + _limit;
+    if (old.nearMe.length != widget.nearMe.length) {
       _loading = false;
     }
     if (old.myAddress != widget.myAddress) {
@@ -86,20 +82,20 @@ class _PresenterState extends State<_Presenter> {
   _refresh() async {
     this.setState(() {
       _limit = 12;
-      _offset = 0;
+      _loading = true;
     });
 
     widget.clearNearMe();
-    widget.addNearMe(await _getUpdate());
+    widget.addNearMe(await _fetchRewards());
   }
 
-  Future<List<Reward>> _getUpdate() {
-    return RewardService.fetchRewards(limit: _limit, offset: _offset, address: widget.myAddress);
+  Future<List<Reward>> _fetchRewards() {
+    return RewardService.fetchRewards(limit: _limit, offset: widget.nearMe.length, address: widget.myAddress);
   }
 
-  _getMoreRewards() async {
+  _getMore() async {
     this.setState(() => _loading = true);
-    var fresh = await _getUpdate();
+    var fresh = await _fetchRewards();
     if (fresh.isEmpty) {
       this.setState(() {
         _limit = 0;
@@ -120,6 +116,7 @@ class _PresenterState extends State<_Presenter> {
         },
         child: CustomScrollView(
           slivers: <Widget>[_appBar(), LocationBar(), _rewardsList(), if (_loading == true) LoadingSliver()],
+          key: PageStorageKey('Rewards'),
           controller: _scrollie,
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
         ),

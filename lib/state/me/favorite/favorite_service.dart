@@ -107,7 +107,7 @@ class FavoriteService {
             ${Store.attributes}
           },
           favorite_posts {
-            ${Post.attributes}
+            id
           },
         }
       }
@@ -116,7 +116,7 @@ class FavoriteService {
     var json = response['userAccountById'];
     var rewards = (json['favorite_rewards'] as List).map((r) => Reward.fromToaster(r)).toList();
     var stores = (json['favorite_stores'] as List).map((s) => Store.fromToaster(s)).toList();
-    var posts = (json['favorite_posts'] as List).map((s) => Post.fromToaster(s)).toList();
-    return {'rewards': rewards, 'stores': stores, 'posts': posts};
+    var posts = (json['favorite_posts'] as List).map((p) => p['id'] as int).toList();
+    return {'rewards': rewards, 'stores': stores, 'postIds': posts};
   }
 }
