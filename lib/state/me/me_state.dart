@@ -1,6 +1,5 @@
 import 'package:crust/models/search.dart';
 import 'package:crust/models/user.dart';
-import 'package:crust/models/user_reward.dart';
 import 'package:crust/state/search/search_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:geocoder/geocoder.dart' as Geo;
@@ -15,7 +14,7 @@ class MeState {
   final List<SearchHistoryItem> searchHistory;
   final Geo.Address address;
 
-  MeState({this.user, searchHistory, location, this.address}) : this.searchHistory = searchHistory ?? defaultSearchHistory;
+  MeState({this.user, searchHistory, this.address}) : this.searchHistory = searchHistory ?? defaultSearchHistory;
 
   MeState.initialState()
       : user = null,
@@ -24,7 +23,6 @@ class MeState {
 
   MeState copyWith({
     User user,
-    UserReward userReward,
     List<SearchHistoryItem> searchHistory,
     Geo.Address address,
   }) {

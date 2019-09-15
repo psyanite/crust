@@ -245,7 +245,7 @@ class _UploadOverlayState extends State<_UploadOverlay> {
     }
 
     widget.setProfilePicture(url);
-    Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
+    Navigator.popUntil(context, ModalRoute.withName(MainRoutes.home));
     return;
   }
 

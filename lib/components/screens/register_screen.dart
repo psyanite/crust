@@ -18,8 +18,9 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-        converter: (Store<AppState> store) => (user) => store.dispatch(AddUser(user)),
-        builder: (context, addUser) => _Presenter(addUser: addUser, user: user));
+      converter: (Store<AppState> store) => (user) => store.dispatch(AddUser(user)),
+      builder: (context, addUser) => _Presenter(addUser: addUser, user: user),
+    );
   }
 }
 
@@ -82,7 +83,7 @@ class _PresenterState extends State<_Presenter> {
       snack(context, 'Sorry, that username is already taken');
     } else {
       widget.addUser(widget.user.copyWith(username: _username));
-      Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
+      Navigator.popUntil(context, ModalRoute.withName(MainRoutes.home));
     }
   }
 }

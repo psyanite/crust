@@ -1,4 +1,3 @@
-import 'package:crust/models/post.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/state/app/app_state.dart';
@@ -100,9 +99,9 @@ Middleware<AppState> _fetchFavorites(FavoriteService service) {
         if (stores.isNotEmpty) store.dispatch(FetchStoresSuccess(stores));
         List<int> postIds = map['postIds'];
         store.dispatch(FetchFavoritesSuccess(
-          favoriteRewards: rewards.map((r) => r.id).toSet(),
-          favoriteStores: stores.map((s) => s.id).toSet(),
-          favoritePosts: postIds.toSet()));
+            favoriteRewards: rewards.map((r) => r.id).toSet(),
+            favoriteStores: stores.map((s) => s.id).toSet(),
+            favoritePosts: postIds.toSet()));
       }).catchError((e) => store.dispatch(RequestFailure("fetchFavorites ${e.toString()}")));
     }
     next(action);

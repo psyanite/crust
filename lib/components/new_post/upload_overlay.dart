@@ -87,7 +87,7 @@ class UploadOverlayState extends State<UploadOverlay> {
       return false;
     }
     deletePhotosQueue.forEach((p) => PostService.deletePhoto(p.id));
-    Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
+    Navigator.popUntil(context, ModalRoute.withName(MainRoutes.home));
     if (post.hidden) {
       Navigator.push(context, MaterialPageRoute(builder: (_) => MyProfileScreen()));
     } else {
@@ -105,7 +105,7 @@ class UploadOverlayState extends State<UploadOverlay> {
     List<Tuple2<StorageUploadTask, StorageReference>> tasks = byteData.map((bd) {
       String fileName = "$timestamp-${Random().nextInt(10000)}.jpg";
       StorageReference ref = FirebaseStorage.instance.ref().child("reviews/post-photos/$fileName");
-      return Tuple2(ref.putData(bd, StorageMetadata(customMetadata: {'secret': 'firebase'})), ref);
+      return Tuple2(ref.putData(bd, StorageMetadata(customMetadata: {'secret': 'breadcat'})), ref);
     }).toList(growable: false);
 
     setState(() {

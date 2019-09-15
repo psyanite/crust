@@ -14,7 +14,7 @@ import 'package:redux_persist_flutter/redux_persist_flutter.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 
 main() async {
-  final persistor = Persistor<AppState>(storage: FlutterStorage(), serializer: JsonSerializer<AppState>(AppState.rehydrate));
+  final persistor = Persistor<AppState>(storage: FlutterStorage(key: 'crust'), serializer: JsonSerializer<AppState>(AppState.rehydrate));
 
   var initialState;
   try {
@@ -42,7 +42,7 @@ main() async {
 }
 
 class MainRoutes {
-  static const String root = '/';
+  static const String home = '/';
   static const String splash = '/splash';
 }
 
@@ -62,7 +62,7 @@ class Main extends StatelessWidget {
         initialRoute: MainRoutes.splash,
         routes: <String, WidgetBuilder>{
           MainRoutes.splash: (context) => SplashScreen(),
-          MainRoutes.root: (context) => MainTabNavigator(),
+          MainRoutes.home: (context) => MainTabNavigator(),
         },
         localizationsDelegates: [
           CustomLocalizationDelegate(),

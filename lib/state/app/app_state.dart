@@ -57,7 +57,7 @@ class AppState {
     return '''{
       me: $me,
       feed: $feed,
-      favorite: $me,
+      favorite: $favorite,
       follow: $follow,
       store: $store,
       user: $user,

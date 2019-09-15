@@ -28,7 +28,7 @@ class _Presenter extends StatelessWidget {
             child: Text('Logout'),
             onPressed: () {
               logout();
-              Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
+              Navigator.popUntil(context, ModalRoute.withName(MainRoutes.home));
             },
           )
         ]),

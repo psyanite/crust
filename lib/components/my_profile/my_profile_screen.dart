@@ -294,7 +294,7 @@ class _PresenterState extends State<_Presenter> {
             title: Text('Log out', style: TextStyle(fontSize: 18.0)),
             onTap: () {
               widget.logout();
-              Navigator.popUntil(context, ModalRoute.withName(MainRoutes.root));
+              Navigator.popUntil(context, ModalRoute.withName(MainRoutes.home));
             },
           ),
         ]),
