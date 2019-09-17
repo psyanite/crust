@@ -14,7 +14,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:multi_image_picker/asset.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:redux/redux.dart';
 import 'package:tuple/tuple.dart';
@@ -86,7 +85,6 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _form() {
-    Function(List<Asset>) _onSelectImages = (photos) => _loadImages(photos);
     return SliverFillRemaining(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -96,7 +94,7 @@ class _PresenterState extends State<_Presenter> {
             padding: EdgeInsets.only(top: 20.0, bottom: 30.0, left: 16.0, right: 16.0),
             child: PhotoSelector(
               images: _imageData != null ? [_imageData] : [],
-              onSelectImages: _onSelectImages,
+              onSelectImages: _loadImages,
               max: 1,
               addText: 'Select Photo',
               changeText: 'Change Photo',
@@ -161,10 +159,10 @@ class _PresenterState extends State<_Presenter> {
 
   _loadImages(photos) async {
     var image = photos[0];
-    setState(() => _image = image);
-    await image.requestOriginal(quality: 80);
-    setState(() {
-      _imageData = image.imageData.buffer.asUint8List();
+    var byteData = await image.getByteData(quality: 80);
+    this.setState(() {
+      _image = image;
+      _imageData = byteData.buffer.asUint8List();
     });
   }
 }
@@ -267,12 +265,11 @@ class _UploadOverlayState extends State<_UploadOverlay> {
   }
 
   Future<Uint8List> _getByteData(Asset asset) async {
-    ByteData byteData = await asset.requestOriginal();
+    ByteData byteData = await asset.getByteData();
     List<int> compressed = await FlutterImageCompress.compressWithList(
       byteData.buffer.asUint8List(),
       minWidth: 1080,
     );
-    asset.release();
     return Uint8List.fromList(compressed);
   }
 }

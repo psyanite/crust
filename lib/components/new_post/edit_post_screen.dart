@@ -9,7 +9,7 @@ import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:multi_image_picker/asset.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 
 import 'current_photos.dart';
 
@@ -454,8 +454,8 @@ class _PresenterState extends State<EditPostScreen> {
 
   _loadImages(List<Asset> photos) async {
     images.asMap().forEach((i, image) async {
-      await image.requestOriginal(quality: 80);
-      imageData[i] = image.imageData.buffer.asUint8List();
+      var byteData = await image.getByteData(quality: 80);
+      imageData[i] = byteData.buffer.asUint8List();
       setState(() {
         imageData = imageData;
       });

@@ -8,12 +8,4 @@
     <string name="facebook_app_id">2065053637091627</string>
     <string name="fb_login_protocol_scheme">fb2065053637091627</string>
 
-    <!-- Multi Image Picker -->
-    <string name="album_name_all">Gallery</string>
-    <string name="button_sure_default">Next</string>
-    <string name="button_sure">Next</string>
-    <string name="error_file_type">Sorry, this file is not a photo</string>
-    <string name="error_under_quality">Sorry, this photo is too low quality</string>
-    <string name="error_over_quality">Sorry, this photo is too low quality</string>
-
 </resources>

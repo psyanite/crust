@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:crust/components/common/carousel.dart';
+import 'package:crust/components/photo/carousel.dart';
 import 'package:crust/components/photo/carousel_page.dart';
 import 'package:crust/components/photo/image_preview.dart';
 import 'package:crust/presentation/components.dart';
@@ -16,7 +16,8 @@ class PhotoSelector extends StatelessWidget {
   final String changeText;
   final int max;
 
-  PhotoSelector({Key key, this.images, this.onSelectImages, this.addText = 'Add Photos', this.changeText = 'Change Photos', this.max = 10}) : super(key: key);
+  PhotoSelector({Key key, this.images, this.onSelectImages, this.addText = 'Add Photos', this.changeText = 'Change Photos', this.max = 10})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -51,12 +52,20 @@ class PhotoSelector extends StatelessWidget {
 
     try {
       resultList = await MultiImagePicker.pickImages(
-        maxImages: max,
-        enableCamera: false,
-        options: CupertinoOptions(takePhotoIcon: "chat"),
-      );
+          maxImages: max,
+          enableCamera: true,
+          materialOptions: MaterialOptions(
+            actionBarColor: '#FFAB40',
+            actionBarTitle: 'Gallery',
+            lightStatusBar: false,
+            statusBarColor: '#FFAB40',
+            allViewTitle: 'All',
+            selectCircleStrokeColor: '#FFAB40',
+            selectionLimitReachedText: 'Sorry, maximum number of photos reached',
+            textOnNothingSelected: 'Oops! Select an image',
+          ));
     } on PlatformException catch (e) {
-      snack(context, e.message);
+      snack(context, "Error " + e.toString());
     }
 
     if (resultList != null && resultList.length > 0) {

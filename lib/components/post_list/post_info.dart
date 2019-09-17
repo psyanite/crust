@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:crust/components/common/carousel.dart';
+import 'package:crust/components/photo/carousel.dart';
 import 'package:crust/components/post_list/carousel_wrapper.dart';
 import 'package:crust/components/post_list/comment_screen.dart';
 import 'package:crust/components/post_list/post_list.dart';

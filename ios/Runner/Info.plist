@@ -67,15 +67,15 @@
 
     <!-- Multi Image Picker -->
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>Example usage description</string>
+    <string>Enable photo access to upload photos.</string>
     <key>NSCameraUsageDescription</key>
-    <string>Example usage description</string>
+    <string>Enable camera access to take photos.</string>
 
     <!-- Geolocator -->
     <key>NSLocationAlwaysUsageDescription</key>
-    <string>Allow access to location in the background.</string>
+    <string>Enable location access to improve your experience.</string>
     <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Allow access to location when open and in the background.</string>
+    <string>Enable location access to improve your experience.</string>
 
 </dict>
 </plist>

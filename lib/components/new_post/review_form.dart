@@ -12,7 +12,7 @@ import 'package:crust/state/app/app_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:multi_image_picker/asset.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:redux/redux.dart';
 
 class ReviewForm extends StatelessWidget {
@@ -413,55 +413,10 @@ class _PresenterState extends State<_Presenter> {
     );
   }
 
-//  Future<List<String>> _uploadPhotos() async {
-//    String timestamp = "${DateTime.now().millisecondsSinceEpoch}";
-//    List<ByteData> byteData = await Future.wait(images.map((a) => _getByteData(a)));
-//    List<Tuple2<StorageUploadTask, StorageReference>> tasks = byteData.map((bd) {
-//      String fileName = "$timestamp-${Random().nextInt(10000)}.jpg";
-//      StorageReference ref = FirebaseStorage.instance.ref().child("reviews/post-photos/$fileName");
-//      return Tuple2(ref.putData(bd.buffer.asUint8List(), StorageMetadata(customMetadata: {'secret': 'breadcat'})), ref);
-//    }).toList(growable: false);
-//
-//    List<String> photoUrls = [];
-//    await Future.forEach(tasks, (t) async {
-//      await t.item1.onComplete;
-//      if (t.item1.isSuccessful) {
-//        photoUrls.add(await t.item2.getDownloadURL());
-//      }
-//    });
-//
-//    return photoUrls;
-//  }
-
-//  Future<ByteData> _getByteData(Asset asset) async {
-//    int quality = 100;
-//    ByteData byteData = await asset.requestOriginal();
-//    int size = byteData.lengthInBytes;
-//    int fileSizeKb = (size - (size % 1000)) ~/ 1000;
-//    if (fileSizeKb > 20000) {
-//      while (size > 500000 && quality > 0) {
-//        byteData = await asset.requestOriginal(quality: quality);
-//        size = byteData.lengthInBytes;
-//        quality = quality - 10;
-//      }
-//    } else if (fileSizeKb > 6000) {
-//      byteData = await asset.requestOriginal(quality: 20);
-//    } else if (fileSizeKb > 4000) {
-//      byteData = await asset.requestOriginal(quality: 30);
-//    } else if (fileSizeKb > 2000) {
-//      byteData = await asset.requestOriginal(quality: 60);
-//    } else if (fileSizeKb > 500) {
-//      byteData = await asset.requestOriginal(quality: 80);
-//    } else {
-//      byteData = await asset.requestOriginal(quality: 90);
-//    }
-//    return byteData;
-//  }
-
   _loadImages(photos) async {
     images.asMap().forEach((i, image) async {
-      await image.requestOriginal(quality: 80);
-      imageData[i] = image.imageData.buffer.asUint8List();
+      var byteData = await image.getByteData(quality: 80);
+      imageData[i] = byteData.buffer.asUint8List();
       setState(() {
         imageData = imageData;
       });

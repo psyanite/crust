@@ -11,7 +11,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:multi_image_picker/asset.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:tuple/tuple.dart';
 
 class UploadOverlay extends StatefulWidget {
@@ -132,12 +132,11 @@ class UploadOverlayState extends State<UploadOverlay> {
   }
 
   Future<Uint8List> _getByteData(Asset asset) async {
-    ByteData byteData = await asset.requestOriginal();
+    ByteData byteData = await asset.getByteData();
     List<int> compressed = await FlutterImageCompress.compressWithList(
       byteData.buffer.asUint8List(),
       minWidth: 1080,
     );
-    asset.release();
     return Uint8List.fromList(compressed);
   }
 
