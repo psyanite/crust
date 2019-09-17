@@ -1,4 +1,4 @@
-import 'package:crust/components/main_tab_navigator.dart';
+import 'package:crust/components/common/main_tab_navigator.dart';
 import 'package:crust/components/screens/splash_screen.dart';
 import 'package:crust/presentation/platform_adaptive.dart';
 import 'package:crust/state/app/app_middleware.dart';

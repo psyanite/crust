@@ -1,4 +1,4 @@
-import 'package:crust/components/dialog.dart';
+import 'package:crust/components/common/dialog.dart';
 import 'package:crust/components/rewards/favorite_reward_button.dart';
 import 'package:crust/components/rewards/reward_locations_screen.dart';
 import 'package:crust/components/rewards/reward_qr_screen.dart';

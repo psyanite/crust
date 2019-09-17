@@ -52,6 +52,11 @@ d
 * Send email of results
 
 ## Done
+* Implemented 
+* Implemented home screen on butter
+* Implemented register on BUtter
+* Implemented login on Butter
+* Made Butter App
 * Change Header on home screen feed posts
 * Update the store mutation endpoint to save point data correctly
 * Implement reward feed

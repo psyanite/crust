@@ -1,5 +1,5 @@
-import 'package:crust/components/confirm.dart';
-import 'package:crust/components/dialog.dart';
+import 'package:crust/components/common/confirm.dart';
+import 'package:crust/components/common/dialog.dart';
 import 'package:crust/components/new_post/edit_post_screen.dart';
 import 'package:crust/components/post_list/comment_screen.dart';
 import 'package:crust/components/post_list/post_info.dart';

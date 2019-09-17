@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:crust/components/carousel.dart';
-import 'package:crust/components/new_post/carousel_page.dart';
-import 'package:crust/components/new_post/image_preview.dart';
+import 'package:crust/components/common/carousel.dart';
+import 'package:crust/components/photo/carousel_page.dart';
+import 'package:crust/components/photo/image_preview.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

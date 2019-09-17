@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:crust/components/new_post/photo_selector.dart';
+import 'package:crust/components/photo/photo_selector.dart';
 import 'package:crust/main.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';

@@ -1,4 +1,4 @@
-import 'package:crust/components/dialog.dart';
+import 'package:crust/components/common/dialog.dart';
 import 'package:crust/components/new_post/review_form.dart';
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/rewards/reward_swiper.dart';
