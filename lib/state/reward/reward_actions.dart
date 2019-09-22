@@ -1,10 +1,15 @@
 import 'package:crust/models/reward.dart';
+import 'package:crust/models/user_reward.dart';
+
+class FetchRedeemedRewards {}
 
 class FetchRewardsNearMeSuccess {
   final List<Reward> rewards;
 
   FetchRewardsNearMeSuccess(this.rewards);
 }
+
+class ClearNearMe {}
 
 class FetchRewardsSuccess {
   final List<Reward> rewards;
@@ -26,4 +31,8 @@ class FetchTopRewardsSuccess {
   FetchTopRewardsSuccess(this.rewards);
 }
 
-class ClearNearMe {}
+class FetchUserRewardsSuccess {
+  final List<UserReward> userRewards;
+
+  FetchUserRewardsSuccess(this.userRewards);
+}

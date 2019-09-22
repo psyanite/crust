@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   fetchRewardsNearMe(Store<AppState> store, myAddress) async {
     var address = myAddress ?? store.state.me.address ?? Utils.defaultAddress;
-    var rewards = await RewardService.fetchRewards(limit: 3, offset: 0, address: address);
+    var rewards = await RewardService.fetchRewards(limit: 12, offset: 0, address: address);
     if (rewards != null) store.dispatch(FetchRewardsNearMeSuccess(rewards));
   }
 

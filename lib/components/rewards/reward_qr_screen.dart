@@ -1,3 +1,4 @@
+import 'package:crust/models/reward.dart';
 import 'package:crust/models/user_reward.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
@@ -7,11 +8,9 @@ import 'package:qr_flutter/qr_flutter.dart';
 
 class RewardQrScreen extends StatelessWidget {
   final UserReward userReward;
+  final Reward reward;
 
-  RewardQrScreen({
-    Key key,
-    this.userReward,
-  }) : super(key: key);
+  RewardQrScreen({Key key, this.userReward, this.reward}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +30,10 @@ class RewardQrScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+          Text(reward.name, textAlign: TextAlign.center, style: TextStyle(fontSize: 30.0, fontWeight: Burnt.fontBold)),
+          Container(height: 5.0),
+          Text(reward.storeNameText(), textAlign: TextAlign.center, style: TextStyle(fontSize: 30.0, fontWeight: Burnt.fontBold)),
+          Container(height: 20.0),
           QrImage(
             data: userReward.uniqueCode,
             size: 200.0,

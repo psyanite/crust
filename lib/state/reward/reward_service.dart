@@ -23,11 +23,7 @@ class RewardService {
     String query = """
       query {
         userRewardBy(userId: $userId, rewardId: $rewardId) {
-          reward {
-            id
-          },
-          unique_code,
-          redeemed_at
+          ${UserReward.attributes}
         }
       }
     """;
@@ -40,11 +36,7 @@ class RewardService {
     String query = """
       mutation {
         addUserReward(userId: $userId, rewardId: $rewardId) {
-          reward {
-            id
-          },
-          unique_code,
-          redeemed_at
+          ${UserReward.attributes}
         }
       }
     """;
@@ -92,5 +84,21 @@ class RewardService {
     final response = await Toaster.get(query);
     var json = response['topRewards'];
     return (json as List).map((r) => Reward.fromToaster(r)).toList();
+  }
+
+  Future<List<UserReward>> fetchRedeemedRewards(userId) async {
+    String query = """
+      query {
+        redeemedRewards(userId: $userId) {
+          reward {
+            ${Reward.attributes}
+          },
+          ${UserReward.attributes}
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['redeemedRewards'];
+    return (json as List).map((u) => UserReward.fromToaster(u)).toList();
   }
 }

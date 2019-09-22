@@ -101,14 +101,13 @@ class _PresenterState extends State<_Presenter> {
   _getMore() async {
     this.setState(() => _loading = true);
     var fresh = await _fetchMore();
-    if (fresh.isEmpty) {
+    if (fresh.length < _limit) {
       this.setState(() {
         _limit = 0;
         _loading = false;
       });
-      return;
     }
-    widget.addPosts(fresh);
+    if (fresh.isNotEmpty) widget.addPosts(fresh);
   }
 
   removeFromList(index, postId) => widget.removePost(postId);

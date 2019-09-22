@@ -86,24 +86,23 @@ class _PresenterState extends State<_Presenter> {
     });
 
     widget.clearNearMe();
-    widget.addNearMe(await _fetchRewards());
+    widget.addNearMe(await _fetchRewards(0));
   }
 
-  Future<List<Reward>> _fetchRewards() {
-    return RewardService.fetchRewards(limit: _limit, offset: widget.nearMe.length, address: widget.myAddress);
+  Future<List<Reward>> _fetchRewards(offset) async {
+    return RewardService.fetchRewards(limit: _limit, offset: offset, address: widget.myAddress);
   }
 
   _getMore() async {
     this.setState(() => _loading = true);
-    var fresh = await _fetchRewards();
-    if (fresh.isEmpty) {
+    var fresh = await _fetchRewards(widget.nearMe.length);
+    if (fresh.length < _limit) {
       this.setState(() {
         _limit = 0;
         _loading = false;
       });
-      return;
     }
-    widget.addNearMe(fresh);
+    if (fresh.isNotEmpty) widget.addNearMe(fresh);
   }
 
   @override

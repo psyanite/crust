@@ -91,18 +91,20 @@ class _PresenterState extends State<_Presenter> {
 
   @override
   Widget build(BuildContext context) {
-    var slivers = <Widget>[
-      _appBar(context),
-      _content(),
-    ];
     return Scaffold(
-        body: Column(children: <Widget>[
-      Flexible(child: CustomScrollView(controller: _scrollCtrl, slivers: slivers)),
-      Container(
-        decoration: BoxDecoration(color: Burnt.paper),
-        child: _composer(),
-      )
-    ]));
+      body: Column(children: <Widget>[
+        Flexible(
+          child: CustomScrollView(controller: _scrollCtrl, slivers: <Widget>[
+            _appBar(context),
+            _content(),
+          ]),
+        ),
+        Container(
+          decoration: BoxDecoration(color: Burnt.paper),
+          child: _composer(),
+        )
+      ]),
+    );
   }
 
   Widget _appBar(context) {
@@ -160,52 +162,52 @@ class _PresenterState extends State<_Presenter> {
     var text = _replyTo != null ? 'Reply to ${_replyTo.displayName} @${_replyTo.username}' : 'Reply to post';
     return Builder(
       builder: (context) => Container(
-            height: 25.0,
-            child: Row(
-              children: <Widget>[
-                Text(text, style: TextStyle(color: _flashReplyTo ? Burnt.blue : Burnt.hintTextColor, fontSize: 13.0)),
-                _replyTo != null
-                    ? InkWell(
-                        onTap: () => _setCommentToPost(context),
-                        child: Container(
-                            child: Padding(
-                          padding: EdgeInsets.only(left: 3.0, right: 3.0, bottom: 1.0, top: 3.0),
-                          child: Icon(CupertinoIcons.clear_thick_circled, size: 20.0, color: Burnt.lightGrey),
-                        )),
-                      )
-                    : Container()
-              ],
-            ),
-          ),
+        height: 25.0,
+        child: Row(
+          children: <Widget>[
+            Text(text, style: TextStyle(color: _flashReplyTo ? Burnt.blue : Burnt.hintTextColor, fontSize: 13.0)),
+            _replyTo != null
+                ? InkWell(
+                    onTap: () => _setCommentToPost(context),
+                    child: Container(
+                        child: Padding(
+                      padding: EdgeInsets.only(left: 3.0, right: 3.0, bottom: 1.0, top: 3.0),
+                      child: Icon(CupertinoIcons.clear_thick_circled, size: 20.0, color: Burnt.lightGrey),
+                    )),
+                  )
+                : Container()
+          ],
+        ),
+      ),
     );
   }
 
   Widget _composer() {
     return Builder(
       builder: (context) => Card(
-            color: Color(0xFFFDFDFD),
-            elevation: 24.0,
-            margin: EdgeInsets.all(0.0),
-            child: Container(
-              padding: EdgeInsets.only(left: 20.0),
-              decoration: BoxDecoration(border: Border.all(color: Colors.transparent)),
-              child: Row(
-                children: <Widget>[
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        _replyToField(),
-                        _bodyTextField(context),
-                        Container(height: 10.0),
-                      ],
-                    ),
-                  ),
-                  _submitButton(),
-                ],
+        color: Color(0xFFFDFDFD),
+        elevation: 24.0,
+        margin: EdgeInsets.all(0.0),
+        child: Container(
+          padding: EdgeInsets.only(left: 20.0),
+          decoration: BoxDecoration(border: Border.all(color: Colors.transparent)),
+          child: Row(
+            children: <Widget>[
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    _replyToField(),
+                    _bodyTextField(context),
+                    Container(height: 10.0),
+                  ],
+                ),
               ),
-            ),
+              _submitButton(),
+            ],
           ),
+        ),
+      ),
     );
   }
 
@@ -383,35 +385,35 @@ class _CommentCardState extends State<_CommentCard> with TickerProviderStateMixi
     return AnimatedBuilder(
       animation: _colorTween,
       builder: (context, child) => Container(
-            child: GestureDetector(
-              behavior: HitTestBehavior.translucent,
-              onLongPress: () async {
-                if (widget.myId != widget.comment.commentedBy.id) return;
-                _colorTween = ColorTween(begin: Burnt.primaryLight).animate(_colorCtrl);
-                Future.delayed(Duration(milliseconds: 500), () {
-                  var deleteComment = () async {
-                    var success = await CommentService.deleteComment(userId: widget.myId, comment: widget.comment);
-                    if (success == true) {
-                      widget.removeComment(widget.comment);
-                      snack(context, 'Comment deleted successfully');
-                    }
-                  };
-                  showDialog(context: context, builder: (context) => _deleteDialog(context, deleteComment));
-                });
-                await _colorCtrl.forward();
-                _colorTween = ColorTween(begin: Burnt.paper).animate(_colorCtrl);
-                _colorCtrl.reset();
-              },
-              child: Container(
-                color: _colorTween.value,
-                padding: EdgeInsets.only(top: 10.0, left: 16.0, right: 16.0),
-                child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                  _profilePicture(widget.comment.commentedBy.profilePicture),
-                  _body(),
-                ]),
-              ),
-            ),
+        child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onLongPress: () async {
+            if (widget.myId != widget.comment.commentedBy.id) return;
+            _colorTween = ColorTween(begin: Burnt.primaryLight).animate(_colorCtrl);
+            Future.delayed(Duration(milliseconds: 500), () {
+              var deleteComment = () async {
+                var success = await CommentService.deleteComment(userId: widget.myId, comment: widget.comment);
+                if (success == true) {
+                  widget.removeComment(widget.comment);
+                  snack(context, 'Comment deleted successfully');
+                }
+              };
+              showDialog(context: context, builder: (context) => _deleteDialog(context, deleteComment));
+            });
+            await _colorCtrl.forward();
+            _colorTween = ColorTween(begin: Burnt.paper).animate(_colorCtrl);
+            _colorCtrl.reset();
+          },
+          child: Container(
+            color: _colorTween.value,
+            padding: EdgeInsets.only(top: 10.0, left: 16.0, right: 16.0),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+              _profilePicture(widget.comment.commentedBy.profilePicture),
+              _body(),
+            ]),
           ),
+        ),
+      ),
     );
   }
 
@@ -485,20 +487,20 @@ class _CommentCardState extends State<_CommentCard> with TickerProviderStateMixi
     return Flexible(
       child: Builder(
         builder: (context) => InkWell(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              child: Padding(
-                padding: EdgeInsets.only(top: 10.0, bottom: 7.0),
-                child: Row(children: <Widget>[
-                  Expanded(child: Divider()),
-                  Container(width: 15.0),
-                  Text(text, style: TextStyle(color: Burnt.hintTextColor, fontSize: 15.0)),
-                  Container(width: 15.0),
-                  Expanded(child: Divider()),
-                ]),
-              ),
-              onTap: () => this.setState(() => _showReplies = !_showReplies),
-            ),
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          child: Padding(
+            padding: EdgeInsets.only(top: 10.0, bottom: 7.0),
+            child: Row(children: <Widget>[
+              Expanded(child: Divider()),
+              Container(width: 15.0),
+              Text(text, style: TextStyle(color: Burnt.hintTextColor, fontSize: 15.0)),
+              Container(width: 15.0),
+              Expanded(child: Divider()),
+            ]),
+          ),
+          onTap: () => this.setState(() => _showReplies = !_showReplies),
+        ),
       ),
     );
   }

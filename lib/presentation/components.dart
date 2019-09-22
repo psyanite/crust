@@ -363,12 +363,13 @@ class LocationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, Geo.Address>(
-        converter: (Store<AppState> store) => store.state.me.address,
-        builder: (context, address) {
-          return SliverToBoxAdapter(
-            child: address != null ? _addressInfo(context, address) : _defaultAddressInfo(context),
-          );
-        });
+      converter: (Store<AppState> store) => store.state.me.address,
+      builder: (context, address) {
+        return SliverToBoxAdapter(
+          child: address != null ? _addressInfo(context, address) : _defaultAddressInfo(context),
+        );
+      },
+    );
   }
 
   _addressInfo(context, address) {

@@ -51,16 +51,19 @@ class MeState {
   }
 
   Map<String, dynamic> toPersist() {
+    var address = this.address;
     return <String, dynamic>{
       'user': this.user?.toPersist(),
       'searchHistory': this.searchHistory?.map((i) => i.toPersist())?.toList(),
-      'address': <String, dynamic>{
-        'lat': this.address.coordinates.latitude,
-        'lng': this.address.coordinates.longitude,
-        'addressLine': this.address.addressLine,
-        'postcode': this.address.postalCode,
-        'locality': this.address.locality,
-      }
+      'address': address != null
+          ? <String, dynamic>{
+              'lat': address.coordinates.latitude,
+              'lng': address.coordinates.longitude,
+              'addressLine': address.addressLine,
+              'postcode': address.postalCode,
+              'locality': address.locality,
+            }
+          : null
     };
   }
 

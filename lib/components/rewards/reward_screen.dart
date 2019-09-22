@@ -1,5 +1,6 @@
 import 'package:crust/components/common/dialog.dart';
 import 'package:crust/components/rewards/favorite_reward_button.dart';
+import 'package:crust/components/rewards/loyalty_card.dart';
 import 'package:crust/components/rewards/reward_locations_screen.dart';
 import 'package:crust/components/rewards/reward_qr_screen.dart';
 import 'package:crust/components/stores/store_screen.dart';
@@ -8,7 +9,6 @@ import 'package:crust/models/user_reward.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
-import 'package:crust/state/reward/reward_actions.dart';
 import 'package:crust/state/reward/reward_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,49 +16,69 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 class RewardScreen extends StatelessWidget {
-  final Reward reward;
   final int rewardId;
-  final UserReward userReward;
 
-  RewardScreen({Key key, this.reward, this.rewardId, this.userReward}) : super(key: key);
+  RewardScreen({Key key, this.rewardId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-      onInit: (Store<AppState> store) {
-        if (reward != null) store.dispatch(FetchRewardSuccess(reward));
-      },
-      converter: (Store<AppState> store) => _Props.fromStore(store, userReward, rewardId),
+      converter: (Store<AppState> store) => _Props.fromStore(store, rewardId),
       builder: (context, props) {
-        return _Presenter(reward: props.reward, userReward: userReward, myId: props.myId);
+        if (props.reward?.type == RewardType.loyalty) {
+          return LoyaltyCard(reward: props.reward, myId: props.myId);
+        }
+        return _Presenter(reward: props.reward, myId: props.myId);
       },
     );
   }
 }
 
-class _Presenter extends StatelessWidget {
+class _Presenter extends StatefulWidget {
   final Reward reward;
-  final UserReward userReward;
   final int myId;
-  final String error;
 
-  _Presenter({Key key, this.reward, this.userReward, this.myId, this.error}) : super(key: key);
+  _Presenter({Key key, this.reward, this.myId}) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _PresenterState();
+}
+
+class _PresenterState extends State<_Presenter> {
+  UserReward _userReward;
+
+  @override
+  initState() {
+    super.initState();
+    _load();
+  }
+
+  _load() async {
+    if (widget.myId != null) {
+      var fresh = await RewardService.fetchUserReward(userId: widget.myId, rewardId: widget.reward.id);
+      if (fresh != null) this.setState(() => _userReward = fresh);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    if (error != null) return Scaffold(body: Center(child: Text(error)));
-    if (reward == null) return Scaffold(body: LoadingCenter());
+    if (widget.reward == null) return Scaffold(body: LoadingCenter());
+    var _refresh = () async {
+      _load();
+      await Future.delayed(Duration(seconds: 1));
+    };
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Column(children: <Widget>[_appBar(), _description()]),
-            _footer(),
-          ],
+      body: Column(children: <Widget>[
+        Flexible(
+          child: RefreshIndicator(
+            onRefresh: _refresh,
+            child: CustomScrollView(slivers: <Widget>[
+              SliverToBoxAdapter(child: Column(children: <Widget>[_appBar(), _description()]))
+            ]),
+          ),
         ),
-      ),
+        _footer(),
+      ]),
     );
   }
 
@@ -73,7 +93,7 @@ class _Presenter extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Burnt.imgPlaceholderColor,
                   image: DecorationImage(
-                    image: NetworkImage(reward.promoImage),
+                    image: NetworkImage(widget.reward.promoImage),
                     fit: BoxFit.cover,
                   ),
                 )),
@@ -105,6 +125,10 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _description() {
+    var reward = widget.reward;
+    var count = _userReward?.lastRedeemedAt != null && reward.type == RewardType.unlimited
+        ? 'You\'ve redeemed this ${_userReward.redeemedCount} times'
+        : null;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
       child: Column(
@@ -121,6 +145,8 @@ class _Presenter extends StatelessWidget {
             ],
           ),
           Text(reward.bannerText()),
+          Container(height: 5.0),
+          if (count != null) Text(count),
           Container(height: 30.0),
           if (reward.isHidden()) _secretBanner(),
           _locationDetails(),
@@ -147,64 +173,70 @@ class _Presenter extends StatelessWidget {
         },
       );
     };
+    var content = Container(
+      padding: EdgeInsets.symmetric(vertical: 20.0),
+      decoration: BoxDecoration(border: Border(top: BorderSide(color: Burnt.separator))),
+      child: Row(
+        children: <Widget>[
+          Text('🎉', style: TextStyle(fontSize: 55.0)),
+          Container(width: 15.0),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text('Congratulations!', style: TextStyle(fontWeight: Burnt.fontBold, color: Burnt.hintTextColor)),
+                Text('You\'ve unlocked a secret reward.'),
+                Text('Make sure you save it to your favourites!'),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
     return Builder(builder: (context) {
       return InkWell(
         onTap: () => onTap(context),
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 20.0),
-          decoration: BoxDecoration(border: Border(top: BorderSide(color: Burnt.separator))),
-          child: Row(
-            children: <Widget>[
-              Text('🎉', style: TextStyle(fontSize: 55.0)),
-              Container(width: 15.0),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('Congratulations!', style: TextStyle(fontWeight: Burnt.fontBold, color: Burnt.hintTextColor)),
-                    Text('You\'ve unlocked a secret reward.'),
-                    Text('Make sure you save it to your favourites!'),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
+        child: content,
       );
     });
   }
 
   Widget _locationDetails() {
-    if (reward.store != null) {
-      return _storeInfo();
-    } else {
-      return _storeGroupDetails();
-    }
-  }
-
-  Widget _storeInfo() {
-    var store = reward.store;
     return Builder(builder: (context) {
-      return InkWell(
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id))),
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 20.0),
-          decoration: BoxDecoration(border: Border(top: BorderSide(color: Burnt.separator), bottom: BorderSide(color: Burnt.separator))),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(store.name, style: TextStyle(fontSize: 20.0)),
-              Container(height: 3.0),
-              _address(),
-            ],
-          ),
-        ),
+      return Container(
+        padding: EdgeInsets.symmetric(vertical: 20.0),
+        decoration: BoxDecoration(border: Border(top: BorderSide(color: Burnt.separator), bottom: BorderSide(color: Burnt.separator))),
+        child: Row(children: <Widget>[
+          Expanded(child: widget.reward.store != null ? _storeInfo(context) : _storeGroupDetails(context)),
+        ]),
       );
     });
   }
 
+  Widget _storeInfo(context) {
+    var store = widget.reward.store;
+    return InkWell(
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id))),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(store.name, style: TextStyle(fontSize: 20.0)),
+                Container(height: 3.0),
+                _address(),
+              ],
+            ),
+          ),
+          _chevronRight()
+        ],
+      ),
+    );
+  }
+
   Widget _address() {
-    var store = reward.store;
+    var store = widget.reward.store;
     var address = store.address;
     if (address == null) return Container();
     var first = store.getFirstLine();
@@ -218,16 +250,12 @@ class _Presenter extends StatelessWidget {
     );
   }
 
-  Widget _storeGroupDetails() {
-    var group = reward.storeGroup;
-    return Builder(builder: (context) {
-      return InkWell(
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => RewardLocationsScreen(group: group))),
-        child: Container(
-          padding: EdgeInsets.symmetric(vertical: 20.0),
-          decoration: BoxDecoration(border: Border(top: BorderSide(color: Burnt.separator), bottom: BorderSide(color: Burnt.separator))),
+  Widget _storeGroupDetails(context) {
+    var group = widget.reward.storeGroup;
+    return InkWell(
+      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => RewardLocationsScreen(group: group))),
+      child: Row(children: <Widget>[
+        Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -241,8 +269,13 @@ class _Presenter extends StatelessWidget {
             ],
           ),
         ),
-      );
-    });
+        _chevronRight(),
+      ]),
+    );
+  }
+
+  Widget _chevronRight() {
+    return Icon(Icons.chevron_right, color: Burnt.iconOrange, size: 30.0);
   }
 
   Widget _termsAndConditions() {
@@ -252,7 +285,7 @@ class _Presenter extends StatelessWidget {
         highlightColor: Colors.transparent,
         onTap: () {
           var options = <DialogOption>[DialogOption(display: 'OK', onTap: () => Navigator.of(context, rootNavigator: true).pop(true))];
-          showDialog(context: context, builder: (context) => TermsDialog(options: options, terms: reward.termsAndConditions));
+          showDialog(context: context, builder: (context) => TermsDialog(options: options, terms: widget.reward.termsAndConditions));
         },
         child: Text(
           'Terms & Conditions',
@@ -263,12 +296,12 @@ class _Presenter extends StatelessWidget {
   }
 
   Widget _footer() {
-    if (userReward?.isRedeemed() == true) {
+    if (_userReward?.isRedeemed(widget.reward) == true) {
       return _renderFooterText('You\'ve already redeemed this reward!');
-    } else if (reward.isExpired() == true) {
+    } else if (widget.reward.isExpired() == true) {
       return _renderFooterText('Sorry, this reward has already expired!');
     }
-    return _RedeemButton(myId: myId, rewardId: reward.id);
+    return _redeemButton();
   }
 
   Widget _renderFooterText(text) {
@@ -277,79 +310,55 @@ class _Presenter extends StatelessWidget {
       child: Center(child: Text(text)),
     );
   }
-}
 
-class _RedeemButton extends StatefulWidget {
-  final int myId;
-  final int rewardId;
-
-  _RedeemButton({Key key, this.myId, this.rewardId}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => _RedeemButtonState();
-}
-
-class _RedeemButtonState extends State<_RedeemButton> {
-  UserReward userReward;
-
-  @override
-  initState() {
-    super.initState();
-    _load();
-  }
-
-  _load() async {
-    if (widget.myId != null) {
-      var update = await RewardService.fetchUserReward(userId: widget.myId, rewardId: widget.rewardId);
-      if (update != null) this.setState(() => userReward = update);
-    }
-  }
-
-  _onPressed(BuildContext context) async {
-    if (widget.myId == null) {
-      snack(context, 'Login to start redeeming rewards!');
-      return;
-    }
-    if (userReward != null) {
-      _redirect(userReward);
-      return;
-    }
-    var update = await RewardService.addUserReward(userId: widget.myId, rewardId: widget.rewardId);
-    this.setState(() => userReward = update);
-    _redirect(update);
+  Widget _redeemButton() {
+    var onPressed = (BuildContext context) async {
+      if (widget.myId == null) {
+        snack(context, 'Login to start redeeming rewards!');
+        return;
+      }
+      if (_userReward != null) {
+        _redirect(_userReward);
+        return;
+      }
+      var update = await RewardService.addUserReward(userId: widget.myId, rewardId: widget.reward.id);
+      this.setState(() => _userReward = update);
+      _redirect(update);
+    };
+    var text = widget.reward.type == RewardType.unlimited
+        ? 'Redeem this reward as many times as you like'
+        : 'This reward can only be redeemed once';
+    return Column(
+      children: <Widget>[
+        Text(text),
+        Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Builder(builder: (context) {
+            return BurntButton(onPressed: () => onPressed(context), text: 'Redeem Now');
+          }),
+        ),
+      ],
+    );
   }
 
   _redirect(UserReward userReward) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => RewardQrScreen(userReward: userReward)));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Builder(builder: (context) {
-        return BurntButton(
-          onPressed: () => _onPressed(context),
-          text: 'Redeem Now',
-        );
-      }),
-    );
+    Navigator.push(context, MaterialPageRoute(builder: (_) => RewardQrScreen(userReward: userReward, reward: widget.reward)));
   }
 }
 
 class _Props {
-  final Reward reward;
   final int myId;
+  final Reward reward;
 
   _Props({
-    this.reward,
     this.myId,
+    this.reward,
   });
 
-  static fromStore(Store<AppState> store, UserReward userReward, int rewardId) {
+  static fromStore(Store<AppState> store, int rewardId) {
     return _Props(
-      reward: userReward?.reward ?? (rewardId != null ? store.state.reward.rewards[rewardId] : null),
       myId: store.state.me.user?.id,
+      reward: store.state.reward.rewards[rewardId],
     );
   }
 }

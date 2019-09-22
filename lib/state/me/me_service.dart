@@ -1,6 +1,4 @@
-import 'package:crust/models/reward.dart';
 import 'package:crust/models/user.dart';
-import 'package:crust/models/user_reward.dart';
 import 'package:crust/services/toaster.dart';
 import 'package:crust/utils/enum_util.dart';
 
@@ -25,7 +23,7 @@ class MeService {
   static Future<User> getUser(User user) async {
     String query = """
       query {
-        userLoginBy(
+        userLogin(
           socialType: "${EnumUtil.format(user.socialType.toString())}", 
           socialId: "${user.socialId}"
         ) {
@@ -42,7 +40,7 @@ class MeService {
       }
     """;
     final response = await Toaster.get(query);
-    var json = response['userLoginBy'];
+    var json = response['userLogin'];
     return user.copyWith(
       id: json['user_account']['id'],
       profilePicture: json['user_account']['profile']['profile_picture'],
@@ -72,23 +70,6 @@ class MeService {
     final response = await Toaster.get(query);
     var json = response['addUser'];
     return json['user_account']['id'];
-  }
-
-  static Future<List<UserReward>> fetchUserRewards(userId) async {
-    String query = """
-      query {
-        allUserRewardsByUserId(userId: $userId) {
-          reward {
-            ${Reward.attributes}
-          },
-          unique_code,
-          redeemed_at
-        }
-      }
-    """;
-    final response = await Toaster.get(query);
-    var json = response['allUserRewardsByUserId'];
-    return (json as List).map((u) => UserReward.fromToaster(u)).toList();
   }
 
   Future<String> setTagline({userId, tagline}) async {

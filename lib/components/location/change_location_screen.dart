@@ -35,17 +35,12 @@ class _Presenter extends StatefulWidget {
 }
 
 class _PresenterState extends State<_Presenter> {
+  TextEditingController queryCtrl = TextEditingController();
   String _query = '';
-  TextEditingController _queryCtrl;
-
-  @override
-  initState() {
-    super.initState();
-  }
 
   @override
   dispose() {
-    _queryCtrl.dispose();
+    queryCtrl.dispose();
     super.dispose();
   }
 
@@ -95,7 +90,7 @@ class _PresenterState extends State<_Presenter> {
   Widget _searchBar() {
     return SliverToBoxAdapter(
       child: TextField(
-        controller: _queryCtrl,
+        controller: queryCtrl,
         onChanged: (text) {
           if (text.trim() != _query) setState(() => _query = text.trim());
         },
@@ -107,7 +102,7 @@ class _PresenterState extends State<_Presenter> {
           suffixIcon: IconButton(
             icon: Icon(Icons.clear),
             onPressed: () {
-              _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
+              queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
               this.setState(() => _query = '');
             },
           ),

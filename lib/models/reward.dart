@@ -15,6 +15,7 @@ class Reward {
   final String promoImage;
   final String termsAndConditions;
   final bool hidden;
+  final int redeemLimit;
 
   Reward({
     this.id,
@@ -28,6 +29,7 @@ class Reward {
     this.promoImage,
     this.termsAndConditions,
     this.hidden,
+    this.redeemLimit,
   });
 
   bool isExpired() {
@@ -95,6 +97,7 @@ class Reward {
       promoImage: json['promo_image'],
       termsAndConditions: json['terms_and_conditions'],
       hidden: json['hidden'],
+      redeemLimit: json['redeem_limit'],
     );
   }
 
@@ -170,7 +173,8 @@ class Reward {
     promo_image,
     terms_and_conditions,
     hidden,
+    redeem_limit,
   """;
 }
 
-enum RewardType { one_time }
+enum RewardType { one_time, unlimited, loyalty }

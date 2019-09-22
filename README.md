@@ -39,17 +39,22 @@ d
 
 ## To Do
 * Add redeem reward behaviour
+
 * Add buy 10 get 1 free rewards
 
 * Import stores from Zomato
 
-* Implement store posts
-* Add submit missing store feature
 * Enable firebase dynamic urls in iOS
 * Add link previews to dynamic links
 * Enable login via iOS
 * Run nightly task to update caches
 * Send email of results
+
+* Implement store posts
+* Add submit missing store feature
+* Add report store feature
+* Add claim store feature
+* Add report store closed feature
 
 ## Done
 * Implemented 

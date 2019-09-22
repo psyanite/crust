@@ -99,18 +99,19 @@ class _PresenterState extends State<_Presenter> {
   _getMorePosts() async {
     this.setState(() => _loading = true);
     var fresh = await _getPosts();
-    if (fresh.isEmpty) {
+    if (fresh.length < _limit) {
       this.setState(() {
         _limit = 0;
         _loading = false;
       });
-      return;
     }
-    var update = List<Post>.from(_posts)..addAll(fresh);
-    this.setState(() {
-      _posts = update;
-      _loading = false;
-    });
+    if (fresh.isNotEmpty) {
+      var update = List<Post>.from(_posts)..addAll(fresh);
+      this.setState(() {
+        _posts = update;
+        _loading = false;
+      });
+    }
   }
 
   @override

@@ -28,7 +28,7 @@ class RewardsSideScroller extends StatelessWidget {
       return _list(widgets, seeAll);
     } else {
       var widgets = List<Widget>.from(userRewards.take(5).map((u) {
-        var onTap = () => Navigator.push(context, MaterialPageRoute(builder: (_) => RewardScreen(userReward: u)));
+        var onTap = () => Navigator.push(context, MaterialPageRoute(builder: (_) => RewardScreen(rewardId: u.rewardId)));
         return _card(onTap, u.reward);
       }));
       return _list(widgets, seeAll);

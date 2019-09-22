@@ -3,14 +3,44 @@ import 'package:crust/components/profile/profile_screen.dart';
 import 'package:crust/components/rewards/reward_screen.dart';
 import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/presentation/components.dart';
+import 'package:crust/state/app/app_state.dart';
+import 'package:crust/state/reward/reward_actions.dart';
 import 'package:crust/state/reward/reward_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 
-class ScanQrScreen extends StatefulWidget {
+class ScanQrScreen extends StatelessWidget {
   @override
-  State<StatefulWidget> createState() => ScanQrScreenState();
+  Widget build(BuildContext context) {
+    return StoreConnector<AppState, dynamic>(
+      converter: (Store<AppState> store) => _Props.fromStore(store),
+      builder: (context, props) => _Presenter(fetchRewardSuccess: props.fetchRewardSuccess),
+    );
+  }
+}
+
+class _Props {
+  final Function fetchRewardSuccess;
+
+  _Props({this.fetchRewardSuccess});
+
+  static fromStore(Store<AppState> store) {
+    return _Props(
+      fetchRewardSuccess: (reward) => store.dispatch(FetchRewardSuccess(reward)),
+    );
+  }
+}
+
+class _Presenter extends StatefulWidget {
+  final Function fetchRewardSuccess;
+
+  _Presenter({Key key, this.fetchRewardSuccess});
+
+  @override
+  State<StatefulWidget> createState() => _PresenterState();
 }
 
 /// Example URLs:
@@ -24,7 +54,7 @@ class ScanQrScreen extends StatefulWidget {
 /// :profiles:1
 /// :rewards:4pPfr
 /// :rewards:BKKWL
-class ScanQrScreenState extends State<ScanQrScreen> {
+class _PresenterState extends State<_Presenter> {
   String error;
 
   @override
@@ -101,8 +131,10 @@ class ScanQrScreenState extends State<ScanQrScreen> {
         var reward = await RewardService.fetchRewardByCode(identifier);
         if (reward == null) {
           _setError('4016');
+          return;
         }
-        _redirect(RewardScreen(reward: reward, rewardId: reward.id));
+        widget.fetchRewardSuccess(reward);
+        _redirect(RewardScreen(rewardId: reward.id));
         break;
     }
 
@@ -132,7 +164,7 @@ class ScanQrScreenState extends State<ScanQrScreen> {
       if (code != null) {
         var reward = await RewardService.fetchRewardByCode(code);
         if (reward != null) {
-          _redirect(RewardScreen(reward: reward, rewardId: reward.id));
+          _redirect(RewardScreen(rewardId: reward.id));
         } else {
           _setError('4008');
         }
