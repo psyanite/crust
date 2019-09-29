@@ -65,7 +65,10 @@ class _PresenterState extends State<_Presenter> {
 
   _load() async {
     var scanResult = await _scan();
-    if (scanResult == null) return;
+    if (scanResult == null) {
+      _setError('4018');
+      return;
+    }
 
     if (scanResult.startsWith(':')) {
       _parseSecretString(scanResult);
@@ -204,8 +207,7 @@ class _PresenterState extends State<_Presenter> {
   }
 
   _redirect(Widget screen) {
-    Navigator.pop(context);
-    Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => screen));
   }
 
   _setError(String code) {
@@ -230,7 +232,7 @@ class _PresenterState extends State<_Presenter> {
               padding: EdgeInsets.only(left: 12.0, right: 12.0, top: 10.0, bottom: 10.0),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: <Widget>[Text('Try Again', style: TextStyle(fontSize: 16.0, color: Colors.white))],
+                children: <Widget>[Text('Try Again', style: TextStyle(fontSize: 22.0, color: Colors.white))],
               ),
             )
           ],

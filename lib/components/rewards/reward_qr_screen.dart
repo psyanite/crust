@@ -22,25 +22,19 @@ class RewardQrScreen extends StatelessWidget {
   }
 
   Widget _body() {
-    if (userReward == null) {
-      return LoadingCenter();
-    }
+    if (userReward == null) return LoadingCenter();
+    var boldStyle = TextStyle(fontSize: 30.0, fontWeight: Burnt.fontBold);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text(reward.name, textAlign: TextAlign.center, style: TextStyle(fontSize: 30.0, fontWeight: Burnt.fontBold)),
+          Text(reward.name, textAlign: TextAlign.center, style: boldStyle),
           Container(height: 5.0),
-          Text(reward.storeNameText(), textAlign: TextAlign.center, style: TextStyle(fontSize: 30.0, fontWeight: Burnt.fontBold)),
+          Text(reward.storeNameText(), textAlign: TextAlign.center, style: boldStyle),
           Container(height: 20.0),
-          QrImage(
-            data: userReward.uniqueCode,
-            size: 200.0,
-            foregroundColor: Burnt.textBodyColor,
-            version: 1,
-          ),
-          Text(userReward.uniqueCode, style: TextStyle(fontSize: 30.0, fontWeight: Burnt.fontBold)),
+          QrImage(data: userReward.uniqueCode, size: 200.0, foregroundColor: Burnt.textBodyColor, version: 1),
+          Text(userReward.uniqueCode, style: boldStyle),
           Container(height: 5.0),
           Text('Simply show this code to the staff.'),
           Container(height: 5.0),

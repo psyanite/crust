@@ -21,8 +21,9 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-        converter: (Store<AppState> store) => (user) => store.dispatch(LoginSuccess(user)),
-        builder: (context, loginSuccess) => _Presenter(loginSuccess: loginSuccess));
+      converter: (Store<AppState> store) => (user) => store.dispatch(LoginSuccess(user)),
+      builder: (context, loginSuccess) => _Presenter(loginSuccess: loginSuccess),
+    );
   }
 }
 
@@ -36,7 +37,6 @@ class _Presenter extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-//          color: Burnt.primary,
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -48,44 +48,54 @@ class _Presenter extends StatelessWidget {
             ],
           ),
         ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Image.asset('assets/images/loading-icon.png', height: 200.0),
-              Container(height: 15.0),
-              WhiteButton(text: "Login with Facebook", onPressed: () => _loginWithFacebook(context)),
-              Container(height: 15.0),
-              WhiteButton(text: "Login with Google", onPressed: () => _loginWithGoogle(context)),
-              Container(height: 15.0),
-              WhiteButton(text: "Login with Data Profile", onPressed: () => _loginWithDataProfile(context)),
-              Container(height: 15.0),
-              WhiteButton(text: "Login with Empty Profile", onPressed: () => _loginWithEmptyProfile(context)),
-              Container(height: 20.0),
-              Column(
-                children: <Widget>[
-                  Text('By continuing you agree to our ', style: TextStyle(color: Colors.white)),
-                  Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
-                    InkWell(
-                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => TermsScreen())),
-                      child: Text('Terms of Use', style: TextStyle(color: Colors.white, decoration: TextDecoration.underline)),
-                    ),
-                    Text(' and ', style: TextStyle(color: Colors.white)),
-                    InkWell(
-                      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => PrivacyScreen())),
-                      child: Text('Privacy Policy', style: TextStyle(color: Colors.white, decoration: TextDecoration.underline)),
-                    ),
-                    Text('.', style: TextStyle(color: Colors.white))
-                  ])
-                ],
-              ),
-            ],
-          ),
-        ),
+        child: Builder(builder: (context) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
+            child: _content(context),
+          );
+        }),
       ),
+    );
+  }
+
+  Widget _content(context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Image.asset('assets/images/loading-icon.png', height: 200.0),
+        Container(height: 15.0),
+        WhiteButton(text: "Login with Facebook", onPressed: () => _loginWithFacebook(context)),
+        Container(height: 15.0),
+        WhiteButton(text: "Login with Google", onPressed: () => _loginWithGoogle(context)),
+        Container(height: 15.0),
+        WhiteButton(text: "Login with Data Profile", onPressed: () => _loginWithDataProfile(context)),
+        Container(height: 15.0),
+        WhiteButton(text: "Login with Empty Profile", onPressed: () => _loginWithEmptyProfile(context)),
+        Container(height: 20.0),
+        _terms(context),
+      ],
+    );
+  }
+
+  Widget _terms(context) {
+    return Column(
+      children: <Widget>[
+        Text('By continuing you agree to our ', style: TextStyle(color: Colors.white)),
+        Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          InkWell(
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => TermsScreen())),
+            child: Text('Terms of Use', style: TextStyle(color: Colors.white, decoration: TextDecoration.underline)),
+          ),
+          Text(' and ', style: TextStyle(color: Colors.white)),
+          InkWell(
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => PrivacyScreen())),
+            child: Text('Privacy Policy', style: TextStyle(color: Colors.white, decoration: TextDecoration.underline)),
+          ),
+          Text('.', style: TextStyle(color: Colors.white))
+        ])
+      ],
     );
   }
 
