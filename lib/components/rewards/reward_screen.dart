@@ -86,36 +86,33 @@ class _PresenterState extends State<_Presenter> {
     return Column(
       children: <Widget>[
         Stack(
-          alignment: AlignmentDirectional.topStart,
+          alignment: AlignmentDirectional.bottomStart,
           children: <Widget>[
             Container(
-                height: 300.0,
-                decoration: BoxDecoration(
-                  color: Burnt.imgPlaceholderColor,
-                  image: DecorationImage(
-                    image: NetworkImage(widget.reward.promoImage),
-                    fit: BoxFit.cover,
-                  ),
-                )),
+              height: 300.0,
+              decoration: BoxDecoration(
+                color: Burnt.imgPlaceholderColor,
+                image: DecorationImage(
+                  image: NetworkImage(widget.reward.promoImage),
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
             Container(
-                height: 150.0,
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
+              height: 300.0,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  stops: [0, 0.2, 1.0],
-                  colors: [Color(0x30000000), Color(0x30000000), Color(0x0000000)],
-                ))),
+                  stops: [0, 0.8],
+                  colors: [Color(0x00000000), Color(0x30000000)],
+                ),
+              ),
+            ),
             SafeArea(
               child: Container(
-                height: 106.0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    BackArrow(color: Colors.white),
-                  ],
-                ),
+                height: 60.0,
+                child: BackArrow(color: Colors.white),
               ),
             ),
           ],
