@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:crust/components/common/confirm.dart';
+import 'package:crust/components/dialog/confirm.dart';
 import 'package:crust/components/post_list/comment_like_button.dart';
 import 'package:crust/components/post_list/reply_like_button.dart';
 import 'package:crust/models/comment.dart';

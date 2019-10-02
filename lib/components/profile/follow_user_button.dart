@@ -1,4 +1,4 @@
-import 'package:crust/components/common/confirm.dart';
+import 'package:crust/components/dialog/confirm.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/follow/follow_actions.dart';

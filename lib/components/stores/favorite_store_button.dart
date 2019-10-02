@@ -1,4 +1,4 @@
-import 'package:crust/components/common/confirm.dart';
+import 'package:crust/components/dialog/confirm.dart';
 import 'package:crust/components/common/favorite_button.dart';
 import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';

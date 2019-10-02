@@ -1,4 +1,4 @@
-import 'package:crust/components/common/confirm.dart';
+import 'package:crust/components/dialog/confirm.dart';
 import 'package:crust/components/common/favorite_button.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/presentation/components.dart';

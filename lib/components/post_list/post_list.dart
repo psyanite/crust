@@ -1,4 +1,4 @@
-import 'package:crust/components/common/confirm.dart';
+import 'package:crust/components/dialog/confirm.dart';
 import 'package:crust/components/common/dialog.dart';
 import 'package:crust/components/new_post/edit_post_screen.dart';
 import 'package:crust/components/post_list/comment_screen.dart';
@@ -165,33 +165,36 @@ class _MoreButtonPresenter extends StatelessWidget {
   Widget _moreDialog(BuildContext context, Function closeMoreDialog) {
     var options = <DialogOption>[
       DialogOption(
-          display: 'Edit Post',
-          onTap: () {
-            closeMoreDialog();
-            Navigator.push(context, MaterialPageRoute(builder: (_) => EditPostScreen(post: post)));
-          })
+        display: 'Edit Post',
+        onTap: () {
+          closeMoreDialog();
+          Navigator.push(context, MaterialPageRoute(builder: (_) => EditPostScreen(post: post)));
+        },
+      )
     ];
     options.add(
       DialogOption(
-          display: 'Delete Post',
-          onTap: () {
-            showDialog(context: context, builder: (context) => _deleteDialog(context, closeMoreDialog));
-          }),
+        display: 'Delete Post',
+        onTap: () {
+          showDialog(context: context, builder: (context) => _deleteDialog(context, closeMoreDialog));
+        },
+      ),
     );
     return BurntDialog(options: options);
   }
 
   Widget _deleteDialog(BuildContext context, Function closeMoreDialog) {
     return Confirm(
-        title: 'Delete Post',
-        description: 'This post will be lost forever.',
-        action: 'Delete',
-        onTap: () async {
-          await PostService.deletePost(post.id, me.id);
-          removeFromList();
-          Navigator.of(context, rootNavigator: true).pop(true);
-          closeMoreDialog();
-        });
+      title: 'Delete Post',
+      description: 'This post will be lost forever.',
+      action: 'Delete',
+      onTap: () async {
+        await PostService.deletePost(post.id, me.id);
+        removeFromList();
+        Navigator.of(context, rootNavigator: true).pop(true);
+        closeMoreDialog();
+      },
+    );
   }
 }
 
