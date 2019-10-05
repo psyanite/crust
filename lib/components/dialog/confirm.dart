@@ -1,4 +1,4 @@
-import 'package:crust/components/common/dialog.dart';
+import 'package:crust/components/dialog/dialog.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

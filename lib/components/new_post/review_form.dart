@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:crust/components/common/dialog.dart';
+import 'package:crust/components/dialog/dialog.dart';
 import 'package:crust/components/photo/photo_selector.dart';
 import 'package:crust/components/new_post/upload_overlay.dart';
 import 'package:crust/models/post.dart';

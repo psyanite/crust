@@ -1,4 +1,4 @@
-import 'package:crust/components/common/dialog.dart';
+import 'package:crust/components/dialog/dialog.dart';
 import 'package:crust/components/rewards/favorite_reward_button.dart';
 import 'package:crust/components/rewards/reward_locations_screen.dart';
 import 'package:crust/components/rewards/reward_qr_screen.dart';
@@ -287,7 +287,7 @@ class _LoyaltyCardState extends State<LoyaltyCard> {
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: Builder(builder: (context) {
-        return BurntButton(onPressed: () => onPressed(context), text: 'Redeem Now');
+        return BurntButton(onPressed: () => onPressed(context), text: text);
       }),
     );
   }
