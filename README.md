@@ -38,9 +38,14 @@ d
 </div>
 
 ## To Do
-* Add redeem reward behaviour
+* Add stores screen
+* Add loyalty rewards screen
 
-* Add buy 10 get 1 free rewards
+* Implement store posts
+* Add submit missing store feature
+* Add report store feature
+* Add claim store feature
+* Add report store closed feature
 
 * Import stores from Zomato
 
@@ -50,14 +55,9 @@ d
 * Run nightly task to update caches
 * Send email of results
 
-* Implement store posts
-* Add submit missing store feature
-* Add report store feature
-* Add claim store feature
-* Add report store closed feature
-
 ## Done
-* Implemented 
+* Add redeem reward behaviour
+* Add buy 10 get 1 free rewards
 * Implemented home screen on butter
 * Implemented register on BUtter
 * Implemented login on Butter

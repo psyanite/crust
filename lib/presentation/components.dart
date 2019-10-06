@@ -12,6 +12,36 @@ import 'package:flutter_svg/svg.dart';
 import 'package:geocoder/geocoder.dart' as Geo;
 import 'package:redux/redux.dart';
 
+class SolidBackButton extends StatelessWidget {
+  final Color color;
+  final Color textColor;
+
+  SolidBackButton({Key key, this.color = Burnt.primary, this.textColor = Colors.white}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () => Navigator.of(context).pop(),
+      child: Container(
+        padding: EdgeInsets.only(left: 7.0, right: 13.0, top: 10.0, bottom: 10.0),
+        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(2.0)), color: color),
+        child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
+          Icon(Icons.arrow_back_ios, color: textColor, size: 20.0),
+          Container(width: 3.0),
+          Text('Go Back', style: TextStyle(color: textColor, fontSize: 22.0))
+        ]),
+      ),
+    );
+  }
+}
+
+class WhiteBackButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SolidBackButton(color: Colors.white, textColor: Burnt.primary);
+  }
+}
+
 class BackArrow extends StatelessWidget {
   final Color color;
 

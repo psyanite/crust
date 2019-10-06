@@ -1,3 +1,4 @@
+import 'package:crust/components/rewards/favorite_rewards_screen.dart';
 import 'package:crust/components/rewards/reward_cards.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
 import 'package:crust/models/reward.dart';
@@ -22,6 +23,7 @@ class RewardsScreen extends StatelessWidget {
       converter: (Store<AppState> store) => _Props.fromStore(store),
       builder: (BuildContext context, _Props props) {
         return _Presenter(
+          isLoggedIn: props.isLoggedIn,
           myAddress: props.myAddress,
           nearMe: props.nearMe,
           setMySuburb: props.setMySuburb,
@@ -34,6 +36,7 @@ class RewardsScreen extends StatelessWidget {
 }
 
 class _Presenter extends StatefulWidget {
+  final bool isLoggedIn;
   final Geo.Address myAddress;
   final List<Reward> nearMe;
   final bool nearMeAll;
@@ -41,7 +44,7 @@ class _Presenter extends StatefulWidget {
   final Function addNearMe;
   final Function clearNearMe;
 
-  _Presenter({Key key, this.nearMe, this.nearMeAll, this.addNearMe, this.myAddress, this.setMySuburb, this.clearNearMe})
+  _Presenter({Key key, this.isLoggedIn, this.nearMe, this.nearMeAll, this.addNearMe, this.myAddress, this.setMySuburb, this.clearNearMe})
       : super(key: key);
 
   @override
@@ -114,7 +117,14 @@ class _PresenterState extends State<_Presenter> {
           await Future.delayed(Duration(seconds: 1));
         },
         child: CustomScrollView(
-          slivers: <Widget>[_appBar(), LocationBar(), _rewardsList(), if (_loading == true) LoadingSliver()],
+          slivers: <Widget>[
+            _appBar(),
+            _myFavoritesButton(context),
+            _myLoyaltyRewardsButton(context),
+            LocationBar(),
+            _rewardsList(),
+            if (_loading == true) LoadingSliver(),
+          ],
           key: PageStorageKey('Rewards'),
           controller: _scrollie,
           physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
@@ -162,9 +172,53 @@ class _PresenterState extends State<_Presenter> {
     if (widget.nearMe.isEmpty) return LoadingSliverCenter();
     return RewardCards(rewards: widget.nearMe);
   }
+
+  Widget _myFavoritesButton(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Container(
+        padding: EdgeInsets.only(top: 20.0, bottom: 15.0, left: 16.0, right: 16.0),
+        child: BurntButton(
+          icon: CrustCons.heart,
+          iconSize: 25.0,
+          text: 'View My Favourites',
+          padding: 10.0,
+          fontSize: 20.0,
+          onPressed: () {
+            if (!widget.isLoggedIn) {
+              snack(context, 'Login now to favourite rewards!');
+            } else {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteRewardsScreen()));
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _myLoyaltyRewardsButton(BuildContext context) {
+    var onTap = () {
+      if (!widget.isLoggedIn) {
+        snack(context, 'Login now to redeem rewards!');
+      } else {
+        Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteRewardsScreen()));
+      }
+    };
+    return SliverToBoxAdapter(
+      child: Container(
+        margin: EdgeInsets.only(bottom: 20.0),
+        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        child: HollowButton(padding: 8.0, onTap: onTap, children: <Widget>[
+          Icon(CrustCons.present, color: Burnt.primaryTextColor, size: 25.0),
+          Container(width: 8.0),
+          Text('View My Loyalty Rewards', style: TextStyle(fontSize: 20.0, color: Burnt.primaryTextColor)),
+        ]),
+      ),
+    );
+  }
 }
 
 class _Props {
+  final bool isLoggedIn;
   final Geo.Address myAddress;
   final List<Reward> nearMe;
   final Function setMySuburb;
@@ -172,6 +226,7 @@ class _Props {
   final Function clearNearMe;
 
   _Props({
+    this.isLoggedIn,
     this.myAddress,
     this.nearMe,
     this.setMySuburb,
@@ -181,6 +236,7 @@ class _Props {
 
   static fromStore(Store<AppState> store) {
     return _Props(
+      isLoggedIn: store.state.me.user != null,
       myAddress: store.state.me.address ?? Utils.defaultAddress,
       nearMe: List<Reward>.from(Utils.subset(store.state.reward.nearMe, store.state.reward.rewards)),
       setMySuburb: (address) => store.dispatch(SetMyAddress(address)),

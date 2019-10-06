@@ -68,13 +68,20 @@ class _LoyaltyCardState extends State<LoyaltyCard> {
 
   _getStarHeight(limit) {
     switch (limit) {
-      case 10: return 200.0;
-      case 9: return 150.0;
-      case 8: return 100.0;
-      case 7: return 150.0;
-      case 6: return 150.0;
-      case 5: return 100.0;
-      default: return 50.0;
+      case 10:
+        return 200.0;
+      case 9:
+        return 150.0;
+      case 8:
+        return 100.0;
+      case 7:
+        return 150.0;
+      case 6:
+        return 150.0;
+      case 5:
+        return 100.0;
+      default:
+        return 50.0;
     }
   }
 
@@ -111,11 +118,12 @@ class _LoyaltyCardState extends State<LoyaltyCard> {
           alignment: AlignmentDirectional.topStart,
           children: <Widget>[
             Container(
-                height: 130.0,
-                decoration: BoxDecoration(
-                  color: Burnt.imgPlaceholderColor,
-                  image: DecorationImage(image: NetworkImage(widget.reward.promoImage), fit: BoxFit.cover),
-                )),
+              height: 130.0,
+              decoration: BoxDecoration(
+                color: Burnt.imgPlaceholderColor,
+                image: DecorationImage(image: NetworkImage(widget.reward.promoImage), fit: BoxFit.cover),
+              ),
+            ),
             Container(
               height: 130.0,
               decoration: BoxDecoration(
