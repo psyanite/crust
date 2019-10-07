@@ -72,10 +72,15 @@ class UnfavoritePostSuccess {
 
 class FetchFavorites {}
 
-class FetchFavoritesSuccess {
+class FetchFavoriteRewardsSuccess {
   final Set<int> favoriteRewards;
+
+  FetchFavoriteRewardsSuccess({this.favoriteRewards});
+}
+
+class FetchFavoritesSuccess {
   final Set<int> favoriteStores;
   final Set<int> favoritePosts;
 
-  FetchFavoritesSuccess({this.favoriteRewards, this.favoriteStores, this.favoritePosts});
+  FetchFavoritesSuccess({this.favoriteStores, this.favoritePosts});
 }

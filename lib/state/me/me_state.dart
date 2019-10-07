@@ -70,7 +70,9 @@ class MeState {
   @override
   String toString() {
     return '''{
-        user: $user, searchHistory: ${searchHistory?.length}, address: ${address?.addressLine},
+        user: $user, 
+        searchHistory: ${searchHistory?.length}, 
+        address: ${address?.addressLine},
       }''';
   }
 }

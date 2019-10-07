@@ -9,6 +9,7 @@ Reducer<FavoriteState> favoriteReducer = combineReducers([
   new TypedReducer<FavoriteState, UnfavoriteStoreSuccess>(unfavoriteStore),
   new TypedReducer<FavoriteState, FavoritePostSuccess>(favoritePost),
   new TypedReducer<FavoriteState, UnfavoritePostSuccess>(unfavoritePost),
+  new TypedReducer<FavoriteState, FetchFavoriteRewardsSuccess>(fetchFavoriteRewards),
   new TypedReducer<FavoriteState, FetchFavoritesSuccess>(fetchFavorites),
 ]);
 
@@ -36,10 +37,10 @@ FavoriteState unfavoritePost(FavoriteState state, UnfavoritePostSuccess action) 
   return state.copyWith(posts: Set.from(state.posts)..remove(action.postId));
 }
 
+FavoriteState fetchFavoriteRewards(FavoriteState state, FetchFavoriteRewardsSuccess action) {
+  return state.copyWith(rewards: action.favoriteRewards);
+}
+
 FavoriteState fetchFavorites(FavoriteState state, FetchFavoritesSuccess action) {
-  return state.copyWith(
-    rewards: action.favoriteRewards,
-    stores: action.favoriteStores,
-    posts: action.favoritePosts,
-  );
+  return state.copyWith(stores: action.favoriteStores, posts: action.favoritePosts);
 }

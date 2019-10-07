@@ -28,10 +28,9 @@ class FavoriteState {
 
   @override
   String toString() {
-    return '''{
-        rewards: ${rewards != null ? rewards.length : null},
-        stores: ${stores != null ? stores.length : null},
-        posts: ${posts != null ? posts.length : null},
-      }''';
+    var rewardCount = rewards != null ? rewards.length : null;
+    var storeCount = stores != null ? stores.length : null;
+    var postCount = posts != null ? posts.length : null;
+    return '{ rewards: ${rewardCount}, stores: ${storeCount}, posts: ${postCount} }';
   }
 }

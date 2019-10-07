@@ -95,13 +95,23 @@ class FavoriteService {
     return Set<int>.from(json['favorite_posts'].map((p) => p['id']));
   }
 
+  Future<List<Reward>> fetchFavoriteRewards(userId) async {
+    String query = """
+      query {
+        favoriteRewards(userId: $userId) {
+          ${Reward.attributes}
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['favoriteRewards'];
+    return (json as List).map((r) => Reward.fromToaster(r)).toList();
+  }
+
   Future<Map<String, dynamic>> fetchFavorites(userId) async {
     String query = """
       query {
         userAccountById(id: $userId) {
-          favorite_rewards {
-            ${Reward.attributes}
-          },
           favorite_stores {
             ${Store.attributes}
           },
@@ -113,9 +123,8 @@ class FavoriteService {
     """;
     final response = await Toaster.get(query);
     var json = response['userAccountById'];
-    var rewards = (json['favorite_rewards'] as List).map((r) => Reward.fromToaster(r)).toList();
     var stores = (json['favorite_stores'] as List).map((s) => Store.fromToaster(s)).toList();
     var posts = (json['favorite_posts'] as List).map((p) => p['id'] as int).toList();
-    return {'rewards': rewards, 'stores': stores, 'postIds': posts};
+    return {'stores': stores, 'postIds': posts};
   }
 }

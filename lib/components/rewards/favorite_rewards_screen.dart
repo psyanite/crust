@@ -4,6 +4,7 @@ import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/favorite/favorite_actions.dart';
+import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -91,9 +92,7 @@ class _Props {
     var favoriteRewards = store.state.favorite.rewards;
     return _Props(
       myId: me != null ? me.id : 0,
-      favoriteRewards: rewards != null && favoriteRewards != null
-          ? rewards.entries.where((r) => favoriteRewards.contains(r.value.id)).map((e) => e.value).toList()
-          : null,
+      favoriteRewards: List<Reward>.from(Utils.subset(favoriteRewards, rewards)),
     );
   }
 }

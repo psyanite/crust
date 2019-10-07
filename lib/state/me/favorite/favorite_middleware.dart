@@ -1,4 +1,3 @@
-import 'package:crust/models/reward.dart';
 import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/error/error_actions.dart';
@@ -32,7 +31,7 @@ Middleware<AppState> _favoriteReward(FavoriteService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     store.dispatch(FavoriteRewardSuccess(action.rewardId));
     service.favoriteReward(userId: store.state.me.user.id, rewardId: action.rewardId).then((rewards) {
-      store.dispatch(FetchFavoritesSuccess(favoriteRewards: rewards));
+      store.dispatch(FetchFavoriteRewardsSuccess(favoriteRewards: rewards));
     }).catchError((e) => store.dispatch(RequestFailure("favoriteReward ${e.toString()}")));
     next(action);
   };
@@ -42,7 +41,7 @@ Middleware<AppState> _unfavoriteReward(FavoriteService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     store.dispatch(UnfavoriteRewardSuccess(action.rewardId));
     service.unfavoriteReward(userId: store.state.me.user.id, rewardId: action.rewardId).then((rewards) {
-      store.dispatch(FetchFavoritesSuccess(favoriteRewards: rewards));
+      store.dispatch(FetchFavoriteRewardsSuccess(favoriteRewards: rewards));
     }).catchError((e) => store.dispatch(RequestFailure("unfavoriteReward ${e.toString()}")));
     next(action);
   };
@@ -93,16 +92,20 @@ Middleware<AppState> _fetchFavorites(FavoriteService service) {
     var user = store.state.me.user;
     if (user != null) {
       service.fetchFavorites(user.id).then((map) {
-        List<Reward> rewards = map['rewards'];
-        if (rewards.isNotEmpty) store.dispatch(FetchRewardsSuccess(rewards));
         List<MyStore.Store> stores = map['stores'];
         if (stores.isNotEmpty) store.dispatch(FetchStoresSuccess(stores));
         List<int> postIds = map['postIds'];
         store.dispatch(FetchFavoritesSuccess(
-            favoriteRewards: rewards.map((r) => r.id).toSet(),
             favoriteStores: stores.map((s) => s.id).toSet(),
             favoritePosts: postIds.toSet()));
       }).catchError((e) => store.dispatch(RequestFailure("fetchFavorites ${e.toString()}")));
+
+      service.fetchFavoriteRewards(user.id).then((rewards) {
+        if (rewards.isNotEmpty) {
+          store.dispatch(FetchRewardsSuccess(rewards));
+          store.dispatch(FetchFavoriteRewardsSuccess(favoriteRewards: rewards.map((r) => r.id).toSet()));
+        }
+      }).catchError((e) => store.dispatch(RequestFailure("fetchFavoriteRewards ${e.toString()}")));
     }
     next(action);
   };
