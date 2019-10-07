@@ -31,6 +31,6 @@ class FavoriteState {
     var rewardCount = rewards != null ? rewards.length : null;
     var storeCount = stores != null ? stores.length : null;
     var postCount = posts != null ? posts.length : null;
-    return '{ rewards: ${rewardCount}, stores: ${storeCount}, posts: ${postCount} }';
+    return '{ rewards: $rewardCount, stores: $storeCount, posts: $postCount }';
   }
 }

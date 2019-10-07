@@ -40,9 +40,7 @@ d
 ## To Do
 * Implement store posts
 * Add submit missing store feature
-* Add report store feature
-* Add claim store feature
-* Add report store closed feature
+* Reply to comments
 
 * Import stores from Zomato
 

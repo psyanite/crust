@@ -4,8 +4,6 @@ import 'package:crust/main.dart';
 import 'package:crust/models/curate.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/feed/feed_actions.dart';
-import 'package:crust/state/me/favorite/favorite_actions.dart';
-import 'package:crust/state/me/follow/follow_actions.dart';
 import 'package:crust/state/me/me_actions.dart';
 import 'package:crust/state/reward/reward_actions.dart';
 import 'package:crust/state/reward/reward_service.dart';

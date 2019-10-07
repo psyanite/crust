@@ -1,6 +1,5 @@
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
-import 'package:crust/components/stores/browse_stores_screen.dart';
 import 'package:crust/components/stores/favorite_store_button.dart';
 import 'package:crust/components/stores/search_stores_screen.dart';
 import 'package:crust/components/stores/store_screen.dart';

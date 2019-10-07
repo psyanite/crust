@@ -1,4 +1,3 @@
-import 'package:crust/components/rewards/favorite_rewards_screen.dart';
 import 'package:crust/components/stores/favorite_stores_screen.dart';
 import 'package:crust/components/stores/search_stores_screen.dart';
 import 'package:crust/components/stores/stores_screen.dart';

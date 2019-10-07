@@ -1,3 +1,4 @@
+import 'package:crust/components/common/banners.dart';
 import 'package:crust/components/my_profile/set_display_name_screen.dart';
 import 'package:crust/components/my_profile/set_picture_screen.dart';
 import 'package:crust/components/my_profile/set_tagline_screen.dart';
@@ -18,29 +19,27 @@ class UpdateProfileScreen extends StatelessWidget {
   }
 
   Widget _appBar() {
-    return SliverSafeArea(
-      sliver: SliverToBoxAdapter(
-        child: Container(
-          padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 35.0, bottom: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return SliverToBoxAdapter(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Stack(
+            alignment: AlignmentDirectional.bottomStart,
             children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  Container(width: 50.0, height: 60.0),
-                  Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
-                ],
-              ),
-              Text('UPDATE PROFILE', style: Burnt.appBarTitleStyle)
+              MyBanner(),
+              Positioned(child: BackArrow(color: Colors.white)),
             ],
           ),
-        )),
+        ],
+      ),
     );
   }
 
   Widget _options(BuildContext context) {
     return SliverFillRemaining(
-      child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+      child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+        Container(
+            padding: EdgeInsets.only(top: 25.0, left: 15.0, bottom: 10.0), child: Text('UPDATE PROFILE', style: Burnt.appBarTitleStyle)),
         ListTile(
           title: Text('Set display name', style: TextStyle(fontSize: 18.0)),
           onTap: () {
