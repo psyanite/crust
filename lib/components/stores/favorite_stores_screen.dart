@@ -36,7 +36,7 @@ class _PresenterState extends State<_Presenter> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-        slivers: <Widget>[_appBar(), StoresGrid(stores: widget.favoriteStores, confirmUnfavorite: true)],
+        slivers: <Widget>[_appBar(), _content()],
         physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       ),
     );
@@ -72,6 +72,16 @@ class _PresenterState extends State<_Presenter> {
         ),
       )),
     );
+  }
+
+  Widget _content() {
+    if (widget.favoriteStores == null) return LoadingSliverCenter();
+    if (widget.favoriteStores.isEmpty) return _noStores();
+    return StoresGrid(stores: widget.favoriteStores, confirmUnfavorite: true);
+  }
+
+  Widget _noStores() {
+    return CenterTextSliver(text: 'Looks like you haven\'t favourited any stores yet.\nDon\'t miss out!');
   }
 }
 

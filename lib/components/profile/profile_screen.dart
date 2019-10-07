@@ -31,16 +31,17 @@ class ProfileScreen extends StatelessWidget {
         }
       },
       converter: (Store<AppState> store) => _Props.fromStore(store, userId),
-      builder: (context, props) => _Presenter(user: props.me, myProfile: props.myProfile),
+      builder: (context, props) => _Presenter(userId: userId, user: props.me, myProfile: props.myProfile),
     );
   }
 }
 
 class _Presenter extends StatefulWidget {
+  final int userId;
   final User user;
   final bool myProfile;
 
-  _Presenter({Key key, this.user, this.myProfile}) : super(key: key);
+  _Presenter({Key key, this.userId, this.user, this.myProfile}) : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState();
@@ -87,7 +88,7 @@ class _PresenterState extends State<_Presenter> {
 
   Future<List<Post>> _getPosts() async {
     var offset = _posts != null ? _posts.length : 0;
-    return PostService.fetchPostsByUserId(userId: widget.user.id, limit: _limit, offset: offset);
+    return PostService.fetchPostsByUserId(userId: widget.userId, limit: _limit, offset: offset);
   }
 
   _getMorePosts() async {
@@ -203,10 +204,10 @@ class _PresenterState extends State<_Presenter> {
         userId: widget.user.id,
         displayName: widget.user.displayName,
         followView: Container(width: 80.0, child: BurntButton(padding: 6.0, text: 'Follow', fontSize: 18.0)),
-        followedView: SolidButton(
+        followedView: SmallButton(
           padding: EdgeInsets.symmetric(vertical: 6.0, horizontal: 10.0),
           color: Color(0x10604B41),
-          children: <Widget>[Text('Following', style: TextStyle(fontSize: 18.0, color: Burnt.lightTextColor))],
+          child: Text('Following', style: TextStyle(fontSize: 18.0, color: Burnt.lightTextColor)),
         ),
       );
     });

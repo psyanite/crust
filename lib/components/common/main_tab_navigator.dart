@@ -3,8 +3,8 @@ import 'dart:collection';
 import 'package:crust/components/my_profile/my_profile_tab.dart';
 import 'package:crust/components/new_post/select_store_screen.dart';
 import 'package:crust/components/rewards/rewards_screen.dart';
-import 'package:crust/components/screens/favorites_screen.dart';
 import 'package:crust/components/screens/home_screen.dart';
+import 'package:crust/components/stores/browse_stores_screen.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,10 +28,10 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
     _history = Queue<int>();
     _history.addLast(0);
     _tabs = {
-      TabType.home: Tab(widget: HomeScreen(), icon: CrustCons.bread_heart),
+      TabType.home: Tab(widget: HomeScreen(jumpToStoresTab: () => _jumpToPage(1)), icon: CrustCons.heart),
+      TabType.stores: Tab(widget: BrowseStoresScreen(), icon: CrustCons.bread_heart),
       TabType.rewards: Tab(widget: RewardsScreen(), icon: CrustCons.present),
       TabType.newPost: Tab(widget: SelectStoreScreen(), icon: CrustCons.new_post),
-      TabType.favorites: Tab(widget: FavoritesScreen(), icon: CrustCons.heart),
       TabType.myProfile: Tab(widget: MyProfileTab(), icon: CrustCons.person)
     };
   }
@@ -91,7 +91,7 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
   }
 }
 
-enum TabType { home, rewards, newPost, favorites, myProfile }
+enum TabType { home, rewards, newPost, stores, myProfile }
 
 class Tab {
   final String name;

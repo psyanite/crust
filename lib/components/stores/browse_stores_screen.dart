@@ -1,3 +1,5 @@
+import 'package:crust/components/rewards/favorite_rewards_screen.dart';
+import 'package:crust/components/stores/favorite_stores_screen.dart';
 import 'package:crust/components/stores/search_stores_screen.dart';
 import 'package:crust/components/stores/stores_screen.dart';
 import 'package:crust/components/stores/stores_side_scroller.dart';
@@ -14,9 +16,27 @@ import 'package:redux/redux.dart';
 class BrowseStoresScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return StoreConnector<AppState, _Props>(
+      converter: (Store<AppState> store) => _Props.fromStore(store),
+      builder: (BuildContext context, _Props props) {
+        return _Presenter(
+          isLoggedIn: props.isLoggedIn,
+        );
+      },
+    );
+  }
+}
+
+class _Presenter extends StatelessWidget {
+  final bool isLoggedIn;
+
+  _Presenter({Key key, this.isLoggedIn}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: CustomScrollView(
-        slivers: <Widget>[_appBar(), _searchBar(context), _content()],
+        slivers: <Widget>[_appBar(), _myFavoritesButton(context), _searchBar(context), _content()],
         physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
       ),
     );
@@ -26,19 +46,35 @@ class BrowseStoresScreen extends StatelessWidget {
     return SliverSafeArea(
       sliver: SliverToBoxAdapter(
         child: Container(
-          padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 35.0, bottom: 20.0),
+          padding: EdgeInsets.only(left: 16.0, right: 6.0, top: 38.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  Container(width: 50.0, height: 60.0),
-                  Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
-                ],
-              ),
-              Text('EAT SLEEP DRINK REPEAT', style: Burnt.appBarTitleStyle)
+              Text('EAT SLEEP DRINK REPEAT', style: Burnt.appBarTitleStyle),
             ],
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _myFavoritesButton(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Container(
+        padding: EdgeInsets.only(top: 33.0, bottom: 15.0, left: 16.0, right: 16.0),
+        child: BurntButton(
+          icon: CrustCons.heart,
+          iconSize: 25.0,
+          text: 'View My Favourites',
+          padding: 10.0,
+          fontSize: 20.0,
+          onPressed: () {
+            if (!isLoggedIn) {
+              snack(context, 'Login now to favourite stores!');
+            } else {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteStoresScreen()));
+            }
+          },
         ),
       ),
     );
@@ -47,7 +83,7 @@ class BrowseStoresScreen extends StatelessWidget {
   Widget _searchBar(BuildContext context) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: EdgeInsets.only(bottom: 20.0),
+        padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
         child: InkWell(
           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SearchScreen())),
           child: Padding(
@@ -87,6 +123,20 @@ class _CurateList extends StatelessWidget {
         var seeAll = () => Navigator.push(context, MaterialPageRoute(builder: (_) => StoresScreen(title: c.title, stores: c.stores)));
         return StoresSideScroller(stores: c.stores, title: c.title, seeAll: seeAll);
       },
+    );
+  }
+}
+
+class _Props {
+  final bool isLoggedIn;
+
+  _Props({
+    this.isLoggedIn,
+  });
+
+  static fromStore(Store<AppState> store) {
+    return _Props(
+      isLoggedIn: store.state.me.user != null,
     );
   }
 }

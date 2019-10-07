@@ -56,13 +56,13 @@ class BackArrow extends StatelessWidget {
   }
 }
 
-class SmallButton extends StatelessWidget {
+class SmallBurntButton extends StatelessWidget {
   final Widget child;
   final Function onPressed;
   final EdgeInsetsGeometry padding;
   final Gradient gradient;
 
-  SmallButton(
+  SmallBurntButton(
       {Key key,
       this.child,
       this.onPressed,
@@ -82,6 +82,33 @@ class SmallButton extends StatelessWidget {
       child: Container(
         padding: padding,
         decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(2.0)), gradient: gradient),
+        child: child,
+      ),
+    );
+  }
+}
+
+class SmallButton extends StatelessWidget {
+  final Widget child;
+  final Function onTap;
+  final EdgeInsetsGeometry padding;
+  final Color color;
+
+  SmallButton({
+    Key key,
+    this.child,
+    this.onTap,
+    this.padding,
+    this.color = Burnt.primary,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: padding,
+        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(2.0)), color: color),
         child: child,
       ),
     );

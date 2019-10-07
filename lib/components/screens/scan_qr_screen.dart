@@ -224,7 +224,7 @@ class _PresenterState extends State<_Presenter> {
           children: <Widget>[
             Text(error),
             Container(height: 20.0),
-            SmallButton(
+            SmallBurntButton(
               onPressed: () {
                 this.setState(() => error = null);
                 _load();

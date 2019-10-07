@@ -38,9 +38,6 @@ d
 </div>
 
 ## To Do
-* Add stores screen
-* Add loyalty rewards screen
-
 * Implement store posts
 * Add submit missing store feature
 * Add report store feature
@@ -56,6 +53,8 @@ d
 * Send email of results
 
 ## Done
+* Add stores screen
+* Add loyalty rewards screen
 * Add redeem reward behaviour
 * Add buy 10 get 1 free rewards
 * Implemented home screen on butter

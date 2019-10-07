@@ -21,6 +21,10 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:redux/redux.dart';
 
 class HomeScreen extends StatelessWidget {
+  final Function jumpToStoresTab;
+
+  HomeScreen({Key key, this.jumpToStoresTab}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, _Props>(
@@ -33,6 +37,7 @@ class HomeScreen extends StatelessWidget {
           refresh: props.refresh,
           removePost: props.removePost,
           addPosts: props.addPosts,
+          jumpToStoresTab: jumpToStoresTab,
         );
       },
     );
@@ -46,8 +51,9 @@ class _Presenter extends StatefulWidget {
   final Function refresh;
   final Function removePost;
   final Function addPosts;
+  final Function jumpToStoresTab;
 
-  _Presenter({Key key, this.myId, this.refresh, this.feed, this.topStores, this.removePost, this.addPosts}) : super(key: key);
+  _Presenter({Key key, this.myId, this.refresh, this.feed, this.topStores, this.removePost, this.addPosts, this.jumpToStoresTab}) : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState();
@@ -217,7 +223,7 @@ class _PresenterState extends State<_Presenter> {
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: HollowButton(
               padding: 8.0,
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => BrowseStoresScreen())),
+              onTap: widget.jumpToStoresTab,
               children: <Widget>[
                 Text('More Places to Eat and Drink', style: TextStyle(fontSize: 18.0, color: Burnt.primaryTextColor)),
               ],

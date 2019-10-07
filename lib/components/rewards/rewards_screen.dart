@@ -146,9 +146,7 @@ class _PresenterState extends State<_Presenter> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text('REWARDS', style: Burnt.appBarTitleStyle),
-                  Row(
-                    children: <Widget>[_qrIcon()],
-                  )
+                  Row(children: <Widget>[_qrIcon()])
                 ],
               ),
             ],
