@@ -62,11 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
         store.dispatch(FetchTopStores());
         store.dispatch(FetchTopRewards());
 
-        if (store.state.me.user != null) {
-          store.dispatch(FetchFavorites());
-          store.dispatch(FetchFollows());
-          store.dispatch(FetchMyPosts());
-        }
+        if (store.state.me.user != null) Utils.fetchUserData(store);
 
         store.dispatch(FetchCurate(Curate(tag: 'coffee', title: 'Coffee At First Sight')));
         store.dispatch(FetchCurate(Curate(tag: 'fancy', title: 'Absolutely Stunning')));

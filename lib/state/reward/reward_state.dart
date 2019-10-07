@@ -9,21 +9,24 @@ class RewardState {
   final LinkedHashMap<int, Reward> rewards;
   final LinkedHashMap<int, Reward> topRewards;
   final Set<int> nearMe;
+  final Set<int> loyalty;
   final List<UserReward> redeemed;
 
-  RewardState({this.rewards, this.topRewards, this.nearMe, this.redeemed});
+  RewardState({this.rewards, this.topRewards, this.nearMe, this.loyalty, this.redeemed});
 
   RewardState.initialState()
     : rewards = LinkedHashMap<int, Reward>(),
       topRewards = LinkedHashMap<int, Reward>(),
       nearMe = Set<int>(),
+      loyalty = Set<int>(),
       redeemed = List<UserReward>();
 
-  RewardState copyWith({LinkedHashMap<int, Reward> rewards, LinkedHashMap<int, Reward> topRewards, Set<int> nearMe, List<UserReward> redeemed}) {
+  RewardState copyWith({LinkedHashMap<int, Reward> rewards, LinkedHashMap<int, Reward> topRewards, Set<int> nearMe, Set<int> loyalty, List<UserReward> redeemed}) {
     return RewardState(
       rewards: rewards ?? this.rewards,
       topRewards: topRewards ?? this.topRewards,
       nearMe: nearMe ?? this.nearMe,
+      loyalty: loyalty ?? this.loyalty,
       redeemed: redeemed ?? this.redeemed,
     );
   }
@@ -57,6 +60,11 @@ class RewardState {
     return copyWith(redeemed: userRewards);
   }
 
+  RewardState addLoyalty(List<Reward> rewards) {
+    var rewardIds = rewards.map((r) => r.id).toSet();
+    return addRewards(rewards).copyWith(loyalty: rewardIds);
+  }
+
   LinkedHashMap<int, Reward> cloneRewards() {
     return LinkedHashMap<int, Reward>.from(this.rewards);
   }
@@ -71,6 +79,6 @@ class RewardState {
 
   @override
   String toString() {
-    return '''{ rewards: ${rewards.length}, topRewards: ${topRewards.length}, nearMe: ${nearMe.join(',')} }''';
+    return '''{ rewards: ${rewards.length}, topRewards: ${topRewards.length}, loyalty: ${loyalty.length}, nearMe: ${nearMe.join(',')} }''';
   }
 }

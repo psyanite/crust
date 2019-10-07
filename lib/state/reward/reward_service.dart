@@ -101,4 +101,20 @@ class RewardService {
     var json = response['redeemedRewards'];
     return (json as List).map((u) => UserReward.fromToaster(u)).toList();
   }
+
+  Future<List<Reward>> fetchLoyaltyRewards(userId) async {
+    String query = """
+      query {
+        loyaltyRewards(userId: $userId) {
+          reward {
+            ${Reward.attributes}
+          }
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['loyaltyRewards'];
+    var userRewards = (json as List).map((u) => UserReward.fromToaster(u)).toList();
+    return userRewards.map((u) => u.reward).toList();
+  }
 }

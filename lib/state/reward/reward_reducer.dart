@@ -7,6 +7,7 @@ Reducer<RewardState> rewardReducer = combineReducers([
   new TypedReducer<RewardState, FetchRewardSuccess>(fetchRewardSuccess),
   new TypedReducer<RewardState, FetchTopRewardsSuccess>(fetchTopRewardSuccess),
   new TypedReducer<RewardState, FetchRewardsNearMeSuccess>(fetchRewardsNearMeSuccess),
+  new TypedReducer<RewardState, FetchLoyaltyRewardsSuccess>(fetchLoyaltySuccess),
   new TypedReducer<RewardState, ClearNearMe>(clearNearMe),
 ]);
 
@@ -24,6 +25,10 @@ RewardState fetchTopRewardSuccess(RewardState state, FetchTopRewardsSuccess acti
 
 RewardState fetchRewardsNearMeSuccess(RewardState state, FetchRewardsNearMeSuccess action) {
   return state.addNearMe(action.rewards);
+}
+
+RewardState fetchLoyaltySuccess(RewardState state, FetchLoyaltyRewardsSuccess action) {
+  return state.addLoyalty(action.rewards);
 }
 
 RewardState clearNearMe(RewardState state, ClearNearMe action) {

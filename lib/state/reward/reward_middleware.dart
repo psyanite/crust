@@ -9,10 +9,12 @@ List<Middleware<AppState>> createRewardMiddleware([
 ]) {
   final fetchTopRewards = _fetchTopRewards(service);
   final fetchRedeemed = _fetchRedeemed(service);
+  final fetchLoyalty = _fetchLoyalty(service);
 
   return [
     TypedMiddleware<AppState, FetchTopRewards>(fetchTopRewards),
     TypedMiddleware<AppState, FetchRedeemedRewards>(fetchRedeemed),
+    TypedMiddleware<AppState, FetchLoyaltyRewards>(fetchLoyalty),
   ];
 }
 
@@ -31,6 +33,15 @@ Middleware<AppState> _fetchRedeemed(RewardService service) {
     service.fetchRedeemedRewards(store.state.me.user.id).then((userRewards) {
       store.dispatch(FetchUserRewardsSuccess(userRewards));
     }).catchError((e) => store.dispatch(RequestFailure("fetchRedeemed ${e.toString()}")));
+    next(action);
+  };
+}
+
+Middleware<AppState> _fetchLoyalty(RewardService service) {
+  return (Store<AppState> store, action, NextDispatcher next) {
+    service.fetchLoyaltyRewards(store.state.me.user.id).then((rewards) {
+      if (rewards != null) store.dispatch(FetchLoyaltyRewardsSuccess(rewards));
+    }).catchError((e) => store.dispatch(RequestFailure("fetchLoyaltyRewards ${e.toString()}")));
     next(action);
   };
 }

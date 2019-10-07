@@ -160,7 +160,7 @@ class _Presenter extends StatelessWidget {
     var fetchedUser = await MeService.getUser(user);
     if (fetchedUser != null) {
       loginSuccess(fetchedUser);
-        Navigator.popUntil(context, ModalRoute.withName(MainRoutes.home));
+      Navigator.popUntil(context, ModalRoute.withName(MainRoutes.home));
     } else {
       Navigator.push(context, MaterialPageRoute(builder: (_) => RegisterScreen(user: user)));
     }

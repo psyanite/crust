@@ -36,3 +36,11 @@ class FetchUserRewardsSuccess {
 
   FetchUserRewardsSuccess(this.userRewards);
 }
+
+class FetchLoyaltyRewards {}
+
+class FetchLoyaltyRewardsSuccess {
+  final List<Reward> rewards;
+
+  FetchLoyaltyRewardsSuccess(this.rewards);
+}

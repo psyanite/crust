@@ -1,8 +1,14 @@
 import 'dart:collection';
 
+import 'package:crust/state/app/app_state.dart';
+import 'package:crust/state/me/favorite/favorite_actions.dart';
+import 'package:crust/state/me/follow/follow_actions.dart';
+import 'package:crust/state/me/me_actions.dart';
+import 'package:crust/state/reward/reward_actions.dart';
 import 'package:geocoder/geocoder.dart' as Geo;
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:redux/redux.dart';
 
 class Utils {
   static final shareBaseUrl = 'https://burntoast.page.link/?link=https://burntoast.com';
@@ -75,5 +81,12 @@ class Utils {
       return address;
     } catch (e) {}
     return null;
+  }
+
+  static fetchUserData(Store<AppState> store) {
+    store.dispatch(FetchFavorites());
+    store.dispatch(FetchLoyaltyRewards());
+    store.dispatch(FetchFollows());
+    store.dispatch(FetchMyPosts());
   }
 }

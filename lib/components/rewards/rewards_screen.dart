@@ -1,4 +1,5 @@
 import 'package:crust/components/rewards/favorite_rewards_screen.dart';
+import 'package:crust/components/rewards/loyalty_rewards_screen.dart';
 import 'package:crust/components/rewards/reward_cards.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
 import 'package:crust/models/reward.dart';
@@ -200,7 +201,7 @@ class _PresenterState extends State<_Presenter> {
       if (!widget.isLoggedIn) {
         snack(context, 'Login now to redeem rewards!');
       } else {
-        Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteRewardsScreen()));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => LoyaltyRewardsScreen()));
       }
     };
     return SliverToBoxAdapter(

@@ -27,7 +27,7 @@ class FavoriteRewardButton extends StatelessWidget {
           size: size,
           padding: padding,
           confirmUnfavorite: confirmUnfavorite,
-          favoriteRewards: props.favoriteRewards,
+            favoriteRewards: props.favoriteRewards,
           favoriteReward: props.favoriteReward,
           unfavoriteReward: props.unfavoriteReward,
           isLoggedIn: props.isLoggedIn,

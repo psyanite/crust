@@ -3,7 +3,6 @@ import 'package:crust/models/reward.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
-import 'package:crust/state/me/favorite/favorite_actions.dart';
 import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,21 +10,21 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
-class FavoriteRewardsScreen extends StatelessWidget {
+class LoyaltyRewardsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
       converter: (Store<AppState> store) => _Props.fromStore(store),
-      builder: (context, props) => _Presenter(myId: props.myId, favoriteRewards: props.favoriteRewards),
+      builder: (context, props) => _Presenter(myId: props.myId, loyaltyRewards: props.loyaltyRewards),
     );
   }
 }
 
 class _Presenter extends StatefulWidget {
   final int myId;
-  final List<Reward> favoriteRewards;
+  final List<Reward> loyaltyRewards;
 
-  _Presenter({Key key, this.myId, this.favoriteRewards}) : super(key: key);
+  _Presenter({Key key, this.myId, this.loyaltyRewards}) : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState();
@@ -58,8 +57,8 @@ class _PresenterState extends State<_Presenter> {
                 Positioned(left: -12.0, child: BackArrow(color: Burnt.lightGrey)),
               ],
             ),
-            Text('FAVOURITE REWARDS', style: Burnt.appBarTitleStyle),
-            if (widget.favoriteRewards != null && widget.favoriteRewards.isNotEmpty) Text('All your favourited rewards'),
+            Text('MY LOYALTY REWARDS', style: Burnt.appBarTitleStyle),
+            if (widget.loyaltyRewards != null && widget.loyaltyRewards.isNotEmpty) Text('All your loyalty rewards'),
           ],
         ),
       )),
@@ -67,9 +66,9 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _content() {
-    if (widget.favoriteRewards == null) return LoadingSliverCenter();
-    if (widget.favoriteRewards.isEmpty) return _noRewards();
-    return RewardCards(rewards: widget.favoriteRewards, confirmUnfavorite: true);
+    if (widget.loyaltyRewards == null) return LoadingSliverCenter();
+    if (widget.loyaltyRewards.isEmpty) return _noRewards();
+    return RewardCards(rewards: widget.loyaltyRewards, confirmUnfavorite: true);
   }
 
   Widget _noRewards() {
@@ -79,17 +78,17 @@ class _PresenterState extends State<_Presenter> {
 
 class _Props {
   final int myId;
-  final List<Reward> favoriteRewards;
+  final List<Reward> loyaltyRewards;
 
-  _Props({this.myId, this.favoriteRewards});
+  _Props({this.myId, this.loyaltyRewards});
 
   static fromStore(Store<AppState> store) {
     var me = store.state.me.user;
     var rewards = store.state.reward.rewards;
-    var favoriteRewards = store.state.favorite.rewards;
+    var loyaltyRewards = store.state.reward.loyalty;
     return _Props(
       myId: me != null ? me.id : 0,
-      favoriteRewards: List<Reward>.from(Utils.subset(favoriteRewards, rewards)),
+      loyaltyRewards: List<Reward>.from(Utils.subset(loyaltyRewards, rewards)),
     );
   }
 }
