@@ -244,12 +244,14 @@ class _PresenterState extends State<_Presenter> {
         ),
       );
     }
+
     return InkWell(
-        highlightColor: Colors.transparent,
-        child: Container(
-            padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 16.0, right: 20.0),
-            child: Text("Submit", style: TextStyle(color: _enableSubmit ? Burnt.primary : Burnt.lightBlue))),
-        onTap: () => _handleSubmit(context, _bodyCtrl.text));
+      highlightColor: Colors.transparent,
+      child: Container(
+          padding: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 16.0, right: 20.0),
+          child: Text("Submit", style: TextStyle(color: _enableSubmit ? Burnt.primary : Burnt.lightBlue))),
+      onTap: () => _handleSubmit(context, _bodyCtrl.text),
+    );
   }
 
   _onBodyChange(String text) {

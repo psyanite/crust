@@ -58,14 +58,14 @@ class BackArrow extends StatelessWidget {
 
 class SmallBurntButton extends StatelessWidget {
   final Widget child;
-  final Function onPressed;
+  final Function onTap;
   final EdgeInsetsGeometry padding;
   final Gradient gradient;
 
   SmallBurntButton(
       {Key key,
       this.child,
-      this.onPressed,
+      this.onTap,
       this.padding,
       this.gradient = const LinearGradient(
         begin: Alignment.bottomLeft,
@@ -78,7 +78,7 @@ class SmallBurntButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed,
+      onTap: onTap,
       child: Container(
         padding: padding,
         decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(2.0)), gradient: gradient),

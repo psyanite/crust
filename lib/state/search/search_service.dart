@@ -42,7 +42,7 @@ class SearchService {
       }
     """;
     final response = await Toaster.get(query);
-    var json = response['storesBySearch'];
+    var json = response['storesByQuery'];
     return (json as List).map((s) => Store.fromToaster(s)).toList();
   }
 

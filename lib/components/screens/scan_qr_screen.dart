@@ -225,7 +225,7 @@ class _PresenterState extends State<_Presenter> {
             Text(error),
             Container(height: 20.0),
             SmallBurntButton(
-              onPressed: () {
+              onTap: () {
                 this.setState(() => error = null);
                 _load();
               },

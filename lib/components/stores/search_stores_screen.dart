@@ -1,3 +1,4 @@
+import 'package:crust/components/screens/report_missing_store_screen.dart';
 import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/models/search.dart';
 import 'package:crust/models/store.dart' as MyStore;
@@ -59,6 +60,7 @@ class _PresenterState extends State<_Presenter> {
       LocationBar(),
       _searchBar(),
       _submit ? _searchResults(context) : _suggestions(),
+      SliverToBoxAdapter(child: Container(height: 40.0)),
     ];
     return Scaffold(body: CustomScrollView(slivers: slivers));
   }
@@ -251,13 +253,32 @@ class _PresenterState extends State<_Presenter> {
             }
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, i) {
-                return Builder(builder: (context) => _storeCard(snapshot.data[i]));
-              }, childCount: snapshot.data.length),
+                return Builder(builder: (context) {
+                if (i >= snapshot.data.length) return _cannotFind();
+                return _storeCard(snapshot.data[i]);
+                });
+              }, childCount: snapshot.data.length + 1),
             );
           default:
             return SliverCenter(child: Container());
         }
       },
+    );
+  }
+
+  Widget _cannotFind() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(height: 40.0),
+        Text("Can't find what you're looking for?"),
+        Container(height: 15.0),
+        SmallBurntButton(
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ReportMissingStoreScreen())),
+          child: Text('Let us know', style: TextStyle(color: Colors.white)),
+          padding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 12.0, right: 12.0),
+        ),
+      ],
     );
   }
 

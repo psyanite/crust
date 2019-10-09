@@ -1,4 +1,5 @@
 import 'package:crust/components/new_post/review_form.dart';
+import 'package:crust/components/screens/report_missing_store_screen.dart';
 import 'package:crust/models/search.dart';
 import 'package:crust/models/store.dart' as MyStore;
 import 'package:crust/presentation/components.dart';
@@ -18,10 +19,10 @@ class SelectStoreScreen extends StatelessWidget {
     return StoreConnector<AppState, _Props>(
       converter: (Store<AppState> store) => _Props.fromStore(store),
       builder: (BuildContext context, _Props props) => _Presenter(
-            isLoggedIn: props.isLoggedIn,
-            searchHistory: props.searchHistory,
-            addSearchHistoryItem: props.addSearchHistoryItem,
-          ),
+        isLoggedIn: props.isLoggedIn,
+        searchHistory: props.searchHistory,
+        addSearchHistoryItem: props.addSearchHistoryItem,
+      ),
     );
   }
 }
@@ -49,36 +50,39 @@ class _PresenterState extends State<_Presenter> {
 
   @override
   Widget build(BuildContext context) {
-    var slivers = <Widget>[_appBar()];
-    if (!widget.isLoggedIn) {
-      slivers.add(CenterTextSliver(text: 'Login now to write a review!'));
-    } else {
-      slivers.add(_searchBar());
-      slivers.add(_query.trim().isEmpty ? _suggestions() : _searchResults(context));
-    }
+    var slivers = <Widget>[_appBar(), ..._content(context)];
     return CustomScrollView(slivers: slivers);
+  }
+
+  List<Widget> _content(context) {
+    if (!widget.isLoggedIn) return <Widget>[CenterTextSliver(text: 'Login now to write a review!')];
+    return <Widget>[
+      _searchBar(),
+      _query.trim().isEmpty ? _suggestions() : _searchResults(context),
+    ];
   }
 
   Widget _appBar() {
     return SliverSafeArea(
       sliver: SliverToBoxAdapter(
-          child: Container(
-        padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 20.0, bottom: 20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text('WRITE A REVIEW', style: Burnt.appBarTitleStyle),
-                Container(height: 50, width: 50),
-              ],
-            ),
-          ],
+        child: Container(
+          padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 20.0, bottom: 20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text('WRITE A REVIEW', style: Burnt.appBarTitleStyle),
+                  Container(height: 50, width: 50),
+                ],
+              ),
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 
@@ -106,10 +110,14 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _suggestions() {
-    var filtered = [...widget.searchHistory].where((i) => i.store != null);
-    var children =
-        filtered.map<Widget>((i) => _StoreCard(store: i.store, addSearchHistoryItem: widget.addSearchHistoryItem)).toList();
-    return SliverToBoxAdapter(child: Column(children: children));
+    var filtered = [...widget.searchHistory].where((i) => i.store != null).toList();
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((context, i) {
+        return Builder(
+          builder: (context) => _StoreCard(store: filtered[i].store, addSearchHistoryItem: widget.addSearchHistoryItem),
+        );
+      }, childCount: filtered.length),
+    );
   }
 
   Widget _searchResults(BuildContext context) {
@@ -124,18 +132,56 @@ class _PresenterState extends State<_Presenter> {
             if (snapshot.hasError) {
               return SliverCenter(child: Text('Oops! Something went wrong, please try again'));
             } else if (snapshot.data.length == 0) {
-              return SliverCenter(child: Text("Oops! We couldn't find anything, maybe try something different?"));
+              return _letUsKnow();
             }
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, i) {
-                return Builder(
-                    builder: (context) => _StoreCard(store: snapshot.data[i], addSearchHistoryItem: widget.addSearchHistoryItem));
-              }, childCount: snapshot.data.length),
+              return Builder(
+                builder: (context) {
+                  if (i >= snapshot.data.length) return _cannotFind();
+                  return _StoreCard(store: snapshot.data[i], addSearchHistoryItem: widget.addSearchHistoryItem);
+                },
+              );
+            }, childCount: snapshot.data.length + 1),
             );
           default:
             return SliverToBoxAdapter(child: Text(''));
         }
       },
+    );
+  }
+
+  Widget _letUsKnow() {
+    return SliverCenter(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Text("Sorry, couldn't find anything matching that."),
+          Container(height: 15.0),
+          SmallBurntButton(
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ReportMissingStoreScreen())),
+            child: Text('Let us know', style: TextStyle(color: Colors.white)),
+            padding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 12.0, right: 12.0),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _cannotFind() {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(height: 40.0),
+        Text("Can't find what you're looking for?"),
+        Container(height: 15.0),
+        SmallBurntButton(
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ReportMissingStoreScreen())),
+          child: Text('Let us know', style: TextStyle(color: Colors.white)),
+          padding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 12.0, right: 12.0),
+        ),
+        Container(height: 40.0),
+      ],
     );
   }
 }
@@ -180,15 +226,16 @@ class _StoreCard extends StatelessWidget {
 
   Widget _listItemPromoImage(MyStore.Store store) {
     return Container(
-        width: 120.0,
-        height: 100.0,
-        decoration: BoxDecoration(
-          color: Burnt.imgPlaceholderColor,
-          image: DecorationImage(
-            image: NetworkImage(store.coverImage),
-            fit: BoxFit.cover,
-          ),
-        ));
+      width: 120.0,
+      height: 100.0,
+      decoration: BoxDecoration(
+        color: Burnt.imgPlaceholderColor,
+        image: DecorationImage(
+          image: NetworkImage(store.coverImage),
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
   }
 }
 
@@ -205,11 +252,12 @@ class _Props {
 
   static fromStore(Store<AppState> store) {
     return _Props(
-        isLoggedIn: store.state.me.user != null,
-        searchHistory: store.state.me.searchHistory,
-        addSearchHistoryItem: (myStore) {
-          var item = SearchHistoryItem(type: SearchHistoryItemType.store, store: myStore);
-          store.dispatch(AddSearchHistoryItem(item));
-        });
+      isLoggedIn: store.state.me.user != null,
+      searchHistory: store.state.me.searchHistory,
+      addSearchHistoryItem: (myStore) {
+        var item = SearchHistoryItem(type: SearchHistoryItemType.store, store: myStore);
+        store.dispatch(AddSearchHistoryItem(item));
+      },
+    );
   }
 }

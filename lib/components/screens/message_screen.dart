@@ -2,8 +2,10 @@ import 'package:crust/presentation/components.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class OopsScreen extends StatelessWidget {
-  OopsScreen({Key key}) : super(key: key);
+class MessageScreen extends StatelessWidget {
+  final String message;
+
+  MessageScreen({Key key, this.message = 'Oops! Something went wrong.'}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +14,9 @@ class OopsScreen extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text('Oops! Something went wrong.'),
+            Text(message),
             Container(height: 15.0),
-            SmallBurntButton(child: Text('Go Back', style: TextStyle(color: Colors.white)), padding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 12.0, right: 12.0), onPressed: () => Navigator.pop(context)),
+            SmallBurntButton(child: Text('Go Back', style: TextStyle(color: Colors.white)), padding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 12.0, right: 12.0), onTap: () => Navigator.pop(context)),
           ],
         ),
       ),

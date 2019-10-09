@@ -39,7 +39,6 @@ d
 
 ## To Do
 * Implement store posts
-* Add submit missing store feature
 * Reply to comments
 
 * Import stores from Zomato
@@ -51,6 +50,7 @@ d
 * Send email of results
 
 ## Done
+* Add submit missing store feature
 * Add stores screen
 * Add loyalty rewards screen
 * Add redeem reward behaviour

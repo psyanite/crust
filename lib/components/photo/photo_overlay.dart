@@ -82,7 +82,7 @@ class _PresenterState extends State<PhotoOverlay> {
         Padding(
           padding: EdgeInsets.only(bottom: 30.0),
           child: SmallBurntButton(
-            onPressed: () {
+            onTap: () {
               onPhotoDelete(photo);
               Navigator.pop(context);
             },
