@@ -43,13 +43,10 @@ class _Presenter extends StatefulWidget {
   _Presenter({Key key, this.isLoggedIn, this.store, this.me}) : super(key: key);
 
   @override
-  _PresenterState createState() => _PresenterState(store: store, me: me);
+  _PresenterState createState() => _PresenterState();
 }
 
 class _PresenterState extends State<_Presenter> {
-  final MyStore.Store store;
-  final User me;
-  final Function fetchPostsByStoreId;
   Post post;
   Score overallScore;
   Score tasteScore;
@@ -62,7 +59,7 @@ class _PresenterState extends State<_Presenter> {
   List<Uint8List> imageData = List<Uint8List>();
   bool showOverlay = false;
 
-  _PresenterState({this.store, this.me, this.fetchPostsByStoreId});
+  _PresenterState();
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +80,7 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _appBar() {
+    var store = widget.store;
     return Container(
       padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 40.0, bottom: 20.0),
       child: Column(
@@ -356,7 +354,7 @@ class _PresenterState extends State<_Presenter> {
     var newPost = Post(
       type: PostType.review,
       hidden: makeSecret,
-      store: store,
+      store: widget.store,
       postPhotos: [],
       postReview: PostReview(
         body: reviewBody,
@@ -366,7 +364,7 @@ class _PresenterState extends State<_Presenter> {
         valueScore: valueScore,
         ambienceScore: ambienceScore,
       ),
-      postedBy: me,
+      postedBy: widget.me,
     );
 
     setState(() {
