@@ -32,13 +32,13 @@ class PostService {
   }
 
   static Future<Post> updateReviewPost(Post post) async {
-    var body = post.postReview.body != null && post.postReview.body.isNotEmpty ? '"${post.postReview.body}"' : null;
+    var body = post.postReview.body != null && post.postReview.body.isNotEmpty ? '"""${post.postReview.body}"""' : null;
     String query = """
       mutation {
         updatePost(
           id: ${post.id},
           hidden: ${post.hidden},
-          body: \"\"$body\"\",
+          body: $body,
           overallScore: ${EnumUtil.format(post.postReview.overallScore.toString())},
           tasteScore: ${EnumUtil.format(post.postReview.tasteScore.toString())},
           serviceScore: ${EnumUtil.format(post.postReview.serviceScore.toString())},
@@ -56,13 +56,13 @@ class PostService {
   }
 
   static Future<Post> submitReviewPost(Post post) async {
-    var body = post.postReview.body != null && post.postReview.body.isNotEmpty ? '"${post.postReview.body}"' : null;
+    var body = post.postReview.body != null && post.postReview.body.isNotEmpty ? '"""${post.postReview.body}"""' : null;
     String query = """
       mutation {
         addReviewPost(
           hidden: ${post.hidden},
           storeId: ${post.store.id},
-          body: \"\"$body\"\",
+          body: $body,
           overallScore: ${EnumUtil.format(post.postReview.overallScore.toString())},
           tasteScore: ${EnumUtil.format(post.postReview.tasteScore.toString())},
           serviceScore: ${EnumUtil.format(post.postReview.serviceScore.toString())},

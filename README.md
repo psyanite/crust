@@ -38,8 +38,20 @@ d
 </div>
 
 ## To Do
-* Implement store posts
+* Reply to posts
 * Reply to comments
+
+* Like posts
+* Like comments
+
+Test as user:
+* Create post
+* Update post
+* Delete post
+* Reply to post
+* Reply to comment
+* Like post
+* Like comment
 
 * Import stores from Zomato
 
@@ -50,6 +62,9 @@ d
 * Send email of results
 
 ## Done
+* Implement store posts
+* Update store posts
+* Delete store posts
 * Add submit missing store feature
 * Add stores screen
 * Add loyalty rewards screen
