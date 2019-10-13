@@ -36,6 +36,7 @@ class CommentScreen extends StatelessWidget {
           postId: post.id,
           comments: props.comments,
           myId: props.myId,
+          refresh: props.refresh,
         );
       },
     );
@@ -46,8 +47,9 @@ class _Presenter extends StatefulWidget {
   final int postId;
   final LinkedHashMap<int, Comment> comments;
   final int myId;
+  final Function refresh;
 
-  _Presenter({Key key, this.postId, this.comments, this.myId}) : super(key: key);
+  _Presenter({Key key, this.postId, this.comments, this.myId, this.refresh}) : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState(comments: comments);
@@ -61,7 +63,7 @@ class _PresenterState extends State<_Presenter> {
   FocusNode _bodyFocus;
   Form _form = Form(type: FormType.comment);
   bool _enableSubmit = false;
-  User _replyTo;
+  String _replyTo;
   bool _flashReplyTo = false;
   bool _showSpinner = false;
   int _flashComment;
@@ -94,10 +96,14 @@ class _PresenterState extends State<_Presenter> {
     return Scaffold(
       body: Column(children: <Widget>[
         Flexible(
-          child: CustomScrollView(controller: _scrollCtrl, slivers: <Widget>[
-            _appBar(context),
-            _content(),
-          ]),
+          child: CustomScrollView(
+            controller: _scrollCtrl,
+            slivers: <Widget>[
+              _appBar(context),
+              _content(),
+              SliverToBoxAdapter(child: Container(height: 20.0)),
+            ],
+          ),
         ),
         Container(
           decoration: BoxDecoration(color: Burnt.paper),
@@ -110,27 +116,28 @@ class _PresenterState extends State<_Presenter> {
   Widget _appBar(context) {
     return SliverSafeArea(
       sliver: SliverToBoxAdapter(
-          child: Container(
-        padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 35.0, bottom: 2.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Stack(
-              children: <Widget>[
-                Container(width: 50.0, height: 60.0),
-                Positioned(
-                  left: -12.0,
-                  child: IconButton(
-                    icon: Icon(CrustCons.back, color: Burnt.lightGrey),
-                    onPressed: () => Navigator.of(context).pop(),
+        child: Container(
+          padding: EdgeInsets.only(left: 16.0, right: 16.0, top: 35.0, bottom: 2.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Stack(
+                children: <Widget>[
+                  Container(width: 50.0, height: 60.0),
+                  Positioned(
+                    left: -12.0,
+                    child: IconButton(
+                      icon: Icon(CrustCons.back, color: Burnt.lightGrey),
+                      onPressed: () => Navigator.of(context).pop(),
+                    ),
                   ),
-                ),
-              ],
-            ),
-            Text('COMMENTS', style: Burnt.appBarTitleStyle),
-          ],
+                ],
+              ),
+              Text('COMMENTS', style: Burnt.appBarTitleStyle),
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 
@@ -159,21 +166,22 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _replyToField() {
-    var text = _replyTo != null ? 'Reply to ${_replyTo.displayName} @${_replyTo.username}' : 'Reply to post';
+    var text = _replyTo != null ? 'Reply to $_replyTo' : _form.comment != null ? 'Reply to ${_form.comment.replyTo()}' : 'Reply to post';
     return Builder(
       builder: (context) => Container(
         height: 25.0,
         child: Row(
           children: <Widget>[
             Text(text, style: TextStyle(color: _flashReplyTo ? Burnt.blue : Burnt.hintTextColor, fontSize: 13.0)),
-            _replyTo != null
+            text != 'Reply to post'
                 ? InkWell(
                     onTap: () => _setCommentToPost(context),
                     child: Container(
-                        child: Padding(
-                      padding: EdgeInsets.only(left: 3.0, right: 3.0, bottom: 1.0, top: 3.0),
-                      child: Icon(CupertinoIcons.clear_thick_circled, size: 20.0, color: Burnt.lightGrey),
-                    )),
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 3.0, right: 3.0, bottom: 1.0, top: 3.0),
+                        child: Icon(CupertinoIcons.clear_thick_circled, size: 20.0, color: Burnt.lightGrey),
+                      ),
+                    ),
                   )
                 : Container()
           ],
@@ -278,12 +286,13 @@ class _PresenterState extends State<_Presenter> {
     this.setState(() => _showSpinner = false);
     FocusScope.of(context).requestFocus(FocusNode());
     _bodyCtrl.clear();
-    setState(() => _body = '');
+    _onBodyChange('');
   }
 
   _addComment() async {
     _scrollToBottom();
     var newComment = await CommentService.addComment(Comment(body: _body, postId: widget.postId, commentedBy: User(id: widget.myId)));
+    widget.refresh();
     this.setState(() => _showSpinner = false);
     if (newComment != null) {
       var clone = LinkedHashMap<int, Comment>.from(comments);
@@ -297,16 +306,16 @@ class _PresenterState extends State<_Presenter> {
   }
 
   _addReply() async {
-    var body = _replyTo != null ? "@${_replyTo.username} $_body" : _body;
-    var newReply = await CommentService.addReply(Reply(body: body, commentId: _form.commentId, repliedBy: User(id: widget.myId)));
+    var body =
+        _replyTo != null ? _replyTo.contains('@') ? '@${_replyTo.split('@')[1]} $_body' : '@${_replyTo.split(' ').join('')} $_body' : _body;
+    var newReply = await CommentService.addReply(Reply(body: body, commentId: _form.comment.id, repliedBy: User(id: widget.myId)));
+    widget.refresh();
     if (newReply != null) {
       var clone = LinkedHashMap<int, Comment>.from(comments);
       var cloneReplies = LinkedHashMap<int, Reply>.from(clone[newReply.commentId].replies);
       cloneReplies[newReply.id] = newReply;
       clone[newReply.commentId] = clone[newReply.commentId].copyWith(replies: cloneReplies);
-      this.setState(() {
-        comments = clone;
-      });
+      this.setState(() => comments = clone);
     }
   }
 
@@ -329,9 +338,9 @@ class _PresenterState extends State<_Presenter> {
     _doFlashReplyToField();
   }
 
-  _setReplyToComment(int commentId, User replyTo) {
+  _setReplyToComment(Comment comment, String replyTo) {
     setState(() {
-      _form = Form(type: FormType.reply, commentId: commentId);
+      _form = Form(type: FormType.reply, comment: comment);
       _replyTo = replyTo;
     });
     FocusScope.of(context).requestFocus(_bodyFocus);
@@ -384,19 +393,20 @@ class _CommentCardState extends State<_CommentCard> with TickerProviderStateMixi
 
   @override
   Widget build(BuildContext context) {
+    var comment = widget.comment;
     return AnimatedBuilder(
       animation: _colorTween,
       builder: (context, child) => Container(
         child: GestureDetector(
           behavior: HitTestBehavior.translucent,
           onLongPress: () async {
-            if (widget.myId != widget.comment.commentedBy.id) return;
+            if (widget.myId != widget.comment.commentedBy?.id) return;
             _colorTween = ColorTween(begin: Burnt.primaryLight).animate(_colorCtrl);
             Future.delayed(Duration(milliseconds: 500), () {
               var deleteComment = () async {
-                var success = await CommentService.deleteComment(userId: widget.myId, comment: widget.comment);
+                var success = await CommentService.deleteComment(userId: widget.myId, comment: comment);
                 if (success == true) {
-                  widget.removeComment(widget.comment);
+                  widget.removeComment(comment);
                   snack(context, 'Comment deleted successfully');
                 }
               };
@@ -410,7 +420,7 @@ class _CommentCardState extends State<_CommentCard> with TickerProviderStateMixi
             color: _colorTween.value,
             padding: EdgeInsets.only(top: 10.0, left: 16.0, right: 16.0),
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-              _profilePicture(widget.comment.commentedBy.profilePicture),
+              _profilePicture(comment.commentedBy?.profilePicture ?? comment.commentedByStore.coverImage),
               _body(),
             ]),
           ),
@@ -437,12 +447,7 @@ class _CommentCardState extends State<_CommentCard> with TickerProviderStateMixi
                       mainAxisSize: MainAxisSize.max,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Text(comment.commentedBy.displayName, style: TextStyle(fontWeight: FontWeight.bold)),
-                            Text(' @${comment.commentedBy.username}', style: TextStyle(color: Burnt.hintTextColor, fontSize: 15.0)),
-                          ],
-                        ),
+                        _commentedBy(),
                         Text(comment.body),
                         Row(
                           children: <Widget>[
@@ -473,6 +478,7 @@ class _CommentCardState extends State<_CommentCard> with TickerProviderStateMixi
             if (comment.replies.isNotEmpty && _showReplies)
               _Replies(
                 postId: widget.postId,
+                comment: comment,
                 replies: comment.replies.values.toList(),
                 myId: widget.myId,
                 setReplyToComment: widget.setReplyToComment,
@@ -482,6 +488,19 @@ class _CommentCardState extends State<_CommentCard> with TickerProviderStateMixi
         ),
       ),
     );
+  }
+
+  Widget _commentedBy() {
+    var comment = widget.comment;
+    if (comment.commentedBy != null) {
+      return Row(
+        children: <Widget>[
+          Text(comment.commentedBy.displayName, style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(' @${comment.commentedBy.username}', style: TextStyle(color: Burnt.hintTextColor, fontSize: 15.0)),
+        ],
+      );
+    }
+    return Text(comment.commentedByStore.getStoreName(), style: TextStyle(fontWeight: FontWeight.bold));
   }
 
   Widget _replyTeaser() {
@@ -508,18 +527,19 @@ class _CommentCardState extends State<_CommentCard> with TickerProviderStateMixi
   }
 
   _onTapReply() {
-    widget.setReplyToComment(widget.comment.id, widget.comment.commentedBy);
+    widget.setReplyToComment(widget.comment, null);
   }
 }
 
 class _Replies extends StatefulWidget {
   final int postId;
+  final Comment comment;
   final List<Reply> replies;
   final int myId;
   final Function setReplyToComment;
   final Function removeReply;
 
-  _Replies({Key key, this.postId, this.replies, this.myId, this.setReplyToComment, this.removeReply}) : super(key: key);
+  _Replies({Key key, this.postId, this.comment, this.replies, this.myId, this.setReplyToComment, this.removeReply}) : super(key: key);
 
   @override
   _RepliesState createState() => _RepliesState();
@@ -545,28 +565,30 @@ class _RepliesState extends State<_Replies> {
   @override
   Widget build(BuildContext context) {
     return MediaQuery.removePadding(
-        context: context,
-        removeTop: true,
-        child: ListView.builder(
-            padding: EdgeInsets.only(top: 5.0, bottom: 15.0),
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-            itemCount: widget.replies.length,
-            itemBuilder: (context, i) {
-              var reply = widget.replies[i];
-              return _ReplyCard(
-                postId: widget.postId,
-                reply: reply,
-                myId: widget.myId,
-                flash: _flashLastReply && i == widget.replies.length - 1,
-                onTapReply: _onTapReply,
-                removeReply: widget.removeReply,
-              );
-            }));
+      context: context,
+      removeTop: true,
+      child: ListView.builder(
+        padding: EdgeInsets.only(top: 5.0, bottom: 15.0),
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: widget.replies.length,
+        itemBuilder: (context, i) {
+          var reply = widget.replies[i];
+          return _ReplyCard(
+            postId: widget.postId,
+            reply: reply,
+            myId: widget.myId,
+            flash: _flashLastReply && i == widget.replies.length - 1,
+            onTapReply: _onTapReply,
+            removeReply: widget.removeReply,
+          );
+        },
+      ),
+    );
   }
 
   _onTapReply(Reply reply) {
-    widget.setReplyToComment(reply.commentId, reply.repliedBy);
+    widget.setReplyToComment(widget.comment, reply.replyTo());
   }
 }
 
@@ -604,39 +626,43 @@ class _ReplyCardState extends State<_ReplyCard> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    var reply = widget.reply;
     return AnimatedBuilder(
-        animation: _colorTween,
-        builder: (context, child) => Container(
-              child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onLongPress: () async {
-                  if (widget.myId != widget.reply.repliedBy.id) return;
-                  _colorTween = ColorTween(begin: Burnt.primaryLight).animate(_colorCtrl);
-                  Future.delayed(Duration(milliseconds: 500), () {
-                    var deleteReply = () async {
-                      var success = await CommentService.deleteReply(userId: widget.myId, reply: widget.reply);
-                      if (success == true) {
-                        widget.removeReply(widget.reply);
-                        snack(context, 'Comment deleted successfully');
-                      }
-                    };
-                    showDialog(context: context, builder: (context) => _deleteDialog(context, deleteReply));
-                  });
-                  await _colorCtrl.forward();
-                  _colorTween = ColorTween(begin: Burnt.paper).animate(_colorCtrl);
-                  _colorCtrl.reset();
-                },
-                child: Container(
-                  padding: EdgeInsets.symmetric(vertical: 7.0),
-                  color: _colorTween.value,
-                  child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                    _profilePicture(widget.reply.repliedBy.profilePicture),
-                    body(),
-                    ReplyLikeButton(postId: widget.postId, reply: widget.reply),
-                  ]),
-                ),
-              ),
-            ));
+      animation: _colorTween,
+      builder: (context, child) {
+        return Container(
+          child: GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onLongPress: () async {
+              if (widget.myId != reply.repliedBy?.id) return;
+              _colorTween = ColorTween(begin: Burnt.primaryLight).animate(_colorCtrl);
+              Future.delayed(Duration(milliseconds: 500), () {
+                var deleteReply = () async {
+                  var success = await CommentService.deleteReply(userId: widget.myId, reply: reply);
+                  if (success == true) {
+                    widget.removeReply(reply);
+                    snack(context, 'Comment deleted successfully');
+                  }
+                };
+                showDialog(context: context, builder: (context) => _deleteDialog(context, deleteReply));
+              });
+              await _colorCtrl.forward();
+              _colorTween = ColorTween(begin: Burnt.paper).animate(_colorCtrl);
+              _colorCtrl.reset();
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: 7.0),
+              color: _colorTween.value,
+              child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+                _profilePicture(reply.repliedBy?.profilePicture ?? reply.repliedByStore.coverImage),
+                body(),
+                ReplyLikeButton(postId: widget.postId, reply: reply),
+              ]),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Widget body() {
@@ -650,20 +676,16 @@ class _ReplyCardState extends State<_ReplyCard> with TickerProviderStateMixin {
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                Text(reply.repliedBy.displayName, style: TextStyle(fontWeight: FontWeight.bold)),
-                Text(' @${reply.repliedBy.username}', style: TextStyle(color: Burnt.hintTextColor, fontSize: 15.0)),
-              ],
-            ),
+            _repliedBy(),
             _bodyText(reply.body),
             Row(
               children: <Widget>[
                 Text('$repliedAt ·', style: TextStyle(color: Burnt.lightTextColor, fontSize: 15.0)),
                 InkWell(
-                    splashColor: Burnt.primaryLight,
-                    onTap: () => widget.onTapReply(reply),
-                    child: Text(' Reply', style: TextStyle(color: Burnt.lightTextColor, fontSize: 15.0))),
+                  splashColor: Burnt.primaryLight,
+                  onTap: () => widget.onTapReply(reply),
+                  child: Text(' Reply', style: TextStyle(color: Burnt.lightTextColor, fontSize: 15.0)),
+                ),
               ],
             )
           ],
@@ -688,39 +710,56 @@ class _ReplyCardState extends State<_ReplyCard> with TickerProviderStateMixin {
       return Text(body);
     }
   }
+
+  Widget _repliedBy() {
+    var reply = widget.reply;
+    if (reply.repliedBy != null) {
+      return Row(
+        children: <Widget>[
+          Text(reply.repliedBy.displayName, style: TextStyle(fontWeight: FontWeight.bold)),
+          Text(' @${reply.repliedBy.username}', style: TextStyle(color: Burnt.hintTextColor, fontSize: 15.0)),
+        ],
+      );
+    }
+    return Text(reply.repliedByStore.getStoreName(), style: TextStyle(fontWeight: FontWeight.bold));
+  }
 }
 
 Widget _profilePicture(String image) {
   return Padding(
     padding: EdgeInsets.only(top: 3.0),
     child: Container(
-        width: 30.0,
-        height: 30.0,
-        decoration: BoxDecoration(color: Burnt.imgPlaceholderColor, image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image)))),
+      width: 30.0,
+      height: 30.0,
+      decoration: BoxDecoration(color: Burnt.imgPlaceholderColor, image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image))),
+    ),
   );
 }
 
 Widget _deleteDialog(BuildContext context, Function delete) {
   return Confirm(
-      title: 'Would you like to delete your comment?',
-      description: 'This comment will be lost forever.',
-      action: 'Delete',
-      onTap: () {
-        delete();
-        Navigator.of(context, rootNavigator: true).pop(true);
-      });
+    title: 'Would you like to delete your comment?',
+    description: 'This comment will be lost forever.',
+    action: 'Delete',
+    onTap: () {
+      delete();
+      Navigator.of(context, rootNavigator: true).pop(true);
+    },
+  );
 }
 
 class _Props {
   final int myId;
   final LinkedHashMap<int, Comment> comments;
+  final Function refresh;
 
-  _Props({this.myId, this.comments});
+  _Props({this.myId, this.comments, this.refresh});
 
   static fromStore(Store<AppState> store, int postId) {
     return _Props(
       myId: store.state.me.user?.id,
       comments: store.state.comment.comments[postId],
+      refresh: () => store.dispatch(FetchComments(postId)),
     );
   }
 }
@@ -729,10 +768,7 @@ enum FormType { reply, comment }
 
 class Form {
   final FormType type;
-  final int commentId;
+  final Comment comment;
 
-  Form({
-    this.type,
-    this.commentId,
-  });
+  Form({this.type, this.comment});
 }

@@ -40,7 +40,7 @@ class _CommentLikeButtonState extends State<CommentLikeButton> with TickerProvid
     return StoreConnector<AppState, dynamic>(
       converter: (Store<AppState> store) => _Props.fromStore(store, widget.comment),
       builder: (context, props) {
-        var isFavorited = widget.comment.likedBy.contains(props.myId);
+        var isFavorited = widget.comment.likedByUsers.contains(props.myId);
         var onFavorite = () {
           if (props.isLoggedIn) {
             props.favoriteComment(widget.comment);
@@ -60,7 +60,7 @@ class _CommentLikeButtonState extends State<CommentLikeButton> with TickerProvid
           isFavorited: isFavorited,
           size: 22.0,
           padding: 2.0 - paddingCtrl.value,
-          count: widget.comment.likedBy.length,
+          count: widget.comment.likedByUsers.length + widget.comment.likedByStores.length,
         );
       });
   }

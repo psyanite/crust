@@ -31,25 +31,25 @@ class CommentState {
 
   CommentState favoriteComment(int myId, Comment comment) {
     var clone = cloneComments();
-    clone[comment.postId][comment.id].likedBy.add(myId);
+    clone[comment.postId][comment.id].likedByUsers.add(myId);
     return copyWith(comments: clone);
   }
 
   CommentState unfavoriteComment(int myId, Comment comment) {
     var clone = cloneComments();
-    clone[comment.postId][comment.id].likedBy.remove(myId);
+    clone[comment.postId][comment.id].likedByUsers.remove(myId);
     return copyWith(comments: clone);
   }
 
   CommentState favoriteReply(int myId, int postId, Reply reply) {
     var clone = cloneComments();
-    clone[postId][reply.commentId].replies[reply.id].likedBy.add(myId);
+    clone[postId][reply.commentId].replies[reply.id].likedByUsers.add(myId);
     return copyWith(comments: clone);
   }
 
   CommentState unfavoriteReply(int myId, int postId, Reply reply) {
     var clone = cloneComments();
-    clone[postId][reply.commentId].replies[reply.id].likedBy.remove(myId);
+    clone[postId][reply.commentId].replies[reply.id].likedByUsers.remove(myId);
     return copyWith(comments: clone);
   }
 

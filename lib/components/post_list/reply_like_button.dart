@@ -41,7 +41,7 @@ class _ReplyLikeButtonState extends State<ReplyLikeButton> with TickerProviderSt
     return StoreConnector<AppState, dynamic>(
       converter: (Store<AppState> store) => _Props.fromStore(store, widget.postId, widget.reply),
       builder: (context, props) {
-        var isFavorited = widget.reply.likedBy.contains(props.myId);
+        var isFavorited = widget.reply.likedByUsers.contains(props.myId);
         var onFavorite = () {
           if (props.isLoggedIn) {
             props.favoriteReply(widget.postId, widget.reply);
@@ -61,7 +61,7 @@ class _ReplyLikeButtonState extends State<ReplyLikeButton> with TickerProviderSt
           isFavorited: isFavorited,
           size: 22.0,
           padding: 2.0 - paddingCtrl.value,
-          count: widget.reply.likedBy.length,
+          count: widget.reply.likedByUsers.length + widget.reply.likedByStores.length,
         );
       });
   }

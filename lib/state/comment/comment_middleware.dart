@@ -35,13 +35,10 @@ Middleware<AppState> _fetchComments(CommentService service) {
 Middleware<AppState> _favoriteComment(CommentService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     var myId = store.state.me.user.id;
+    store.dispatch(FavoriteCommentSuccess(myId, action.comment));
     service.favoriteComment(userId: myId, commentId: action.comment.id).then((success) {
-      if (success) {
-        store.dispatch(FavoriteCommentSuccess(myId, action.comment));
-      } else {
-        store.dispatch(RequestFailure("Failed to favorite comment: ${action.comment.id}"));
-      }
-    }).catchError((e) => store.dispatch(RequestFailure("favoriteComments ${e.toString()}")));
+      if (success == false) store.dispatch(RequestFailure("Failed to favorite comment: ${action.comment.id}"));
+    }).catchError((e) => store.dispatch(RequestFailure("favoriteComment ${e.toString()}")));
     next(action);
   };
 }
@@ -49,13 +46,10 @@ Middleware<AppState> _favoriteComment(CommentService service) {
 Middleware<AppState> _unfavoriteComment(CommentService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     var myId = store.state.me.user.id;
+    store.dispatch(UnfavoriteCommentSuccess(myId, action.comment));
     service.unfavoriteComment(userId: myId, commentId: action.comment.id).then((success) {
-      if (success) {
-        store.dispatch(UnfavoriteCommentSuccess(myId, action.comment));
-      } else {
-        store.dispatch(RequestFailure("Failed to unfavorite comment: ${action.comment.id}"));
-      }
-    }).catchError((e) => store.dispatch(RequestFailure("unfavoriteComments ${e.toString()}")));
+      if (success == false ) store.dispatch(RequestFailure("Failed to unfavorite comment: ${action.comment.id}"));
+    }).catchError((e) => store.dispatch(RequestFailure("unfavoriteComment ${e.toString()}")));
     next(action);
   };
 }
@@ -63,12 +57,9 @@ Middleware<AppState> _unfavoriteComment(CommentService service) {
 Middleware<AppState> _favoriteReply(CommentService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     var myId = store.state.me.user.id;
-    service.favoriteReply(userId: store.state.me.user.id, replyId: action.reply.id).then((success) {
-      if (success) {
-        store.dispatch(FavoriteReplySuccess(myId, action.postId, action.reply));
-      } else {
-        store.dispatch(RequestFailure("Failed to favorite reply: ${action.reply.id}"));
-      }
+    store.dispatch(FavoriteReplySuccess(myId, action.postId, action.reply));
+    service.favoriteReply(userId: myId, replyId: action.reply.id).then((success) {
+      if (success == false) store.dispatch(RequestFailure("Failed to favorite reply: ${action.reply.id}"));
     }).catchError((e) => store.dispatch(RequestFailure("favoriteReply ${e.toString()}")));
     next(action);
   };
@@ -77,12 +68,9 @@ Middleware<AppState> _favoriteReply(CommentService service) {
 Middleware<AppState> _unfavoriteReply(CommentService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     var myId = store.state.me.user.id;
+    store.dispatch(UnfavoriteReplySuccess(myId, action.postId, action.reply));
     service.unfavoriteReply(userId: myId, replyId: action.reply.id).then((success) {
-      if (success) {
-        store.dispatch(UnfavoriteReplySuccess(myId, action.postId, action.reply));
-      } else {
-        store.dispatch(RequestFailure("Failed to unfavorite reply: ${action.reply.id}"));
-      }
+      if (success == false) store.dispatch(RequestFailure("Failed to unfavorite reply: ${action.reply.id}"));
     }).catchError((e) => store.dispatch(RequestFailure("unfavoriteReply ${e.toString()}")));
     next(action);
   };

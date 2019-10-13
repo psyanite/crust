@@ -133,6 +133,10 @@ class Store {
     }
   """;
 
+  String getStoreName() {
+    return '$name ⭐';
+  }
+
   String getDirectionUrl() {
     var query = [
       name,

@@ -38,21 +38,6 @@ d
 </div>
 
 ## To Do
-* Reply to posts
-* Reply to comments
-
-* Like posts
-* Like comments
-
-Test as user:
-* Create post
-* Update post
-* Delete post
-* Reply to post
-* Reply to comment
-* Like post
-* Like comment
-
 * Import stores from Zomato
 
 * Enable firebase dynamic urls in iOS
