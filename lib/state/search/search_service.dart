@@ -49,10 +49,9 @@ class SearchService {
   static Future<List<Store>> searchStores(Geo.Address a, String queryStr) async {
     var lat = a.coordinates.latitude;
     var lng = a.coordinates.longitude;
-    var dist = a.addressLine == 'Sydney' ? 15 : 7;
     String query = """
       query {
-        storesByQueryCoords(query: "$queryStr", lat: $lat, lng: $lng, dist: $dist) {
+        storesByQueryCoords(query: "$queryStr", lat: $lat, lng: $lng) {
           ${Store.attributes}
         }
       }
