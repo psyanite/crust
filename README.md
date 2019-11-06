@@ -38,7 +38,7 @@ d
 </div>
 
 ## To Do
-* Import stores from Zomato
+* Fix up other stores search screen
 
 * Enable firebase dynamic urls in iOS
 * Add link previews to dynamic links
@@ -47,6 +47,8 @@ d
 * Send email of results
 
 ## Done
+* Fix up stores search screen
+* Import stores from Zomato
 * Implement store posts
 * Update store posts
 * Delete store posts

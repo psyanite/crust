@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:crust/components/screens/report_missing_store_screen.dart';
 import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/models/search.dart';
@@ -43,14 +45,46 @@ class _Presenter extends StatefulWidget {
 }
 
 class _PresenterState extends State<_Presenter> {
-  String _query = '';
-  bool _submit = false;
+  ScrollController _scrollie = ScrollController();
+  Timer _typingTmr;
   TextEditingController _queryCtrl = TextEditingController();
+  String _query = '';
+  List<MyStore.Store> _results = List<MyStore.Store>();
+  bool _loading = false;
+  int _limit = 12;
+
+  @override
+  initState() {
+    super.initState();
+    _scrollie.addListener(() {
+        if (_results.isNotEmpty
+          && _loading == false
+          && _limit > 0
+          && _scrollie.position.extentAfter < 500) _fetch();
+      });
+  }
 
   @override
   dispose() {
+    _scrollie.dispose();
     _queryCtrl.dispose();
     super.dispose();
+  }
+
+  _search() async {
+    this.setState(() {
+      _results = List<MyStore.Store>();
+      _limit = 12;
+    });
+    _fetch();
+  }
+
+  _fetch() async {
+    this.setState(() => _loading = true);
+    var fresh = await SearchService.searchStores(widget.myAddress, _query, _limit, _results.length);
+    this.setState(() => _loading = false);
+    if (fresh.length < _limit) this.setState(() => _limit = 0);
+    if (fresh.isNotEmpty) _results.addAll(fresh);
   }
 
   @override
@@ -59,10 +93,10 @@ class _PresenterState extends State<_Presenter> {
       _appBar(),
       LocationBar(),
       _searchBar(),
-      _submit ? _searchResults(context) : _suggestions(),
+      _query.isEmpty ? _suggestions() : _searchResults(context),
       SliverToBoxAdapter(child: Container(height: 40.0)),
     ];
-    return Scaffold(body: CustomScrollView(slivers: slivers));
+    return Scaffold(body: CustomScrollView(slivers: slivers, controller: _scrollie));
   }
 
   Widget _appBar() {
@@ -92,11 +126,16 @@ class _PresenterState extends State<_Presenter> {
       child: TextField(
         controller: _queryCtrl,
         onChanged: (text) {
-          if (text.trim() != _query) setState(() => _query = text.trim());
+          this.setState(() {
+            _query = text;
+            _loading = true;
+          });
+          if (_typingTmr != null) setState(() => _typingTmr.cancel());
+          setState(() => _typingTmr = new Timer(Duration(milliseconds: 600), _search));
         },
-        onSubmitted: (text) => this.setState(() => _submit = true),
         style: TextStyle(fontSize: 18.0),
         autofocus: true,
+        autocorrect: false,
         decoration: InputDecoration(
           hintText: 'Search for a restaurant, cafe, or eatery',
           prefixIcon: Icon(CrustCons.search, color: Burnt.lightGrey, size: 18.0),
@@ -104,10 +143,7 @@ class _PresenterState extends State<_Presenter> {
             icon: Icon(Icons.clear),
             onPressed: () {
               _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
-              this.setState(() {
-                _submit = false;
-                _query = '';
-              });
+              this.setState(() => _query = '');
             },
           ),
           border: InputBorder.none,
@@ -117,14 +153,7 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _suggestions() {
-    var suggests = [...widget.searchHistory];
-    var filtered = _query.isEmpty
-        ? suggests
-        : suggests.where((i) {
-            return (i.cuisineName == null || i.cuisineName.toLowerCase().contains(_query.toLowerCase())) &&
-                (i.store == null || i.store.name.toLowerCase().contains(_query.toLowerCase()));
-          });
-    var children = filtered.map<Widget>((i) {
+    var children = widget.searchHistory.map<Widget>((i) {
       switch (i.type) {
         case SearchHistoryItemType.cuisine:
           return _cuisineSuggest(i);
@@ -144,12 +173,14 @@ class _PresenterState extends State<_Presenter> {
       builder: (context) => InkWell(
         splashColor: Burnt.lightGrey,
         onTap: () {
-          widget.addSearchHistoryItem(item);
+          _scrollie.animateTo(0.0, curve: Curves.easeOut, duration: const Duration(milliseconds: 300));
           _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: item.cuisineName));
           this.setState(() {
-            _submit = true;
             _query = item.cuisineName;
+            _loading = true;
           });
+          _search();
+          widget.addSearchHistoryItem(item);
         },
         child: Padding(
           padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),
@@ -235,50 +266,32 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _searchResults(BuildContext context) {
-    if (_query.isEmpty) {
-      return SliverCenter(child: Container());
-    }
-    return FutureBuilder(
-      future: SearchService.searchStores(widget.myAddress, _query.isEmpty ? 's' : _query),
-      builder: (context, snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.active:
-          case ConnectionState.waiting:
-            return LoadingSliverCenter();
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              return CenterTextSliver(text: 'Oops! Something went wrong, please try again');
-            } else if (snapshot.data.length == 0) {
-              return CenterTextSliver(text: 'Oops! We couldn\'t find anything, maybe try something different?');
-            }
-            return SliverList(
-              delegate: SliverChildBuilderDelegate((context, i) {
-                return Builder(builder: (context) {
-                if (i >= snapshot.data.length) return _cannotFind();
-                return _storeCard(snapshot.data[i]);
-                });
-              }, childCount: snapshot.data.length + 1),
-            );
-          default:
-            return SliverCenter(child: Container());
-        }
-      },
+    if (_loading == true) return LoadingSliverCenter();
+    if (_results.isEmpty) return _cannotFind();
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((context, i) {
+        return Builder(builder: (context) {
+          return _storeCard(_results[i]);
+        });
+      }, childCount: _results.length),
     );
   }
 
   Widget _cannotFind() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Container(height: 40.0),
-        Text("Can't find what you're looking for?"),
-        Container(height: 15.0),
-        SmallBurntButton(
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ReportMissingStoreScreen())),
-          child: Text('Let us know', style: TextStyle(color: Colors.white)),
-          padding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 12.0, right: 12.0),
-        ),
-      ],
+    return SliverToBoxAdapter(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Container(height: 40.0),
+          Text("Can't find what you're looking for?"),
+          Container(height: 15.0),
+          SmallBurntButton(
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ReportMissingStoreScreen())),
+            child: Text('Let us know', style: TextStyle(color: Colors.white)),
+            padding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 12.0, right: 12.0),
+          ),
+        ],
+      ),
     );
   }
 

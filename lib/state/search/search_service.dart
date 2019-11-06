@@ -46,12 +46,12 @@ class SearchService {
     return (json as List).map((s) => Store.fromToaster(s)).toList();
   }
 
-  static Future<List<Store>> searchStores(Geo.Address a, String queryStr) async {
+  static Future<List<Store>> searchStores(Geo.Address a, String queryStr, int limit, int offset) async {
     var lat = a.coordinates.latitude;
     var lng = a.coordinates.longitude;
     String query = """
       query {
-        storesByQueryCoords(query: "$queryStr", lat: $lat, lng: $lng) {
+        storesByQueryCoords(query: "$queryStr", lat: $lat, lng: $lng, limit: $limit, offset: $offset) {
           ${Store.attributes}
         }
       }
