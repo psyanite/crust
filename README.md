@@ -39,6 +39,7 @@ d
 
 ## To Do
 * Fix up other stores search screen
+* Migrate changes to butter
 
 * Enable firebase dynamic urls in iOS
 * Add link previews to dynamic links
