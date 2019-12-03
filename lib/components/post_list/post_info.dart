@@ -175,14 +175,11 @@ class PostInfo extends StatelessWidget {
   }
 
   Widget _teaserImage(image) {
-    return Container(
+    return NetworkImg(
+      image,
       margin: EdgeInsets.only(right: 10.0),
       width: 50.0,
       height: 50.0,
-      decoration: BoxDecoration(
-        color: Burnt.imgPlaceholderColor,
-        image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image)),
-      ),
     );
   }
 
@@ -248,16 +245,7 @@ class PostInfo extends StatelessWidget {
       return Column(
         children: <Widget>[
           Container(height: 5.0),
-          Container(
-            height: MediaQuery.of(context).size.width - 30.0,
-            decoration: BoxDecoration(
-              color: Burnt.imgPlaceholderColor,
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: NetworkImage(post.postPhotos[0].url),
-              ),
-            ),
-          ),
+          NetworkImg(post.postPhotos[0].url, height: MediaQuery.of(context).size.width - 30.0),
           Container(height: 15.0),
           Row(mainAxisAlignment: MainAxisAlignment.start, crossAxisAlignment: CrossAxisAlignment.center, children: buttons),
           Container(height: 10.0),

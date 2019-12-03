@@ -45,15 +45,16 @@ class _PresenterState extends State<CurrentPhotos> {
       images.map((i) {
         return InkWell(
           child: Container(
-              color: Burnt.imgPlaceholderColor,
-              padding: EdgeInsets.symmetric(horizontal: 1.0),
-              width: size,
-              height: size,
-              child: CachedNetworkImage(
-                imageUrl: i.url,
-                fit: BoxFit.cover,
-                fadeInDuration: Duration(milliseconds: 100),
-              )),
+            color: Burnt.imgPlaceholderColor,
+            padding: EdgeInsets.symmetric(horizontal: 1.0),
+            width: size,
+            height: size,
+            child: CachedNetworkImage(
+              imageUrl: i.url,
+              fit: BoxFit.cover,
+              fadeInDuration: Duration(milliseconds: 100),
+            ),
+          ),
           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => PhotoOverlay(photo: i, onPhotoDelete: onPhotoDelete))),
         );
       }),

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:crust/components/screens/report_missing_store_screen.dart';
 import 'package:crust/components/stores/store_screen.dart';
@@ -10,6 +11,7 @@ import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
 import 'package:crust/state/search/search_service.dart';
+import 'package:crust/utils/cuisine_lookup.dart';
 import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +47,7 @@ class _Presenter extends StatefulWidget {
 }
 
 class _PresenterState extends State<_Presenter> {
+  final HashMap<String, Set<int>> cLookup = CuisineLookup.all;
   ScrollController _scrollie = ScrollController();
   Timer _typingTmr;
   TextEditingController _queryCtrl = TextEditingController();
@@ -57,11 +60,8 @@ class _PresenterState extends State<_Presenter> {
   initState() {
     super.initState();
     _scrollie.addListener(() {
-        if (_results.isNotEmpty
-          && _loading == false
-          && _limit > 0
-          && _scrollie.position.extentAfter < 500) _fetch();
-      });
+      if (_results.isNotEmpty && _loading == false && _limit > 0 && _scrollie.position.extentAfter < 500) _fetch();
+    });
   }
 
   @override
@@ -81,10 +81,21 @@ class _PresenterState extends State<_Presenter> {
 
   _fetch() async {
     this.setState(() => _loading = true);
-    var fresh = await SearchService.searchStores(widget.myAddress, _query, _limit, _results.length);
+    var fresh = await _searchQuery();
     this.setState(() => _loading = false);
     if (fresh.length < _limit) this.setState(() => _limit = 0);
     if (fresh.isNotEmpty) _results.addAll(fresh);
+  }
+
+  Future<List<MyStore.Store>> _searchQuery() {
+    var lookupKey = _query.replaceAll(new RegExp(r"\s+\b|\b\s"), "").toLowerCase();
+    var cuisineIds = cLookup[lookupKey];
+    if (cuisineIds != null && cuisineIds.isNotEmpty) {
+      print("Search by cuisine Ids");
+      return SearchService.searchStoresByCuisineIds(widget.myAddress, cuisineIds, _limit, _results.length);
+    }
+    print("Search by searchStores ");
+    return SearchService.searchStores(widget.myAddress, _query, _limit, _results.length);
   }
 
   @override
@@ -93,7 +104,8 @@ class _PresenterState extends State<_Presenter> {
       _appBar(),
       LocationBar(),
       _searchBar(),
-      _query.isEmpty ? _suggestions() : _searchResults(context),
+      _query.trim().isEmpty ? _suggestions() : _searchResults(context),
+      if (_loading) LoadingSliver(),
       SliverToBoxAdapter(child: Container(height: 40.0)),
     ];
     return Scaffold(body: CustomScrollView(slivers: slivers, controller: _scrollie));
@@ -229,7 +241,7 @@ class _PresenterState extends State<_Presenter> {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
-                  _storeImage(store),
+                  NetworkImg(store.coverImage, width: 50.0, height: 50.0),
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.all(8.0),
@@ -252,22 +264,8 @@ class _PresenterState extends State<_Presenter> {
     );
   }
 
-  Widget _storeImage(MyStore.Store store) {
-    return Container(
-        width: 50.0,
-        height: 50.0,
-        decoration: BoxDecoration(
-          color: Burnt.imgPlaceholderColor,
-          image: DecorationImage(
-            image: NetworkImage(store.coverImage),
-            fit: BoxFit.cover,
-          ),
-        ));
-  }
-
   Widget _searchResults(BuildContext context) {
-    if (_loading == true) return LoadingSliverCenter();
-    if (_results.isEmpty) return _cannotFind();
+    if (_loading == false && _results.isEmpty) return _cannotFind();
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, i) {
         return Builder(builder: (context) {
@@ -308,17 +306,7 @@ class _PresenterState extends State<_Presenter> {
             child: IntrinsicHeight(
               child: Row(
                 children: <Widget>[
-                  Container(
-                    width: 120.0,
-                    height: 100.0,
-                    decoration: BoxDecoration(
-                      color: Burnt.imgPlaceholderColor,
-                      image: DecorationImage(
-                        image: NetworkImage(store.coverImage),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
+                  NetworkImg(store.coverImage, width: 120.0, height: 100.0),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

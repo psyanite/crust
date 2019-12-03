@@ -1,6 +1,7 @@
 import 'package:crust/components/rewards/favorite_reward_button.dart';
 import 'package:crust/components/rewards/reward_screen.dart';
 import 'package:crust/models/reward.dart';
+import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -60,15 +61,7 @@ class RewardCards extends StatelessWidget {
     return Stack(
       alignment: AlignmentDirectional.topEnd,
       children: <Widget>[
-        Container(
-            height: 200.0,
-            decoration: BoxDecoration(
-              color: Burnt.imgPlaceholderColor,
-              image: DecorationImage(
-                image: NetworkImage(reward.promoImage),
-                fit: BoxFit.cover,
-              ),
-            )),
+        NetworkImg(reward.promoImage, height: 200.0),
         FavoriteRewardButton(reward: reward, padding: EdgeInsets.all(15.0), size: 27.0, confirmUnfavorite: confirmUnfavorite),
       ],
     );

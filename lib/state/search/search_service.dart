@@ -6,11 +6,7 @@ import 'package:geocoder/geocoder.dart' as Geo;
 class SearchService {
   const SearchService();
 
-  static const List<String> Cuisines = ["Café", "Modern Australian", "Italian", "Brunch", "French", "Pizza"];
-
-  static List<String> getCuisines() {
-    return Cuisines;
-  }
+  static const List<String> Cuisines = ["Coffee", "Asian", "Tapas", "Brunch", "Pizza"];
 
   static List<SearchHistoryItem> getCuisineSuggestions() {
     return Cuisines.map((c) => SearchHistoryItem(type: SearchHistoryItemType.cuisine, cuisineName: c)).toList();
@@ -33,10 +29,10 @@ class SearchService {
     return (json as List).map((s) => SearchLocationItem.fromToaster(s)).toList();
   }
 
-  static Future<List<Store>> searchStoreByName(String queryStr) async {
+  static Future<List<Store>> searchStoreByName(String queryStr, int limit, int offset) async {
     String query = """
       query {
-        storesByQuery(query: "$queryStr", limit: 12, offset: 0) {
+        storesByQuery(query: "$queryStr", limit: $limit, offset: $offset) {
           ${Store.attributes}
         }
       }
@@ -58,6 +54,21 @@ class SearchService {
     """;
     final response = await Toaster.get(query);
     var json = response['storesByQueryCoords'];
+    return (json as List).map((s) => Store.fromToaster(s)).toList();
+  }
+
+  static Future<List<Store>> searchStoresByCuisineIds(Geo.Address a, Set<int> cuisineIds, int limit, int offset) async {
+    var lat = a.coordinates.latitude;
+    var lng = a.coordinates.longitude;
+    String query = """
+      query {
+        storesByCuisines(cuisines: [${cuisineIds.join(", ")}], lat: $lat, lng: $lng, limit: $limit, offset: $offset) {
+          ${Store.attributes}
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['storesByCuisines'];
     return (json as List).map((s) => Store.fromToaster(s)).toList();
   }
 

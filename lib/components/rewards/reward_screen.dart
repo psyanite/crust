@@ -88,16 +88,7 @@ class _PresenterState extends State<_Presenter> {
         Stack(
           alignment: AlignmentDirectional.bottomStart,
           children: <Widget>[
-            Container(
-              height: 300.0,
-              decoration: BoxDecoration(
-                color: Burnt.imgPlaceholderColor,
-                image: DecorationImage(
-                  image: NetworkImage(widget.reward.promoImage),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
+            NetworkImg(widget.reward.promoImage, height: 300.0),
             Container(
               height: 300.0,
               decoration: BoxDecoration(

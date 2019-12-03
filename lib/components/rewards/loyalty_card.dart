@@ -117,13 +117,7 @@ class _LoyaltyCardState extends State<LoyaltyCard> {
         Stack(
           alignment: AlignmentDirectional.topStart,
           children: <Widget>[
-            Container(
-              height: 130.0,
-              decoration: BoxDecoration(
-                color: Burnt.imgPlaceholderColor,
-                image: DecorationImage(image: NetworkImage(widget.reward.promoImage), fit: BoxFit.cover),
-              ),
-            ),
+            NetworkImg(widget.reward.promoImage, height: 130.0),
             Container(
               height: 130.0,
               decoration: BoxDecoration(

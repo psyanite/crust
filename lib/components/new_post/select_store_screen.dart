@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:crust/components/new_post/review_form.dart';
 import 'package:crust/components/screens/report_missing_store_screen.dart';
 import 'package:crust/models/search.dart';
@@ -39,11 +41,25 @@ class _Presenter extends StatefulWidget {
 }
 
 class _PresenterState extends State<_Presenter> {
-  String _query = '';
+  ScrollController _scrollie = ScrollController();
+  Timer _typingTmr;
   TextEditingController _queryCtrl = TextEditingController();
+  String _query = '';
+  List<MyStore.Store> _results = List<MyStore.Store>();
+  bool _loading = false;
+  int _limit = 12;
+
+  @override
+  initState() {
+    super.initState();
+    _scrollie.addListener(() {
+      if (_results.isNotEmpty && _loading == false && _limit > 0 && _scrollie.position.extentAfter < 500) _fetch();
+    });
+  }
 
   @override
   dispose() {
+    _scrollie.dispose();
     _queryCtrl.dispose();
     super.dispose();
   }
@@ -51,7 +67,7 @@ class _PresenterState extends State<_Presenter> {
   @override
   Widget build(BuildContext context) {
     var slivers = <Widget>[_appBar(), ..._content(context)];
-    return CustomScrollView(slivers: slivers);
+    return Scaffold(body: CustomScrollView(slivers: slivers, controller: _scrollie));
   }
 
   List<Widget> _content(context) {
@@ -59,7 +75,24 @@ class _PresenterState extends State<_Presenter> {
     return <Widget>[
       _searchBar(),
       _query.trim().isEmpty ? _suggestions() : _searchResults(context),
+      SliverToBoxAdapter(child: Container(height: 40.0)),
     ];
+  }
+
+  _search() async {
+    this.setState(() {
+      _results = List<MyStore.Store>();
+      _limit = 12;
+    });
+    _fetch();
+  }
+
+  _fetch() async {
+    this.setState(() => _loading = true);
+    var fresh = await SearchService.searchStoreByName(_query, _limit, _results.length);
+    this.setState(() => _loading = false);
+    if (fresh.length < _limit) this.setState(() => _limit = 0);
+    if (fresh.isNotEmpty) _results.addAll(fresh);
   }
 
   Widget _appBar() {
@@ -91,18 +124,24 @@ class _PresenterState extends State<_Presenter> {
       child: TextField(
         controller: _queryCtrl,
         onChanged: (text) {
-          if (text.trim() != _query.trim()) setState(() => _query = text);
+          this.setState(() {
+            _query = text;
+            _loading = true;
+          });
+          if (_typingTmr != null) setState(() => _typingTmr.cancel());
+          setState(() => _typingTmr = new Timer(Duration(milliseconds: 600), _search));
         },
         style: TextStyle(fontSize: 18.0),
         decoration: InputDecoration(
           hintText: 'Search for a restaurant, cafe, or eatery to review',
           prefixIcon: Icon(CrustCons.search, color: Burnt.lightGrey, size: 18.0),
           suffixIcon: IconButton(
-              icon: Icon(Icons.clear),
-              onPressed: () {
-                _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
-                this.setState(() => _query = '');
-              }),
+            icon: Icon(Icons.clear),
+            onPressed: () {
+              _queryCtrl = TextEditingController.fromValue(TextEditingValue(text: ''));
+              this.setState(() => _query = '');
+            },
+          ),
           border: InputBorder.none,
         ),
       ),
@@ -121,33 +160,15 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _searchResults(BuildContext context) {
-    return FutureBuilder<List<MyStore.Store>>(
-      future: SearchService.searchStoreByName(_query),
-      builder: (context, AsyncSnapshot<List<MyStore.Store>> snapshot) {
-        switch (snapshot.connectionState) {
-          case ConnectionState.active:
-          case ConnectionState.waiting:
-            return LoadingSliverCenter();
-          case ConnectionState.done:
-            if (snapshot.hasError) {
-              return SliverCenter(child: Text('Oops! Something went wrong, please try again'));
-            } else if (snapshot.data.length == 0) {
-              return _letUsKnow();
-            }
-            return SliverList(
-              delegate: SliverChildBuilderDelegate((context, i) {
-              return Builder(
-                builder: (context) {
-                  if (i >= snapshot.data.length) return _cannotFind();
-                  return _StoreCard(store: snapshot.data[i], addSearchHistoryItem: widget.addSearchHistoryItem);
-                },
-              );
-            }, childCount: snapshot.data.length + 1),
-            );
-          default:
-            return SliverToBoxAdapter(child: Text(''));
-        }
-      },
+    if (_loading == true) return LoadingSliverCenter();
+    if (_results.isEmpty) return _letUsKnow();
+    return SliverList(
+      delegate: SliverChildBuilderDelegate((context, i) {
+        return Builder(builder: (context) {
+          if (i >= _results.length) return _cannotFind();
+          return _StoreCard(store: _results[i], addSearchHistoryItem: widget.addSearchHistoryItem);
+        });
+      }, childCount: _results.length + 1),
     );
   }
 
@@ -193,7 +214,8 @@ class _StoreCard extends StatelessWidget {
   const _StoreCard({Key key, this.store, this.addSearchHistoryItem}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => InkWell(
+  Widget build(BuildContext context) {
+    return InkWell(
       onTap: () {
         addSearchHistoryItem(store);
         Navigator.push(context, MaterialPageRoute(builder: (_) => ReviewForm(store: store)));
@@ -204,7 +226,7 @@ class _StoreCard extends StatelessWidget {
           child: IntrinsicHeight(
             child: Row(
               children: <Widget>[
-                _listItemPromoImage(store),
+                NetworkImg(store.coverImage, width: 120.0, height: 100.0),
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -221,18 +243,6 @@ class _StoreCard extends StatelessWidget {
               ],
             ),
           ),
-        ),
-      ));
-
-  Widget _listItemPromoImage(MyStore.Store store) {
-    return Container(
-      width: 120.0,
-      height: 100.0,
-      decoration: BoxDecoration(
-        color: Burnt.imgPlaceholderColor,
-        image: DecorationImage(
-          image: NetworkImage(store.coverImage),
-          fit: BoxFit.cover,
         ),
       ),
     );

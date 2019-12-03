@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crust/components/location/change_location_screen.dart';
 import 'package:crust/components/location/use_my_location.dart';
 import 'package:crust/models/post.dart';
@@ -455,6 +456,40 @@ class LocationBar extends StatelessWidget {
         _addressInfo(context, Utils.defaultAddress),
         UseMyLocation(),
       ],
+    );
+  }
+}
+
+class NetworkImg extends StatelessWidget {
+  final String url;
+  final double width;
+  final double height;
+  final EdgeInsets padding;
+  final EdgeInsets margin;
+  final BoxFit fit;
+
+  NetworkImg(this.url, {Key key, this.width, this.height, this.padding, this.margin, this.fit = BoxFit.cover}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    if (url == null || url.isEmpty) {
+      return Container(
+        width: width,
+        height: height,
+        padding: padding,
+        margin: margin,
+        color: Burnt.imgPlaceholderColor,
+      );
+    }
+    return Container(
+      width: width,
+      height: height,
+      padding: padding,
+      margin: margin,
+      decoration: BoxDecoration(
+        color: Burnt.imgPlaceholderColor,
+        image: DecorationImage(image: CachedNetworkImageProvider(url), fit: BoxFit.cover),
+      ),
     );
   }
 }

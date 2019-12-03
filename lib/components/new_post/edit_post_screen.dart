@@ -110,16 +110,7 @@ class _PresenterState extends State<EditPostScreen> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                Container(
-                    width: 60.0,
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                      color: Burnt.imgPlaceholderColor,
-                      image: DecorationImage(
-                        image: NetworkImage(store.coverImage),
-                        fit: BoxFit.cover,
-                      ),
-                    )),
+                NetworkImg(store.coverImage, width: 60.0, height: 50.0),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Column(

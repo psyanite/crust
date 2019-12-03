@@ -1,4 +1,4 @@
-import 'package:crust/presentation/theme.dart';
+import 'package:crust/presentation/components.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,13 +29,7 @@ class BurntBanner extends StatelessWidget {
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,
       children: <Widget>[
-        Container(
-          height: 300.0,
-          decoration: BoxDecoration(
-            color: Burnt.imgPlaceholderColor,
-            image: image != null ? DecorationImage(image: NetworkImage(image), fit: BoxFit.cover) : null,
-          ),
-        ),
+        NetworkImg(image, height: 300.0),
         Container(
           height: 300.0,
           decoration: BoxDecoration(
