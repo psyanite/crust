@@ -1,3 +1,0 @@
-{
-  "query": "      query {        commentsByPostId(postId: 1) {              id,    reply {      id,    },    body,    replies {      id,      comment {        id,      },      body,      replied_by {        id,        profile {          username,          preferred_name,          profile_picture        }      }      replied_at    },    commented_by {      id,      profile {        username,        preferred_name,        profile_picture      }    }    commented_at          }      }    "
-}

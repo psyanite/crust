@@ -1,6 +1,7 @@
 import 'package:crust/components/rewards/favorite_reward_button.dart';
 import 'package:crust/components/rewards/reward_screen.dart';
 import 'package:crust/models/reward.dart';
+import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
@@ -55,16 +56,7 @@ class RewardSwiper extends StatelessWidget {
             Stack(
               alignment: AlignmentDirectional.topEnd,
               children: <Widget>[
-                Container(
-                  height: 150.0,
-                  decoration: BoxDecoration(
-                    color: Burnt.imgPlaceholderColor,
-                    image: DecorationImage(
-                      image: NetworkImage(reward.promoImage),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+                NetworkImg(reward.promoImage, height: 150.0, fit: BoxFit.cover),
                 FavoriteRewardButton(reward: reward, size: 30.0, padding: EdgeInsets.all(20.0)),
               ],
             ),

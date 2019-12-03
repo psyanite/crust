@@ -101,10 +101,10 @@ class _Presenter extends StatelessWidget {
 
   _loginWithFacebook(context) async {
     var login = FacebookLogin();
-    var result = await login.logInWithReadPermissions(['email']);
+    var result = await login.logIn(['email']);
     if (result.status != FacebookLoginStatus.loggedIn) {
       await login.logOut();
-      result = await login.logInWithReadPermissions(['email']);
+      result = await login.logIn(['email']);
       if (result.status != FacebookLoginStatus.loggedIn) {
         return;
       }

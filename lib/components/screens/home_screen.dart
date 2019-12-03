@@ -244,16 +244,7 @@ class _PresenterState extends State<_Presenter> {
             Stack(
               alignment: AlignmentDirectional.topEnd,
               children: <Widget>[
-                Container(
-                  height: 150.0,
-                  decoration: BoxDecoration(
-                    color: Burnt.imgPlaceholderColor,
-                    image: DecorationImage(
-                      image: NetworkImage(store.coverImage),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
+                NetworkImg(store.coverImage, height: 150.0),
                 FavoriteStoreButton(store: store, size: 30.0, padding: EdgeInsets.all(20.0)),
               ],
             ),

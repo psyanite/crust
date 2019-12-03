@@ -136,13 +136,7 @@ class _PresenterState extends State<_Presenter> {
             children: <Widget>[
               Container(height: 200.0),
               Stack(children: <Widget>[
-                Container(
-                  height: 150.0,
-                  decoration: BoxDecoration(
-                    color: Burnt.separator,
-                    image: DecorationImage(image: NetworkImage(user.profilePicture), fit: BoxFit.cover),
-                  ),
-                ),
+                NetworkImg(user.profilePicture, height: 150.0),
                 Container(
                   height: 150.0,
                   decoration: BoxDecoration(color: Color(0x55000000)),

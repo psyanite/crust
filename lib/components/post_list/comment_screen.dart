@@ -728,11 +728,7 @@ class _ReplyCardState extends State<_ReplyCard> with TickerProviderStateMixin {
 Widget _profilePicture(String image) {
   return Padding(
     padding: EdgeInsets.only(top: 3.0),
-    child: Container(
-      width: 30.0,
-      height: 30.0,
-      decoration: BoxDecoration(color: Burnt.imgPlaceholderColor, image: DecorationImage(fit: BoxFit.cover, image: NetworkImage(image))),
-    ),
+    child: NetworkImg(image, width: 30.0, height: 30.0),
   );
 }
 

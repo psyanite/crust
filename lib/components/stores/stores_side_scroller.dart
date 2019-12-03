@@ -1,5 +1,6 @@
 import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/models/store.dart' as MyStore;
+import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -55,28 +56,31 @@ class StoresSideScroller extends StatelessWidget {
 
   Widget _card(MyStore.Store store) {
     return Builder(
-        builder: (context) => InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id)),
-              );
-            },
-            child: Container(
-                width: 200.0,
-                height: 160.0,
-                padding: EdgeInsets.only(right: 10.0),
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                  Stack(alignment: AlignmentDirectional.topEnd, children: <Widget>[
-                    Container(height: 100.0, width: 200.0, child: Image.network(store.coverImage, fit: BoxFit.cover)),
-                    FavoriteStoreButton(store: store, padding: EdgeInsets.all(7.0), confirmUnfavorite: confirmUnfavorite)
-                  ]),
-                  Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                    Container(height: 5.0),
-                    Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
-                    Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
-                    Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
-                  ])
-                ]))));
+      builder: (context) => InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => StoreScreen(storeId: store.id)),
+          );
+        },
+        child: Container(
+          width: 200.0,
+          height: 160.0,
+          padding: EdgeInsets.only(right: 10.0),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+            Stack(alignment: AlignmentDirectional.topEnd, children: <Widget>[
+              NetworkImg(store.coverImage, height: 100.0, width: 200.0),
+              FavoriteStoreButton(store: store, padding: EdgeInsets.all(7.0), confirmUnfavorite: confirmUnfavorite)
+            ]),
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
+              Container(height: 5.0),
+              Text(store.name, style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
+              Text(store.location != null ? store.location : store.suburb, style: TextStyle(fontSize: 14.0)),
+              Text(store.cuisines.join(', '), style: TextStyle(fontSize: 14.0)),
+            ])
+          ]),
+        ),
+      ),
+    );
   }
 }
