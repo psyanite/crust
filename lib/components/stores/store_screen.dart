@@ -215,7 +215,7 @@ class _PresenterState extends State<_Presenter> {
                         children: <Widget>[
                           Icon(CrustCons.call_bold, size: 35.0, color: Burnt.iconOrange),
                           Container(width: 10.0),
-                          Text('${store.phoneNumber}', style: TextStyle(color: Burnt.hintTextColor)),
+                          Text(store.phoneNumber, style: TextStyle(color: Burnt.hintTextColor)),
                         ],
                       ),
                     ),

@@ -14,7 +14,7 @@ class StoresSideScroller extends StatelessWidget {
   final String emptyMessage;
   final bool confirmUnfavorite;
 
-  StoresSideScroller({Key key, this.stores, this.title, this.seeAll, this.emptyMessage, this.confirmUnfavorite = false}) : super(key: key);
+  StoresSideScroller({Key key, this.stores, this.title, this.seeAll, this.emptyMessage = '', this.confirmUnfavorite = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

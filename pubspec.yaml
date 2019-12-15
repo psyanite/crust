@@ -1,7 +1,7 @@
 name: crust
 description: Toast would not be toast without the crust
 
-version: 1.0.0+1
+version: 1.3.0+3
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
