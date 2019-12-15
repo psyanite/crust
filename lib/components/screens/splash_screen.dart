@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   _startTimer() async {
-    return Timer(Duration(seconds: 3), () {
+    return Timer(Duration(milliseconds: 500), () {
       Navigator.popAndPushNamed(context, MainRoutes.home);
       Navigator.pop(context);
     });

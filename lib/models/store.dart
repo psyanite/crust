@@ -85,11 +85,11 @@ class Store {
     return Store(
       id: json['id'],
       name: json['name'],
-      phoneNumber: json['phone_number'],
+      phoneNumber: json['phone_number'] != null ? json['phone_number'] : 'Not Available',
       coverImage: json['cover_image'],
       followerCount: json['follower_count'],
       reviewCount: json['review_count'],
-      address: json['address'] != null ? Address.fromToaster(json['address']) : null,
+      address: json['address'] != null ? Address.fromToaster(json['address']) : Address(firstLine: 'Not Available'),
       location: json['location'] != null ? json['location']['name'] : null,
       suburb: json['suburb'] != null ? json['suburb']['name'] : null,
       city: json['city'] != null ? json['city']['name'] : null,
