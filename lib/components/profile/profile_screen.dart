@@ -26,12 +26,12 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
       onInit: (Store<AppState> store) {
-        if (store.state.user.users == null || store.state.user.users[userId] == null) {
+        if (store.state.user.users[userId] == null) {
           return store.dispatch(FetchUserByUserId(userId));
         }
       },
       converter: (Store<AppState> store) => _Props.fromStore(store, userId),
-      builder: (context, props) => _Presenter(userId: userId, user: props.me, myProfile: props.myProfile),
+      builder: (context, props) => _Presenter(userId: userId, user: props.user, myProfile: props.myProfile),
     );
   }
 }
@@ -82,7 +82,15 @@ class _PresenterState extends State<_Presenter> {
     this.setState(() => _posts = fresh);
   }
 
-  removeFromList(index, postId) {
+  Future<void> _refresh() async {
+    var fresh = await PostService.fetchPostsByUserId(userId: widget.userId, limit: 12, offset: 0);
+    this.setState(() {
+      _limit = 12;
+      _posts = fresh;
+    });
+  }
+
+  _removeFromList(index, postId) {
     this.setState(() => _posts = List<Post>.from(_posts)..removeAt(index));
   }
 
@@ -114,16 +122,19 @@ class _PresenterState extends State<_Presenter> {
     var user = widget.user;
     if (user == null) return LoadingScreen();
     return Scaffold(
-      body: CustomScrollView(slivers: <Widget>[
-        _appBar(),
-        PostList(
-          noPostsView: Text('Looks like ${user.firstName} hasn\'t written any reviews yet.'),
-          postListType: PostListType.forProfile,
-          posts: _posts,
-          removeFromList: removeFromList,
-        ),
-        if (_loading == true) LoadingSliver(),
-      ]),
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: CustomScrollView(slivers: <Widget>[
+          _appBar(),
+          PostList(
+            noPostsView: Text('Looks like ${user.firstName} hasn\'t written any reviews yet.'),
+            postListType: PostListType.forProfile,
+            posts: _posts,
+            removeFromList: _removeFromList,
+          ),
+          if (_loading == true) LoadingSliver(),
+        ]),
+      ),
     );
   }
 
@@ -169,7 +180,7 @@ class _PresenterState extends State<_Presenter> {
               Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 Text(user.displayName, style: Burnt.titleStyle),
                 Container(width: 4.0),
-                Text("@${user.username}"),
+                Text('@${user.username}'),
               ]),
               Container(height: 10.0),
               _followButton(),
@@ -222,17 +233,17 @@ class _PresenterState extends State<_Presenter> {
 }
 
 class _Props {
-  final User me;
+  final User user;
   final bool myProfile;
 
-  _Props({this.me, this.myProfile = false});
+  _Props({this.user, this.myProfile = false});
 
   static fromStore(Store<AppState> store, int userId) {
     var me = store.state.me.user;
     var myProfile = me != null && me?.id == userId;
-    if (store.state.user.users == null || myProfile) {
-      return _Props(me: null, myProfile: myProfile);
+    if (myProfile) {
+      return _Props(user: null, myProfile: myProfile);
     }
-    return _Props(me: store.state.user.users[userId]);
+    return _Props(user: store.state.user.users[userId]);
   }
 }

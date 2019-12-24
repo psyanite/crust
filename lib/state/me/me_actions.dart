@@ -72,3 +72,13 @@ class SetMyAddress {
 
   SetMyAddress(this.address);
 }
+
+class CheckFcmToken {
+  CheckFcmToken();
+}
+
+class SetFcmToken {
+  final String token;
+
+  SetFcmToken(this.token);
+}

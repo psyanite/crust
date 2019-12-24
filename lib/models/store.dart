@@ -129,8 +129,8 @@ class Store {
     ratings {
       heart_ratings,
       okay_ratings,
-      burnt_ratings
-    }
+      burnt_ratings,
+    },
   """;
 
   String getStoreName() {
@@ -207,8 +207,8 @@ class Suburb {
       },
     },
     coords {
-      coordinates
-    }
+      coordinates,
+    },
   """;
 
   factory Suburb.fromToaster(Map<String, dynamic> json) {

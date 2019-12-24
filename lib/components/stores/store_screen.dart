@@ -114,22 +114,33 @@ class _PresenterState extends State<_Presenter> {
     }
   }
 
+  Future<void> _refresh() async {
+    var fresh = await StoreService.fetchPostsByStoreId(storeId: widget.storeId, limit: 12, offset: 0);
+    this.setState(() {
+      _limit = 12;
+      _posts = fresh;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.store == null) return Scaffold(body: LoadingCenter());
     return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          _appBar(),
-          if (widget.rewards.isNotEmpty) _rewards(context),
-          PostList(
-            noPostsView: Text('Looks like ${widget.store.name} doesn\'t have any reviews yet.'),
-            postListType: PostListType.forStore,
-            posts: _posts,
-            removeFromList: removeFromList,
-          ),
-          if (_loading == true) LoadingSliver(),
-        ],
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: CustomScrollView(
+          slivers: <Widget>[
+            _appBar(),
+            if (widget.rewards.isNotEmpty) _rewards(context),
+            PostList(
+              noPostsView: Text('Looks like ${widget.store.name} doesn\'t have any reviews yet.'),
+              postListType: PostListType.forStore,
+              posts: _posts,
+              removeFromList: removeFromList,
+            ),
+            if (_loading == true) LoadingSliver(),
+          ],
+        ),
       ),
     );
   }

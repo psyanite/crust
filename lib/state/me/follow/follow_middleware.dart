@@ -26,10 +26,10 @@ Middleware<AppState> _fetchFollows(FollowService service) {
     if (user != null) {
       service.fetchFollowedUserIds(user.id).then((stores) {
         store.dispatch(FetchFollowedUsersSuccess(stores));
-      }).catchError((e) => store.dispatch(RequestFailure("fetchFollowedUserIds ${e.toString()}")));
+      }).catchError((e) => store.dispatch(RequestFailure('fetchFollowedUserIds $e')));
       service.fetchFollowedStoreIds(user.id).then((stores) {
         store.dispatch(FetchFollowedStoresSuccess(stores));
-      }).catchError((e) => store.dispatch(RequestFailure("fetchFollowedStoreIds ${e.toString()}")));
+      }).catchError((e) => store.dispatch(RequestFailure('fetchFollowedStoreIds $e')));
     }
     next(action);
   };
@@ -42,7 +42,7 @@ Middleware<AppState> _followUser(FollowService service) {
       store.dispatch(FollowUserSuccess(action.userId));
       service.followUser(userId: action.userId, followerId: user.id).catchError((e) {
         store.dispatch(UnfollowUserSuccess(action.userId));
-        store.dispatch(RequestFailure("followUser ${e.toString()}"));
+        store.dispatch(RequestFailure('followUser $e'));
       });
     }
     next(action);
@@ -56,7 +56,7 @@ Middleware<AppState> _followStore(FollowService service) {
       store.dispatch(FollowStoreSuccess(action.storeId));
       service.followStore(storeId: action.storeId, followerId: user.id).catchError((e) {
         store.dispatch(UnfollowStoreSuccess(action.storeId));
-        store.dispatch(RequestFailure("followStore ${e.toString()}"));
+        store.dispatch(RequestFailure('followStore $e'));
       });
     }
     next(action);
@@ -70,7 +70,7 @@ Middleware<AppState> _unfollowUser(FollowService service) {
       store.dispatch(UnfollowUserSuccess(action.userId));
       service.unfollowUser(userId: action.userId, followerId: user.id).catchError((e) {
         store.dispatch(FollowUserSuccess(action.userId));
-        store.dispatch(RequestFailure("unfollowUser ${e.toString()}"));
+        store.dispatch(RequestFailure('unfollowUser $e'));
       });
     }
     next(action);
@@ -84,7 +84,7 @@ Middleware<AppState> _unfollowStore(FollowService service) {
       store.dispatch(UnfollowStoreSuccess(action.storeId));
       service.unfollowStore(storeId: action.storeId, followerId: user.id).catchError((e) {
         store.dispatch(FollowStoreSuccess(action.storeId));
-        store.dispatch(RequestFailure("unfollowStore ${e.toString()}"));
+        store.dispatch(RequestFailure('unfollowStore $e'));
       });
     }
     next(action);

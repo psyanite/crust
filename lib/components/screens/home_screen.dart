@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
 import 'package:crust/components/stores/favorite_store_button.dart';
@@ -15,7 +17,6 @@ import 'package:crust/state/store/store_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:redux/redux.dart';
 
@@ -87,12 +88,13 @@ class _PresenterState extends State<_Presenter> {
     super.dispose();
   }
 
-  _refresh() {
+  Future<void> _refresh() async {
     this.setState(() {
       _limit = 12;
       _loading = true;
     });
     widget.refresh();
+    await Future.delayed(Duration(milliseconds: 500));
   }
 
   Future<List<Post>> _fetchMore() {
@@ -119,14 +121,9 @@ class _PresenterState extends State<_Presenter> {
 
   @override
   Widget build(BuildContext context) {
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
-    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
     return Scaffold(
       body: RefreshIndicator(
-        onRefresh: () async {
-          _refresh();
-          await Future.delayed(Duration(seconds: 1));
-        },
+        onRefresh: _refresh,
         child: CustomScrollView(
           slivers: <Widget>[
             _appBar(),

@@ -50,7 +50,7 @@ class _PresenterState extends State<_Presenter> {
               Padding(
                 padding: EdgeInsets.only(top: 100.0, bottom: 20.0),
                 child: Text(
-                  "Select your username",
+                  'Select your username',
                   style: TextStyle(fontSize: 18.0),
                   textAlign: TextAlign.center,
                 ),
@@ -58,12 +58,12 @@ class _PresenterState extends State<_Presenter> {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40.0),
                 child: TextField(
-                  decoration: InputDecoration(hintText: "Username"),
+                  decoration: InputDecoration(hintText: 'Username'),
                   onChanged: (val) => setState(() => _username = val),
                   style: TextStyle(fontSize: 18.0, color: Burnt.textBodyColor),
                 ),
               ),
-              BurntButton(text: "Next", onPressed: () => _press(context))
+              BurntButton(text: 'Next', onPressed: () => _press(context))
             ],
           ),
         );

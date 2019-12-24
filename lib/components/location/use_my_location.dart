@@ -32,7 +32,7 @@ class UseMyLocationState extends State<UseMyLocation> {
                 ? Container(
                     width: 100.0,
                     child: Center(child: Container(width: 20.0, height: 20.0, child: CircularProgressIndicator(strokeWidth: 3.0))))
-                : Text("Use My Location", style: TextStyle(color: Burnt.primaryTextColor)),
+                : Text('Use My Location', style: TextStyle(color: Burnt.primaryTextColor)),
           ),
         );
       },
@@ -91,7 +91,7 @@ class MyLocationState extends State<MyLocation> {
         onTap: () => _getLocation(context),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-          child: Text("Use My Location", style: TextStyle(color: Burnt.primaryTextColor)),
+          child: Text('Use My Location', style: TextStyle(color: Burnt.primaryTextColor)),
         ),
       );
     }

@@ -43,14 +43,14 @@ class _LoyaltyCardState extends State<LoyaltyCard> {
     });
   }
 
+  Future<void> _refresh() async {
+    await _fetchUserReward();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.reward == null || _loading == true) return Scaffold(body: LoadingCenter());
 
-    var _refresh = () async {
-      _fetchUserReward();
-      await Future.delayed(Duration(seconds: 1));
-    };
     return Scaffold(
       body: Column(children: <Widget>[
         Flexible(
@@ -238,7 +238,7 @@ class _LoyaltyCardState extends State<LoyaltyCard> {
               Container(height: 7.0),
               Text('Available across ${group.stores.length.toString()} locations'),
               Container(height: 3.0),
-              Text(group.stores.map((s) => s.location ?? s.suburb).join(", ")),
+              Text(group.stores.map((s) => s.location ?? s.suburb).join(', ')),
               Container(height: 10.0),
               Text('More Information', style: TextStyle(color: Burnt.primaryTextColor)),
             ],

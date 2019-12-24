@@ -154,7 +154,7 @@ class _PresenterState extends State<_Presenter> {
             return LoadingSliverCenter();
           case ConnectionState.done:
             if (snapshot.hasError || snapshot.data.length == 0) {
-              return SliverCenter(child: Text("No Results Found"));
+              return SliverCenter(child: Text('No Results Found'));
             }
             return SliverList(
               delegate: SliverChildBuilderDelegate((context, i) {

@@ -67,16 +67,17 @@ class Comment {
       profile_picture
     },
     commented_by_store {
+      id,
       name,
       cover_image,
     },
-    commented_at
+    commented_at,
   """;
 
   String replyTo() {
-    if (commentedBy != null) {
-      return '${commentedBy.displayName} @${commentedBy.username}';
+    if (commentedByStore != null) {
+      return commentedByStore.name;
     }
-    return commentedByStore.name;
+    return '${commentedBy.displayName} @${commentedBy.username}';
   }
 }

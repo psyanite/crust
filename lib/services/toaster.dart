@@ -17,10 +17,10 @@ class Toaster {
     var requestBody = json.encode({'query': body });
     var response = await http.post(url, body: requestBody, headers: headers);
     var responseBody;
-    try { responseBody = json.decode(response.body); } catch (e) { print(e); }
+    try { responseBody = json.decode(response.body); } catch (e, stack) { print('$e, $stack'); }
     if (response.statusCode != 200 || responseBody == null || responseBody['errors'] != null) {
-      print('Toaster request failed: {\n${body.trimRight()}\n}');
-      print('${response.statusCode} response: ${response.body}');
+      print('[ERROR] Toaster request failed: {\n${body.trimRight()}\n}');
+      print('[ERROR] ${response.statusCode} response: ${response.body}');
       return Map<String, dynamic>();
     }
     return responseBody['data'];

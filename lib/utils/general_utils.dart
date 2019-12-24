@@ -13,6 +13,10 @@ import 'package:redux/redux.dart';
 class Utils {
   static final shareBaseUrl = 'https://burntoast.page.link/?link=https://burntoast.com';
 
+  static int strToInt(String str) {
+    return str != null ? int.parse(str) : null;
+  }
+
   static String validateUsername(String name) {
     if (name == null || name.isEmpty) {
       return 'Oops! Usernames can\'t be blank';

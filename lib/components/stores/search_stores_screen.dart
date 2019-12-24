@@ -88,13 +88,11 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Future<List<MyStore.Store>> _searchQuery() {
-    var lookupKey = _query.replaceAll(new RegExp(r"\s+\b|\b\s"), "").toLowerCase();
+    var lookupKey = _query.replaceAll(new RegExp(r"\s+\b|\b\s"), '').toLowerCase();
     var cuisineIds = cLookup[lookupKey];
     if (cuisineIds != null && cuisineIds.isNotEmpty) {
-      print("Search by cuisine Ids");
       return SearchService.searchStoresByCuisineIds(widget.myAddress, cuisineIds, _limit, _results.length);
     }
-    print("Search by searchStores ");
     return SearchService.searchStores(widget.myAddress, _query, _limit, _results.length);
   }
 
@@ -281,7 +279,7 @@ class _PresenterState extends State<_Presenter> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(height: 40.0),
-          Text("Can't find what you're looking for?"),
+          Text('Can\'t find what you\'re looking for?'),
           Container(height: 15.0),
           SmallBurntButton(
             onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ReportMissingStoreScreen())),

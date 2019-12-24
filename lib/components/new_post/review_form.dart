@@ -287,27 +287,27 @@ class _PresenterState extends State<_Presenter> {
 
   bool _isValid(BuildContext context) {
     if (overallScore == null) {
-      snack(context, "Select a toast for how it was overall");
+      snack(context, 'Select a toast for how it was overall');
       return false;
     }
     if (tasteScore == null) {
-      snack(context, "Select a toast for whether it was delicious");
+      snack(context, 'Select a toast for whether it was delicious');
       return false;
     }
     if (serviceScore == null) {
-      snack(context, "Select a toast for how the service was");
+      snack(context, 'Select a toast for how the service was');
       return false;
     }
     if (valueScore == null) {
-      snack(context, "Select a toast for whether it was good value");
+      snack(context, 'Select a toast for whether it was good value');
       return false;
     }
     if (ambienceScore == null) {
-      snack(context, "Select a toast for how the ambience was");
+      snack(context, 'Select a toast for how the ambience was');
       return false;
     }
     if ((reviewBody == null || reviewBody.isEmpty) && images.isEmpty) {
-      snack(context, "Add some photos or add some thoughts");
+      snack(context, 'Add some photos or add some thoughts');
       return false;
     }
     if (images.isNotEmpty) {
@@ -330,9 +330,9 @@ class _PresenterState extends State<_Presenter> {
     });
     if (!isValid) {
       if (images.length == 1) {
-        return "Oops! Photo has to be smaller than 5000x5000";
+        return 'Oops! Photo has to be smaller than 5000x5000';
       } else {
-        return "Oops! All the photos have to be smaller than 5000x5000";
+        return 'Oops! All the photos have to be smaller than 5000x5000';
       }
     }
     return null;

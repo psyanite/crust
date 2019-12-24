@@ -12,10 +12,9 @@ ThemeData getTheme(context) => ThemeData(
           .apply(
             bodyColor: Burnt.textBodyColor,
             displayColor: Burnt.textBodyColor,
+            fontFamily: Burnt.fontBase,
           )
-          .merge(TextTheme(
-              body1: TextStyle(fontSize: 18.0),
-      )),
+          .merge(TextTheme(body1: TextStyle(fontSize: 18.0))),
     );
 
 /// App bar that uses iOS styling on iOS

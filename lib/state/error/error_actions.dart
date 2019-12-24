@@ -5,6 +5,13 @@ class RequestFailure {
 
   @override
   String toString() {
-    return "RequestFailure";
+    return 'RequestFailure';
   }
+}
+
+class SendSystemError {
+  final String type;
+  final String description;
+  
+  SendSystemError(this.type, this.description);
 }

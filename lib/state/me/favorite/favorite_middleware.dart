@@ -32,7 +32,7 @@ Middleware<AppState> _favoriteReward(FavoriteService service) {
     store.dispatch(FavoriteRewardSuccess(action.rewardId));
     service.favoriteReward(userId: store.state.me.user.id, rewardId: action.rewardId).then((rewards) {
       store.dispatch(FetchFavoriteRewardsSuccess(favoriteRewards: rewards));
-    }).catchError((e) => store.dispatch(RequestFailure("favoriteReward ${e.toString()}")));
+    }).catchError((e) => store.dispatch(RequestFailure('favoriteReward $e')));
     next(action);
   };
 }
@@ -42,7 +42,7 @@ Middleware<AppState> _unfavoriteReward(FavoriteService service) {
     store.dispatch(UnfavoriteRewardSuccess(action.rewardId));
     service.unfavoriteReward(userId: store.state.me.user.id, rewardId: action.rewardId).then((rewards) {
       store.dispatch(FetchFavoriteRewardsSuccess(favoriteRewards: rewards));
-    }).catchError((e) => store.dispatch(RequestFailure("unfavoriteReward ${e.toString()}")));
+    }).catchError((e) => store.dispatch(RequestFailure('unfavoriteReward $e')));
     next(action);
   };
 }
@@ -52,7 +52,7 @@ Middleware<AppState> _favoriteStore(FavoriteService service) {
     store.dispatch(FavoriteStoreSuccess(action.storeId));
     service.favoriteStore(userId: store.state.me.user.id, storeId: action.storeId).then((stores) {
       store.dispatch(FetchFavoritesSuccess(favoriteStores: stores));
-    }).catchError((e) => store.dispatch(RequestFailure("favoriteStore ${e.toString()}")));
+    }).catchError((e) => store.dispatch(RequestFailure('favoriteStore $e')));
     next(action);
   };
 }
@@ -62,7 +62,7 @@ Middleware<AppState> _unfavoriteStore(FavoriteService service) {
     store.dispatch(UnfavoriteStoreSuccess(action.storeId));
     service.unfavoriteStore(userId: store.state.me.user.id, storeId: action.storeId).then((stores) {
       store.dispatch(FetchFavoritesSuccess(favoriteStores: stores));
-    }).catchError((e) => store.dispatch(RequestFailure("unfavoriteStore ${e.toString()}")));
+    }).catchError((e) => store.dispatch(RequestFailure('unfavoriteStore $e')));
     next(action);
   };
 }
@@ -72,7 +72,7 @@ Middleware<AppState> _favoritePost(FavoriteService service) {
     store.dispatch(FavoritePostSuccess(action.postId));
     service.favoritePost(userId: store.state.me.user.id, postId: action.postId).then((posts) {
       store.dispatch(FetchFavoritesSuccess(favoritePosts: posts));
-    }).catchError((e) => store.dispatch(RequestFailure("favoritePost ${e.toString()}")));
+    }).catchError((e) => store.dispatch(RequestFailure('favoritePost $e')));
     next(action);
   };
 }
@@ -82,7 +82,7 @@ Middleware<AppState> _unfavoritePost(FavoriteService service) {
     store.dispatch(UnfavoritePostSuccess(action.postId));
     service.unfavoritePost(userId: store.state.me.user.id, postId: action.postId).then((posts) {
       store.dispatch(FetchFavoritesSuccess(favoritePosts: posts));
-    }).catchError((e) => store.dispatch(RequestFailure("unfavoritePost ${e.toString()}")));
+    }).catchError((e) => store.dispatch(RequestFailure('unfavoritePost $e')));
     next(action);
   };
 }
@@ -98,14 +98,14 @@ Middleware<AppState> _fetchFavorites(FavoriteService service) {
         store.dispatch(FetchFavoritesSuccess(
             favoriteStores: stores.map((s) => s.id).toSet(),
             favoritePosts: postIds.toSet()));
-      }).catchError((e) => store.dispatch(RequestFailure("fetchFavorites ${e.toString()}")));
+      }).catchError((e) => store.dispatch(RequestFailure('fetchFavorites $e')));
 
       service.fetchFavoriteRewards(user.id).then((rewards) {
         if (rewards.isNotEmpty) {
           store.dispatch(FetchRewardsSuccess(rewards));
           store.dispatch(FetchFavoriteRewardsSuccess(favoriteRewards: rewards.map((r) => r.id).toSet()));
         }
-      }).catchError((e) => store.dispatch(RequestFailure("fetchFavoriteRewards ${e.toString()}")));
+      }).catchError((e) => store.dispatch(RequestFailure('fetchFavoriteRewards $e')));
     }
     next(action);
   };

@@ -38,16 +38,44 @@ d
 </div>
 
 ## To Do
+
+Test:
+// User comments on user post
+// User replies to user post
+// User replies to user reply
+
+// Admin - Create post
+// Admin - Edit post
+// Admin - Delete post
+
+// User - Create post
+// User - Edit post
+// User - Delete post
+
+
+* Show private posts, and all posts on the homepage post list on the Admin app
+
 * Fix up other stores search screen
 * Migrate changes to butter
 
+* Enable flutter_local_notifications on iOS
+* Enable push notifications in iOS
 * Enable firebase dynamic urls in iOS
+
+* Add loading dialog on delete post
+* Add page refresh on my profile
+* Add on tap of cuisine to open search page
+
 * Add link previews to dynamic links
 * Enable login via iOS
 * Run nightly task to update caches
 * Send email of results
 
+* Fix location_search uses union all but has duplicates
+
 ## Done
+* Add admin-user comment, post, reply notifications
+* Migrate Butter to AndroidX
 * Fix up stores search screen
 * Import stores from Zomato
 * Implement store posts
@@ -141,6 +169,11 @@ d
 * Compress images before upload
 * Upload photos to firebase
 * Cache network images on post lists
+
+## Get started
+* Move `crust.jks` into `/android/app`
+* Move `google-services.json` into `/android/app`
+* Move `key.properties` into `/android`
 
 ## How to Release
 1. Update `config.dart`

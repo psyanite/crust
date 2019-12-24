@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:crust/components/my_profile/my_profile_tab.dart';
@@ -7,6 +8,7 @@ import 'package:crust/components/screens/home_screen.dart';
 import 'package:crust/components/stores/browse_stores_screen.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
+import 'package:crust/services/firebase_messenger.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +36,8 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
       TabType.newPost: Tab(widget: SelectStoreScreen(), icon: CrustCons.new_post),
       TabType.myProfile: Tab(widget: MyProfileTab(), icon: CrustCons.person)
     };
+
+    FirebaseMessenger(context: context);
   }
 
   @override

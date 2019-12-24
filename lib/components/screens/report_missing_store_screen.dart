@@ -58,7 +58,7 @@ class _PresenterState extends State<ReportMissingStoreScreen> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 40.0),
             child: TextField(
-              decoration: InputDecoration(hintText: "What's the name of the store?"),
+              decoration: InputDecoration(hintText: 'What\'s the name of the store?'),
               onChanged: (val) => setState(() => _storeName = val),
               style: TextStyle(fontSize: 18.0, color: Burnt.textBodyColor),
             ),
@@ -66,7 +66,7 @@ class _PresenterState extends State<ReportMissingStoreScreen> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 40.0),
             child: TextField(
-              decoration: InputDecoration(hintText: "Where is it located and what kind of store is it?"),
+              decoration: InputDecoration(hintText: 'Where is it located and what kind of store is it?'),
               onChanged: (val) => setState(() => _description = val),
               style: TextStyle(fontSize: 18.0, color: Burnt.textBodyColor),
             ),

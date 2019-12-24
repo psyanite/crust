@@ -77,11 +77,11 @@ class RewardLocationsScreen extends StatelessWidget {
 
   Widget _details(MyStore.Store store) {
     var address = store.address;
-    var firstLine = "";
-    if (address.firstLine != null) firstLine += "${address.firstLine}";
-    if (address.secondLine != null) firstLine += ", ${address.secondLine}";
-    var secondLine = "${address.streetNumber} ${address.streetName}";
-    if (store.location != null) secondLine += ", ${store.location}";
+    var firstLine = '';
+    if (address.firstLine != null) firstLine += '${address.firstLine}';
+    if (address.secondLine != null) firstLine += ', ${address.secondLine}';
+    var secondLine = '${address.streetNumber} ${address.streetName}';
+    if (store.location != null) secondLine += ', ${store.location}';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[

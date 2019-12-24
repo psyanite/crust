@@ -177,7 +177,7 @@ class _PresenterState extends State<_Presenter> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          Text("Sorry, couldn't find anything matching that."),
+          Text('Sorry, couldn\'t find anything matching that.'),
           Container(height: 15.0),
           SmallBurntButton(
             onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ReportMissingStoreScreen())),
@@ -194,7 +194,7 @@ class _PresenterState extends State<_Presenter> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(height: 40.0),
-        Text("Can't find what you're looking for?"),
+        Text('Can\'t find what you\'re looking for?'),
         Container(height: 15.0),
         SmallBurntButton(
           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ReportMissingStoreScreen())),

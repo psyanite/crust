@@ -143,7 +143,7 @@ class _PresenterState extends State<_Presenter> {
               Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
                 Text(user.displayName, style: Burnt.titleStyle),
                 Container(width: 4.0),
-                Text("@${user.username}"),
+                Text('@${user.username}'),
               ]),
             ],
           ),
@@ -246,7 +246,7 @@ class _PresenterState extends State<_Presenter> {
             child: Column(
               children: <Widget>[
                 Text(user.displayName, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
-                Text("@${user.username}")
+                Text('@${user.username}')
               ],
             ),
           ),

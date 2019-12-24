@@ -37,7 +37,7 @@ class PostInfo extends StatelessWidget {
   }
 
   Widget _header() {
-    if (post.isOfficialStorePost()) {
+    if (post.official == true) {
       return _officialHeaderContent();
     } else if (postListType == PostListType.forProfile) {
       return _profileHeaderContent();
