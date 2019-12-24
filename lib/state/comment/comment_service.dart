@@ -47,7 +47,12 @@ class CommentService {
   static Future<Reply> addReply(Reply reply) async {
     String query = """
       mutation {
-        addReply(commentId: ${reply.commentId}, body: "${reply.body}", repliedBy: ${reply.repliedBy.id}) {
+        addReply(
+          commentId: ${reply.commentId}, 
+          body: "${reply.body}", 
+          replyTo: ${reply.replyTo},
+          repliedBy: ${reply.repliedBy.id}
+        ) {
           ${Reply.attributes}
         }
       }

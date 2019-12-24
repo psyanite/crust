@@ -32,7 +32,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
 
   List<Locale> get supportedLocales {
     return const <Locale>[
-      Locale("en", ""),
+      Locale('en', ''),
     ];
   }
 
@@ -57,7 +57,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
     final String lang = getLang(locale);
     if (lang != null) {
       switch (lang) {
-        case "en":
+        case '':
           S.current = const $en();
           return SynchronousFuture<S>(S.current);
         default:
@@ -82,7 +82,7 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<S> {
       return fallback ?? supported.first;
     }
 
-    final Locale languageLocale = Locale(locale.languageCode, "");
+    final Locale languageLocale = Locale(locale.languageCode, '');
     if (supported.contains(locale)) {
       return locale;
     } else if (supported.contains(languageLocale)) {

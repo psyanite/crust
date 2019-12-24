@@ -115,7 +115,7 @@ class _PresenterState extends State<_Presenter> {
       body: RefreshIndicator(
         onRefresh: () async {
           _refresh();
-          await Future.delayed(Duration(seconds: 1));
+          await Future.delayed(Duration(milliseconds: 500));
         },
         child: CustomScrollView(
           slivers: <Widget>[

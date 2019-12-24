@@ -4,6 +4,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class User {
   final int id;
+  final int storeId;
   final String username;
   final String firstName;
   final String lastName;
@@ -14,10 +15,12 @@ class User {
   final SocialType socialType;
   final String socialId;
   final String token;
+  final String fcmToken;
   final List<Post> posts;
 
   User({
     this.id,
+    this.storeId,
     this.username,
     this.firstName,
     this.lastName,
@@ -28,10 +31,11 @@ class User {
     this.socialType,
     this.socialId,
     this.token,
+    this.fcmToken,
     this.posts,
   });
 
-  User copyWith({int id, String username, String profilePicture, String displayName, List<Post> posts, String tagline}) {
+  User copyWith({int id, String username, String profilePicture, String displayName, List<Post> posts, String tagline, String fcmToken, String storeId}) {
     return User(
       id: id ?? this.id,
       username: username ?? this.username,
@@ -44,6 +48,7 @@ class User {
       socialType: socialType,
       socialId: socialId,
       token: token,
+      fcmToken: fcmToken ?? this.fcmToken,
       posts: posts ?? this.posts,
     );
   }
@@ -51,6 +56,7 @@ class User {
   User setTagline(String tagline) {
     return User(
       id: id,
+      storeId: storeId,
       username: username,
       firstName: firstName,
       lastName: lastName,
@@ -61,6 +67,7 @@ class User {
       socialType: socialType,
       socialId: socialId,
       token: token,
+      fcmToken: fcmToken,
       posts: posts,
     );
   }
@@ -78,6 +85,7 @@ class User {
       'socialType': EnumUtil.format(this.socialType.toString()),
       'socialId': this.socialId,
       'token': this.token,
+      'fcmToken': this.fcmToken,
     };
   }
 
@@ -94,30 +102,37 @@ class User {
       socialType: EnumUtil.fromString(SocialType.values, json['socialType']),
       socialId: json['socialId'],
       token: json['token'],
+      fcmToken: json['fcmToken'],
     );
   }
 
   factory User.fromToaster(Map<String, dynamic> json) {
     if (json == null) return null;
+    var admin = json['admin'];
     return User(
       id: json['id'],
+      storeId: admin != null ? admin['store_id'] : null,
       email: json['email'],
       username: json['profile']['username'],
       displayName: json['profile']['preferred_name'],
       profilePicture: json['profile']['profile_picture'],
       tagline: json['profile']['tagline'],
+      fcmToken: json['fcmToken'],
       posts: json['posts'] != null ? (json['posts'] as List).map((p) => Post.fromToaster(p)).toList() : null,
     );
   }
 
   factory User.fromProfileToaster(Map<String, dynamic> json) {
     if (json == null) return null;
+    var admin = json['admin'];
     return User(
       id: json['user_id'],
+      storeId: admin != null ? admin['store_id'] : null,
       username: json['username'],
       displayName: json['preferred_name'],
       profilePicture: json['profile_picture'],
       tagline: json['tagline'],
+      fcmToken: json['fcmToken'],
     );
   }
 
@@ -142,6 +157,10 @@ class User {
       socialType: SocialType.google,
       socialId: googleUser.id,
     );
+  }
+
+  bool isAdmin() {
+    return storeId != null;
   }
 
   @override

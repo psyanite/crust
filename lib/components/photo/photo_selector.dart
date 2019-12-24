@@ -65,7 +65,7 @@ class PhotoSelector extends StatelessWidget {
             textOnNothingSelected: 'Oops! Select an image',
           ));
     } on PlatformException catch (e) {
-      snack(context, "Error " + e.toString());
+      snack(context, 'Error $e');
     }
 
     if (resultList != null && resultList.length > 0) {

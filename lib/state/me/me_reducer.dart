@@ -14,6 +14,7 @@ Reducer<MeState> meReducer = combineReducers([
   new TypedReducer<MeState, SetMyDisplayName>(setMyDisplayName),
   new TypedReducer<MeState, SetMyUsername>(setMyUsername),
   new TypedReducer<MeState, SetMyAddress>(setMyAddress),
+  new TypedReducer<MeState, SetFcmToken>(setFcmToken),
 ]);
 
 MeState loginSuccess(MeState state, LoginSuccess action) {
@@ -63,4 +64,8 @@ MeState setMyUsername(MeState state, SetMyUsername action) {
 
 MeState setMyAddress(MeState state, SetMyAddress action) {
   return state.copyWith(address: action.address);
+}
+
+MeState setFcmToken(MeState state, SetFcmToken action) {
+  return state.copyWith(user: state.user.copyWith(fcmToken: action.token));
 }

@@ -21,7 +21,10 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
-      converter: (Store<AppState> store) => (user) => store.dispatch(LoginSuccess(user)),
+      converter: (Store<AppState> store) => (user) {
+        store.dispatch(LoginSuccess(user));
+        store.dispatch(CheckFcmToken());
+      },
       builder: (context, loginSuccess) => _Presenter(loginSuccess: loginSuccess),
     );
   }
@@ -66,13 +69,13 @@ class _Presenter extends StatelessWidget {
       children: [
         Image.asset('assets/images/loading-icon.png', height: 200.0),
         Container(height: 15.0),
-        WhiteButton(text: "Login with Facebook", onPressed: () => _loginWithFacebook(context)),
+        WhiteButton(text: 'Login with Facebook', onPressed: () => _loginWithFacebook(context)),
         Container(height: 15.0),
-        WhiteButton(text: "Login with Google", onPressed: () => _loginWithGoogle(context)),
+        WhiteButton(text: 'Login with Google', onPressed: () => _loginWithGoogle(context)),
         Container(height: 15.0),
-        WhiteButton(text: "Login with Data Profile", onPressed: () => _loginWithDataProfile(context)),
+        WhiteButton(text: 'Login with Data Profile', onPressed: () => _loginWithDataProfile(context)),
         Container(height: 15.0),
-        WhiteButton(text: "Login with Empty Profile", onPressed: () => _loginWithEmptyProfile(context)),
+        WhiteButton(text: 'Login with Empty Profile', onPressed: () => _loginWithEmptyProfile(context)),
         Container(height: 20.0),
         _terms(context),
       ],
@@ -128,30 +131,30 @@ class _Presenter extends StatelessWidget {
 
   _loginWithDataProfile(context) async {
     var user = User(
-      firstName: "Neila",
-      lastName: "Nyan",
-      displayName: "Neila Nyan",
-      email: "psyneia@gmail.com",
-      profilePicture: "meow",
+      firstName: 'Neila',
+      lastName: 'Nyan',
+      displayName: 'Neila Nyan',
+      email: 'psyneia@gmail.com',
+      profilePicture: 'meow',
       socialType: SocialType.facebook,
-      socialId: "1905457732907903",
+      socialId: '1905457732907903',
       token:
-          "EAAdWJ8R7ISsBAOZCfBqwJQmxbNV6cpgZCp8DBjTuufciDUqIvzJxLq5ZBaecbPyKUq5SRgJrpWWKJY5fQd72GfV0cVuTDk84cAZBlSb00pZBTBQULk2ybauUsqeL3sa9NBMM3GuBrqX5KcZCFo8ovZC0xuiZCFGo9ZAH5gSRTuKugrIkw0q8p1e53RHZBbFqzFUQ3o9cZCjSgNtCQZDZD",
+          'EAAdWJ8R7ISsBAOZCfBqwJQmxbNV6cpgZCp8DBjTuufciDUqIvzJxLq5ZBaecbPyKUq5SRgJrpWWKJY5fQd72GfV0cVuTDk84cAZBlSb00pZBTBQULk2ybauUsqeL3sa9NBMM3GuBrqX5KcZCFo8ovZC0xuiZCFGo9ZAH5gSRTuKugrIkw0q8p1e53RHZBbFqzFUQ3o9cZCjSgNtCQZDZD',
     );
     await _login(user, context);
   }
 
   _loginWithEmptyProfile(context) async {
     var user = User(
-      firstName: "Sophia",
-      lastName: "King",
-      displayName: "Sophia",
-      email: "sophia_king@gmail.com",
-      profilePicture: "meow",
+      firstName: 'Sophia',
+      lastName: 'King',
+      displayName: 'Sophia',
+      email: 'sophia_king@gmail.com',
+      profilePicture: 'meow',
       socialType: SocialType.google,
-      socialId: "sophia123",
+      socialId: 'sophia123',
       token:
-          "EAAdWJ8R7ISsBAOZCfBqwJQmxbNV6cpgZCp8DBjTuufciDUqIvzJxLq5ZBaecbPyKUq5SRgJrpWWKJY5fQd72GfV0cVuTDk84cAZBlSb00pZBTBQULk2ybauUsqeL3sa9NBMM3GuBrqX5KcZCFo8ovZC0xuiZCFGo9ZAH5gSRTuKugrIkw0q8p1e53RHZBbFqzFUQ3o9cZCjSgNtCQZDZD",
+          'EAAdWJ8R7ISsBAOZCfBqwJQmxbNV6cpgZCp8DBjTuufciDUqIvzJxLq5ZBaecbPyKUq5SRgJrpWWKJY5fQd72GfV0cVuTDk84cAZBlSb00pZBTBQULk2ybauUsqeL3sa9NBMM3GuBrqX5KcZCFo8ovZC0xuiZCFGo9ZAH5gSRTuKugrIkw0q8p1e53RHZBbFqzFUQ3o9cZCjSgNtCQZDZD',
     );
     await _login(user, context);
   }

@@ -6,26 +6,27 @@ import 'package:crust/state/app/app_reducer.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_logging/redux_logging.dart';
 import 'package:redux_persist/redux_persist.dart';
 import 'package:redux_persist_flutter/redux_persist_flutter.dart';
-import 'package:redux_thunk/redux_thunk.dart';
 
 main() async {
-  final persistor = Persistor<AppState>(storage: FlutterStorage(key: 'crust'), serializer: JsonSerializer<AppState>(AppState.rehydrate));
+  WidgetsFlutterBinding.ensureInitialized();
 
+  final persistor = Persistor<AppState>(storage: FlutterStorage(key: 'crust'), serializer: JsonSerializer<AppState>(AppState.rehydrate));
   var initialState;
   try {
     initialState = await persistor.load();
-  } catch (e) {
+  } catch (e, stack) {
+    print('[ERROR] $e, $stack');
     initialState = null;
   }
 
   List<Middleware<AppState>> createMiddleware() {
     return <Middleware<AppState>>[
-      thunkMiddleware,
       persistor.createMiddleware(),
       LoggingMiddleware.printer(),
       ...createAppMiddleware(),
@@ -37,7 +38,6 @@ main() async {
     initialState: initialState ?? AppState(),
     middleware: createMiddleware(),
   );
-
   runApp(Main(store: store));
 }
 
@@ -53,6 +53,18 @@ class Main extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        systemNavigationBarColor: Color(0xFFEEEEEE),
+        systemNavigationBarDividerColor: null,
+        systemNavigationBarIconBrightness: Brightness.dark,
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+        statusBarBrightness: Brightness.light,
+      )
+    );
+
     return StoreProvider<AppState>(
       store: store,
       child: MaterialApp(
@@ -93,5 +105,5 @@ class CustomLocalization extends DefaultMaterialLocalizations {
   const CustomLocalization();
 
   @override
-  String get searchFieldLabel => "Search restaurants, cuisines...";
+  String get searchFieldLabel => 'Search restaurants, cuisines...';
 }

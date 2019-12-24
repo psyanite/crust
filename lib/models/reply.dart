@@ -9,23 +9,26 @@ class Reply {
   final List<int> likedByStores;
   final User repliedBy;
   final Store repliedByStore;
+  final int replyTo;
   final DateTime repliedAt;
 
-  Reply({this.id, this.commentId, this.body, this.likedByUsers, this.likedByStores, this.repliedBy, this.repliedByStore, this.repliedAt});
+  Reply({this.id, this.commentId, this.body, this.likedByUsers, this.likedByStores, this.repliedBy, this.repliedByStore, this.replyTo, this.repliedAt});
 
-  factory Reply.fromToaster(Map<String, dynamic> reply) {
-    if (reply == null) return null;
-    var repliedBy = reply['replied_by'];
-    var repliedByStore = reply['replied_by_store'];
+  factory Reply.fromToaster(Map<String, dynamic> json) {
+    if (json == null) return null;
+    var repliedBy = json['replied_by'];
+    var repliedByStore = json['replied_by_store'];
+    var replyTo = json['replyTo'];
     return Reply(
-      id: reply['id'],
-      commentId: reply['comment_id'],
-      body: reply['body'],
-      likedByUsers: List<int>.from(reply['likes'].map((l) => l['user_id']).where((id) => id != null)),
-      likedByStores: List<int>.from(reply['likes'].map((l) => l['store_id']).where((id) => id != null)),
+      id: json['id'],
+      commentId: json['comment_id'],
+      body: json['body'],
+      likedByUsers: List<int>.from(json['likes'].map((l) => l['user_id']).where((id) => id != null)),
+      likedByStores: List<int>.from(json['likes'].map((l) => l['store_id']).where((id) => id != null)),
       repliedBy: repliedBy != null ? User.fromProfileToaster(repliedBy) : null,
       repliedByStore: repliedByStore != null ? Store.fromToaster(repliedByStore) : null,
-      repliedAt: DateTime.parse(reply['replied_at']),
+      replyTo: replyTo != null ? replyTo['user_id'] : null,
+      repliedAt: DateTime.parse(json['replied_at']),
     );
   }
 
@@ -41,19 +44,26 @@ class Reply {
       user_id,
       username,
       preferred_name,
-      profile_picture
+      profile_picture,
+      admin {
+        store_id,
+      }
     },
     replied_by_store {
+      id,
       name,
       cover_image,
     },
-    replied_at
+    reply_to {
+      user_id,
+    },
+    replied_at,
   """;
 
-  String replyTo() {
-    if (repliedBy != null) {
-      return '${repliedBy.displayName} @${repliedBy.username}';
+  String getReplyTo() {
+    if (repliedByStore != null) {
+      return repliedByStore.name;
     }
-    return repliedByStore.name;
+    return '${repliedBy.displayName} @${repliedBy.username}';
   }
 }

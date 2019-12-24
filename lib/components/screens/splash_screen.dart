@@ -12,7 +12,6 @@ import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:redux/redux.dart';
 
@@ -24,36 +23,40 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+
   @override
   initState() {
     super.initState();
-    _startTimer();
+    _redirect();
   }
 
-  _startTimer() async {
-    return Timer(Duration(milliseconds: 500), () {
+  _redirect() async {
+    Timer(Duration(milliseconds: 500), () {
       Navigator.popAndPushNamed(context, MainRoutes.home);
-      Navigator.pop(context);
     });
   }
 
-  getMyAddress() async {
+  _getMyAddress() async {
     var enabled = await Geolocator().isLocationServiceEnabled();
     if (enabled == false) return null;
     var address = await Utils.getGeoAddress(5);
     return address;
   }
 
-  fetchRewardsNearMe(Store<AppState> store, myAddress) async {
+  _fetchRewardsNearMe(Store<AppState> store, myAddress) async {
     var address = myAddress ?? store.state.me.address ?? Utils.defaultAddress;
     var rewards = await RewardService.fetchRewards(limit: 12, offset: 0, address: address);
     if (rewards != null) store.dispatch(FetchRewardsNearMeSuccess(rewards));
   }
 
+  _setupFcm(Store<AppState> store) {
+    if (store.state.me.user != null) {
+      store.dispatch(CheckFcmToken());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    FlutterStatusbarcolor.setStatusBarWhiteForeground(false);
-    FlutterStatusbarcolor.setStatusBarColor(Colors.transparent);
     return StoreConnector<AppState, int>(
       onInit: (Store<AppState> store) async {
         store.dispatch(InitFeed());
@@ -69,10 +72,12 @@ class _SplashScreenState extends State<SplashScreen> {
         store.dispatch(FetchCurate(Curate(tag: 'brunch', title: 'Brunch Spots')));
         store.dispatch(FetchCurate(Curate(tag: 'sweet', title: 'Sweet Tooth')));
 
-        var myAddress = await getMyAddress();
+        var myAddress = await _getMyAddress();
         if (myAddress != null) store.dispatch(SetMyAddress(myAddress));
 
-        fetchRewardsNearMe(store, myAddress);
+        _fetchRewardsNearMe(store, myAddress);
+
+        _setupFcm(store);
       },
       converter: (Store<AppState> store) => 1,
       builder: (BuildContext context, int props) {

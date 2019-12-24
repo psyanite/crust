@@ -44,22 +44,22 @@ class Reward {
 
   String bannerText() {
     var lastDay = this.validUntil;
-    if (isExpired() == true) return 'Expired ${DateFormat.MMMEd("en_US").format(lastDay)}';
+    if (isExpired() == true) return 'Expired ${DateFormat.MMMEd('en_US').format(lastDay)}';
 
     var today = new DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
     var firstDay = this.validFrom;
     if (firstDay != null && lastDay != null) {
       if (firstDay == lastDay) {
         if (today == firstDay) return 'Only available TODAY. Get in quick!';
-        return 'Coming Soon · ${DateFormat.MMMEd("en_US").format(firstDay)} · One Day Only';
+        return 'Coming Soon · ${DateFormat.MMMEd('en_US').format(firstDay)} · One Day Only';
       } else {
-        if (firstDay.isBefore(today)) return 'Hurry! Only available until ${DateFormat.MMMEd("en_US").format(lastDay)}';
-        return 'Coming Soon · ${DateFormat.MMMEd("en_US").format(firstDay)} - ${DateFormat.MMMEd("en_US").format(lastDay)}';
+        if (firstDay.isBefore(today)) return 'Hurry! Only available until ${DateFormat.MMMEd('en_US').format(lastDay)}';
+        return 'Coming Soon · ${DateFormat.MMMEd('en_US').format(firstDay)} - ${DateFormat.MMMEd('en_US').format(lastDay)}';
       }
     } else if (firstDay == null) {
-      return 'Available today until ${DateFormat.MMMEd("en_US").format(lastDay)}';
+      return 'Available today until ${DateFormat.MMMEd('en_US').format(lastDay)}';
     } else {
-      return 'Available from the ${DateFormat.MMMEd("en_US").format(firstDay)}';
+      return 'Available from the ${DateFormat.MMMEd('en_US').format(firstDay)}';
     }
   }
 
@@ -132,7 +132,7 @@ class Reward {
       ratings {
         heart_ratings,
         okay_ratings,
-        burnt_ratings
+        burnt_ratings,
       }
     },
     store_group {
@@ -164,7 +164,7 @@ class Reward {
         ratings {
           heart_ratings,
           okay_ratings,
-          burnt_ratings
+          burnt_ratings,
         }
       }
     },

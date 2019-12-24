@@ -136,4 +136,17 @@ class MeService {
     var json = response['setUsername'];
     return name == json['username'];
   }
+
+  Future<bool> setFcmToken({userId, token}) async {
+    String query = """
+      mutation {
+        setFcmToken(userId: $userId, token: "$token") {
+          fcm_token
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['setFcmToken'];
+    return token == json['fcm_token'];
+  }
 }

@@ -53,7 +53,7 @@ class _PresenterState extends State<_Presenter> {
     _load();
   }
 
-  _load() async {
+  Future<void> _load() async {
     if (widget.myId != null) {
       var fresh = await RewardService.fetchUserReward(userId: widget.myId, rewardId: widget.reward.id);
       if (fresh != null) this.setState(() => _userReward = fresh);
@@ -63,15 +63,12 @@ class _PresenterState extends State<_Presenter> {
   @override
   Widget build(BuildContext context) {
     if (widget.reward == null) return Scaffold(body: LoadingCenter());
-    var _refresh = () async {
-      _load();
-      await Future.delayed(Duration(seconds: 1));
-    };
+
     return Scaffold(
       body: Column(children: <Widget>[
         Flexible(
           child: RefreshIndicator(
-            onRefresh: _refresh,
+            onRefresh: _load,
             child: CustomScrollView(slivers: <Widget>[
               SliverToBoxAdapter(child: Column(children: <Widget>[_appBar(), _description()]))
             ]),
@@ -251,7 +248,7 @@ class _PresenterState extends State<_Presenter> {
               Container(height: 7.0),
               Text('Available across ${group.stores.length.toString()} locations'),
               Container(height: 3.0),
-              Text(group.stores.map((s) => s.location ?? s.suburb).join(", ")),
+              Text(group.stores.map((s) => s.location ?? s.suburb).join(', ')),
               Container(height: 10.0),
               Text('More Information', style: TextStyle(color: Burnt.primaryTextColor)),
             ],

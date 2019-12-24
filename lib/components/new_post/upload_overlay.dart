@@ -40,7 +40,7 @@ class UploadOverlayState extends State<UploadOverlay> {
   @override
   initState() {
     super.initState();
-    loadingText = images.isNotEmpty ? "Processing your awesome photos…" : "Submitting your awesome review…";
+    loadingText = images.isNotEmpty ? 'Processing your awesome photos…' : 'Submitting your awesome review…';
     _submit();
   }
 
@@ -79,11 +79,9 @@ class UploadOverlayState extends State<UploadOverlay> {
     }
     var postPhotos = photoUrls.map((s) => PostPhoto(url: s)).toList();
     var update = post.copyWith(postPhotos: postPhotos);
-    var result = await (post.id == null ? PostService.submitReviewPost(update) : PostService.updateReviewPost(update));
+    var result = await (post.id == null ? PostService.submitPost(update) : PostService.updatePost(update));
     if (result == null) {
-      setState(() {
-        error = "Oops! Something went wrong, please try again.";
-      });
+      setState(() =>error = 'Oops! Something went wrong, please try again.');
       return false;
     }
     deletePhotosQueue.forEach((p) => PostService.deletePhoto(p.id));
@@ -97,20 +95,18 @@ class UploadOverlayState extends State<UploadOverlay> {
   }
 
   Future<List<String>> _uploadPhotos() async {
-    String timestamp = "${DateTime.now().millisecondsSinceEpoch}";
+    String timestamp = '${DateTime.now().millisecondsSinceEpoch}';
     List<Uint8List> byteData = await Future.wait(images.map((a) => _getByteData(a)));
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseUser user = await auth.currentUser();
     if (user == null) await auth.signInAnonymously();
     List<Tuple2<StorageUploadTask, StorageReference>> tasks = byteData.map((bd) {
-      String fileName = "$timestamp-${Random().nextInt(10000)}.jpg";
-      StorageReference ref = FirebaseStorage.instance.ref().child("reviews/post-photos/$fileName");
+      String fileName = '$timestamp-${Random().nextInt(10000)}.jpg';
+      StorageReference ref = FirebaseStorage.instance.ref().child('reviews/post-photos/$fileName');
       return Tuple2(ref.putData(bd, StorageMetadata(customMetadata: {'secret': 'breadcat'})), ref);
     }).toList(growable: false);
 
-    setState(() {
-      loadingText = "Uploading photos to the cloud…";
-    });
+    setState(() => loadingText = 'Uploading photos to the cloud…');
 
     List<String> photoUrls = [];
     var halfwayPoint = (tasks.length / 2).floor();
@@ -119,7 +115,7 @@ class UploadOverlayState extends State<UploadOverlay> {
       await t.item1.onComplete;
       if (count == halfwayPoint) {
         setState(() {
-          loadingText = "Almost there now…";
+          loadingText = 'Almost there now…';
         });
       }
       if (t.item1.isSuccessful) {

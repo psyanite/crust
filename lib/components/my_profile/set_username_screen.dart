@@ -54,6 +54,13 @@ class _PresenterState extends State<_Presenter> {
       snack(context, error);
       return;
     }
+
+    var userId = await MeService.getUserIdByUsername(name);
+    if (userId != null) {
+      snack(context, 'Sorry, that username is already taken');
+      return;
+    }
+
     var result = await MeService.setUsername(userId: widget.myId, name: name);
     if (result == true) {
       widget.setUsername(name);

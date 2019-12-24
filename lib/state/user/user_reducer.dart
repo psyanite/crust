@@ -1,6 +1,3 @@
-import 'dart:collection';
-
-import 'package:crust/models/user.dart';
 import 'package:crust/state/user/user_actions.dart';
 import 'package:crust/state/user/user_state.dart';
 import 'package:redux/redux.dart';
@@ -10,8 +7,5 @@ Reducer<UserState> userReducer = combineReducers([
 ]);
 
 UserState fetchUserSuccess(UserState state, FetchUserByUserIdSuccess action) {
-  var users = state.users;
-  if (users == null) users = LinkedHashMap<int, User>();
-  users.update(action.user.id, (user) => action.user, ifAbsent: () => action.user);
-  return state.copyWith(users: users);
+  return state.addUser(action.user);
 }

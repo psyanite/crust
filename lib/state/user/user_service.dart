@@ -12,9 +12,9 @@ class UserService {
           id,
           email,
           profile {
-            profile_picture,
-            preferred_name,
             username,
+            preferred_name,
+            profile_picture,
             tagline
           },
           posts {

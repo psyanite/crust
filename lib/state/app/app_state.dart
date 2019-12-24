@@ -27,7 +27,7 @@ class AppState {
         favorite = favorite ?? FavoriteState.initialState(),
         follow = follow ?? FollowState.initialState(),
         store = store ?? StoreState.initialState(),
-        user = user ?? UserState(),
+        user = user ?? UserState.initialState(),
         reward = reward ?? RewardState.initialState(),
         comment = comment ?? CommentState.initialState(),
         error = error ?? ErrorState();
@@ -39,8 +39,8 @@ class AppState {
         me: json['me'] != null ? MeState.rehydrate(json['me']) : null
       );
     }
-    catch (e) {
-      print("Could not deserialize json from persistor: $e");
+    catch (e, stack) {
+      print('[ERROR] Could not deserialize json from persistor: $e, $stack');
       return AppState();
     }
   }

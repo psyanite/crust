@@ -23,7 +23,7 @@ Middleware<AppState> _fetchTopRewards(RewardService service) {
     service.fetchTopRewards().then((rewards) {
       store.dispatch(FetchTopRewardsSuccess(rewards));
       store.dispatch(FetchRewardsSuccess(rewards));
-    }).catchError((e) => store.dispatch(RequestFailure("fetchTopRewards ${e.toString()}")));
+    }).catchError((e) => store.dispatch(RequestFailure('fetchTopRewards $e')));
     next(action);
   };
 }
@@ -32,7 +32,7 @@ Middleware<AppState> _fetchRedeemed(RewardService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     service.fetchRedeemedRewards(store.state.me.user.id).then((userRewards) {
       store.dispatch(FetchUserRewardsSuccess(userRewards));
-    }).catchError((e) => store.dispatch(RequestFailure("fetchRedeemed ${e.toString()}")));
+    }).catchError((e) => store.dispatch(RequestFailure('fetchRedeemed $e')));
     next(action);
   };
 }
@@ -41,7 +41,7 @@ Middleware<AppState> _fetchLoyalty(RewardService service) {
   return (Store<AppState> store, action, NextDispatcher next) {
     service.fetchLoyaltyRewards(store.state.me.user.id).then((rewards) {
       if (rewards != null) store.dispatch(FetchLoyaltyRewardsSuccess(rewards));
-    }).catchError((e) => store.dispatch(RequestFailure("fetchLoyaltyRewards ${e.toString()}")));
+    }).catchError((e) => store.dispatch(RequestFailure('fetchLoyaltyRewards $e')));
     next(action);
   };
 }

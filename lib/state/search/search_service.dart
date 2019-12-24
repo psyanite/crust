@@ -6,7 +6,7 @@ import 'package:geocoder/geocoder.dart' as Geo;
 class SearchService {
   const SearchService();
 
-  static const List<String> Cuisines = ["Coffee", "Asian", "Tapas", "Brunch", "Pizza"];
+  static const List<String> Cuisines = ['Coffee', 'Asian', 'Tapas', 'Brunch', 'Pizza'];
 
   static List<SearchHistoryItem> getCuisineSuggestions() {
     return Cuisines.map((c) => SearchHistoryItem(type: SearchHistoryItemType.cuisine, cuisineName: c)).toList();
@@ -62,7 +62,7 @@ class SearchService {
     var lng = a.coordinates.longitude;
     String query = """
       query {
-        storesByCuisines(cuisines: [${cuisineIds.join(", ")}], lat: $lat, lng: $lng, limit: $limit, offset: $offset) {
+        storesByCuisines(cuisines: [${cuisineIds.join(', ')}], lat: $lat, lng: $lng, limit: $limit, offset: $offset) {
           ${Store.attributes}
         }
       }
@@ -92,7 +92,7 @@ class SearchService {
     if (args.isEmpty) return List<Suburb>();
     String query = """
       query {
-        suburbsByQuery(${args.join(", ")}) {
+        suburbsByQuery(${args.join(', ')}) {
           ${Suburb.attributes}
         }
       }

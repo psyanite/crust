@@ -19,7 +19,7 @@ Middleware<AppState> _initFeed(FeedService service) {
     var promise = me != null ? service.fetchFeed(userId: me.id, limit: 12, offset: 0) : service.fetchDefaultFeed(limit: 12, offset: 0);
     promise.then((posts) {
       store.dispatch(FetchFeedSuccess(posts));
-    }).catchError((e) => store.dispatch(RequestFailure("fetchFeed ${e.toString()}")));
+    }).catchError((e) => store.dispatch(RequestFailure('fetchFeed $e')));
 
     next(action);
   };
