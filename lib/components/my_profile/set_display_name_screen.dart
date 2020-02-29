@@ -144,13 +144,9 @@ class _PresenterState extends State<_Presenter> {
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(2.0),
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomLeft,
-                      end: Alignment.topRight,
-                      stops: [0, 0.6, 1.0],
-                      colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-                    )),
+                  borderRadius: BorderRadius.circular(2.0),
+                  gradient: Burnt.buttonGradient,
+                ),
                 child: Text('SUBMIT', style: TextStyle(fontSize: 16.0, color: Colors.white, letterSpacing: 3.0)),
               ),
             ),

@@ -1,3 +1,4 @@
+import 'package:crust/presentation/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -26,12 +27,8 @@ class _AsyncButtonState extends State<AsyncButton> {
         padding: EdgeInsets.symmetric(vertical: 20.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(2.0)),
-          gradient: LinearGradient(
-            begin: Alignment.bottomLeft,
-            end: Alignment.topRight,
-            stops: [0, 0.6, 1.0],
-            colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-          )),
+          gradient: Burnt.buttonGradient,
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -47,10 +44,7 @@ class _AsyncButtonState extends State<AsyncButton> {
       return Container(
         width: 25.0,
         height: 25.0,
-        child: CircularProgressIndicator(
-          strokeWidth: 3.0,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
-        ),
+        child: CircularProgressIndicator(strokeWidth: 3.0, valueColor: AlwaysStoppedAnimation<Color>(Colors.white)),
       );
     } else {
       return Text(text, style: TextStyle(fontSize: 20.0, color: Colors.white, letterSpacing: 3.0));
@@ -58,8 +52,12 @@ class _AsyncButtonState extends State<AsyncButton> {
   }
 
   _doMagic() async {
-    setState(() { isLoading = true; });
+    setState(() {
+      isLoading = true;
+    });
     await onPressed();
-    setState(() { isLoading = false; });
+    setState(() {
+      isLoading = false;
+    });
   }
 }

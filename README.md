@@ -39,36 +39,56 @@ d
 
 ## To Do
 
-Test:
-// User comments on user post
-// User replies to user post
-// User replies to user reply
+* Send email to Joe
 
-// Admin - Create post
-// Admin - Edit post
-// Admin - Delete post
+Toaster:
+* DEV DB
+* PROD DB
 
-// User - Create post
-// User - Edit post
-// User - Delete post
+Crust & Butter:
+* DEV GraphQL endpoint
+* PROD GraphQL endpoint
 
-
+* Facebook Login
+* Google Login
+* Help page on the login/signup page
 * Show private posts, and all posts on the homepage post list on the Admin app
 
 * Fix up other stores search screen
+* Fix Write A Review screen
 * Migrate changes to butter
 
+* Convert icon to blue
+* Move photos away from Zomato
+
+* Polish database for production
+* Edit my profile ^_^
+
+* Enable login via iOS
 * Enable flutter_local_notifications on iOS
 * Enable push notifications in iOS
+* Test on iOS
 * Enable firebase dynamic urls in iOS
+
+* Migrate database to Google Cloud
+* Migrate server to Google Cloud
+* Backup FirebaseStorage using Google Cloud Archive
+* Export database every night
+* Write Cloud Function to call endpoint to do database cleanup
+* Backup Firebase Storage
+
+* Set notifications / alerts on Google AppEngine
+https://medium.com/google-cloud/three-simple-steps-to-save-costs-when-prototyping-with-app-engine-flexible-environment-104fc6736495
+https://cloud.google.com/billing/docs/how-to/budgets
+https://stackoverflow.com/questions/47125661/pricing-of-google-app-engine-flexible-env-a-500-lesson
+
+================================================================
 
 * Add loading dialog on delete post
 * Add page refresh on my profile
 * Add on tap of cuisine to open search page
 
 * Add link previews to dynamic links
-* Enable login via iOS
-* Run nightly task to update caches
 * Send email of results
 
 * Fix location_search uses union all but has duplicates

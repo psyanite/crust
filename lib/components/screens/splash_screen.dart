@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:crust/main.dart';
 import 'package:crust/models/curate.dart';
+import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/feed/feed_actions.dart';
 import 'package:crust/state/me/me_actions.dart';
@@ -23,7 +24,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
   @override
   initState() {
     super.initState();
@@ -89,16 +89,9 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget _presenter() {
     return Scaffold(
       body: Container(
+        decoration: BoxDecoration(gradient: Burnt.burntGradient),
         child: Center(
           child: Image.asset('assets/images/loading-icon.png', height: 200.0),
-        ),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            stops: [0, 0.6, 1.0],
-            colors: [Color(0xFFffc86b), Color(0xFFffab40), Color(0xFFc45d35)],
-          ),
         ),
       ),
     );

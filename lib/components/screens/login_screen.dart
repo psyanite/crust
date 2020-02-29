@@ -6,6 +6,7 @@ import 'package:crust/components/screens/terms_screen.dart';
 import 'package:crust/main.dart';
 import 'package:crust/models/user.dart';
 import 'package:crust/presentation/components.dart';
+import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
 import 'package:crust/state/me/me_service.dart';
@@ -39,18 +40,7 @@ class _Presenter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            stops: [0, 0.6, 1.0],
-            colors: [
-              Color(0xFFffc86b),
-              Color(0xFFffab40),
-              Color(0xFFc45d35),
-            ],
-          ),
-        ),
+        decoration: BoxDecoration(gradient: Burnt.burntGradient),
         child: Builder(builder: (context) {
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),

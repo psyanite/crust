@@ -1,4 +1,5 @@
 import 'package:crust/presentation/components.dart';
+import 'package:crust/presentation/theme.dart';
 import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,14 +14,7 @@ class MyQrScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            stops: [0, 0.6, 1.0],
-            colors: [Color(0xFFffc86b), Color(0xFFffab40), Color(0xFFc45d35)],
-          ),
-        ),
+        decoration: BoxDecoration(gradient: Burnt.burntGradient),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,

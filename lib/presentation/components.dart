@@ -17,7 +17,11 @@ class SolidBackButton extends StatelessWidget {
   final Color color;
   final Color textColor;
 
-  SolidBackButton({Key key, this.color = Burnt.primary, this.textColor = Colors.white}) : super(key: key);
+  SolidBackButton({
+    Key key,
+    this.color = Burnt.primary,
+    this.textColor = Colors.white,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +50,10 @@ class WhiteBackButton extends StatelessWidget {
 class BackArrow extends StatelessWidget {
   final Color color;
 
-  BackArrow({Key key, this.color = Burnt.textBodyColor}) : super(key: key);
+  BackArrow({
+    Key key,
+    this.color = Burnt.textBodyColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,18 +70,13 @@ class SmallBurntButton extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final Gradient gradient;
 
-  SmallBurntButton(
-      {Key key,
-      this.child,
-      this.onTap,
-      this.padding,
-      this.gradient = const LinearGradient(
-        begin: Alignment.bottomLeft,
-        end: Alignment.topRight,
-        stops: [0, 0.6, 1.0],
-        colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-      )})
-      : super(key: key);
+  SmallBurntButton({
+    Key key,
+    this.child,
+    this.onTap,
+    this.padding,
+    this.gradient = Burnt.buttonGradient,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +122,11 @@ class WhiteButton extends StatelessWidget {
   final String text;
   final Function onPressed;
 
-  WhiteButton({Key key, this.text, this.onPressed}) : super(key: key);
+  WhiteButton({
+    Key key,
+    this.text,
+    this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -153,7 +159,11 @@ class BottomButton extends StatelessWidget {
   final String text;
   final Function onPressed;
 
-  BottomButton({Key key, this.text, this.onPressed}) : super(key: key);
+  BottomButton({
+    Key key,
+    this.text,
+    this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -162,13 +172,9 @@ class BottomButton extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 20.0),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(2.0)),
-            gradient: LinearGradient(
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
-              stops: [0, 0.6, 1.0],
-              colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
-            )),
+          borderRadius: BorderRadius.all(Radius.circular(2.0)),
+          gradient: Burnt.buttonGradient,
+        ),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -190,7 +196,15 @@ class BurntButton extends StatelessWidget {
   final double padding;
   final double fontSize;
 
-  BurntButton({Key key, this.icon, this.iconSize, this.text, this.onPressed, this.padding, this.fontSize}) : super(key: key);
+  BurntButton({
+    Key key,
+    this.icon,
+    this.iconSize,
+    this.text,
+    this.onPressed,
+    this.padding,
+    this.fontSize,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +242,14 @@ class SolidButton extends StatelessWidget {
   final Color color;
   final Color splashColor;
 
-  SolidButton({Key key, this.onTap, this.children, this.padding, this.color, this.splashColor}) : super(key: key);
+  SolidButton({
+    Key key,
+    this.onTap,
+    this.children,
+    this.padding,
+    this.color,
+    this.splashColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -260,7 +281,14 @@ class HollowButton extends StatelessWidget {
   final Color borderColor;
   final Color splashColor;
 
-  HollowButton({Key key, this.onTap, this.children, this.padding, this.borderColor, this.splashColor}) : super(key: key);
+  HollowButton({
+    Key key,
+    this.onTap,
+    this.children,
+    this.padding,
+    this.borderColor,
+    this.splashColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -297,7 +325,10 @@ class LoadingCenter extends StatelessWidget {
 class SliverCenter extends StatelessWidget {
   final Widget child;
 
-  SliverCenter({Key key, this.child}) : super(key: key);
+  SliverCenter({
+    Key key,
+    this.child,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -330,7 +361,10 @@ class LoadingSliver extends StatelessWidget {
 class CenterTextSliver extends StatelessWidget {
   final String text;
 
-  CenterTextSliver({Key key, this.text}) : super(key: key);
+  CenterTextSliver({
+    Key key,
+    this.text,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -351,7 +385,13 @@ class ScoreIcon extends StatelessWidget {
   final double size;
   final String name;
 
-  ScoreIcon({Key key, this.score, this.size = 25.0, this.name, this.opacity = 1.0}) : super(key: key);
+  ScoreIcon({
+    Key key,
+    this.score,
+    this.size = 25.0,
+    this.name,
+    this.opacity = 1.0,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -404,7 +444,11 @@ class HeartIcon extends StatelessWidget {
   final bool isHollow;
   final double size;
 
-  HeartIcon({Key key, this.isHollow, this.size = 25.0}) : super(key: key);
+  HeartIcon({
+    Key key,
+    this.isHollow,
+    this.size = 25.0,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -468,7 +512,15 @@ class NetworkImg extends StatelessWidget {
   final EdgeInsets margin;
   final BoxFit fit;
 
-  NetworkImg(this.url, {Key key, this.width, this.height, this.padding, this.margin, this.fit = BoxFit.cover}) : super(key: key);
+  NetworkImg(
+    this.url, {
+    Key key,
+    this.width,
+    this.height,
+    this.padding,
+    this.margin,
+    this.fit = BoxFit.cover,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
