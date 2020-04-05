@@ -46,7 +46,12 @@ class MainTabNavigatorState extends State<MainTabNavigator> {
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
-        body: PageView(controller: _pageCtrl, onPageChanged: _onPageChanged, children: _tabs.values.map((t) => t.widget).toList()),
+        body: PageView(
+          controller: _pageCtrl,
+          physics: NeverScrollableScrollPhysics(),
+          onPageChanged: _onPageChanged,
+          children: _tabs.values.map((t) => t.widget).toList(),
+        ),
         bottomNavigationBar: Card(
           margin: EdgeInsets.all(0.0),
           elevation: 24.0,
