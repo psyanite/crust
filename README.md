@@ -39,18 +39,18 @@ d
 
 ## To Do
 
-* Send email to Joe
+* Upload post on crusts and butter
+* Ensure new photo was uploaded to correct firebase project
 
-Toaster:
-* DEV DB
-* PROD DB
+* Update & test butter
+* Update & test crusts
 
-Crust & Butter:
-* DEV GraphQL endpoint
-* PROD GraphQL endpoint
-
+* Fix app
+* Fix firebase authentication
 * Facebook Login
 * Google Login
+* Uploading review photos
+* Uploading profile pictures
 * Help page on the login/signup page
 * Show private posts, and all posts on the homepage post list on the Admin app
 
@@ -58,11 +58,9 @@ Crust & Butter:
 * Fix Write A Review screen
 * Migrate changes to butter
 
-* Convert icon to blue
 * Move photos away from Zomato
 
 * Polish database for production
-* Edit my profile ^_^
 
 * Enable login via iOS
 * Enable flutter_local_notifications on iOS
@@ -70,20 +68,33 @@ Crust & Butter:
 * Test on iOS
 * Enable firebase dynamic urls in iOS
 
-* Migrate database to Google Cloud
-* Migrate server to Google Cloud
 * Backup FirebaseStorage using Google Cloud Archive
 * Export database every night
 * Write Cloud Function to call endpoint to do database cleanup
 * Backup Firebase Storage
 
-* Set notifications / alerts on Google AppEngine
-https://medium.com/google-cloud/three-simple-steps-to-save-costs-when-prototyping-with-app-engine-flexible-environment-104fc6736495
-https://cloud.google.com/billing/docs/how-to/budgets
-https://stackoverflow.com/questions/47125661/pricing-of-google-app-engine-flexible-env-a-500-lesson
+* Do a fresh import of the database to Knob
 
+* Setup nightly task at 2am to rebuild caches
+
+* Create uptime checker and alert policies: https://console.cloud.google.com/monitoring?authuser=0&project=burntoast&timeDomain=1h
+* Setup database backups
+
+
+* Test Prod Crust
+* Test Prod Butter
+
+* Why cities, location_search, suburbs, and stores store coords in point?
+
+* https://github.com/fluttercandies/like_button
+
+* Edit my profile ^_^
+
+
+Backlog
 ================================================================
-
+* Implement CoffeeCat on toaster
+* Implement Cooper on toaster
 * Add loading dialog on delete post
 * Add page refresh on my profile
 * Add on tap of cuisine to open search page
@@ -93,7 +104,25 @@ https://stackoverflow.com/questions/47125661/pricing-of-google-app-engine-flexib
 
 * Fix location_search uses union all but has duplicates
 
-## Done
+
+
+Done
+================================================================
+* Send notification to Slack
+* Test setAdminPassword new endpoint
+* Update flutter_launcher_icons to latest version on crust and butter
+* Remove dupes and null coords from location_search
+* Fix up suburbs data
+* Separate local public tables out to croissant schema
+* Remove duplicates and null coords from location_search
+* Migrate GAE and database to new project
+* Migrate database to GCP
+* Migrate bucket dat to new project
+* Setup AppEngine
+* Update toaster to Node 10
+* Send email to Joe
+* Update butter to blue splash screen
+* Update butter to blue launcher icon
 * Add admin-user comment, post, reply notifications
 * Migrate Butter to AndroidX
 * Fix up stores search screen
@@ -189,13 +218,3 @@ https://stackoverflow.com/questions/47125661/pricing-of-google-app-engine-flexib
 * Compress images before upload
 * Upload photos to firebase
 * Cache network images on post lists
-
-## Get started
-* Move `crust.jks` into `/android/app`
-* Move `google-services.json` into `/android/app`
-* Move `key.properties` into `/android`
-
-## How to Release
-1. Update `config.dart`
-1. Update `pubspec.yaml`
-1. Run `flutter build appbundle`
