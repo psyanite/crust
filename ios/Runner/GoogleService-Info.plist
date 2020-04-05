@@ -2,39 +2,35 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
-	<string>ca-app-pub-3940256099942544/2934735716</string>
-	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
-	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>78759597703-s5d783k7evpp1mrk0g0go6oh1p97q2ta.apps.googleusercontent.com</string>
+	<string>691778990314-i9u89scb3ifnb0c1sad9mm96og9jsl60.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.78759597703-s5d783k7evpp1mrk0g0go6oh1p97q2ta</string>
+	<string>com.googleusercontent.apps.691778990314-i9u89scb3ifnb0c1sad9mm96og9jsl60</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBDjgQAtYqWJqR_d7cLPsB67KafOlVzQnU</string>
+	<string>AIzaSyC6ptK-tfADqgPDj_XNDAhG7Lq6LTKgMJk</string>
 	<key>GCM_SENDER_ID</key>
-	<string>78759597703</string>
+	<string>691778990314</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.burntoast.crust</string>
 	<key>PROJECT_ID</key>
-	<string>burntoast-fix</string>
+	<string>burntoast</string>
 	<key>STORAGE_BUCKET</key>
-	<string>burntoast-fix.appspot.com</string>
+	<string>burntoast.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<true></true>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
 	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<false></false>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
 	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:78759597703:ios:fc317a33a43181db</string>
+	<string>1:691778990314:ios:4ef009443bd3541ba5a793</string>
 	<key>DATABASE_URL</key>
-	<string>https://burntoast-fix.firebaseio.com</string>
+	<string>https://burntoast.firebaseio.com</string>
 </dict>
 </plist>
