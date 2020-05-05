@@ -31,4 +31,4 @@ lib/generated_plugin_registrant.dart
 
 # Meow
 google-services.json
-GoogleService-Info
+GoogleService-Info.plist

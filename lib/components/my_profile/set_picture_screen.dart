@@ -251,7 +251,7 @@ class _UploadOverlayState extends State<_UploadOverlay> {
     String fileName = '$timestamp-${Random().nextInt(10000)}.jpg';
     StorageReference ref = FirebaseStorage.instance.ref().child('users/profile-pictures/$fileName');
     Tuple2<StorageUploadTask, StorageReference> task =
-        Tuple2(ref.putData(byteData, StorageMetadata(customMetadata: {'secret': 'firebase'})), ref);
+        Tuple2(ref.putData(byteData, StorageMetadata(contentType: "image/jpeg", customMetadata: {'secret': 'firebase'})), ref);
     await task.item1.onComplete;
     if (task.item1.isSuccessful) {
       return await task.item2.getDownloadURL();

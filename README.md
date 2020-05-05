@@ -38,6 +38,10 @@ d
 </div>
 
 ## To Do
+* User -> update profile picture -> verify url is correct
+* User -> post photo -> verify url is correct
+* Admin -> update cover photo -> verify url is correct
+* Admin -> post photo -> verify url is correct
 
 * Upload post on crusts and butter
 * Ensure new photo was uploaded to correct firebase project
@@ -91,23 +95,27 @@ d
 * Edit my profile ^_^
 
 
+
 Backlog
 ================================================================
-* Implement CoffeeCat on toaster
-* Implement Cooper on toaster
+* Fix "Let us know" button color
 * Add loading dialog on delete post
 * Add page refresh on my profile
 * Add on tap of cuisine to open search page
 
 * Add link previews to dynamic links
 * Send email of results
-
-* Fix location_search uses union all but has duplicates
-
+* Fix up .idea in .gitignore for other projects
+* Fix store name is center aligned when no text in post
 
 
 Done
 ================================================================
+* Migrate from burntbutter-fix to burntbutter
+* Update any photo urls in the database to use burntoast url instead
+* Fix location_search uses union all but has duplicates
+* Implement CoffeeCat on toaster
+* Implement Cooper on toaster
 * Send notification to Slack
 * Test setAdminPassword new endpoint
 * Update flutter_launcher_icons to latest version on crust and butter

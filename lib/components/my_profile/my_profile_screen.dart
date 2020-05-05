@@ -44,7 +44,7 @@ class _Presenter extends StatefulWidget {
 
 class _PresenterState extends State<_Presenter> {
   final String _defaultProfilePic =
-      'https://firebasestorage.googleapis.com/v0/b/burntoast-fix.appspot.com/o/users%2Fprofile-pictures%2F1565423370052-9201.jpg?alt=media&token=1a80c164-4ca6-4174-bd46-c8c265c17ae9';
+      'https://firebasestorage.googleapis.com/v0/b/burntoast.appspot.com/o/users%2Fprofile-pictures%2F1565423370052-9201.jpg?alt=media&token=1a80c164-4ca6-4174-bd46-c8c265c17ae9';
   ScrollController _scrollie;
   List<Post> _posts;
   bool _loading = false;

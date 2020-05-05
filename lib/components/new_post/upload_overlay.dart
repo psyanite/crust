@@ -81,7 +81,7 @@ class UploadOverlayState extends State<UploadOverlay> {
     var update = post.copyWith(postPhotos: postPhotos);
     var result = await (post.id == null ? PostService.submitPost(update) : PostService.updatePost(update));
     if (result == null) {
-      setState(() =>error = 'Oops! Something went wrong, please try again.');
+      setState(() => error = 'Oops! Something went wrong, please try again.');
       return false;
     }
     deletePhotosQueue.forEach((p) => PostService.deletePhoto(p.id));
@@ -103,7 +103,7 @@ class UploadOverlayState extends State<UploadOverlay> {
     List<Tuple2<StorageUploadTask, StorageReference>> tasks = byteData.map((bd) {
       String fileName = '$timestamp-${Random().nextInt(10000)}.jpg';
       StorageReference ref = FirebaseStorage.instance.ref().child('reviews/post-photos/$fileName');
-      return Tuple2(ref.putData(bd, StorageMetadata(customMetadata: {'secret': 'breadcat'})), ref);
+      return Tuple2(ref.putData(bd, StorageMetadata(contentType: "image/jpeg", customMetadata: {'secret': 'breadcat'})), ref);
     }).toList(growable: false);
 
     setState(() => loadingText = 'Uploading photos to the cloud…');
