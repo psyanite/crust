@@ -178,7 +178,7 @@ class _PresenterState extends State<_Presenter> {
     return Builder(builder: (context) {
       return Padding(
         padding: EdgeInsets.only(top: 20.0),
-        child: SmallBurntButton(
+        child: SmallButton(
           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => SetPictureScreen())),
           padding: EdgeInsets.only(left: 7.0, right: 12.0, top: 10.0, bottom: 10.0),
           child: Row(

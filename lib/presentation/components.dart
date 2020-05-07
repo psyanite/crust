@@ -28,8 +28,10 @@ class SolidBackButton extends StatelessWidget {
     return InkWell(
       onTap: () => Navigator.of(context).pop(),
       child: Container(
-        padding: EdgeInsets.only(left: 7.0, right: 13.0, top: 10.0, bottom: 10.0),
-        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(2.0)), color: color),
+        padding:
+            EdgeInsets.only(left: 7.0, right: 13.0, top: 10.0, bottom: 10.0),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(2.0)), color: color),
         child: Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
           Icon(Icons.arrow_back_ios, color: textColor, size: 20.0),
           Container(width: 3.0),
@@ -64,37 +66,11 @@ class BackArrow extends StatelessWidget {
   }
 }
 
-class SmallBurntButton extends StatelessWidget {
-  final Widget child;
-  final Function onTap;
-  final EdgeInsetsGeometry padding;
-  final Gradient gradient;
-
-  SmallBurntButton({
-    Key key,
-    this.child,
-    this.onTap,
-    this.padding,
-    this.gradient = Burnt.buttonGradient,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: padding,
-        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(2.0)), gradient: gradient),
-        child: child,
-      ),
-    );
-  }
-}
-
 class SmallButton extends StatelessWidget {
   final Widget child;
   final Function onTap;
   final EdgeInsetsGeometry padding;
+  final Gradient gradient;
   final Color color;
 
   SmallButton({
@@ -102,7 +78,8 @@ class SmallButton extends StatelessWidget {
     this.child,
     this.onTap,
     this.padding,
-    this.color = Burnt.primary,
+    this.gradient = Burnt.buttonGradient,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -111,7 +88,11 @@ class SmallButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: padding,
-        decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(2.0)), color: color),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(2.0)),
+          gradient: color != null ? null : gradient,
+          color: color,
+        ),
         child: child,
       ),
     );
@@ -139,14 +120,21 @@ class WhiteButton extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 12.0),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(2.0)),
-            boxShadow: [BoxShadow(color: Color(0x10000000), offset: Offset(5.0, 5.0), blurRadius: 10.0, spreadRadius: 1.0)],
+            boxShadow: [
+              BoxShadow(
+                  color: Color(0x10000000),
+                  offset: Offset(5.0, 5.0),
+                  blurRadius: 10.0,
+                  spreadRadius: 1.0)
+            ],
           ),
           child: Row(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Text(text, style: TextStyle(fontSize: 20.0, color: Burnt.primary)),
+              Text(text,
+                  style: TextStyle(fontSize: 20.0, color: Burnt.primary)),
             ],
           ),
         ),
@@ -180,7 +168,9 @@ class BottomButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Text(text, style: TextStyle(fontSize: 20.0, color: Colors.white, letterSpacing: 3.0)),
+            Text(text,
+                style: TextStyle(
+                    fontSize: 20.0, color: Colors.white, letterSpacing: 3.0)),
           ],
         ),
       ),
@@ -217,17 +207,20 @@ class BurntButton extends StatelessWidget {
             gradient: LinearGradient(
               begin: Alignment.bottomLeft,
               end: Alignment.topRight,
-              stops: [0, 0.6, 1.0],
-              colors: [Color(0xFFFFAB40), Color(0xFFFFAB40), Color(0xFFFFC86B)],
+              stops: [0, 0.3],
+              colors: [Color(0xFFFFC86B), Color(0xFFFFAB40)],
             )),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            if (icon != null) Icon(icon, size: iconSize ?? 20.0, color: Colors.white),
+            if (icon != null)
+              Icon(icon, size: iconSize ?? 20.0, color: Colors.white),
             if (icon != null) Container(width: 8.0),
-            Text(text, style: TextStyle(fontSize: fontSize ?? 22.0, color: Colors.white)),
+            Text(text,
+                style:
+                    TextStyle(fontSize: fontSize ?? 22.0, color: Colors.white)),
           ],
         ),
       ),
@@ -298,7 +291,10 @@ class HollowButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: borderColor ?? Color(0xFFFFD173), width: 1.0, style: BorderStyle.solid),
+          border: Border.all(
+              color: borderColor ?? Color(0xFFFFD173),
+              width: 1.0,
+              style: BorderStyle.solid),
           borderRadius: BorderRadius.circular(2.0),
         ),
         padding: EdgeInsets.symmetric(vertical: padding ?? 10.0),
@@ -354,7 +350,9 @@ class LoadingSliverCenter extends StatelessWidget {
 class LoadingSliver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SliverToBoxAdapter(child: Container(height: 200, child: Center(child: CircularProgressIndicator())));
+    return SliverToBoxAdapter(
+        child: Container(
+            height: 200, child: Center(child: CircularProgressIndicator())));
   }
 }
 
@@ -372,7 +370,8 @@ class CenterTextSliver extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 50.0),
         child: Center(
-          child: Text(text, style: TextStyle(fontSize: 17.0), textAlign: TextAlign.center),
+          child: Text(text,
+              style: TextStyle(fontSize: 17.0), textAlign: TextAlign.center),
         ),
       ),
     );
@@ -452,7 +451,9 @@ class HeartIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var assetName = isHollow ? 'assets/svgs/heart-hollow.svg' : 'assets/svgs/heart-filled.svg';
+    var assetName = isHollow
+        ? 'assets/svgs/heart-hollow.svg'
+        : 'assets/svgs/heart-filled.svg';
     return SvgPicture.asset(
       assetName,
       width: size,
@@ -468,7 +469,9 @@ class LocationBar extends StatelessWidget {
       converter: (Store<AppState> store) => store.state.me.address,
       builder: (context, address) {
         return SliverToBoxAdapter(
-          child: address != null ? _addressInfo(context, address) : _defaultAddressInfo(context),
+          child: address != null
+              ? _addressInfo(context, address)
+              : _defaultAddressInfo(context),
         );
       },
     );
@@ -476,7 +479,8 @@ class LocationBar extends StatelessWidget {
 
   _addressInfo(context, address) {
     return InkWell(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ChangeLocationScreen())),
+      onTap: () => Navigator.push(
+          context, MaterialPageRoute(builder: (_) => ChangeLocationScreen())),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -484,10 +488,14 @@ class LocationBar extends StatelessWidget {
           Container(width: 14.0),
           Icon(CrustCons.location_bold, color: Burnt.lightGrey, size: 22.0),
           Container(width: 12.0),
-          Text(address.addressLine.split(',')[0] ?? '', style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
+          Text(address.addressLine.split(',')[0] ?? '',
+              style: TextStyle(fontSize: 18.0, fontWeight: Burnt.fontBold)),
           Container(width: 5),
           Text(address.locality ?? '', style: TextStyle(fontSize: 18.0)),
-          Container(margin: EdgeInsets.only(top: 6.0), child: Icon(Icons.keyboard_arrow_down, color: Burnt.primary, size: 30.0))
+          Container(
+              margin: EdgeInsets.only(top: 6.0),
+              child: Icon(Icons.keyboard_arrow_down,
+                  color: Burnt.primary, size: 30.0))
         ],
       ),
     );
@@ -540,7 +548,8 @@ class NetworkImg extends StatelessWidget {
       margin: margin,
       decoration: BoxDecoration(
         color: Burnt.imgPlaceholderColor,
-        image: DecorationImage(image: CachedNetworkImageProvider(url), fit: BoxFit.cover),
+        image: DecorationImage(
+            image: CachedNetworkImageProvider(url), fit: BoxFit.cover),
       ),
     );
   }

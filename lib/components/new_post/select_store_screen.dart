@@ -179,7 +179,7 @@ class _PresenterState extends State<_Presenter> {
         children: <Widget>[
           Text('Sorry, couldn\'t find anything matching that.'),
           Container(height: 15.0),
-          SmallBurntButton(
+          SmallButton(
             onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ReportMissingStoreScreen())),
             child: Text('Let us know', style: TextStyle(color: Colors.white)),
             padding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 12.0, right: 12.0),
@@ -196,7 +196,7 @@ class _PresenterState extends State<_Presenter> {
         Container(height: 40.0),
         Text('Can\'t find what you\'re looking for?'),
         Container(height: 15.0),
-        SmallBurntButton(
+        SmallButton(
           onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => ReportMissingStoreScreen())),
           child: Text('Let us know', style: TextStyle(color: Colors.white)),
           padding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 12.0, right: 12.0),

@@ -16,7 +16,7 @@ class MessageScreen extends StatelessWidget {
           children: <Widget>[
             Text(message),
             Container(height: 15.0),
-            SmallBurntButton(child: Text('Go Back', style: TextStyle(color: Colors.white)), padding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 12.0, right: 12.0), onTap: () => Navigator.pop(context)),
+            SmallButton(child: Text('Go Back', style: TextStyle(color: Colors.white)), padding: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 12.0, right: 12.0), onTap: () => Navigator.pop(context)),
           ],
         ),
       ),

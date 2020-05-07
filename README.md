@@ -38,11 +38,6 @@ d
 </div>
 
 ## To Do
-* User -> update profile picture -> verify url is correct
-* User -> post photo -> verify url is correct
-* Admin -> update cover photo -> verify url is correct
-* Admin -> post photo -> verify url is correct
-
 * Upload post on crusts and butter
 * Ensure new photo was uploaded to correct firebase project
 
@@ -98,6 +93,7 @@ d
 
 Backlog
 ================================================================
+* Fix notification when I post a store post
 * Fix "Let us know" button color
 * Add loading dialog on delete post
 * Add page refresh on my profile
@@ -111,6 +107,10 @@ Backlog
 
 Done
 ================================================================
+* Admin -> update cover photo -> verify url is correct
+* Admin -> post photo -> verify url is correct
+* User -> update profile picture -> verify url is correct
+* User -> post photo -> verify url is correct
 * Migrate from burntbutter-fix to burntbutter
 * Update any photo urls in the database to use burntoast url instead
 * Fix location_search uses union all but has duplicates
