@@ -17,6 +17,7 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['userProfileByUsername'];
+    if (json == null) return null;
     return json['user_account']['id'];
   }
 

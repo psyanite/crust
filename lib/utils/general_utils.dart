@@ -17,6 +17,12 @@ class Utils {
     return str != null ? int.parse(str) : null;
   }
 
+  static String buildEmail(String subject, String body) {
+    var encodedSubject = Uri.encodeComponent(subject);
+    var encodedBody = Uri.encodeComponent('Hi there,<br><br>$body');
+    return 'mailto:burntoastfix@gmail.com?subject=$encodedSubject&body=$encodedBody';
+  }
+
   static String validateUsername(String name) {
     if (name == null || name.isEmpty) {
       return 'Oops! Usernames can\'t be blank';

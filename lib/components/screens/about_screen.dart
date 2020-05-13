@@ -5,6 +5,7 @@ import 'package:crust/components/screens/privacy_screen.dart';
 import 'package:crust/components/screens/terms_screen.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
+import 'package:crust/utils/general_utils.dart';
 import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class AboutScreen extends StatelessWidget {
         Container(padding: EdgeInsets.only(top: 25.0, left: 15.0, bottom: 10.0), child: Text('ABOUT', style: Burnt.appBarTitleStyle)),
         ListTile(
           title: Text('Contact Us', style: TextStyle(fontSize: 18.0)),
-          onTap: () => launch('mailto:burntoastfix@gmail.com?body=Hi there,\n\n\n'),
+          onTap: () => launch(Utils.buildEmail('', '(insert-your-query-here)')),
         ),
         ListTile(
           title: Text('Report an Issue', style: TextStyle(fontSize: 18.0)),
@@ -96,6 +97,6 @@ class AboutScreen extends StatelessWidget {
     } on PlatformException {
       info = 'platform-exception-could-not-get-device-info';
     }
-    launch('mailto:burntoastfix@gmail.com?body=Hi there,\n\n\n<insert-your-query-here>\n\n\n\n\n\nDiagnostics\n\n$info');
+    launch(Utils.buildEmail('Issue Report', '(describe-your-issue-here)<br><br><br>Diagnostics<br><br>$info'));
   }
 }

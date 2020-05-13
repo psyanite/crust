@@ -26,7 +26,7 @@
 * Implements Sliver components for greater flexibility
 * Switch between list items and cards viewing available rewards
 * Persists session data into local device using `redux-persist` and `flutter-storage`
-d
+
 <div align="center">
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/splash.jpg" width="250px"/>
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/home.jpg" width="250px"/>
@@ -38,26 +38,22 @@ d
 </div>
 
 ## To Do
-* Upload post on crusts and butter
-* Ensure new photo was uploaded to correct firebase project
+* Move photos away from Zomato
 
-* Update & test butter
-* Update & test crusts
+* Run critical path test
+1. Login with Facebook
+1. Login with Google
 
-* Fix app
-* Fix firebase authentication
-* Facebook Login
-* Google Login
-* Uploading review photos
-* Uploading profile pictures
+* Load up butter on phone
+* Run critical path test
 * Help page on the login/signup page
-* Show private posts, and all posts on the homepage post list on the Admin app
 
+* Disable going back when entering review
+* Disable going back when upload overlay is showing
+* Show private posts, and all posts on the homepage post list on the Admin app
+* Fix post post time is incorrect, needs to be timezone corrected
 * Fix up other stores search screen
 * Fix Write A Review screen
-* Migrate changes to butter
-
-* Move photos away from Zomato
 
 * Polish database for production
 
@@ -79,6 +75,7 @@ d
 * Create uptime checker and alert policies: https://console.cloud.google.com/monitoring?authuser=0&project=burntoast&timeDomain=1h
 * Setup database backups
 
+* Test QR scanning
 
 * Test Prod Crust
 * Test Prod Butter
@@ -93,6 +90,7 @@ d
 
 Backlog
 ================================================================
+* When updating profile, disable button onClick
 * Fix notification when I post a store post
 * Fix "Let us know" button color
 * Add loading dialog on delete post

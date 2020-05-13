@@ -1,6 +1,7 @@
 import 'package:crust/components/screens/message_screen.dart';
 import 'package:crust/presentation/components.dart';
 import 'package:crust/presentation/theme.dart';
+import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -113,7 +114,7 @@ class _PresenterState extends State<ReportMissingStoreScreen> {
     }
 
     try {
-      await launch('mailto:burntoastfix@gmail.com?subject=Report Missing Store&body=${_storeName.trim()}\nDescription: ${_description.trim()}');
+      await launch(Utils.buildEmail('Missing Store Report', '${_storeName.trim()}<br><br>Description: ${_description.trim()}'));
     } catch (e) {
       snack(context, 'Oops an error has occurred');
       this.setState(() => _submitting = false);
