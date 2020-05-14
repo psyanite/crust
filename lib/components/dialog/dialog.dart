@@ -22,11 +22,12 @@ class BurntDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     var children = <Widget>[
       if (title != null || description != null) _leading(context),
-      if (options != null) _options(context),
+      if (options != null) DialogOptions(options),
     ];
     return AlertDialog(
-        contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
-        content: Container(width: 100.0, child: Column(mainAxisSize: MainAxisSize.min, children: children)));
+      contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 10.0),
+      content: Container(width: 100.0, child: Column(mainAxisSize: MainAxisSize.min, children: children)),
+    );
   }
 
   Widget _leading(BuildContext context) {
@@ -35,18 +36,35 @@ class BurntDialog extends StatelessWidget {
       if (title != null && description != null) Container(height: 5.0),
       if (description != null)
         Container(
-            width: 200.0,
-            child: Text(description, textAlign: TextAlign.center, style: TextStyle(color: Color(0xAA604B41), fontSize: 16.0))),
+          width: 200.0,
+          child: Text(
+            description,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xAA604B41),
+              fontSize: 16.0,
+            ),
+          ),
+        ),
     ];
     return Container(padding: EdgeInsets.only(top: 10.0, bottom: 10.0), child: Column(children: children));
   }
 
-  Widget _options(BuildContext context) {
+}
+
+class DialogOptions extends StatelessWidget {
+  final List<DialogOption> options;
+
+  DialogOptions(this.options, {Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return ListView.separated(
-        shrinkWrap: true,
-        itemBuilder: (context, index) => _option(options[index]),
-        separatorBuilder: (context, index) => Divider(color: Burnt.separatorBlue),
-        itemCount: options.length);
+      shrinkWrap: true,
+      itemBuilder: (context, index) => _option(options[index]),
+      separatorBuilder: (context, index) => Divider(color: Burnt.separatorBlue),
+      itemCount: options.length,
+    );
   }
 
   Widget _option(DialogOption option) {
@@ -75,24 +93,28 @@ class TermsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
-      content: Container(width: 300.0, child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
-        Container(
-          padding: EdgeInsets.symmetric(vertical: 20.0),
-          width: 300.0,
-          child: Text(terms, style: TextStyle(fontSize: 20.0)),
-        ),
-        _options(context)
-      ],
-      )));
+        contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 15.0),
+        content: Container(
+            width: 300.0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 20.0),
+                  width: 300.0,
+                  child: Text(terms, style: TextStyle(fontSize: 20.0)),
+                ),
+                _options(context)
+              ],
+            )));
   }
 
   Widget _options(BuildContext context) {
     return ListView.separated(
-      shrinkWrap: true,
-      itemBuilder: (context, index) => _option(options[index]),
-      separatorBuilder: (context, index) => Divider(color: Burnt.separatorBlue),
-      itemCount: options.length);
+        shrinkWrap: true,
+        itemBuilder: (context, index) => _option(options[index]),
+        separatorBuilder: (context, index) => Divider(color: Burnt.separatorBlue),
+        itemCount: options.length);
   }
 
   Widget _option(DialogOption option) {
