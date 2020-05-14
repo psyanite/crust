@@ -1,6 +1,6 @@
 import 'package:crust/components/stores/stores_grid.dart';
 import 'package:crust/models/store.dart' as MyStore;
-import 'package:crust/presentation/components.dart';
+import 'package:crust/components/common/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/favorite/favorite_actions.dart';

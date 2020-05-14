@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:crust/components/photo/carousel.dart';
 import 'package:crust/components/photo/carousel_page.dart';
 import 'package:crust/components/photo/image_preview.dart';
-import 'package:crust/presentation/components.dart';
+import 'package:crust/components/common/components.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

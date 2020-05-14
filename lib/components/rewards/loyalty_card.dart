@@ -5,7 +5,7 @@ import 'package:crust/components/rewards/reward_qr_screen.dart';
 import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/models/reward.dart';
 import 'package:crust/models/user_reward.dart';
-import 'package:crust/presentation/components.dart';
+import 'package:crust/components/common/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/reward/reward_service.dart';
 import 'package:flutter/cupertino.dart';

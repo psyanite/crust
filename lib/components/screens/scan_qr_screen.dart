@@ -2,7 +2,7 @@ import 'package:barcode_scan/barcode_scan.dart';
 import 'package:crust/components/profile/profile_screen.dart';
 import 'package:crust/components/rewards/reward_screen.dart';
 import 'package:crust/components/stores/store_screen.dart';
-import 'package:crust/presentation/components.dart';
+import 'package:crust/components/common/components.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/reward/reward_actions.dart';
 import 'package:crust/state/reward/reward_service.dart';

@@ -1,7 +1,7 @@
 import 'package:crust/components/rewards/favorite_reward_button.dart';
 import 'package:crust/components/rewards/reward_screen.dart';
 import 'package:crust/models/reward.dart';
-import 'package:crust/presentation/components.dart';
+import 'package:crust/components/common/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';

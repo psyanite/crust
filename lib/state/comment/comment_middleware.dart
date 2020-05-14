@@ -2,7 +2,6 @@ import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/comment/comment_actions.dart';
 import 'package:crust/state/comment/comment_service.dart';
 import 'package:crust/state/error/error_actions.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:redux/redux.dart';
 
 List<Middleware<AppState>> createCommentMiddleware([

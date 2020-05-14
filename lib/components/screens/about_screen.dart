@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:crust/components/common/banners.dart';
 import 'package:crust/components/screens/privacy_screen.dart';
 import 'package:crust/components/screens/terms_screen.dart';
-import 'package:crust/presentation/components.dart';
+import 'package:crust/components/common/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/utils/general_utils.dart';
 import 'package:device_info/device_info.dart';

@@ -1,5 +1,5 @@
 import 'package:crust/models/reply.dart';
-import 'package:crust/presentation/components.dart';
+import 'package:crust/components/common/components.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/comment/comment_actions.dart';
 import 'package:flutter/material.dart';

@@ -1,6 +1,6 @@
 import 'package:crust/components/location/use_my_location.dart';
 import 'package:crust/models/search.dart';
-import 'package:crust/presentation/components.dart';
+import 'package:crust/components/common/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';

@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:collection';
 
+import 'package:crust/components/common/suggests.dart';
 import 'package:crust/components/screens/report_missing_store_screen.dart';
 import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/models/search.dart';
 import 'package:crust/models/store.dart' as MyStore;
-import 'package:crust/presentation/components.dart';
+import 'package:crust/components/common/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';

@@ -3,7 +3,7 @@ import 'package:crust/components/my_profile/set_display_name_screen.dart';
 import 'package:crust/components/my_profile/set_picture_screen.dart';
 import 'package:crust/components/my_profile/set_tagline_screen.dart';
 import 'package:crust/components/my_profile/set_username_screen.dart';
-import 'package:crust/presentation/components.dart';
+import 'package:crust/components/common/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

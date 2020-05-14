@@ -5,7 +5,7 @@ import 'package:crust/components/screens/register_screen.dart';
 import 'package:crust/components/screens/terms_screen.dart';
 import 'package:crust/main.dart';
 import 'package:crust/models/user.dart';
-import 'package:crust/presentation/components.dart';
+import 'package:crust/components/common/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';

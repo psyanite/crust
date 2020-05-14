@@ -6,7 +6,7 @@ import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/profile/profile_screen.dart';
 import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/models/post.dart';
-import 'package:crust/presentation/components.dart';
+import 'package:crust/components/common/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/utils/time_util.dart';
 import 'package:flutter/cupertino.dart';

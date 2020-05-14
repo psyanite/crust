@@ -38,22 +38,7 @@
 </div>
 
 ## To Do
-* Move photos away from Zomato
-
-* Run critical path test
-1. Login with Facebook
-1. Login with Google
-
-* Load up butter on phone
-* Run critical path test
-* Help page on the login/signup page
-
-* Disable going back when entering review
-* Disable going back when upload overlay is showing
-* Show private posts, and all posts on the homepage post list on the Admin app
-* Fix post post time is incorrect, needs to be timezone corrected
-* Fix up other stores search screen
-* Fix Write A Review screen
+* Login with Google
 
 * Polish database for production
 
@@ -80,9 +65,16 @@
 * Test Prod Crust
 * Test Prod Butter
 
+* In edit post mode, just Navigator.pop
+-- To reproduce: go to my profile, edit a post, get redirected to store page
 * Why cities, location_search, suburbs, and stores store coords in point?
+* Check timezone is correct when posting a post in PROD environment
 
-* https://github.com/fluttercandies/like_button
+* Fix up other stores search screen
+
+* Fix Write A Review screen
+
+* Show private posts, and all posts on the homepage post list on the Admin app
 
 * Edit my profile ^_^
 
@@ -105,6 +97,12 @@ Backlog
 
 Done
 ================================================================
+* Disable going back when upload overlay is showing
+* Login with Facebook
+* Migrate photos to Zomato
+* Load up butter on phone
+* Run critical path test
+* Help page on the login/signup page
 * Admin -> update cover photo -> verify url is correct
 * Admin -> post photo -> verify url is correct
 * User -> update profile picture -> verify url is correct

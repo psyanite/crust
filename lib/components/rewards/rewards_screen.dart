@@ -3,7 +3,7 @@ import 'package:crust/components/rewards/loyalty_rewards_screen.dart';
 import 'package:crust/components/rewards/reward_cards.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
 import 'package:crust/models/reward.dart';
-import 'package:crust/presentation/components.dart';
+import 'package:crust/components/common/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
