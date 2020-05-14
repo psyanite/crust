@@ -56,8 +56,8 @@ class _PresenterState extends State<_Presenter> {
   String reviewBody;
   bool makeSecret = false;
   List<Asset> images = List<Asset>();
-  List<Uint8List> imageData = List<Uint8List>();
-  bool showOverlay = false;
+  List<Uint8List> _imageData = List<Uint8List>();
+  bool _showOverlay = false;
 
   _PresenterState();
 
@@ -74,7 +74,7 @@ class _PresenterState extends State<_Presenter> {
             ],
           ),
         ),
-        if (showOverlay) UploadOverlay(post: post, images: images)
+        if (_showOverlay) UploadOverlay(post: post, images: images)
       ],
     );
   }
@@ -124,7 +124,7 @@ class _PresenterState extends State<_Presenter> {
     Function(List<Asset>) onSelectImages = (photos) {
       setState(() {
         images = photos;
-        imageData = List.generate(photos.length, (i) => null, growable: false);
+        _imageData = List.generate(photos.length, (i) => null, growable: false);
       });
       _loadImages(photos);
     };
@@ -141,7 +141,7 @@ class _PresenterState extends State<_Presenter> {
               _ambienceQuestion(),
               Padding(
                 padding: EdgeInsets.only(top: 20.0, bottom: 30.0),
-                child: PhotoSelector(images: imageData, onSelectImages: onSelectImages),
+                child: PhotoSelector(images: _imageData, onSelectImages: onSelectImages),
               ),
               _reviewBody(),
               _secretSwitch(context),
@@ -359,7 +359,7 @@ class _PresenterState extends State<_Presenter> {
 
     setState(() {
       post = newPost;
-      showOverlay = true;
+      _showOverlay = true;
     });
   }
 
@@ -399,9 +399,9 @@ class _PresenterState extends State<_Presenter> {
   _loadImages(photos) async {
     images.asMap().forEach((i, image) async {
       var byteData = await image.getByteData(quality: 80);
-      imageData[i] = byteData.buffer.asUint8List();
+      _imageData[i] = byteData.buffer.asUint8List();
       setState(() {
-        imageData = imageData;
+        _imageData = _imageData;
       });
     });
   }
