@@ -149,13 +149,16 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _suggestions() {
-    var filtered = [...widget.searchHistory].where((i) => i.store != null).toList();
+    var stores = [...widget.searchHistory].where((i) => i.store != null).take(10).toList();
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, i) {
         return Builder(
-          builder: (context) => _StoreCard(store: filtered[i].store, addSearchHistoryItem: widget.addSearchHistoryItem),
+          builder: (context) => _StoreCard(
+            store: stores[i].store,
+            addSearchHistoryItem: widget.addSearchHistoryItem,
+          ),
         );
-      }, childCount: filtered.length),
+      }, childCount: stores.length),
     );
   }
 

@@ -10,6 +10,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 
 class FavoriteStoresScreen extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(

@@ -12,6 +12,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoder/geocoder.dart' as Geo;
 import 'package:redux/redux.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SolidBackButton extends StatelessWidget {
   final Color color;
@@ -270,7 +271,7 @@ class SolidButton extends StatelessWidget {
 class HollowButton extends StatelessWidget {
   final Function onTap;
   final List<Widget> children;
-  final double padding;
+  final EdgeInsets padding;
   final Color borderColor;
   final Color splashColor;
 
@@ -297,7 +298,7 @@ class HollowButton extends StatelessWidget {
               style: BorderStyle.solid),
           borderRadius: BorderRadius.circular(2.0),
         ),
-        padding: EdgeInsets.symmetric(vertical: padding ?? 10.0),
+        padding: padding ?? EdgeInsets.symmetric(vertical: 10.0),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -314,6 +315,25 @@ class LoadingCenter extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: CircularProgressIndicator(),
+    );
+  }
+}
+
+class LoadingDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      content: CircularProgressIndicator(),
+    );
+  }
+}
+
+class LoadingOverlay extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0x99000000),
+      body: LoadingCenter(),
     );
   }
 }
@@ -550,6 +570,28 @@ class NetworkImg extends StatelessWidget {
         color: Burnt.imgPlaceholderColor,
         image: DecorationImage(
             image: CachedNetworkImageProvider(url), fit: BoxFit.cover),
+      ),
+    );
+  }
+}
+
+class SeeMoreArrow extends StatelessWidget {
+  final Function onTap;
+
+  SeeMoreArrow(this.onTap, {Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(right: 15.0, bottom: 75.0),
+      child: Shimmer.fromColors(
+        loop: 1,
+        baseColor: Burnt.primaryLight,
+        highlightColor: Color(0xFFFFEDC7),
+        child: IconButton(
+          icon: Icon(Icons.arrow_forward_ios, color: Burnt.primaryLight, size: 30.0),
+          onPressed: onTap,
+        ),
       ),
     );
   }

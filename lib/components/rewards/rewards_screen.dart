@@ -45,7 +45,15 @@ class _Presenter extends StatefulWidget {
   final Function addNearMe;
   final Function clearNearMe;
 
-  _Presenter({Key key, this.isLoggedIn, this.nearMe, this.nearMeAll, this.addNearMe, this.myAddress, this.setMySuburb, this.clearNearMe})
+  _Presenter(
+      {Key key,
+      this.isLoggedIn,
+      this.nearMe,
+      this.nearMeAll,
+      this.addNearMe,
+      this.myAddress,
+      this.setMySuburb,
+      this.clearNearMe})
       : super(key: key);
 
   @override
@@ -62,7 +70,8 @@ class _PresenterState extends State<_Presenter> {
     super.initState();
     _scrollie = ScrollController()
       ..addListener(() {
-        if (widget.nearMe.isNotEmpty && _loading == false && _limit > 0 && _scrollie.position.extentAfter < 500) _getMore();
+        if (widget.nearMe.isNotEmpty && _loading == false && _limit > 0 && _scrollie.position.extentAfter < 500)
+          _getMore();
       });
   }
 
@@ -206,11 +215,15 @@ class _PresenterState extends State<_Presenter> {
       child: Container(
         margin: EdgeInsets.only(bottom: 20.0),
         padding: EdgeInsets.symmetric(horizontal: 16.0),
-        child: HollowButton(padding: 8.0, onTap: onTap, children: <Widget>[
-          Icon(CrustCons.present, color: Burnt.primaryTextColor, size: 25.0),
-          Container(width: 8.0),
-          Text('View My Loyalty Rewards', style: TextStyle(fontSize: 20.0, color: Burnt.primaryTextColor)),
-        ]),
+        child: HollowButton(
+          padding: EdgeInsets.symmetric(vertical: 8.0),
+          onTap: onTap,
+          children: <Widget>[
+            Icon(CrustCons.present, color: Burnt.primaryTextColor, size: 25.0),
+            Container(width: 8.0),
+            Text('View My Loyalty Rewards', style: TextStyle(fontSize: 20.0, color: Burnt.primaryTextColor)),
+          ],
+        ),
       ),
     );
   }

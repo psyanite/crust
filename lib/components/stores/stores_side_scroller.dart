@@ -4,22 +4,31 @@ import 'package:crust/components/common/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 import 'favorite_store_button.dart';
 
 class StoresSideScroller extends StatelessWidget {
   final List<MyStore.Store> stores;
   final String title;
-  final Function seeAll;
+  final Function seeMore;
   final String emptyMessage;
   final bool confirmUnfavorite;
 
-  StoresSideScroller({Key key, this.stores, this.title, this.seeAll, this.emptyMessage = '', this.confirmUnfavorite = false}) : super(key: key);
+  StoresSideScroller(
+    this.stores, {
+    Key key,
+    this.title,
+    this.seeMore,
+    this.emptyMessage = '',
+    this.confirmUnfavorite = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var widgets = List<Widget>.from(stores.take(5).map((s) => _card(s)));
-    return _list(widgets, seeAll);
+    widgets.add(SeeMoreArrow(seeMore));
+    return _list(widgets, seeMore);
   }
 
   Widget _list(List<Widget> children, Function seeAll) {
@@ -32,11 +41,6 @@ class StoresSideScroller extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(title, style: TextStyle(fontSize: 23.0, fontWeight: Burnt.fontBold)),
-              if (children.isNotEmpty)
-                InkWell(
-                  child: Text('See All', style: TextStyle(fontSize: 14.0, fontWeight: Burnt.fontBold, color: Burnt.primary)),
-                  onTap: seeAll,
-                )
             ],
           ),
         ),
@@ -49,7 +53,8 @@ class StoresSideScroller extends StatelessWidget {
               children: children,
             ),
           ),
-        if (children.isEmpty) Container(margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 25.0), child: Text(emptyMessage)),
+        if (children.isEmpty)
+          Container(margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 25.0), child: Text(emptyMessage)),
       ],
     );
   }

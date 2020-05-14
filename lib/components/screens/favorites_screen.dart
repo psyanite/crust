@@ -93,17 +93,17 @@ class _Presenter extends StatelessWidget {
     return SliverList(
       delegate: SliverChildListDelegate(<Widget>[
         StoresSideScroller(
-          stores: stores,
+          stores,
           title: 'Favourite Stores',
           emptyMessage: 'Start favouriting stores and they\'ll show up here.',
-          seeAll: () => Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteStoresScreen())),
+          seeMore: () => Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteStoresScreen())),
           confirmUnfavorite: true,
         ),
         RewardsSideScroller(
-          rewards: rewards,
+          rewards,
           title: 'Favourite Rewards',
           emptyMessage: 'Start favouriting rewards and they\'ll show up here.',
-          seeAll: () => Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteRewardsScreen())),
+          seeMore: () => Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteRewardsScreen())),
           showExpiredBanner: true,
           confirmUnfavorite: true,
         )

@@ -218,10 +218,10 @@ class _PresenterState extends State<_Presenter> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0),
             child: HollowButton(
-              padding: 8.0,
+              padding: EdgeInsets.symmetric(vertical: 8.0),
               onTap: widget.jumpToStoresTab,
               children: <Widget>[
-                Text('More Places to Eat and Drink', style: TextStyle(fontSize: 18.0, color: Burnt.primaryTextColor)),
+                Text('Discover More', style: TextStyle(fontSize: 18.0, color: Burnt.primaryTextColor)),
               ],
             ),
           ),

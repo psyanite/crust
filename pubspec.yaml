@@ -38,7 +38,7 @@ dependencies:
   intl: ^0.15.7
   multi_image_picker: ^4.6.7
   qr_flutter: ^2.0.0+51
-  shimmer: ^1.0.0
+  shimmer: ^1.1.1
   timeago: ^2.0.9
   tuple: ^1.0.2
   url_launcher: ^5.4.7

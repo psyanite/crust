@@ -120,7 +120,7 @@ class _CurateList extends StatelessWidget {
       builder: (context, c) {
         if (c.stores == null) return Container();
         var seeAll = () => Navigator.push(context, MaterialPageRoute(builder: (_) => StoresScreen(title: c.title, stores: c.stores)));
-        return StoresSideScroller(stores: c.stores, title: c.title, seeAll: seeAll);
+        return StoresSideScroller(c.stores, title: c.title, seeMore: seeAll);
       },
     );
   }

@@ -1,3 +1,4 @@
+import 'package:crust/components/common/components.dart';
 import 'package:crust/components/rewards/favorite_reward_button.dart';
 import 'package:crust/components/rewards/reward_screen.dart';
 import 'package:crust/models/reward.dart';
@@ -10,13 +11,21 @@ class RewardsSideScroller extends StatelessWidget {
   final List<UserReward> userRewards;
   final List<Reward> rewards;
   final String title;
-  final Function seeAll;
+  final Function seeMore;
   final String emptyMessage;
   final bool showExpiredBanner;
   final bool confirmUnfavorite;
 
-  RewardsSideScroller({Key key, this.userRewards, this.rewards, this.title, this.seeAll, this.emptyMessage, this.showExpiredBanner = false, this.confirmUnfavorite = false})
-      : super(key: key);
+  RewardsSideScroller(
+    this.rewards, {
+    Key key,
+    this.userRewards,
+    this.title,
+    this.seeMore,
+    this.emptyMessage,
+    this.showExpiredBanner = false,
+    this.confirmUnfavorite = false,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +34,15 @@ class RewardsSideScroller extends StatelessWidget {
         var onTap = () => Navigator.push(context, MaterialPageRoute(builder: (_) => RewardScreen(rewardId: r.id)));
         return _card(onTap, r);
       }));
-      return _list(widgets, seeAll);
+      return _list(widgets, seeMore);
     } else {
       var widgets = List<Widget>.from(userRewards.take(5).map((u) {
-        var onTap = () => Navigator.push(context, MaterialPageRoute(builder: (_) => RewardScreen(rewardId: u.rewardId)));
+        var onTap =
+            () => Navigator.push(context, MaterialPageRoute(builder: (_) => RewardScreen(rewardId: u.rewardId)));
         return _card(onTap, u.reward);
       }));
-      return _list(widgets, seeAll);
+      widgets.add(SeeMoreArrow(seeMore));
+      return _list(widgets, seeMore);
     }
   }
 
@@ -45,15 +56,14 @@ class RewardsSideScroller extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(title, style: TextStyle(fontSize: 23.0, fontWeight: Burnt.fontBold)),
-              if (children.isNotEmpty) InkWell(
-                  child: Text('See All', style: TextStyle(fontSize: 14.0, fontWeight: Burnt.fontBold, color: Burnt.primary)),
-                  onTap: seeAll)
             ],
           ),
         ),
         if (children.isNotEmpty)
           Container(
-              margin: EdgeInsets.only(left: 16.0), height: 180.0, child: ListView(scrollDirection: Axis.horizontal, children: children)),
+              margin: EdgeInsets.only(left: 16.0),
+              height: 180.0,
+              child: ListView(scrollDirection: Axis.horizontal, children: children)),
         if (children.isEmpty) Container(margin: EdgeInsets.symmetric(horizontal: 16.0), child: Text(emptyMessage)),
       ],
     );
@@ -68,30 +78,29 @@ class RewardsSideScroller extends StatelessWidget {
                 height: 202.0,
                 padding: EdgeInsets.only(right: 10.0),
                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                  Stack(
-                    children: <Widget>[
+                  Stack(children: <Widget>[
                     Container(
-                      width: 200.0,
-                      height: 100.0,
+                        width: 200.0,
+                        height: 100.0,
                         padding: EdgeInsets.all(1.0),
                         color: Burnt.imgPlaceholderColor,
                         child: Image.network(reward.promoImage, fit: BoxFit.cover)),
                     Positioned(
-                      top: 0.0,
-                      right: 0.0,
-                      child: FavoriteRewardButton(reward: reward, padding: EdgeInsets.all(7.0), confirmUnfavorite: confirmUnfavorite)
-                    ),
+                        top: 0.0,
+                        right: 0.0,
+                        child: FavoriteRewardButton(
+                            reward: reward, padding: EdgeInsets.all(7.0), confirmUnfavorite: confirmUnfavorite)),
                     if (showExpiredBanner == true && reward.isExpired() == true)
                       Positioned(
-                        bottom: 0.0,
-                        child: Container(
-                        width: 200.0,
-                        padding: EdgeInsets.symmetric(vertical: 7.0),
-                        color: Burnt.separator,
-                        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                          Text('Expired', style: TextStyle(color: Burnt.lightTextColor)),
-                        ]),
-                      ))
+                          bottom: 0.0,
+                          child: Container(
+                            width: 200.0,
+                            padding: EdgeInsets.symmetric(vertical: 7.0),
+                            color: Burnt.separator,
+                            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                              Text('Expired', style: TextStyle(color: Burnt.lightTextColor)),
+                            ]),
+                          ))
                   ]),
                   Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
                     Container(height: 5.0),
