@@ -46,10 +46,13 @@ class UploadOverlayState extends State<UploadOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0x99000000),
-      body: Center(
-        child: AlertDialog(content: _content()),
+    return new WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: Color(0x99000000),
+        body: Center(
+          child: AlertDialog(content: _content()),
+        ),
       ),
     );
   }
@@ -103,7 +106,8 @@ class UploadOverlayState extends State<UploadOverlay> {
     List<Tuple2<StorageUploadTask, StorageReference>> tasks = byteData.map((bd) {
       String fileName = '$timestamp-${Random().nextInt(10000)}.jpg';
       StorageReference ref = FirebaseStorage.instance.ref().child('reviews/post-photos/$fileName');
-      return Tuple2(ref.putData(bd, StorageMetadata(contentType: "image/jpeg", customMetadata: {'secret': 'breadcat'})), ref);
+      return Tuple2(
+          ref.putData(bd, StorageMetadata(contentType: "image/jpeg", customMetadata: {'secret': 'breadcat'})), ref);
     }).toList(growable: false);
 
     setState(() => loadingText = 'Uploading photos to the cloud…');
@@ -136,28 +140,4 @@ class UploadOverlayState extends State<UploadOverlay> {
     return Uint8List.fromList(compressed);
   }
 
-//  Future<ByteData> _getByteData(Asset asset) async {
-//    int quality = 100;
-//    ByteData byteData = await asset.requestOriginal();
-//    int size = byteData.lengthInBytes;
-//    int fileSizeKb = (size - (size % 1000)) ~/ 1000;
-//    if (fileSizeKb > 20000) {
-//      while (size > 500000 && quality > 0) {
-//        byteData = await asset.requestOriginal(quality: quality);
-//        size = byteData.lengthInBytes;
-//        quality = quality - 10;
-//      }
-//    } else if (fileSizeKb > 6000) {
-//      byteData = await asset.requestOriginal(quality: 20);
-//    } else if (fileSizeKb > 4000) {
-//      byteData = await asset.requestOriginal(quality: 30);
-//    } else if (fileSizeKb > 2000) {
-//      byteData = await asset.requestOriginal(quality: 60);
-//    } else if (fileSizeKb > 500) {
-//      byteData = await asset.requestOriginal(quality: 80);
-//    } else {
-//      byteData = await asset.requestOriginal(quality: 90);
-//    }
-//    return byteData;
-//  }
 }
