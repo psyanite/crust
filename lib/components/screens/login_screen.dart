@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:crust/components/dialog/dialog.dart';
 import 'package:crust/components/screens/privacy_screen.dart';
 import 'package:crust/components/screens/register_screen.dart';
 import 'package:crust/components/screens/terms_screen.dart';
@@ -10,6 +11,7 @@ import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
 import 'package:crust/state/me/me_service.dart';
+import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
@@ -17,6 +19,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:redux/redux.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -31,23 +34,39 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class _Presenter extends StatelessWidget {
+class _Presenter extends StatefulWidget {
   final Function loginSuccess;
 
   _Presenter({Key key, this.loginSuccess}) : super(key: key);
 
   @override
+  _PresenterState createState() => _PresenterState(loginSuccess: loginSuccess);
+}
+
+class _PresenterState extends State<_Presenter> {
+  final Function loginSuccess;
+  bool _loading = false;
+
+  _PresenterState({this.loginSuccess});
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(gradient: Burnt.burntGradient),
-        child: Builder(builder: (context) {
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.0),
-            child: _content(context),
-          );
-        }),
-      ),
+    return Stack(
+      fit: StackFit.expand,
+      children: <Widget>[
+        Scaffold(
+          body: Container(
+            decoration: BoxDecoration(gradient: Burnt.burntGradient),
+            child: Builder(builder: (context) {
+              return Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: _content(context),
+              );
+            }),
+          ),
+        ),
+        if (_loading) LoadingOverlay(),
+      ],
     );
   }
 
@@ -92,31 +111,65 @@ class _Presenter extends StatelessWidget {
     );
   }
 
+  _setError(message) {
+    this.setState(() => _loading = false);
+
+    var options = <DialogOption>[
+      DialogOption(
+        display: 'Email Us',
+        onTap: () => launch(Utils.buildEmail(
+            'Login Error', 'I couldn\'t login. (add-further-info-here-if-you-want)<br><br><br>$message')),
+      )
+    ];
+    showDialog(
+      context: context,
+      builder: (context) {
+        return BurntDialog(
+          options: options,
+          description: 'Oops, something went wrong.\nPlease email this so we can fix this stat!',
+        );
+      },
+    );
+  }
+
   _loginWithFacebook(context) async {
-    var login = FacebookLogin();
-    var result = await login.logIn(['email']);
-    if (result.status != FacebookLoginStatus.loggedIn) {
-      await login.logOut();
-      result = await login.logIn(['email']);
+    this.setState(() => _loading = true);
+
+    try {
+      var login = FacebookLogin();
+      var result = await login.logIn(['email']);
       if (result.status != FacebookLoginStatus.loggedIn) {
-        return;
+        await login.logOut();
+        result = await login.logIn(['email']);
+        if (result.status != FacebookLoginStatus.loggedIn) {
+          _setError(result.errorMessage);
+          return;
+        }
       }
+      var graphResponse = await http.get(
+          'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${result.accessToken.token}');
+      var user = User.fromFacebook(result.accessToken.token, json.decode(graphResponse.body));
+      await _login(user, context);
+    } catch (e) {
+      _setError(e.toString());
     }
-    var graphResponse = await http.get(
-        'https://graph.facebook.com/v2.12/me?fields=name,first_name,last_name,email,picture.height(200)&access_token=${result.accessToken.token}');
-    var user = User.fromFacebook(result.accessToken.token, json.decode(graphResponse.body));
-    await _login(user, context);
   }
 
   _loginWithGoogle(context) async {
-    GoogleSignIn _googleSignIn = GoogleSignIn(
-      scopes: <String>[
-        'email',
-        'https://www.googleapis.com/auth/contacts.readonly',
-      ],
-    );
-    GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    await _login(User.fromGoogle(googleUser), context);
+    this.setState(() => _loading = true);
+
+    try {
+      GoogleSignIn _googleSignIn = GoogleSignIn(
+        scopes: <String>[
+          'email',
+          'https://www.googleapis.com/auth/contacts.readonly',
+        ],
+      );
+      GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      await _login(User.fromGoogle(googleUser), context);
+    } catch (e) {
+      _setError(e.toString());
+    }
   }
 
   _loginWithDataProfile(context) async {
