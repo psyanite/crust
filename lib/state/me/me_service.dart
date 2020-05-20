@@ -42,6 +42,7 @@ class MeService {
     """;
     final response = await Toaster.get(query);
     var json = response['userLogin'];
+    if (json == null) return null;
     return user.copyWith(
       id: json['user_account']['id'],
       profilePicture: json['user_account']['profile']['profile_picture'],

@@ -39,7 +39,9 @@ class MeState {
     var a = json['address'];
     return MeState(
         user: user != null ? User.rehydrate(user) : null,
-        searchHistory: searchHistory != null ? searchHistory.map<SearchHistoryItem>((i) => SearchHistoryItem.rehydrate(i)).toList() : null,
+        searchHistory: searchHistory != null
+            ? searchHistory.map<SearchHistoryItem>((i) => SearchHistoryItem.rehydrate(i)).toList()
+            : null,
         address: a != null
             ? Geo.Address(
                 coordinates: Geo.Coordinates(a['lat'], a['lng']),

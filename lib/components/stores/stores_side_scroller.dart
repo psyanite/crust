@@ -1,10 +1,9 @@
+import 'package:crust/components/common/components.dart';
 import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/models/store.dart' as MyStore;
-import 'package:crust/components/common/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 
 import 'favorite_store_button.dart';
 

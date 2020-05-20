@@ -72,8 +72,6 @@
 
 * Fix up other stores search screen
 
-* Fix Write A Review screen
-
 * Show private posts, and all posts on the homepage post list on the Admin app
 
 * Edit my profile ^_^
@@ -82,6 +80,8 @@
 
 Backlog
 ================================================================
+* Add store suggestions on the "Write a Review" page
+* Add loading overlay when logging in
 * When updating profile, disable button onClick
 * Fix notification when I post a store post
 * Fix "Let us know" button color
@@ -97,6 +97,7 @@ Backlog
 
 Done
 ================================================================
+* Replace See All side scroller button with arrow
 * Disable going back when upload overlay is showing
 * Login with Facebook
 * Migrate photos to Zomato
