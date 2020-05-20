@@ -72,4 +72,17 @@ class StoreService {
     var json = response['curatedByTag']['stores'];
     return (json as List).map((s) => Store.fromToaster(s)).toList();
   }
+
+  Future<List<Store>> fetchFamousStores() async {
+    String query = """
+      query {
+        famousStores {
+          ${Store.attributes}
+        }
+      }
+    """;
+    final response = await Toaster.get(query);
+    var json = response['famousStores'];
+    return (json as List).map((s) => Store.fromToaster(s)).toList();
+  }
 }

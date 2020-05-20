@@ -22,7 +22,7 @@ class SelectStoreScreen extends StatelessWidget {
       converter: (Store<AppState> store) => _Props.fromStore(store),
       builder: (BuildContext context, _Props props) => _Presenter(
         isLoggedIn: props.isLoggedIn,
-        searchHistory: props.searchHistory,
+        suggestedStores: props.suggestedStores,
         addSearchHistoryItem: props.addSearchHistoryItem,
       ),
     );
@@ -31,10 +31,10 @@ class SelectStoreScreen extends StatelessWidget {
 
 class _Presenter extends StatefulWidget {
   final bool isLoggedIn;
-  final List<SearchHistoryItem> searchHistory;
+  final List<MyStore.Store> suggestedStores;
   final Function addSearchHistoryItem;
 
-  _Presenter({Key key, this.isLoggedIn, this.searchHistory, this.addSearchHistoryItem}) : super(key: key);
+  _Presenter({Key key, this.isLoggedIn, this.suggestedStores, this.addSearchHistoryItem}) : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState();
@@ -149,12 +149,13 @@ class _PresenterState extends State<_Presenter> {
   }
 
   Widget _suggestions() {
-    var stores = [...widget.searchHistory].where((i) => i.store != null).take(10).toList();
+    var stores = widget.suggestedStores.toList();
+
     return SliverList(
       delegate: SliverChildBuilderDelegate((context, i) {
         return Builder(
           builder: (context) => _StoreCard(
-            store: stores[i].store,
+            store: stores[i],
             addSearchHistoryItem: widget.addSearchHistoryItem,
           ),
         );
@@ -254,19 +255,25 @@ class _StoreCard extends StatelessWidget {
 
 class _Props {
   final bool isLoggedIn;
-  final List<SearchHistoryItem> searchHistory;
+  final List<MyStore.Store> suggestedStores;
   final Function addSearchHistoryItem;
 
   _Props({
     this.isLoggedIn,
-    this.searchHistory,
+    this.suggestedStores,
     this.addSearchHistoryItem,
   });
 
   static fromStore(Store<AppState> store) {
+    var suggestedStores = store.state.me.searchHistory.where((i) => i.store != null).map((i) => i.store).toList();
+    if (suggestedStores.length < 10) {
+      var famousStores = store.state.store.famousStores.values;
+      suggestedStores.addAll(famousStores);
+      suggestedStores = suggestedStores.take(10).toList();
+    }
     return _Props(
       isLoggedIn: store.state.me.user != null,
-      searchHistory: store.state.me.searchHistory,
+      suggestedStores: suggestedStores,
       addSearchHistoryItem: (myStore) {
         var item = SearchHistoryItem(type: SearchHistoryItemType.store, store: myStore);
         store.dispatch(AddSearchHistoryItem(item));

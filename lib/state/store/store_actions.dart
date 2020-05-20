@@ -27,6 +27,14 @@ class FetchTopStoresSuccess {
   FetchTopStoresSuccess(this.stores);
 }
 
+class FetchFamousStores {}
+
+class FetchFamousStoresSuccess {
+  final List<Store> stores;
+
+  FetchFamousStoresSuccess(this.stores);
+}
+
 class FetchRewardsByStoreId {
   final int storeId;
 

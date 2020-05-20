@@ -72,6 +72,8 @@ class _SplashScreenState extends State<SplashScreen> {
         store.dispatch(FetchCurate(Curate(tag: 'brunch', title: 'Brunch Spots')));
         store.dispatch(FetchCurate(Curate(tag: 'sweet', title: 'Sweet Tooth')));
 
+        store.dispatch(FetchFamousStores());
+
         var myAddress = await _getMyAddress();
         if (myAddress != null) store.dispatch(SetMyAddress(myAddress));
 

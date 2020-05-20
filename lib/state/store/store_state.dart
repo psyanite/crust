@@ -8,21 +8,29 @@ import 'package:meta/meta.dart';
 class StoreState {
   final LinkedHashMap<int, Store> stores;
   final LinkedHashMap<int, Store> topStores;
+  final LinkedHashMap<int, Store> famousStores;
   final LinkedHashMap<int, List<int>> rewards;
   final LinkedHashMap<String, Curate> curates;
 
-  StoreState({this.stores, this.topStores, this.rewards, this.curates});
+  StoreState({this.stores, this.topStores, this.famousStores, this.rewards, this.curates});
 
   StoreState.initialState()
       : stores = LinkedHashMap<int, Store>(),
+        famousStores = LinkedHashMap<int, Store>(),
         topStores = LinkedHashMap<int, Store>(),
         rewards = LinkedHashMap<int, List<int>>(),
         curates = LinkedHashMap<String, Curate>();
 
-  StoreState copyWith({LinkedHashMap<int, Store> stores, LinkedHashMap<int, Store> topStores, LinkedHashMap<int, List<int>> rewards, LinkedHashMap<String, Curate> curates}) {
+  StoreState copyWith(
+      {LinkedHashMap<int, Store> stores,
+        LinkedHashMap<int, Store> topStores,
+        LinkedHashMap<int, Store> famousStores,
+      LinkedHashMap<int, List<int>> rewards,
+      LinkedHashMap<String, Curate> curates}) {
     return StoreState(
       stores: stores ?? this.stores,
       topStores: topStores ?? this.topStores,
+      famousStores: famousStores ?? this.famousStores,
       rewards: rewards ?? this.rewards,
       curates: curates ?? this.curates,
     );
@@ -39,17 +47,18 @@ class StoreState {
   }
 
   StoreState setTopStores(List<Store> stores) {
-    stores.shuffle();
     return copyWith(topStores: LinkedHashMap<int, Store>.fromEntries(stores.map((s) => MapEntry<int, Store>(s.id, s))));
   }
 
+  StoreState setFamousStores(List<Store> stores) {
+    return copyWith(famousStores: LinkedHashMap<int, Store>.fromEntries(stores.map((s) => MapEntry<int, Store>(s.id, s))));
+  }
+
   StoreState addTopStores(List<Store> stores) {
-    stores.shuffle();
     return copyWith(topStores: cloneTopStores()..addEntries(stores.map((s) => MapEntry<int, Store>(s.id, s))));
   }
 
   StoreState addStoreRewards(int storeId, List<int> rewards) {
-    rewards.shuffle();
     return copyWith(rewards: cloneStoreRewards()..addEntries([MapEntry<int, List<int>>(storeId, rewards)]));
   }
 

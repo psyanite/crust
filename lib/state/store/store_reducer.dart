@@ -7,6 +7,7 @@ Reducer<StoreState> storeReducer = combineReducers([
   new TypedReducer<StoreState, FetchStoresSuccess>(fetchStoresSuccess),
   new TypedReducer<StoreState, FetchRewardsByStoreIdSuccess>(fetchRewardsByStoreIdSuccess),
   new TypedReducer<StoreState, FetchTopStoresSuccess>(fetchTopStoresSuccess),
+  new TypedReducer<StoreState, FetchFamousStoresSuccess>(fetchFamousStoresSuccess),
   new TypedReducer<StoreState, FetchCurateSuccess>(fetchCurateSuccess),
 ]);
 
@@ -24,6 +25,10 @@ StoreState fetchRewardsByStoreIdSuccess(StoreState state, FetchRewardsByStoreIdS
 
 StoreState fetchTopStoresSuccess(StoreState state, FetchTopStoresSuccess action) {
   return state.setTopStores(action.stores);
+}
+
+StoreState fetchFamousStoresSuccess(StoreState state, FetchFamousStoresSuccess action) {
+  return state.setFamousStores(action.stores);
 }
 
 StoreState fetchCurateSuccess(StoreState state, FetchCurateSuccess action) {
