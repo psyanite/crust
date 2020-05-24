@@ -78,16 +78,40 @@ class _PresenterState extends State<_Presenter> {
       children: [
         Image.asset('assets/images/loading-icon.png', height: 200.0),
         Container(height: 15.0),
-        WhiteButton(text: 'Login with Facebook', onPressed: () => _loginWithFacebook(context)),
+        _googleButton(context),
         Container(height: 15.0),
-        WhiteButton(text: 'Login with Google', onPressed: () => _loginWithGoogle(context)),
-        Container(height: 15.0),
-        WhiteButton(text: 'Login with Data Profile', onPressed: () => _loginWithDataProfile(context)),
-        Container(height: 15.0),
-        WhiteButton(text: 'Login with Empty Profile', onPressed: () => _loginWithEmptyProfile(context)),
+        _facebookButton(context),
         Container(height: 20.0),
         _terms(context),
       ],
+    );
+  }
+
+  Widget _googleButton(context) {
+    return WhiteButton(
+        child: Row(
+          children: <Widget>[
+            Image.asset('assets/images/login-google.png', height: 40.0),
+            Container(width: 20.0),
+            Text('Login with Google', style: TextStyle(fontSize: 25.0, color: Color(0xFFF7900A))),
+            Container(width: 30.0),
+          ],
+        ),
+        onPressed: () => _loginWithGoogle(context)
+    );
+  }
+
+  Widget _facebookButton(context) {
+    return WhiteButton(
+        child: Row(
+          children: <Widget>[
+            Image.asset('assets/images/login-facebook.png', height: 40.0),
+            Container(width: 20.0),
+            Text('Login with Facebook', style: TextStyle(fontSize: 25.0, color: Color(0xFFF7900A))),
+            Container(width: 10.0),
+          ],
+        ),
+        onPressed: () => _loginWithFacebook(context)
     );
   }
 
@@ -159,47 +183,12 @@ class _PresenterState extends State<_Presenter> {
     this.setState(() => _loading = true);
 
     try {
-      GoogleSignIn _googleSignIn = GoogleSignIn(
-        scopes: <String>[
-          'email',
-          'https://www.googleapis.com/auth/contacts.readonly',
-        ],
-      );
+      GoogleSignIn _googleSignIn = GoogleSignIn();
       GoogleSignInAccount googleUser = await _googleSignIn.signIn();
       await _login(User.fromGoogle(googleUser), context);
     } catch (e) {
       _setError(e.toString());
     }
-  }
-
-  _loginWithDataProfile(context) async {
-    var user = User(
-      firstName: 'Neila',
-      lastName: 'Nyan',
-      displayName: 'Neila Nyan',
-      email: 'psyneia@gmail.com',
-      profilePicture: 'meow',
-      socialType: SocialType.facebook,
-      socialId: '1905457732907903',
-      token:
-          'EAAdWJ8R7ISsBAOZCfBqwJQmxbNV6cpgZCp8DBjTuufciDUqIvzJxLq5ZBaecbPyKUq5SRgJrpWWKJY5fQd72GfV0cVuTDk84cAZBlSb00pZBTBQULk2ybauUsqeL3sa9NBMM3GuBrqX5KcZCFo8ovZC0xuiZCFGo9ZAH5gSRTuKugrIkw0q8p1e53RHZBbFqzFUQ3o9cZCjSgNtCQZDZD',
-    );
-    await _login(user, context);
-  }
-
-  _loginWithEmptyProfile(context) async {
-    var user = User(
-      firstName: 'Sophia',
-      lastName: 'King',
-      displayName: 'Sophia',
-      email: 'sophia_king@gmail.com',
-      profilePicture: 'meow',
-      socialType: SocialType.google,
-      socialId: 'sophia123',
-      token:
-          'EAAdWJ8R7ISsBAOZCfBqwJQmxbNV6cpgZCp8DBjTuufciDUqIvzJxLq5ZBaecbPyKUq5SRgJrpWWKJY5fQd72GfV0cVuTDk84cAZBlSb00pZBTBQULk2ybauUsqeL3sa9NBMM3GuBrqX5KcZCFo8ovZC0xuiZCFGo9ZAH5gSRTuKugrIkw0q8p1e53RHZBbFqzFUQ3o9cZCjSgNtCQZDZD',
-    );
-    await _login(user, context);
   }
 
   _login(user, context) async {

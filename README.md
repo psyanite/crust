@@ -38,8 +38,6 @@
 </div>
 
 ## To Do
-* Login with Google
-
 * Polish database for production
 
 * Enable login via iOS
@@ -78,10 +76,7 @@
 
 
 
-Backlog
-================================================================
-* Add store suggestions on the "Write a Review" page
-* Add loading overlay when logging in
+## Backlog
 * When updating profile, disable button onClick
 * Fix notification when I post a store post
 * Fix "Let us know" button color
@@ -95,8 +90,10 @@ Backlog
 * Fix store name is center aligned when no text in post
 
 
-Done
-================================================================
+## Done
+* Add loading overlay when logging in
+* Add store suggestions on the "Write a Review" page
+* Login with Google
 * Replace See All side scroller button with arrow
 * Disable going back when upload overlay is showing
 * Login with Facebook
