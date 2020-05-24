@@ -1,13 +1,20 @@
-# 🍞 Setup
+# 🍞 Get Started
 
 # Android Debug SHA1
 * keytool -list -v -keystore %USERPROFILE%\.android\debug.keystore -alias androiddebugkey
 * password: android
 
-## Get started
+## Get started Android
 * Move `crust.jks` into `/android/app`
 * Move `google-services.json` into `/android/app`
 * Move `key.properties` into `/android`
+
+## Get Started iOS
+* Open Xcode
+* Open `ios/Runner.xcodeproj`
+* Right click the `Runner` folder on the left hand side
+* Click `Add Files to "Runner"` 
+* Select `GoogleService-Info.plist`
 
 ## How to Release
 1. Update `config.dart`

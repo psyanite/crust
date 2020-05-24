@@ -38,7 +38,9 @@
 </div>
 
 ## To Do
-* Polish database for production
+* Fix Burntoast app iOS icon
+* Login via Facebook via iOS
+* Login via Google via iOS
 
 * Enable login via iOS
 * Enable flutter_local_notifications on iOS
@@ -62,6 +64,8 @@
 
 * Test Prod Crust
 * Test Prod Butter
+
+* Polish database for production
 
 * In edit post mode, just Navigator.pop
 -- To reproduce: go to my profile, edit a post, get redirected to store page
