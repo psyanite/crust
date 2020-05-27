@@ -133,9 +133,8 @@ class _PresenterState extends State<EditPostScreen> {
   Widget _questions() {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.0),
+        padding: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 20.0),
         child: Container(
-          height: 555.0,
           child: Column(children: <Widget>[
             _overallQuestion(),
             _tasteQuestion(),
