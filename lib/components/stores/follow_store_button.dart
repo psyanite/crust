@@ -68,7 +68,6 @@ class _Presenter extends StatelessWidget {
           onTap: () {
             unfollow();
             Navigator.of(context, rootNavigator: true).pop(true);
-            snack(context, 'Unfollowed $storeName');
           },
         );
       },
@@ -81,7 +80,7 @@ class _Presenter extends StatelessWidget {
       return;
     }
     follow();
-    snack(context, 'Now following $storeName');
+    snack(context, '🎉 Following $storeName');
   }
 
   @override

@@ -68,7 +68,7 @@ class _Presenter extends StatelessWidget {
       onFavorite: () {
         if (isLoggedIn) {
           favoriteStore(store.id);
-          snack(context, 'Added to favourites');
+          snack(context, '🎉 Added to favourites');
         } else {
           snack(context, 'Login now to favourite stores');
         }

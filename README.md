@@ -38,9 +38,6 @@
 </div>
 
 ## To Do
-* Login via Facebook via iOS
-* Login via Google via iOS
-
 * Enable flutter_local_notifications on iOS
 * Enable push notifications in iOS
 * Test on iOS
@@ -68,13 +65,16 @@
 * Why cities, location_search, suburbs, and stores store coords in point?
 * Check timezone is correct when posting a post in PROD environment
 
-* Show private posts, and all posts on the homepage post list on the Admin app
-
 * Edit my profile ^_^
+
+https://www.reddit.com/r/FlutterDev/comments/gon8w0/how_i_got_my_first_10k_downloads_in_google/
+
+https://github.com/flutter/flutter/issues/50951
 
 
 
 ## Backlog
+* Show private posts, and all posts on the homepage post list on the Admin app
 * Generate iOS and Android icons (icon.png)
 * When updating profile, disable button onClick
 * Fix notification when I post a store post
@@ -93,6 +93,8 @@
 
 
 ## Done
+* Login via Facebook via iOS
+* Login via Google via iOS
 * Add loading overlay when logging in
 * Add store suggestions on the "Write a Review" page
 * Login with Google

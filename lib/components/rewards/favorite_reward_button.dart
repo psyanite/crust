@@ -67,10 +67,10 @@ class _Presenter extends StatelessWidget {
       isFavorited: favoriteRewards.contains(reward.id),
       onFavorite: () {
         if (reward.isExpired() == true) {
-          snack(context, 'Expired rewards cannot be favorited');
+          snack(context, 'Sorry, expired rewards cannot be favourited');
         } else if (isLoggedIn) {
           favoriteReward(reward.id);
-          snack(context, 'Added to favourites');
+          snack(context, '🎉 Added to favourites');
         } else {
           snack(context, 'Login now to favourite rewards');
         }

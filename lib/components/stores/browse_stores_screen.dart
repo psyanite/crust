@@ -69,7 +69,7 @@ class _Presenter extends StatelessWidget {
           fontSize: 20.0,
           onPressed: () {
             if (!isLoggedIn) {
-              snack(context, 'Login now to favourite stores!');
+              snack(context, 'Login now to favourite stores');
             } else {
               Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteStoresScreen()));
             }
