@@ -72,8 +72,6 @@
 * Why cities, location_search, suburbs, and stores store coords in point?
 * Check timezone is correct when posting a post in PROD environment
 
-* Fix up other stores search screen
-
 * Show private posts, and all posts on the homepage post list on the Admin app
 
 * Edit my profile ^_^
@@ -81,6 +79,7 @@
 
 
 ## Backlog
+* Generate iOS and Android icons (icon.png)
 * When updating profile, disable button onClick
 * Fix notification when I post a store post
 * Fix "Let us know" button color

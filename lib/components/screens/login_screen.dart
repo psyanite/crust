@@ -122,7 +122,7 @@ class _PresenterState extends State<_Presenter> {
         Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
           InkWell(
             onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => TermsScreen())),
-            child: Text('Terms of Use', style: TextStyle(color: Colors.white, decoration: TextDecoration.underline)),
+            child: Text('Terms & Conditions', style: TextStyle(color: Colors.white, decoration: TextDecoration.underline)),
           ),
           Text(' and ', style: TextStyle(color: Colors.white)),
           InkWell(
