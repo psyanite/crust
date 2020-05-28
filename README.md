@@ -37,11 +37,22 @@
   <img src="https://github.com/psyanite/crust/blob/master/docs/images/search.jpg" width="250px"/>
 </div>
 
-## To Do
+
+## In Progress
 * Enable flutter_local_notifications on iOS
+
+https://pub.dev/packages/flutter_local_notifications
+local_notifier.dart
+
+
+## To Do
+* Test sending notifications on Android
+
 * Enable push notifications in iOS
 * Test on iOS
 * Enable firebase dynamic urls in iOS
+
+* After I make a post the app should scroll down to show the post
 
 * Backup FirebaseStorage using Google Cloud Archive
 * Export database every night
@@ -74,6 +85,8 @@ https://github.com/flutter/flutter/issues/50951
 
 
 ## Backlog
+* Commenting on a post in iOS gives a weird popping animation
+
 * Show private posts, and all posts on the homepage post list on the Admin app
 * Generate iOS and Android icons (icon.png)
 * When updating profile, disable button onClick
@@ -93,6 +106,7 @@ https://github.com/flutter/flutter/issues/50951
 
 
 ## Done
+* Critical path testing iOS
 * Login via Facebook via iOS
 * Login via Google via iOS
 * Add loading overlay when logging in

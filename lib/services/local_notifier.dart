@@ -40,14 +40,12 @@ class LocalNotifier {
 
   Future<NotificationDetails> _getPlatformChannelSpecs(FirebaseMessage message) async {
     var image = message.imageUrl;
-    var largeIcon = image != null ? await _getFilePath(image) : null;
+    var largeIcon = image != null ? await _getAndroidBitmap(image) : null;
 
+    // https://github.com/MaikuB/flutter_local_notifications/blob/master/flutter_local_notifications/example/lib/main.dart
     var androidSpecs = AndroidNotificationDetails(
       message.hashCode.toString(), 'Burntoast', 'Burntoast',
-      largeIcon: largeIcon,
-      largeIconBitmapSource: largeIcon != null ? BitmapSource.FilePath : null,
-      style: AndroidNotificationStyle.BigText,
-      styleInformation: null,
+      largeIcon: (largeIcon),
       importance: Importance.Max, priority: Priority.High,
     );
 
@@ -60,12 +58,17 @@ class LocalNotifier {
     if (_fileDir == null) await _initImageDir();
     var filePath = '${_fileDir.path}/notify-image-${url.hashCode}';
     var file = File(filePath);
-    if (! await file.exists()) {
+    if (!await file.exists()) {
       var response = await http.get(url);
       await file.writeAsBytes(response.bodyBytes);
     }
 
     return filePath;
+  }
+
+  Future<FilePathAndroidBitmap> _getAndroidBitmap(String url) async {
+    var filePath = await _getFilePath(url);
+    return FilePathAndroidBitmap(filePath);
   }
 
   factory LocalNotifier({Function redirect}) {
