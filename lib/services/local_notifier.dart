@@ -39,7 +39,7 @@ class LocalNotifier {
   }
 
   Future<NotificationDetails> _getPlatformChannelSpecs(FirebaseMessage message) async {
-    var image = message.imageUrl;
+    var image = message.image;
     var largeIcon = image != null ? await _getAndroidBitmap(image) : null;
 
     // https://github.com/MaikuB/flutter_local_notifications/blob/master/flutter_local_notifications/example/lib/main.dart

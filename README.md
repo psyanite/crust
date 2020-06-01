@@ -39,20 +39,18 @@
 
 
 ## In Progress
-* Enable flutter_local_notifications on iOS
+* Enable firebase dynamic urls in iOS
 
-https://pub.dev/packages/flutter_local_notifications
-local_notifier.dart
 
 
 ## To Do
 * Test sending notifications on Android
 
+* Enable login via iOS
+* Enable flutter_local_notifications on iOS
 * Enable push notifications in iOS
 * Test on iOS
 * Enable firebase dynamic urls in iOS
-
-* After I make a post the app should scroll down to show the post
 
 * Backup FirebaseStorage using Google Cloud Archive
 * Export database every night
@@ -66,15 +64,19 @@ local_notifier.dart
 * Create uptime checker and alert policies: https://console.cloud.google.com/monitoring?authuser=0&project=burntoast&timeDomain=1h
 * Setup database backups
 
-* Test QR scanning
+* Test QR scanning by admins android
+* Test QR scanning by users android
+* Test QR scanning by admins iOS
+* Test QR scanning by users iOS
 
 * Test Prod Crust
 * Test Prod Butter
 
-* Polish database for production
-
 * Why cities, location_search, suburbs, and stores store coords in point?
 * Check timezone is correct when posting a post in PROD environment
+
+* Polish database for production
+* Do a fresh import of the database to Knob
 
 * Edit my profile ^_^
 
@@ -101,8 +103,7 @@ https://github.com/flutter/flutter/issues/50951
 * Fix up .idea in .gitignore for other projects
 * Fix store name is center aligned when no text in post
 
-* In edit post mode, just Navigator.pop
--- To reproduce: go to my profile, edit a post, get redirected to store page
+* After I edit a post, I want to see the post have been updated on the same page that I was on
 
 
 ## Done

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:crust/components/screens/handle_notify_screen.dart';
 import 'package:crust/services/local_notifier.dart';
@@ -11,19 +12,20 @@ import 'dart:convert' as Convert;
 class FirebaseMessage {
   final String title;
   final String body;
-  final String imageUrl;
+  final String image;
   final String data;
 
-  FirebaseMessage({this.title, this.body, this.imageUrl, this.data});
+  FirebaseMessage({this.title, this.body, this.image, this.data});
 
   factory FirebaseMessage.fromJson(Map<String, dynamic> json) {
     if (json == null) return null;
     var notification = json['notification'];
+    var data = json['data'];
     return FirebaseMessage(
       title: notification['title'],
       body: notification['body'],
-      imageUrl: notification['imageUrl'],
-      data: Convert.json.encode(json['data']),
+      image: data != null ? data['image'] : null,
+      data: Convert.json.encode(data),
     );
   }
 }
