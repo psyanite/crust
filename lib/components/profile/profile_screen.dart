@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crust/components/my_profile/my_profile_screen.dart';
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/profile/follow_user_button.dart';
@@ -145,11 +146,11 @@ class _PresenterState extends State<_Presenter> {
         Container(
           child: Stack(
             children: <Widget>[
-              Container(height: 200.0),
+              Container(height: 360.0),
               Stack(children: <Widget>[
-                NetworkImg(user.profilePicture, height: 150.0),
+                NetworkImg(user.profilePicture, height: 290.0),
                 Container(
-                  height: 150.0,
+                  height: 290.0,
                   decoration: BoxDecoration(color: Color(0x55000000)),
                   child: SafeArea(
                     child: Row(
@@ -163,7 +164,7 @@ class _PresenterState extends State<_Presenter> {
                 ),
               ]),
               Container(
-                margin: EdgeInsets.only(top: 70.0),
+                margin: EdgeInsets.only(top: 100.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -182,14 +183,14 @@ class _PresenterState extends State<_Presenter> {
                 Container(width: 4.0),
                 Text('@${user.username}'),
               ]),
-              Container(height: 10.0),
+              Container(height: 15.0),
               _followButton(),
             ],
           ),
         ),
         if (user.tagline != null) _tagline(),
         Container(
-          margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 20.0),
+          margin: EdgeInsets.only(left: 16.0, right: 16.0, top: 25.0),
           decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Burnt.separator))),
         )
       ]),
@@ -220,13 +221,13 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _profilePicture(String picture) {
     return Container(
-      width: 150.0,
-      height: 150.0,
+      width: 250.0,
+      height: 250.0,
       decoration: BoxDecoration(
         color: Burnt.separator,
         borderRadius: BorderRadius.circular(150.0),
         border: Border.all(color: Colors.white, width: 4.0),
-        image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(picture)),
+        image: DecorationImage(fit: BoxFit.fill, image: CachedNetworkImageProvider(picture)),
       ),
     );
   }

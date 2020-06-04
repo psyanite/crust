@@ -85,9 +85,9 @@ class _PresenterState extends State<_Presenter> {
         Stack(
           alignment: AlignmentDirectional.bottomStart,
           children: <Widget>[
-            NetworkImg(widget.reward.promoImage, height: 300.0),
+            NetworkImg(widget.reward.promoImage, height: 400.0),
             Container(
-              height: 300.0,
+              height: 400.0,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,

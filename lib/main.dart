@@ -16,7 +16,11 @@ import 'package:redux_persist_flutter/redux_persist_flutter.dart';
 main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  final persistor = Persistor<AppState>(storage: FlutterStorage(key: 'crust'), serializer: JsonSerializer<AppState>(AppState.rehydrate));
+  final persistor = Persistor<AppState>(
+    storage: FlutterStorage(key: 'crust'),
+    serializer: JsonSerializer<AppState>(AppState.rehydrate),
+  );
+
   var initialState;
   try {
     initialState = await persistor.load();
@@ -92,7 +96,8 @@ class CustomLocalizationDelegate extends LocalizationsDelegate<MaterialLocalizat
   bool isSupported(Locale locale) => locale.languageCode == 'en';
 
   @override
-  Future<MaterialLocalizations> load(Locale locale) => SynchronousFuture<MaterialLocalizations>(const CustomLocalization());
+  Future<MaterialLocalizations> load(Locale locale) =>
+      SynchronousFuture<MaterialLocalizations>(const CustomLocalization());
 
   @override
   bool shouldReload(CustomLocalizationDelegate old) => false;

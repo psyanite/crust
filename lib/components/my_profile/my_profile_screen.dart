@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:crust/components/common/components.dart';
 import 'package:crust/components/my_profile/find_user_screen.dart';
 import 'package:crust/components/my_profile/my_qr_screen.dart';
 import 'package:crust/components/my_profile/set_picture_screen.dart';
@@ -10,7 +12,6 @@ import 'package:crust/components/screens/about_screen.dart';
 import 'package:crust/main.dart';
 import 'package:crust/models/post.dart';
 import 'package:crust/models/user.dart';
-import 'package:crust/components/common/components.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
@@ -121,9 +122,9 @@ class _PresenterState extends State<_Presenter> {
       child: Column(children: <Widget>[
         Container(
           child: Stack(children: <Widget>[
-            Container(height: 200.0),
+            Container(height: 330.0),
             Stack(children: <Widget>[
-              NetworkImg(user.profilePicture, height: 150.0),
+              NetworkImg(user.profilePicture, height: 250.0),
               _menuButton(),
             ]),
             Container(
@@ -156,13 +157,13 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _profilePicture(String picture) {
     return Container(
-      width: 150.0,
-      height: 150.0,
+      width: 250.0,
+      height: 250.0,
       decoration: BoxDecoration(
         color: Burnt.separator,
         borderRadius: BorderRadius.circular(150.0),
         border: Border.all(color: Colors.white, width: 4.0),
-        image: DecorationImage(fit: BoxFit.fill, image: NetworkImage(picture)),
+        image: DecorationImage(fit: BoxFit.fill, image: CachedNetworkImageProvider(picture)),
       ),
     );
   }
@@ -196,7 +197,7 @@ class _PresenterState extends State<_Presenter> {
 
   Widget _menuButton() {
     return Container(
-      height: 150.0,
+      height: 250.0,
       decoration: BoxDecoration(color: Color(0x55000000)),
       child: SafeArea(
         child: Row(

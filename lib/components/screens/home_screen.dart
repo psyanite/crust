@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:crust/components/common/components.dart';
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
 import 'package:crust/components/stores/favorite_store_button.dart';
@@ -7,7 +8,6 @@ import 'package:crust/components/stores/search_stores_screen.dart';
 import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/models/post.dart';
 import 'package:crust/models/store.dart' as MyStore;
-import 'package:crust/components/common/components.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
 import 'package:crust/state/app/app_state.dart';
@@ -16,6 +16,7 @@ import 'package:crust/state/feed/feed_service.dart';
 import 'package:crust/state/store/store_actions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:redux/redux.dart';
@@ -53,7 +54,16 @@ class _Presenter extends StatefulWidget {
   final Function addPosts;
   final Function jumpToStoresTab;
 
-  _Presenter({Key key, this.myId, this.refresh, this.feed, this.topStores, this.removePost, this.addPosts, this.jumpToStoresTab}) : super(key: key);
+  _Presenter(
+      {Key key,
+      this.myId,
+      this.refresh,
+      this.feed,
+      this.topStores,
+      this.removePost,
+      this.addPosts,
+      this.jumpToStoresTab})
+      : super(key: key);
 
   @override
   _PresenterState createState() => _PresenterState();
@@ -70,7 +80,8 @@ class _PresenterState extends State<_Presenter> {
     super.initState();
     _scrollie = ScrollController()
       ..addListener(() {
-        if (widget.feed.isNotEmpty && _loading == false && _limit > 0 && _scrollie.position.extentAfter < 500) _getMore();
+        if (widget.feed.isNotEmpty && _loading == false && _limit > 0 && _scrollie.position.extentAfter < 500)
+          _getMore();
       });
   }
 
@@ -117,10 +128,18 @@ class _PresenterState extends State<_Presenter> {
     if (fresh.isNotEmpty) widget.addPosts(fresh);
   }
 
-  removeFromList(index, postId) => widget.removePost(postId);
+  _updateSystemUiOverlay() {
+    Timer(Duration(milliseconds: 500), () {
+      SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle.dark.copyWith(statusBarColor: Color(0xAAFAFAFA)),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    _updateSystemUiOverlay();
+
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: _refresh,
@@ -203,7 +222,10 @@ class _PresenterState extends State<_Presenter> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(Radius.circular(2.0)),
-                        boxShadow: [BoxShadow(color: Color(0x10000000), offset: Offset(2.0, 2.0), blurRadius: 1.0, spreadRadius: 1.0)],
+                        boxShadow: [
+                          BoxShadow(
+                              color: Color(0x10000000), offset: Offset(2.0, 2.0), blurRadius: 1.0, spreadRadius: 1.0)
+                        ],
                       ),
                       child: _topStoreCard(widget.topStores[i]),
                     ),
@@ -249,8 +271,10 @@ class _PresenterState extends State<_Presenter> {
               padding: EdgeInsets.only(top: 16.0, bottom: 20.0, left: 16.0, right: 16.0),
               child: Column(
                 children: <Widget>[
-                  Text(store.name, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
-                  Text(store.location ?? store.suburb, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16.0)),
+                  Text(store.name,
+                      overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 22.0, fontWeight: Burnt.fontBold)),
+                  Text(store.location ?? store.suburb,
+                      overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16.0)),
                   Text(store.cuisines.join(', '), overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 16.0)),
                 ],
               ),
