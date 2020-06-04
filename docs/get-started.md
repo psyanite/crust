@@ -10,10 +10,13 @@
 * Move `key.properties` into `/android`
 
 ## Get Started iOS
+* Download `GoogleService-Info.plist`
+* In IntelliJ, expand the `ios` directory
+* Drag and drop the file into the `Runner` directory
 * Open Xcode
 * Open `ios/Runner.xcodeproj`
 * Right click the `Runner` folder on the left hand side
-* Click `Add Files to "Runner"` 
+* Click `Add Files to "Runner"`
 * Select `GoogleService-Info.plist`
 
 ## How to Release

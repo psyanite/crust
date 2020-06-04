@@ -28,6 +28,7 @@ dependencies:
   cached_network_image: ^2.0.0-rc.1
   cupertino_icons: ^0.1.2
   device_info: ^0.4.2+1
+  flushbar: ^1.10.4
   flutter_image_compress: ^0.6.7
   flutter_local_notifications: ^1.4.3
   flutter_swiper : ^1.1.6

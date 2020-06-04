@@ -81,6 +81,14 @@ class Main extends StatelessWidget {
           MainRoutes.splash: (context) => SplashScreen(),
           MainRoutes.home: (context) => MainTabNavigator(),
         },
+        builder: (context, child) {
+          var currentTsf = MediaQuery.of(context).textScaleFactor;
+          var newTsf = -0.25 * currentTsf + 1;
+          return MediaQuery(
+            child: child,
+            data: MediaQuery.of(context).copyWith(textScaleFactor: newTsf),
+          );
+        },
         localizationsDelegates: [
           CustomLocalizationDelegate(),
         ],

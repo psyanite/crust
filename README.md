@@ -39,18 +39,22 @@
 
 
 ## In Progress
-* Enable firebase dynamic urls in iOS
+* modify messenger.dart to always use flushbar
+* test sending notification to my app and trying to open with flushbar
+* test if redirect works
+
 
 
 
 ## To Do
-* Test sending notifications on Android
-
-* Enable login via iOS
 * Enable flutter_local_notifications on iOS
 * Enable push notifications in iOS
 * Test on iOS
+
+
 * Enable firebase dynamic urls in iOS
+
+* Enable login via iOS
 
 * Backup FirebaseStorage using Google Cloud Archive
 * Export database every night
@@ -107,6 +111,7 @@ https://github.com/flutter/flutter/issues/50951
 
 
 ## Done
+* Test sending notifications on Android
 * Critical path testing iOS
 * Login via Facebook via iOS
 * Login via Google via iOS
