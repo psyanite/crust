@@ -115,11 +115,11 @@ class _LoyaltyCardState extends State<LoyaltyCard> {
     return Column(
       children: <Widget>[
         Stack(
-          alignment: AlignmentDirectional.topStart,
+          alignment: AlignmentDirectional.bottomStart,
           children: <Widget>[
-            NetworkImg(widget.reward.promoImage, height: 130.0),
+            NetworkImg(widget.reward.promoImage, height: 200.0),
             Container(
-              height: 130.0,
+              height: 200.0,
               decoration: BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
@@ -131,14 +131,8 @@ class _LoyaltyCardState extends State<LoyaltyCard> {
             ),
             SafeArea(
               child: Container(
-                height: 106.0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    BackArrow(color: Colors.white),
-                  ],
-                ),
+                height: 60.0,
+                child: BackArrow(color: Colors.white),
               ),
             ),
           ],
@@ -150,7 +144,7 @@ class _LoyaltyCardState extends State<LoyaltyCard> {
   Widget _description() {
     var reward = widget.reward;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      padding: EdgeInsets.only(top: 20.0, left: 16.0, right: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
