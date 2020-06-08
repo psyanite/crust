@@ -39,15 +39,6 @@
 
 
 ## In Progress
-* modify messenger.dart to always use flushbar
-* test sending notification to my app and trying to open with flushbar
-* test if redirect works
-
-
-
-
-## To Do
-* Enable flutter_local_notifications on iOS
 * Enable push notifications in iOS
 * Test on iOS
 
