@@ -39,41 +39,37 @@
 
 
 ## In Progress
-* Enable push notifications in iOS
-* Test on iOS
+* Why cities, location_search, suburbs, and stores store coords in point?
 
-
-* Enable firebase dynamic urls in iOS
-
-* Enable login via iOS
-
-* Backup FirebaseStorage using Google Cloud Archive
-* Export database every night
-* Write Cloud Function to call endpoint to do database cleanup
-* Backup Firebase Storage
-
-* Do a fresh import of the database to Knob
-
-* Setup nightly task at 2am to rebuild caches
-
-* Create uptime checker and alert policies: https://console.cloud.google.com/monitoring?authuser=0&project=burntoast&timeDomain=1h
-* Setup database backups
+* Edit my profile ^_^
 
 * Test QR scanning by admins android
 * Test QR scanning by users android
 * Test QR scanning by admins iOS
 * Test QR scanning by users iOS
 
+===
+
+* Enable push notifications in iOS
+* Enable firebase dynamic urls in iOS
+* Enable login via iOS
+
 * Test Prod Crust
 * Test Prod Butter
-
-* Why cities, location_search, suburbs, and stores store coords in point?
 * Check timezone is correct when posting a post in PROD environment
+
+* Deploy app to iOS and google play
 
 * Polish database for production
 * Do a fresh import of the database to Knob
 
-* Edit my profile ^_^
+* Setup database backups
+* Create uptime checker and alert policies: https://console.cloud.google.com/monitoring?authuser=0&project=burntoast&timeDomain=1h
+* Check cooper endpoint works
+* Setup Health Check on cooper starts with `^Success.*`
+* 2 am everyday `0 2 * * *`
+* Check refreshMaterializedView endpoints work
+* Check scheduled tasks work
 
 https://www.reddit.com/r/FlutterDev/comments/gon8w0/how_i_got_my_first_10k_downloads_in_google/
 
@@ -99,6 +95,7 @@ https://github.com/flutter/flutter/issues/50951
 * Fix store name is center aligned when no text in post
 
 * After I edit a post, I want to see the post have been updated on the same page that I was on
+
 
 
 ## Done
