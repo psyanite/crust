@@ -55,8 +55,7 @@ class _PresenterState extends State<_Presenter> {
       return;
     }
 
-    var userId = await MeService.getUserIdByUsername(name);
-    if (userId != null) {
+    if (await MeService.isValidUsername(widget.myId, name) == false) {
       snack(context, 'Sorry, that username is already taken');
       return;
     }

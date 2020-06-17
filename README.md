@@ -39,6 +39,12 @@
 
 
 ## In Progress
+* Commit crust and toaster changes
+* Set username minimum length limit
+* Write phony endpoint meow to create usernames for me
+
+
+## Todo
 * Why cities, location_search, suburbs, and stores store coords in point?
 
 * Edit my profile ^_^

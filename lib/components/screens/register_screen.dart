@@ -78,8 +78,8 @@ class _PresenterState extends State<_Presenter> {
       snack(context, error);
       return;
     }
-    var userId = await MeService.getUserIdByUsername(_username);
-    if (userId != null) {
+
+    if (await MeService.isValidUsername(null, _username) == false) {
       snack(context, 'Sorry, that username is already taken');
     } else {
       widget.addUser(widget.user.copyWith(username: _username));

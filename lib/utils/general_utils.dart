@@ -27,12 +27,12 @@ class Utils {
     if (name == null || name.isEmpty) {
       return 'Oops! Usernames can\'t be blank';
     }
-    if (name.length > 24) {
-      return 'Sorry, usernames have to be shorter than 24 characters';
+    if (!(name.length >= 6 && name.length <= 24)) {
+      return 'Sorry, usernames have to be between 6-24 characters';
     }
     var allow = '0123456789abcdefghijklmnopqrstuvwxyz._'.split('');
     if (!name.split('').every((char) => allow.contains(char))) {
-      return 'Sorry, usernames can only have lowercase letters, numbers, underscores, and periods';
+      return 'Sorry, usernames can only have lowercase letters, numbers, underscores & periods';
     }
     return null;
   }

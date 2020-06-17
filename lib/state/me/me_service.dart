@@ -5,20 +5,14 @@ import 'package:crust/utils/enum_util.dart';
 class MeService {
   const MeService();
 
-  static Future<int> getUserIdByUsername(String username) async {
+  static Future<bool> isValidUsername(int userId, String username) async {
     String query = """
       query {
-        userProfileByUsername(username: "$username") {
-          user_account {
-            id
-          }
-        }
+        isValidUsername(userId: $userId, username: "$username")
       }
     """;
     final response = await Toaster.get(query);
-    var json = response['userProfileByUsername'];
-    if (json == null) return null;
-    return json['user_account']['id'];
+    return response['isValidUsername'] == true;
   }
 
   static Future<User> getUser(User user) async {
