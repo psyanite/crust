@@ -39,20 +39,25 @@
 
 
 ## In Progress
-* Commit crust and toaster changes
-* Set username minimum length limit
-* Write phony endpoint meow to create usernames for me
+* Fix iOS app icon
+* Fix "Let us know" button color
+* Fix up .idea in .gitignore for other projects
 
 
 ## Todo
-* Why cities, location_search, suburbs, and stores store coords in point?
+* How to handle expired rewards???
+* https://www.reddit.com/r/FlutterDev/comments/gon8w0/how_i_got_my_first_10k_downloads_in_google/ 
+*  https://github.com/flutter/flutter/issues/50951
 
-* Edit my profile ^_^
+===
 
-* Test QR scanning by admins android
-* Test QR scanning by users android
-* Test QR scanning by admins iOS
-* Test QR scanning by users iOS
+* Fix notification when I post a store post
+* Add page refresh on my profile (?)
+
+===
+
+* Deploy app to Google Play
+* Complete QR scan-test in iOS
 
 ===
 
@@ -63,8 +68,6 @@
 * Test Prod Crust
 * Test Prod Butter
 * Check timezone is correct when posting a post in PROD environment
-
-* Deploy app to iOS and google play
 
 * Polish database for production
 * Do a fresh import of the database to Knob
@@ -77,27 +80,18 @@
 * Check refreshMaterializedView endpoints work
 * Check scheduled tasks work
 
-https://www.reddit.com/r/FlutterDev/comments/gon8w0/how_i_got_my_first_10k_downloads_in_google/
-
-https://github.com/flutter/flutter/issues/50951
-
 
 
 ## Backlog
 * Commenting on a post in iOS gives a weird popping animation
 
 * Show private posts, and all posts on the homepage post list on the Admin app
-* Generate iOS and Android icons (icon.png)
 * When updating profile, disable button onClick
-* Fix notification when I post a store post
-* Fix "Let us know" button color
 * Add loading dialog on delete post
-* Add page refresh on my profile
 * Add on tap of cuisine to open search page
 
 * Add link previews to dynamic links
 * Send email of results
-* Fix up .idea in .gitignore for other projects
 * Fix store name is center aligned when no text in post
 
 * After I edit a post, I want to see the post have been updated on the same page that I was on
@@ -105,6 +99,11 @@ https://github.com/flutter/flutter/issues/50951
 
 
 ## Done
+* Complete QR code testing in Android
+* Set username minimum length limit
+* Create usernames
+* Write phony endpoint meow to create usernames for me
+* Why cities, location_search, suburbs, and stores store coords in point?
 * Test sending notifications on Android
 * Critical path testing iOS
 * Login via Facebook via iOS

@@ -45,7 +45,7 @@ android {
     defaultConfig {
         multiDexEnabled true
         applicationId "com.burntoast.crust"
-        minSdkVersion 28
+        minSdkVersion 27
         targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

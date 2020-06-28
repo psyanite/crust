@@ -221,8 +221,8 @@ class Suburb {
       postcode: json['postcode'],
       city: city != null ? city['name'] : null,
       district: city != null && city['district'] != null ? city['district']['name'] : null,
-      lat: coords != null ? coords['coordinates'][0] : null,
-      lng: coords != null ? coords['coordinates'][1] : null,
+      lng: coords != null ? coords['coordinates'][0] : null,
+      lat: coords != null ? coords['coordinates'][1] : null,
     );
   }
 

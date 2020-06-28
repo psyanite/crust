@@ -368,7 +368,7 @@ class _PresenterState extends State<_Presenter> {
       );
     };
     return Builder(builder: (context) {
-      return InkWell(onTap: () => showBottomSheet(context), child: Icon(CrustCons.menu_bold, color: Colors.white, size: 30.0));
+      return InkWell(onTap: () => showBottomSheet(context), child: Icon(CrustCons.triple_dot, color: Colors.white, size: 30.0));
     });
   }
 

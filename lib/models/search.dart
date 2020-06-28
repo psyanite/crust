@@ -50,8 +50,8 @@ class SearchLocationItem {
     return SearchLocationItem(
       name: json['name'],
       description: json['description'],
-      lat: coords != null ? coords['coordinates'][0] : null,
-      lng: coords != null ? coords['coordinates'][1] : null,
+      lng: coords != null ? coords['coordinates'][0] : null,
+      lat: coords != null ? coords['coordinates'][1] : null,
     );
   }
 }

@@ -22,3 +22,39 @@
 1. Delete comments
 1. View another user
 1. Follow user
+
+# QR Testing
+#### User profile QR code
+* Open my QR code
+* On another phone, scan that QR code
+* Verify correct redirection
+
+#### Store QR code
+* As admin, go to my QR code
+* As user, scan QR code
+* Verify correct redirection
+
+#### Reward QR code
+* As admin, view a store-redeemable reward
+* As user, scan QR code
+* Verify correct redirection
+
+#### Redeem star on a reward card
+* Login as test user and admin in 2 apps
+* As user, acquire QR code
+* As admin, scan QR code
+* As user, refresh page
+* Repeat until all stars are redeemed
+* As admin, scan QR one last time to refresh reward card
+
+#### One-time rewards
+* Login as test user and admin in 2 apps
+* As user, acquire QR code
+* As admin, scan QR code
+* As user, refresh page and verify cannot be redeemed again
+
+#### Unlimited rewards
+* Login as test user and admin in 2 apps
+* As user, acquire QR code
+* As admin, scan QR code
+* As user, refresh page and attempt to redeem again
