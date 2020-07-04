@@ -40,9 +40,6 @@
 
 ## In Progress
 * Fix iOS app icon
-* Fix "Let us know" button color
-* Fix up .idea in .gitignore for other projects
-
 
 ## Todo
 * How to handle expired rewards???
@@ -99,6 +96,8 @@
 
 
 ## Done
+* Fix up .idea in .gitignore for other projects
+* Fix "Let us know" button color
 * Complete QR code testing in Android
 * Set username minimum length limit
 * Create usernames

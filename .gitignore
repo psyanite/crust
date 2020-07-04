@@ -7,13 +7,17 @@
 .buildlog/
 .history
 
-# IntelliJ related
+# IntelliJ
+.idea/codeStyles
+.idea/libraries
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/**/usage.statistics.xml
+.idea/**/shelf
+modules.xml
 *.iml
-*.ipr
-*.iws
-.idea/
 
-# Flutter/Dart/Pub related
+# Flutter/Dart/Pub
 **/doc/api/
 .dart_tool/
 .flutter-plugins
@@ -23,7 +27,7 @@
 .pub/
 /build/
 
-# Web related
+# Web
 lib/generated_plugin_registrant.dart
 
 # Exceptions to above rules
