@@ -18,10 +18,51 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb2065053637091627</string>
+				<string>com.googleusercontent.apps.691778990314-i9u89scb3ifnb0c1sad9mm96og9jsl60</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>meow</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.burntoast.crust</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>FacebookAppID</key>
+	<string>2065053637091627</string>
+	<key>FacebookDisplayName</key>
+	<string>Burntoast</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+		<string>fbauth2</string>
+		<string>fbshareextension</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Enable camera access to take photos.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Enable location access to improve your experience.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Enable location access to improve your experience.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Enable photo access to upload photos.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -41,52 +82,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-
-
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-            	<!-- Facebook Login Configuration -->
-                <string>fb2065053637091627</string>
-
-            	<!-- Google Login Configuration -->
-                <string>com.googleusercontent.apps.691778990314-i9u89scb3ifnb0c1sad9mm96og9jsl60</string>
-            </array>
-        </dict>
-    </array>
-
-
-	<!-- Facebook Login Configuration -->
-    <key>FacebookAppID</key>
-    <string>2065053637091627</string>
-
-    <key>FacebookDisplayName</key>
-    <string>Burntoast</string>
-
-    <key>LSApplicationQueriesSchemes</key>
-    <array>
-        <string>fbapi</string>
-        <string>fb-messenger-share-api</string>
-        <string>fbauth2</string>
-        <string>fbshareextension</string>
-    </array>
-
-
-    <!-- Multi Image Picker -->
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Enable photo access to upload photos.</string>
-    <key>NSCameraUsageDescription</key>
-    <string>Enable camera access to take photos.</string>
-
-    <!-- Geolocator -->
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>Enable location access to improve your experience.</string>
-    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Enable location access to improve your experience.</string>
-
 </dict>
 </plist>

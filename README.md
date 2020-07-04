@@ -38,29 +38,16 @@
 </div>
 
 
+
 ## In Progress
-* Fix iOS app icon
-
-## Todo
-* How to handle expired rewards???
-* https://www.reddit.com/r/FlutterDev/comments/gon8w0/how_i_got_my_first_10k_downloads_in_google/ 
-*  https://github.com/flutter/flutter/issues/50951
-
-===
-
-* Fix notification when I post a store post
+* Fix notification when I post a store post (?)
 * Add page refresh on my profile (?)
 
-===
+
+## Todo
 
 * Deploy app to Google Play
-* Complete QR scan-test in iOS
 
-===
-
-* Enable push notifications in iOS
-* Enable firebase dynamic urls in iOS
-* Enable login via iOS
 
 * Test Prod Crust
 * Test Prod Butter
@@ -77,9 +64,21 @@
 * Check refreshMaterializedView endpoints work
 * Check scheduled tasks work
 
+===
+
+* Complete QR scan-test in iOS
+* Enable push notifications in iOS
+* Enable firebase dynamic urls in iOS
+* Enable login via iOS
+
+===
+
+* https://www.reddit.com/r/FlutterDev/comments/gon8w0/how_i_got_my_first_10k_downloads_in_google/ 
+
 
 
 ## Backlog
+* How to handle expired rewards???
 * Commenting on a post in iOS gives a weird popping animation
 
 * Show private posts, and all posts on the homepage post list on the Admin app
@@ -96,6 +95,7 @@
 
 
 ## Done
+* Fix iOS app icon
 * Fix up .idea in .gitignore for other projects
 * Fix "Let us know" button color
 * Complete QR code testing in Android
