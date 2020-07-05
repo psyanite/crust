@@ -4,7 +4,7 @@ import 'package:crust/components/common/components.dart';
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/screens/scan_qr_screen.dart';
 import 'package:crust/components/stores/favorite_store_button.dart';
-import 'package:crust/components/stores/search_stores_screen.dart';
+import 'package:crust/components/stores/search_screen.dart';
 import 'package:crust/components/stores/store_screen.dart';
 import 'package:crust/models/post.dart';
 import 'package:crust/models/store.dart' as MyStore;
