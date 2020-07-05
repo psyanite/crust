@@ -15,10 +15,10 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:redux/redux.dart';
 
-class ReviewForm extends StatelessWidget {
+class WriteAReviewScreen extends StatelessWidget {
   final MyStore.Store store;
 
-  ReviewForm({Key key, this.store}) : super(key: key);
+  WriteAReviewScreen({Key key, this.store}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

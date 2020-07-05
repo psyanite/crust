@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:crust/components/new_post/review_form.dart';
+import 'package:crust/components/new_post/write_a_review_screen.dart';
 import 'package:crust/components/screens/report_missing_store_screen.dart';
 import 'package:crust/models/search.dart';
 import 'package:crust/models/store.dart' as MyStore;
@@ -222,7 +222,7 @@ class _StoreCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         addSearchHistoryItem(store);
-        Navigator.push(context, MaterialPageRoute(builder: (_) => ReviewForm(store: store)));
+        Navigator.push(context, MaterialPageRoute(builder: (_) => WriteAReviewScreen(store: store)));
       },
       child: Padding(
         padding: EdgeInsets.only(top: 10.0, right: 16.0, left: 16.0),

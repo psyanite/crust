@@ -1,5 +1,5 @@
 import 'package:crust/components/dialog/dialog.dart';
-import 'package:crust/components/new_post/review_form.dart';
+import 'package:crust/components/new_post/write_a_review_screen.dart';
 import 'package:crust/components/post_list/post_list.dart';
 import 'package:crust/components/rewards/reward_swiper.dart';
 import 'package:crust/components/stores/favorite_store_button.dart';
@@ -302,7 +302,7 @@ class _PresenterState extends State<_Presenter> {
           if (widget.isLoggedIn == false) {
             snack(context, 'Login now to write a review');
           } else {
-            Navigator.push(context, MaterialPageRoute(builder: (_) => ReviewForm(store: widget.store)));
+            Navigator.push(context, MaterialPageRoute(builder: (_) => WriteAReviewScreen(store: widget.store)));
           }
         },
         children: <Widget>[
