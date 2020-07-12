@@ -266,7 +266,7 @@ class _LoyaltyCardState extends State<LoyaltyCard> {
   Widget _footer() {
     var onPressed = (BuildContext context) async {
       if (widget.myId == null) {
-        snack(context, 'Login to start redeeming rewards!');
+        loginSnack(context, 'Login to start redeeming rewards!');
         return;
       }
       if (_userReward != null) {

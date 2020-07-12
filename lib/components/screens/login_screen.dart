@@ -1,13 +1,13 @@
 import 'dart:convert';
 
+import 'package:crust/components/common/components.dart';
 import 'package:crust/components/dialog/dialog.dart';
 import 'package:crust/components/screens/privacy_screen.dart';
 import 'package:crust/components/screens/register_screen.dart';
 import 'package:crust/components/screens/terms_screen.dart';
-import 'package:crust/main.dart';
 import 'package:crust/models/user.dart';
-import 'package:crust/components/common/components.dart';
 import 'package:crust/presentation/theme.dart';
+import 'package:crust/services/navi.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/state/me/me_actions.dart';
 import 'package:crust/state/me/me_service.dart';
@@ -21,7 +21,11 @@ import 'package:http/http.dart' as http;
 import 'package:redux/redux.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../main.dart';
+
 class LoginScreen extends StatelessWidget {
+  LoginScreen({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, dynamic>(
@@ -29,25 +33,29 @@ class LoginScreen extends StatelessWidget {
         store.dispatch(LoginSuccess(user));
         store.dispatch(CheckFcmToken());
       },
-      builder: (context, loginSuccess) => _Presenter(loginSuccess: loginSuccess),
+      builder: (BuildContext context, onLoginSuccess) {
+        return _Presenter(onLoginSuccess: (user) => onLoginSuccess(user));
+      },
     );
   }
 }
 
-class _Presenter extends StatefulWidget {
-  final Function loginSuccess;
+typedef OnLoginSuccess = void Function(User user);
 
-  _Presenter({Key key, this.loginSuccess}) : super(key: key);
+class _Presenter extends StatefulWidget {
+  final OnLoginSuccess onLoginSuccess;
+
+  _Presenter({Key key, this.onLoginSuccess}) : super(key: key);
 
   @override
-  _PresenterState createState() => _PresenterState(loginSuccess: loginSuccess);
+  _PresenterState createState() => _PresenterState(onLoginSuccess: onLoginSuccess);
 }
 
 class _PresenterState extends State<_Presenter> {
-  final Function loginSuccess;
+  final OnLoginSuccess onLoginSuccess;
   bool _loading = false;
 
-  _PresenterState({this.loginSuccess});
+  _PresenterState({this.onLoginSuccess});
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +105,7 @@ class _PresenterState extends State<_Presenter> {
             Container(width: 30.0),
           ],
         ),
-        onPressed: () => _loginWithGoogle(context)
-    );
+        onPressed: () => _loginWithGoogle(context));
   }
 
   Widget _facebookButton(context) {
@@ -111,8 +118,7 @@ class _PresenterState extends State<_Presenter> {
             Container(width: 10.0),
           ],
         ),
-        onPressed: () => _loginWithFacebook(context)
-    );
+        onPressed: () => _loginWithFacebook(context));
   }
 
   Widget _terms(context) {
@@ -122,7 +128,8 @@ class _PresenterState extends State<_Presenter> {
         Row(mainAxisSize: MainAxisSize.min, children: <Widget>[
           InkWell(
             onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => TermsScreen())),
-            child: Text('Terms & Conditions', style: TextStyle(color: Colors.white, decoration: TextDecoration.underline)),
+            child:
+                Text('Terms & Conditions', style: TextStyle(color: Colors.white, decoration: TextDecoration.underline)),
           ),
           Text(' and ', style: TextStyle(color: Colors.white)),
           InkWell(
@@ -165,7 +172,7 @@ class _PresenterState extends State<_Presenter> {
       if (result.status != FacebookLoginStatus.loggedIn) {
         await login.logOut();
         result = await login.logIn(['email']);
-        if (result.status != FacebookLoginStatus.loggedIn) {
+        if (result.status == FacebookLoginStatus.error) {
           _setError(result.errorMessage);
           return;
         }
@@ -194,8 +201,9 @@ class _PresenterState extends State<_Presenter> {
   _login(user, context) async {
     var fetchedUser = await MeService.getUser(user);
     if (fetchedUser != null) {
-      loginSuccess(fetchedUser);
+      onLoginSuccess(fetchedUser);
       Navigator.popUntil(context, ModalRoute.withName(MainRoutes.home));
+      Navi().getMainTabNav().jumpToMyProfileTab();
     } else {
       Navigator.push(context, MaterialPageRoute(builder: (_) => RegisterScreen(user: user)));
     }

@@ -19,12 +19,12 @@ class Carousel extends StatefulWidget {
 }
 
 class _CarouselState extends State<Carousel> {
-  PageController _controller = PageController();
+  PageController _ctrl = PageController();
 
   @override
   dispose() {
-    _controller.dispose();
-    _controller = null;
+    _ctrl.dispose();
+    _ctrl = null;
     super.dispose();
   }
 
@@ -48,7 +48,7 @@ class _CarouselState extends State<Carousel> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               widget.left != null ? widget.left : Container(),
-              Dots(controller: _controller, itemCount: widget.images.length),
+              Dots(ctrl: _ctrl, itemCount: widget.images.length),
               if (widget.centreDots) Container()
             ],
           ),
@@ -64,7 +64,7 @@ class _CarouselState extends State<Carousel> {
         Container(
           child: PageView(
             physics: AlwaysScrollableScrollPhysics(),
-            controller: _controller,
+            controller: _ctrl,
             children: widget.images,
           ),
         ),
@@ -74,10 +74,10 @@ class _CarouselState extends State<Carousel> {
 }
 
 class Dots extends AnimatedWidget {
-  final PageController controller;
+  final PageController ctrl;
   final int itemCount;
 
-  Dots({this.controller, this.itemCount}) : super(listenable: controller);
+  Dots({this.ctrl, this.itemCount}) : super(listenable: ctrl);
 
   Widget build(BuildContext context) {
     return Row(
@@ -90,7 +90,7 @@ class Dots extends AnimatedWidget {
     double selectedness = Curves.easeOut.transform(
       max(
         0.0,
-        1.0 - ((controller.page ?? controller.initialPage) - index).abs(),
+        1.0 - ((ctrl.page ?? ctrl.initialPage) - index).abs(),
       ),
     );
     double size = 6.0 * (1.0 + 0.1 * selectedness);

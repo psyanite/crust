@@ -44,7 +44,7 @@ class Confirm extends StatelessWidget {
 
   Widget _options(context) {
     var options = <DialogOption>[
-      DialogOption(display: action, onTap: onTap, style: TextStyle(color: Color(0xFF51A4FF), fontSize: 16.0, fontWeight: Burnt.fontBold)),
+      DialogOption(display: action, onTap: onTap, style: TextStyle(color: Burnt.anchorColor, fontSize: 16.0, fontWeight: Burnt.fontBold)),
       DialogOption(display: 'Cancel', onTap: () => Navigator.of(context, rootNavigator: true).pop(true), style: TextStyle(fontSize: 16.0)),
     ];
     return Column(

@@ -45,7 +45,7 @@ class _CommentLikeButtonState extends State<CommentLikeButton> with TickerProvid
           if (props.isLoggedIn) {
             props.favoriteComment(widget.comment);
           } else {
-            snack(context, 'Login now to favourite comments');
+            loginSnack(context, 'Login now to favourite comments');
           }
         };
         var onUnfavorite = () {

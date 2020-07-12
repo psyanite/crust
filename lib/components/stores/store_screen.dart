@@ -300,7 +300,7 @@ class _PresenterState extends State<_Presenter> {
       child: HollowButton(
         onTap: () {
           if (widget.isLoggedIn == false) {
-            snack(context, 'Login now to write a review');
+            loginSnack(context, 'Login now to write a review');
           } else {
             Navigator.push(context, MaterialPageRoute(builder: (_) => WriteAReviewScreen(store: widget.store)));
           }

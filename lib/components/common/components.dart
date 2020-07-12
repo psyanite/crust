@@ -1,13 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crust/components/location/change_location_screen.dart';
 import 'package:crust/components/location/use_my_location.dart';
+import 'package:crust/components/screens/login_screen.dart';
+import 'package:crust/main.dart';
 import 'package:crust/models/post.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';
 import 'package:crust/presentation/theme.dart';
+import 'package:crust/services/navi.dart';
 import 'package:crust/state/app/app_state.dart';
 import 'package:crust/utils/general_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:geocoder/geocoder.dart' as Geo;
@@ -520,8 +524,7 @@ class NetworkImg extends StatelessWidget {
   final EdgeInsets margin;
   final BoxFit fit;
 
-  NetworkImg(
-    this.url, {
+  NetworkImg(this.url, {
     Key key,
     this.width,
     this.height,
@@ -576,13 +579,42 @@ class SeeMoreArrow extends StatelessWidget {
   }
 }
 
-snack(context, text) {
+buttonSnack(BuildContext context, String text, String buttonText, Function onTap) {
   final snackBar = SnackBar(
-    content: Text(text),
-    action: SnackBarAction(
-      label: 'OK',
-      onPressed: () {},
+    elevation: 0.0,
+    backgroundColor: Color(0xFF51A4FF),
+    behavior: SnackBarBehavior.floating,
+    content: Container(
+      child: Row(
+        children: <Widget>[
+          Expanded(child: Text(text, style: TextStyle(color: Color(0xEEFFFFFF), fontSize: 16.0))),
+          InkWell(
+            onTap: onTap,
+            child: Container(
+              padding: EdgeInsets.only(left: 8.0, top: 2.0, bottom: 2.0),
+              child: Text(
+                buttonText,
+                style: TextStyle(color: Colors.white, fontSize: 17.0, fontWeight: Burnt.fontBold),
+              ),
+            ),
+          )
+        ],
+      ),
     ),
   );
   Scaffold.of(context).showSnackBar(snackBar);
+}
+
+snack(BuildContext context, String text) {
+  buttonSnack(context, text, 'OK', () {
+    Scaffold.of(context).removeCurrentSnackBar(reason: SnackBarClosedReason.dismiss);
+  });
+}
+
+loginSnack(BuildContext context, String text) {
+  buttonSnack(context, text, 'Login', () {
+    Navigator.popUntil(context, ModalRoute.withName(MainRoutes.home));
+    Navi().getMainTabNav().jumpToMyProfileTab();
+    Scaffold.of(context).removeCurrentSnackBar(reason: SnackBarClosedReason.dismiss);
+  });
 }

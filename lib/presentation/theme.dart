@@ -8,6 +8,7 @@ class Burnt {
   static const primaryLight = Color(0xFFFFC86B);
   static const primaryExtraLight = Color(0xFFFFD173);
   static const textBodyColor = Color(0xDD604B41);
+  static const anchorColor = Color(0xFF51A4FF);
   static const hintTextColor = Color(0xBB604B41);
   static const lightTextColor = Color(0x82604B41);
   static const primaryTextColor = Color(0xFFF9AB0F);

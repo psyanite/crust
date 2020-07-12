@@ -193,7 +193,7 @@ class _PresenterState extends State<_Presenter> {
           fontSize: 20.0,
           onPressed: () {
             if (!widget.isLoggedIn) {
-              snack(context, 'Login now to favourite rewards!');
+              loginSnack(context, 'Login now to favourite rewards!');
             } else {
               Navigator.push(context, MaterialPageRoute(builder: (_) => FavoriteRewardsScreen()));
             }
@@ -206,7 +206,7 @@ class _PresenterState extends State<_Presenter> {
   Widget _myLoyaltyRewardsButton(BuildContext context) {
     var onTap = () {
       if (!widget.isLoggedIn) {
-        snack(context, 'Login now to redeem rewards!');
+        loginSnack(context, 'Login now to redeem rewards!');
       } else {
         Navigator.push(context, MaterialPageRoute(builder: (_) => LoyaltyRewardsScreen()));
       }

@@ -22,7 +22,7 @@ class CarouselWrapper extends StatelessWidget {
             if (props.isLoggedIn) {
               props.favoriteComment(postId);
             } else {
-              snack(context, 'Login now to favourite posts');
+              loginSnack(context, 'Login now to favourite posts');
             }
           },
           onUnfavorite: () {

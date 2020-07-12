@@ -45,7 +45,7 @@ class _PostLikeButtonState extends State<PostLikeButton> with TickerProviderStat
             if (props.isLoggedIn) {
               props.favoritePost(postId);
             } else {
-              snack(context, 'Login now to favourite posts');
+              loginSnack(context, 'Login now to favourite posts');
             }
           };
           var onUnfavorite =  () {

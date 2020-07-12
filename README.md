@@ -39,15 +39,13 @@
 
 
 
-## In Progress
-* Fix notification when I post a store post (?)
+## ･ﾟ✧ฅ(○•ω•○)ฅ･ﾟ✧
 * Add page refresh on my profile (?)
 
 
+
 ## Todo
-
 * Deploy app to Google Play
-
 
 * Test Prod Crust
 * Test Prod Butter
@@ -81,7 +79,8 @@
 * How to handle expired rewards???
 * Commenting on a post in iOS gives a weird popping animation
 
-* Show private posts, and all posts on the homepage post list on the Admin app
+* Admin - Allow admins to see detailed ratings the customer gave on their review
+* Admin - Show private posts, and all posts on the homepage post list
 * When updating profile, disable button onClick
 * Add loading dialog on delete post
 * Add on tap of cuisine to open search page
@@ -95,6 +94,9 @@
 
 
 ## Done
+* Add login redirect on login-prompting toasts
+* Facelift toasts
+* Fix notification when I post a store post
 * Fix iOS app icon
 * Fix up .idea in .gitignore for other projects
 * Fix "Let us know" button color

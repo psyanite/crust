@@ -76,7 +76,7 @@ class _Presenter extends StatelessWidget {
 
   onFollow(BuildContext context) async {
     if (isLoggedIn == false) {
-      snack(context, 'Login now to follow stores');
+      loginSnack(context, 'Login now to follow stores');
       return;
     }
     follow();

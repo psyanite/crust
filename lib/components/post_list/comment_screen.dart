@@ -367,7 +367,7 @@ class _PresenterState extends State<_Presenter> {
   }
 
   _handleSubmit(BuildContext context, String text) async {
-    if (widget.myId == null) snack(context, 'Login now to add comments');
+    if (widget.myId == null) loginSnack(context, 'Login now to add comments');
     if (!_enableSubmit) return;
     this.setState(() => _showSpinner = true);
     _form.type == FormType.comment ? await _addComment() : await _addReply();

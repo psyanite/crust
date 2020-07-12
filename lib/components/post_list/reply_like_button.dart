@@ -46,7 +46,7 @@ class _ReplyLikeButtonState extends State<ReplyLikeButton> with TickerProviderSt
           if (props.isLoggedIn) {
             props.favoriteReply(widget.postId, widget.reply);
           } else {
-            snack(context, 'Login now to favourite replies');
+            loginSnack(context, 'Login now to favourite replies');
           }
         };
         var onUnfavorite = () {

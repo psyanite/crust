@@ -299,7 +299,7 @@ class _PresenterState extends State<_Presenter> {
   Widget _redeemButton() {
     var onPressed = (BuildContext context) async {
       if (widget.myId == null) {
-        snack(context, 'Login to start redeeming rewards!');
+        loginSnack(context, 'Login to start redeeming rewards!');
         return;
       }
       if (_userReward != null) {

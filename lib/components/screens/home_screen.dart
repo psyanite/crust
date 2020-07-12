@@ -24,7 +24,7 @@ import 'package:redux/redux.dart';
 class HomeScreen extends StatelessWidget {
   final Function jumpToStoresTab;
 
-  HomeScreen({Key key, this.jumpToStoresTab}) : super(key: key);
+  HomeScreen(this.jumpToStoresTab, {Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -224,7 +224,11 @@ class _PresenterState extends State<_Presenter> {
                         borderRadius: BorderRadius.all(Radius.circular(2.0)),
                         boxShadow: [
                           BoxShadow(
-                              color: Color(0x10000000), offset: Offset(2.0, 2.0), blurRadius: 1.0, spreadRadius: 1.0)
+                            color: Color(0x10000000),
+                            offset: Offset(2.0, 2.0),
+                            blurRadius: 1.0,
+                            spreadRadius: 1.0,
+                          )
                         ],
                       ),
                       child: _topStoreCard(widget.topStores[i]),

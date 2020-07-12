@@ -16,7 +16,13 @@ class PhotoSelector extends StatelessWidget {
   final String changeText;
   final int max;
 
-  PhotoSelector({Key key, this.images, this.onSelectImages, this.addText = 'Add Photos', this.changeText = 'Change Photos', this.max = 10})
+  PhotoSelector(
+      {Key key,
+      this.images,
+      this.onSelectImages,
+      this.addText = 'Add Photos',
+      this.changeText = 'Change Photos',
+      this.max = 10})
       : super(key: key);
 
   @override
@@ -52,18 +58,19 @@ class PhotoSelector extends StatelessWidget {
 
     try {
       resultList = await MultiImagePicker.pickImages(
-          maxImages: max,
-          enableCamera: true,
-          materialOptions: MaterialOptions(
-            actionBarColor: '#FFAB40',
-            actionBarTitle: 'Gallery',
-            lightStatusBar: false,
-            statusBarColor: '#FFAB40',
-            allViewTitle: 'All',
-            selectCircleStrokeColor: '#FFFFFF',
-            selectionLimitReachedText: 'Sorry, maximum number of photos reached',
-            textOnNothingSelected: 'Oops! Select an image',
-          ));
+        maxImages: max,
+        enableCamera: true,
+        materialOptions: MaterialOptions(
+          actionBarColor: '#FFAB40',
+          actionBarTitle: 'Gallery',
+          lightStatusBar: false,
+          statusBarColor: '#FFAB40',
+          allViewTitle: 'All',
+          selectCircleStrokeColor: '#FFFFFF',
+          selectionLimitReachedText: 'Sorry, maximum number of photos reached',
+          textOnNothingSelected: 'Oops! Select an image',
+        ),
+      );
     } on PlatformException catch (e) {
       snack(context, 'Error $e');
     }
