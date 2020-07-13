@@ -46,7 +46,7 @@ class UploadOverlayState extends State<UploadOverlay> {
 
   @override
   Widget build(BuildContext context) {
-    return new WillPopScope(
+    return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
         backgroundColor: Color(0x99000000),

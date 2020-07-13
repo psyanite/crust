@@ -128,6 +128,7 @@ class _PresenterState extends State<_Presenter> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: _refresh,
+        displacement: 30.0,
         child: CustomScrollView(
           slivers: <Widget>[
             _appBar(),

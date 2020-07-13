@@ -122,6 +122,7 @@ class _PresenterState extends State<_Presenter> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: RefreshIndicator(
+        displacement: 30.0,
         onRefresh: () async {
           _refresh();
           await Future.delayed(Duration(milliseconds: 500));

@@ -40,12 +40,11 @@
 
 
 ## ･ﾟ✧ฅ(○•ω•○)ฅ･ﾟ✧
-* Add page refresh on my profile (?)
+* Deploy app to Google Play
 
 
 
 ## Todo
-* Deploy app to Google Play
 
 * Test Prod Crust
 * Test Prod Butter
@@ -90,10 +89,11 @@
 * Fix store name is center aligned when no text in post
 
 * After I edit a post, I want to see the post have been updated on the same page that I was on
-
+* Tie my posts on MyProfileScreen to state
 
 
 ## Done
+* Add page refresh on my profile
 * Add login redirect on login-prompting toasts
 * Facelift toasts
 * Fix notification when I post a store post

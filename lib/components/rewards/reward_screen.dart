@@ -69,6 +69,7 @@ class _PresenterState extends State<_Presenter> {
         Flexible(
           child: RefreshIndicator(
             onRefresh: _load,
+            displacement: 30.0,
             child: CustomScrollView(slivers: <Widget>[
               SliverToBoxAdapter(child: Column(children: <Widget>[_appBar(), _description()]))
             ]),

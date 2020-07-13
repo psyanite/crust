@@ -101,8 +101,8 @@ class _PresenterState extends State<_Presenter> {
 
   Future<void> _refresh() async {
     this.setState(() {
-      _limit = 12;
       _loading = true;
+      _limit = 12;
     });
     widget.refresh();
     await Future.delayed(Duration(milliseconds: 500));
@@ -143,6 +143,7 @@ class _PresenterState extends State<_Presenter> {
     return Scaffold(
       body: RefreshIndicator(
         onRefresh: _refresh,
+        displacement: 30.0,
         child: CustomScrollView(
           slivers: <Widget>[
             _appBar(),

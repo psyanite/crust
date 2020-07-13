@@ -50,27 +50,36 @@ class MainRoutes {
   static const String splash = '/splash';
 }
 
-class Main extends StatelessWidget {
-  final store;
+class Main extends StatefulWidget {
+  final Store store;
 
-  Main({this.store});
+  const Main({Key key, this.store}) : super(key: key);
+
+  @override
+  _MainState createState() => _MainState();
+}
+
+class _MainState extends State<Main> {
+
+  @override
+  void initState() {
+    SystemChrome.setSystemUIOverlayStyle(
+        SystemUiOverlayStyle(
+          systemNavigationBarColor: Color(0xFFEEEEEE),
+          systemNavigationBarDividerColor: null,
+          systemNavigationBarIconBrightness: Brightness.dark,
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness: Brightness.dark,
+          statusBarBrightness: Brightness.light,
+        )
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-
-    SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        systemNavigationBarColor: Color(0xFFEEEEEE),
-        systemNavigationBarDividerColor: null,
-        systemNavigationBarIconBrightness: Brightness.dark,
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.dark,
-        statusBarBrightness: Brightness.light,
-      )
-    );
-
     return StoreProvider<AppState>(
-      store: store,
+      store: widget.store,
       child: MaterialApp(
         title: 'Burntoast',
         debugShowCheckedModeBanner: false,

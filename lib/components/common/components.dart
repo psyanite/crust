@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crust/components/location/change_location_screen.dart';
 import 'package:crust/components/location/use_my_location.dart';
-import 'package:crust/components/screens/login_screen.dart';
 import 'package:crust/main.dart';
 import 'package:crust/models/post.dart';
 import 'package:crust/presentation/crust_cons_icons.dart';

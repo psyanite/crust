@@ -56,6 +56,7 @@ class _LoyaltyCardState extends State<LoyaltyCard> {
         Flexible(
           child: RefreshIndicator(
             onRefresh: _refresh,
+            displacement: 30.0,
             child: CustomScrollView(slivers: <Widget>[
               SliverToBoxAdapter(child: Column(children: <Widget>[_appBar(), _description()]))
             ]),

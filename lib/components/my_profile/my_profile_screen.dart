@@ -72,6 +72,16 @@ class _PresenterState extends State<_Presenter> {
     this.setState(() => _posts = fresh);
   }
 
+  Future<void> _refresh() async {
+    this.setState(() {
+      _posts = null;
+      _loading = true;
+      _limit = 12;
+    });
+    _load();
+    await Future.delayed(Duration(milliseconds: 500));
+  }
+
   removeFromList(index, postId) {
     this.setState(() => _posts = List<Post>.from(_posts)..removeAt(index));
   }
@@ -103,16 +113,20 @@ class _PresenterState extends State<_Presenter> {
   Widget build(BuildContext context) {
     return Scaffold(
       endDrawer: _drawer(context),
-      body: CustomScrollView(slivers: <Widget>[
-        _appBar(),
-        PostList(
-          noPostsView: Text('Start reviewing now and your reviews will show up here!'),
-          postListType: PostListType.forProfile,
-          posts: _posts,
-          removeFromList: removeFromList,
-        ),
-        if (_loading == true) LoadingSliver(),
-      ], controller: _scrollie),
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        displacement: 30.0,
+        child: CustomScrollView(slivers: <Widget>[
+          _appBar(),
+          PostList(
+            noPostsView: Text('Start reviewing now and your reviews will show up here!'),
+            postListType: PostListType.forProfile,
+            posts: _posts,
+            removeFromList: removeFromList,
+          ),
+          if (_loading == true) LoadingSliver(),
+        ], controller: _scrollie),
+      ),
     );
   }
 

@@ -21,7 +21,7 @@
 ## How to Release
 1. Update `config.dart`
 1. Update `pubspec.yaml`
-1. Run `flutter build appbundle`
+1. Run `flutter clean && flutter build appbundle --release`
 
 ## How to rebuild app launcher icons
 `flutter pub get && flutter pub run flutter_launcher_icons:main`
